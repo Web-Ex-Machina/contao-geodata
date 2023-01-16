@@ -92,7 +92,8 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             {import_legend},excelPattern;
             {map_legend},mapProvider;
             {geocoding_legend},geocodingProvider;
-            {categories_legend},categories
+            {categories_legend},categories;
+            {markers_legend},doNotAddItemsToContaoSitemap,doNotAddItemsToContaoSearch;
         ',
     ],
 
@@ -215,6 +216,24 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
                 'showOperations' => true,
                 'operations' => ['edit', 'delete'],
             ],
+        ],
+        'doNotAddItemsToContaoSitemap' => [
+            'label' => &$GLOBALS['TL_LANG']['tl_wem_map']['doNotAddItemsToContaoSitemap'],
+            'exclude' => true,
+            'filter' => true,
+            'flag' => 1,
+            'inputType' => 'checkbox',
+            'eval' => ['doNotCopy' => true, 'tl_class' => 'w50 m12'],
+            'sql' => "char(1) NOT NULL default ''",
+        ],
+        'doNotAddItemsToContaoSearch' => [
+            'label' => &$GLOBALS['TL_LANG']['tl_wem_map']['doNotAddItemsToContaoSearch'],
+            'exclude' => true,
+            'filter' => true,
+            'flag' => 1,
+            'inputType' => 'checkbox',
+            'eval' => ['doNotCopy' => true, 'tl_class' => 'w50 m12'],
+            'sql' => "char(1) NOT NULL default ''",
         ],
     ],
 ];

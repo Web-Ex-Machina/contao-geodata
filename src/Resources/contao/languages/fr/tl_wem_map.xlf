@@ -126,6 +126,27 @@
 			<target>Gérez les catégories de la map</target>
 		</trans-unit>
 
+		<trans-unit id="tl_wem_map.markers_legend">
+			<source>Markers settings</source>
+			<target>Paramètres des marqueurs</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.doNotAddItemsToContaoSitemap.0">
+			<source>Exclude from sitemap</source>
+			<target>Exclure du sitemap</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.doNotAddItemsToContaoSitemap.1">
+			<source>Do not add items to Contao sitemap</source>
+			<target>Ne pas ajouter les marqueurs au sitemap Contao</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.doNotAddItemsToContaoSearch.0">
+			<source>Exclude from Contao search</source>
+			<target>Exclure de la recherche Contao</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.doNotAddItemsToContaoSearch.1">
+			<source>Do not add items to Contao search</source>
+			<target>Ne pas inclure les marqueurs à la recherche Contao</target>
+		</trans-unit>
+
 		<trans-unit id="tl_wem_map.new.0">
 			<source>New map</source>
 			<target>Nouvelle carte</target>

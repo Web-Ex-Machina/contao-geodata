@@ -97,6 +97,27 @@
 			<target>Enter the Google Maps API Key</target>
 		</trans-unit>
 
+		<trans-unit id="tl_wem_map.markers_legend">
+			<source>Markers settings</source>
+			<source>Markers settings</source>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.doNotAddItemsToContaoSitemap.0">
+			<source>Exclude from sitemap</source>
+			<source>Exclude from sitemap</source>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.doNotAddItemsToContaoSitemap.1">
+			<source>Do not add items to Contao sitemap</source>
+			<source>Do not add items to Contao sitemap</source>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.doNotAddItemsToContaoSearch.0">
+			<source>Exclude from Contao search</source>
+			<source>Exclude from Contao search</source>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.doNotAddItemsToContaoSearch.1">
+			<source>Do not add items to Contao search</source>
+			<source>Do not add items to Contao search</source>
+		</trans-unit>
+
 		<trans-unit id="tl_wem_map.new.0">
 			<source>New map</source>
 			<target>New map</target>
