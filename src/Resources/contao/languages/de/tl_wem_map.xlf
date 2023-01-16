@@ -122,10 +122,18 @@
 			<target>Karten ID %s bearbeiten</target>
 		</trans-unit>
 		<trans-unit id="tl_wem_map.copy.0">
+			<source>Copy map and its markers</source>
+			<target>Karte kopieren und ihre Markierungen</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.copy.1">
+			<source>Copy map ID %s and its markers</source>
+			<target>Karte ID %s kopieren und ihre Markierungen</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.copy_map_item.0">
 			<source>Copy map</source>
 			<target>Karte kopieren</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_map.copy.1">
+		<trans-unit id="tl_wem_map.copy_map_item.1">
 			<source>Copy map ID %s</source>
 			<target>Karte ID %s kopieren</target>
 		</trans-unit>

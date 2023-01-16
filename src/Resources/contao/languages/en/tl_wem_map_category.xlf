@@ -3,73 +3,73 @@
     <body>
     	<trans-unit id="tl_wem_map_category.general_legend">
 			<source>Global informations</source>
-			<target>Informations générales</target>
+			<target>Global informations</target>			
 		</trans-unit>
 		<trans-unit id="tl_wem_map_category.title.0">
 			<source>Title</source>
-			<target>Intitulé</target>
+			<target>Title</target>			
 		</trans-unit>
 		<trans-unit id="tl_wem_map_category.title.1">
 			<source>Enter the category title</source>
-			<target>Saisissez le titre de la catégorie</target>
+			<target>Enter the category title</target>			
 		</trans-unit>
 
 		<trans-unit id="tl_wem_map_category.marker_legend">
 			<source>Marker settings</source>
-			<target>Paramètres du marqueur</target>
+			<target>Marker settings</target>			
 		</trans-unit>
 		<trans-unit id="tl_wem_map_category.marker.0">
 			<source>Marker</source>
-			<target>Marqueur</target>
+			<target>Marker</target>			
 		</trans-unit>
 		<trans-unit id="tl_wem_map_category.marker.1">
 			<source>Select the category marker</source>
-			<target>Sélectionnez le marqueur de la catégorie</target>
+			<target>Select the category marker</target>			
 		</trans-unit>
 		<trans-unit id="tl_wem_map_category.markerConfig.0">
 			<source>Settings</source>
-			<target>Paramètres</target>
+			<target>Settings</target>			
 		</trans-unit>
 		<trans-unit id="tl_wem_map_category.markerConfig.1">
 			<source>Configure the marker</source>
-			<target>Configurez le marqueur</target>
+			<target>Configure the marker</target>			
 		</trans-unit>
 		<trans-unit id="tl_wem_map_category.createdAt.0">
 			<source>Created at</source>
-			<target>Créée le</target>
+			<target>Created at</target>			
 		</trans-unit>
 
 		<trans-unit id="tl_wem_map_category.new.0">
 			<source>New map category</source>
-			<target>Nouvelle catégorie</target>
+			<target>New map category</target>			
 		</trans-unit>
 		<trans-unit id="tl_wem_map_category.new.1">
 			<source>Create a new map category</source>
-			<target>Créer une nouvelle catégorie</target>
+			<target>Create a new map category</target>			
 		</trans-unit>
 		<trans-unit id="tl_wem_map_category.edit.0">
 			<source>Edit map category locations</source>
-			<target>Editer les emplacements de la catégorie</target>
+			<target>Edit map category locations</target>			
 		</trans-unit>
 		<trans-unit id="tl_wem_map_category.edit.1">
 			<source>Edit locations of map category ID %s</source>
-			<target>Editer les emplacements de la catégorie ID %s</target>
+			<target>Edit locations of map category ID %s</target>			
 		</trans-unit>
 		<trans-unit id="tl_wem_map_category.delete.0">
 			<source>Delete map category</source>
-			<target>Supprimer la catégorie</target>
+			<target>Delete map category</target>			
 		</trans-unit>
 		<trans-unit id="tl_wem_map_category.delete.1">
 			<source>Delete map category ID %s</source>
-			<target>Supprimer la catégorie ID %s</target>
+			<target>Delete map category ID %s</target>			
 		</trans-unit>
 		<trans-unit id="tl_wem_map_category.show.0">
 			<source>Show map category data</source>
-			<target>Voir les informations de la catégorie</target>
+			<target>Show map category data</target>			
 		</trans-unit>
 		<trans-unit id="tl_wem_map_category.show.1">
 			<source>Show map category data ID %s</source>
-			<target>Voir les informations de la catégorie ID %s</target>
+			<target>Show map category data ID %s</target>			
 		</trans-unit>
     </body>
   </file>

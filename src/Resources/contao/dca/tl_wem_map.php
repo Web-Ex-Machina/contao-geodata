@@ -207,8 +207,8 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'eval' => [
                 'fields' => ['createdAt', 'title'],
                 'headerFields' => [
-                    &$GLOBALS['TL_LANG']['tl_wem_map_category']['createdAt'], 
-                    &$GLOBALS['TL_LANG']['tl_wem_map_category']['title']
+                    &$GLOBALS['TL_LANG']['tl_wem_map_category']['createdAt'][0], 
+                    &$GLOBALS['TL_LANG']['tl_wem_map_category']['title'][0]
                 ],
                 'orderField' => 'createdAt DESC',
                 'hideButton' => false,
