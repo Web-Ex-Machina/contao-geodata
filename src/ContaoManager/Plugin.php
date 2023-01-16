@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace WEM\GeoDataBundle\ContaoManager;
 
-use WEM\GeoDataBundle\AltradMapBundle;
+use WEM\GeoDataBundle\WEMGeoDataBundle;
 use Contao\CoreBundle\ContaoCoreBundle;
 use Contao\ManagerPlugin\Bundle\BundlePluginInterface;
 use Contao\ManagerPlugin\Bundle\Config\BundleConfig;

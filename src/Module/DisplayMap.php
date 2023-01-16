@@ -14,9 +14,13 @@ declare(strict_types=1);
 
 namespace WEM\GeoDataBundle\Module;
 
+use Contao\BackendTemplate;
+use Contao\FrontendTemplate;
+use Contao\PageModel;
+use Contao\System;
 use WEM\GeoDataBundle\Controller\ClassLoader;
 use WEM\GeoDataBundle\Controller\Util;
-use WEM\GeoDataBundle\Model\Location;
+use WEM\GeoDataBundle\Model\Item;
 use WEM\GeoDataBundle\Model\Map;
 
 /**
@@ -53,7 +57,7 @@ class DisplayMap extends Core
     public function generate()
     {
         if (TL_MODE === 'BE') {
-            $objTemplate = new \BackendTemplate('be_wildcard');
+            $objTemplate = new BackendTemplate('be_wildcard');
 
             $objTemplate->wildcard = '### '.utf8_strtoupper($GLOBALS['TL_LANG']['FMD']['wem_display_map'][0]).' ###';
             $objTemplate->title = $this->headline;
@@ -82,7 +86,7 @@ class DisplayMap extends Core
 
             // Load the libraries
             // ClassLoader::loadLibraries($this->objMap, 1);
-            \System::getCountries();
+            System::getCountries();
 
             // Build the config
             $arrConfig = [];
@@ -108,7 +112,7 @@ class DisplayMap extends Core
             }
 
             // Get the jumpTo page
-            $this->objJumpTo = \PageModel::findByPk($this->objMap->jumpTo);
+            $this->objJumpTo = PageModel::findByPk($this->objMap->jumpTo);
 
             // Get locations
             $arrLocations = $this->getLocations();
@@ -171,7 +175,7 @@ class DisplayMap extends Core
 
             // Gather filters
             if ('nofilters' !== $this->wem_location_map_filters) {
-                \System::loadLanguageFile('tl_wem_location');
+                System::loadLanguageFile('tl_wem_item');
                 $arrFilterFields = unserialize($this->wem_location_map_filters_fields);
                 $this->filters = [];
 
@@ -186,8 +190,8 @@ class DisplayMap extends Core
                         ];
                     } else {
                         $this->filters[$f] = [
-                            'label' => sprintf('%s :', $GLOBALS['TL_LANG']['tl_wem_location'][$f][0]),
-                            'placeholder' => $GLOBALS['TL_LANG']['tl_wem_location'][$f][1],
+                            'label' => sprintf('%s :', $GLOBALS['TL_LANG']['tl_wem_item'][$f][0]),
+                            'placeholder' => $GLOBALS['TL_LANG']['tl_wem_item'][$f][1],
                             'name' => $f,
                             'type' => 'select',
                             'options' => [],
@@ -227,7 +231,7 @@ class DisplayMap extends Core
 
             // If the config says so, we will generate a template with a list of the locations
             if ('nolist' !== $this->wem_location_map_list) {
-                $objTemplate = new \FrontendTemplate($this->strListTemplate);
+                $objTemplate = new FrontendTemplate($this->strListTemplate);
                 $objTemplate->locations = $arrLocations;
                 $objTemplate->list_position = $this->wem_location_map_list;
 

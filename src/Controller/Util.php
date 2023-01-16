@@ -14,7 +14,11 @@ declare(strict_types=1);
 
 namespace WEM\GeoDataBundle\Controller;
 
-use WEM\GeoDataBundle\Model\Location;
+use WEM\GeoDataBundle\Model\Item;
+use Contao\Input;
+use Contao\Database;
+use Contao\System;
+use Contao\StringUtil;
 
 /**
  * Provide utilities function to Locations Extension.
@@ -75,17 +79,17 @@ class Util
             $varLocation = $arrTag[1];
             $strField = $arrTag[2];
         } else {
-            $varLocation = \Input::get('auto_item');
+            $varLocation = Input::get('auto_item');
             $strField = $arrTag[1];
         }
 
         // Before trying to find a specific location, make sure the field we want exists
-        if (!\Database::getInstance()->fieldExists($strField, Location::getTable())) {
+        if (!Database::getInstance()->fieldExists($strField, Item::getTable())) {
             return false;
         }
 
         // Try to find the location, with the item given (return false if not found)
-        if (!$objLocation = Location::findByIdOrAlias($varLocation)) {
+        if (!$objLocation = Item::findByIdOrAlias($varLocation)) {
             return false;
         }
 
@@ -98,11 +102,11 @@ class Util
      */
     public static function getCountryISOCodeFromFullname($strFullname)
     {
-        $arrCountries = \System::getCountries();
+        $arrCountries = System::getCountries();
 
         foreach ($arrCountries as $strIsoCode => $strName) {
             // Use Generate Alias to handle little imperfections
-            if (\StringUtil::generateAlias($strName) === \StringUtil::generateAlias($strFullname)) {
+            if (StringUtil::generateAlias($strName) === StringUtil::generateAlias($strFullname)) {
                 return $strIsoCode;
             }
         }

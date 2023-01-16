@@ -16,6 +16,7 @@ namespace WEM\GeoDataBundle\Controller\Provider;
 
 use Contao\Controller;
 use Contao\Encryption;
+use Contao\System;
 
 /**
  * Provide Google Maps utilities functions to Locations Extension.
@@ -46,7 +47,7 @@ class GoogleMaps extends Controller
         }
         // Standardize the address to geocode
         $strAddress = '';
-        $arrCountries = \System::getCountries();
+        $arrCountries = System::getCountries();
         if (\is_object($varAddress)) {
             if ($varAddress->street) {
                 $strAddress .= trim(preg_replace('/\s+/', ' ', strip_tags($varAddress->street)));

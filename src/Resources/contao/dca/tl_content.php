@@ -13,5 +13,5 @@ declare(strict_types=1);
  */
 
 if ('wem-maps' === Contao\Input::get('do')) {
-    $GLOBALS['TL_DCA']['tl_content']['config']['ptable'] = 'tl_wem_location';
+    $GLOBALS['TL_DCA']['tl_content']['config']['ptable'] = 'tl_wem_item';
 }

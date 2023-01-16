@@ -1,242 +1,242 @@
 <?xml version="1.0" ?><xliff version="1.1">
-  <file datatype="php" original="system/modules/wem-contao-locations/languages/en/tl_wem_location.php" source-language="en" target-language="en">
+  <file datatype="php" original="system/modules/wem-contao-locations/languages/en/tl_wem_item.php" source-language="en" target-language="en">
     <body>
-    	<trans-unit id="tl_wem_location.location_legend">
+    	<trans-unit id="tl_wem_item.location_legend">
 			<source>Global informations</source>
 			<target>Global informations</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.title.0">
+		<trans-unit id="tl_wem_item.title.0">
 			<source>Title</source>
 			<target>Title</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.title.1">
+		<trans-unit id="tl_wem_item.title.1">
 			<source>Enter the map title</source>
 			<target>Enter the map title</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.category.0">
+		<trans-unit id="tl_wem_item.category.0">
 			<source>Category</source>
 			<target>Category</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.category.1">
+		<trans-unit id="tl_wem_item.category.1">
 			<source>Select the location category</source>
 			<target>Select the location category</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.published.0">
+		<trans-unit id="tl_wem_item.published.0">
 			<source>Publish</source>
 			<target>Publish</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.published.1">
+		<trans-unit id="tl_wem_item.published.1">
 			<source>Check to display the location on the frontend map</source>
 			<target>Check to display the location on the frontend map</target>
 		</trans-unit>
 
-		<trans-unit id="tl_wem_location.coords_legend">
+		<trans-unit id="tl_wem_item.coords_legend">
 			<source>Coordinates</source>
 			<target>Coordinates</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.lat.0">
+		<trans-unit id="tl_wem_item.lat.0">
 			<source>Latitude</source>
 			<target>Latitude</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.lat.1">
+		<trans-unit id="tl_wem_item.lat.1">
 			<source>Enter the location latitude</source>
 			<target>Enter the location latitude</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.lng.0">
+		<trans-unit id="tl_wem_item.lng.0">
 			<source>Longitude</source>
 			<target>Longitude</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.lng.1">
+		<trans-unit id="tl_wem_item.lng.1">
 			<source>Enter the location longitude</source>
 			<target>Enter the location longitude</target>
 		</trans-unit>
 
-		<trans-unit id="tl_wem_location.street_legend">
+		<trans-unit id="tl_wem_item.street_legend">
 			<source>Postal address</source>
 			<target>Postal address</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.street.0">
+		<trans-unit id="tl_wem_item.street.0">
 			<source>Street</source>
 			<target>Street</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.street.1">
+		<trans-unit id="tl_wem_item.street.1">
 			<source>Enter the location street</source>
 			<target>Enter the location street</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.postal.0">
+		<trans-unit id="tl_wem_item.postal.0">
 			<source>Postal</source>
 			<target>Postal</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.postal.1">
+		<trans-unit id="tl_wem_item.postal.1">
 			<source>Enter the location postal code</source>
 			<target>Enter the location postal code</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.city.0">
+		<trans-unit id="tl_wem_item.city.0">
 			<source>City</source>
 			<target>City</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.city.1">
+		<trans-unit id="tl_wem_item.city.1">
 			<source>Enter the location city</source>
 			<target>Enter the location city</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.region.0">
+		<trans-unit id="tl_wem_item.region.0">
 			<source>Region</source>
 			<target>Region</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.region.1">
+		<trans-unit id="tl_wem_item.region.1">
 			<source>Enter the location region</source>
 			<target>Enter the location region</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.country.0">
+		<trans-unit id="tl_wem_item.country.0">
 			<source>Country</source>
 			<target>Country</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.country.1">
+		<trans-unit id="tl_wem_item.country.1">
 			<source>Enter the location country</source>
 			<target>Enter the location country</target>
 		</trans-unit>
 
-		<trans-unit id="tl_wem_location.contact_legend">
+		<trans-unit id="tl_wem_item.contact_legend">
 			<source>Contact Data</source>
 			<target>Contact Data</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.phone.0">
+		<trans-unit id="tl_wem_item.phone.0">
 			<source>Phone</source>
 			<target>Phone</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.phone.1">
+		<trans-unit id="tl_wem_item.phone.1">
 			<source>Enter the location phone number</source>
 			<target>Enter the location phone number</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.email.0">
+		<trans-unit id="tl_wem_item.email.0">
 			<source>Email</source>
 			<target>Email</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.email.1">
+		<trans-unit id="tl_wem_item.email.1">
 			<source>Enter the location mail address</source>
 			<target>Enter the location mail address</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.website.0">
+		<trans-unit id="tl_wem_item.website.0">
 			<source>Website</source>
 			<target>Website</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.website.1">
+		<trans-unit id="tl_wem_item.website.1">
 			<source>Enter the location website URL</source>
 			<target>Enter the location website URL</target>
 		</trans-unit>
 
-		<trans-unit id="tl_wem_location.new.0">
+		<trans-unit id="tl_wem_item.new.0">
 			<source>New location</source>
 			<target>New location</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.new.1">
+		<trans-unit id="tl_wem_item.new.1">
 			<source>Create a new location</source>
 			<target>Create a new location</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.edit.0">
+		<trans-unit id="tl_wem_item.edit.0">
 			<source>Edit location</source>
 			<target>Edit location</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.edit.1">
+		<trans-unit id="tl_wem_item.edit.1">
 			<source>Edit location ID %s</source>
 			<target>Edit location ID %s</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.copy.0">
+		<trans-unit id="tl_wem_item.copy.0">
 			<source>Copy location</source>
 			<target>Copy location</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.copy.1">
+		<trans-unit id="tl_wem_item.copy.1">
 			<source>Copy location ID %s</source>
 			<target>Copy location ID %s</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.delete.0">
+		<trans-unit id="tl_wem_item.delete.0">
 			<source>Delete location</source>
 			<target>Delete location</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.delete.1">
+		<trans-unit id="tl_wem_item.delete.1">
 			<source>Delete location ID %s</source>
 			<target>Delete location ID %s</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.show.0">
+		<trans-unit id="tl_wem_item.show.0">
 			<source>Show location data</source>
 			<target>Show location data</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.show.1">
+		<trans-unit id="tl_wem_item.show.1">
 			<source>Show location data ID %s</source>
 			<target>Show location data ID %s</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.toggle.0">
+		<trans-unit id="tl_wem_item.toggle.0">
 			<source>Show/Hide location</source>
 			<target>Show/Hide location</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.toggle.1">
+		<trans-unit id="tl_wem_item.toggle.1">
 			<source>Show/Hide location ID %s</source>
 			<target>Show/Hide location ID %s</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.geocode.0">
+		<trans-unit id="tl_wem_item.geocode.0">
 			<source>Find location coordinates</source>
 			<target>Find location coordinates</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.geocode.1">
+		<trans-unit id="tl_wem_item.geocode.1">
 			<source>Find location ID %s coordinates</source>
 			<target>Find location coordinates ID %s</target>
 		</trans-unit>
 
-		<trans-unit id="tl_wem_location.import.0">
+		<trans-unit id="tl_wem_item.import.0">
 			<source>Import</source>
 			<target>Import</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.import.1">
+		<trans-unit id="tl_wem_item.import.1">
 			<source>Import locations in this map</source>
 			<target>Import locations in this map</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.source.0">
+		<trans-unit id="tl_wem_item.source.0">
 			<source>File</source>
 			<target>File</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.source.1">
+		<trans-unit id="tl_wem_item.source.1">
 			<source>Select the Excel File with your locations</source>
 			<target>Select the Excel File with your locations</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.export.0">
+		<trans-unit id="tl_wem_item.export.0">
 			<source>Export</source>
 			<target>Export</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.export.1">
+		<trans-unit id="tl_wem_item.export.1">
 			<source>Export locations of this map</source>
 			<target>Export locations of this map</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.importExampleTitle">
+		<trans-unit id="tl_wem_item.importExampleTitle">
 			<source>Your Excel file should looks like this :</source>
 			<target>Your Excel file should looks like this :</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.importListCountriesTitle">
+		<trans-unit id="tl_wem_item.importListCountriesTitle">
 			<source>You will find the list of the countries below :</source>
 			<target>You will find the list of the countries below :</target>
 		</trans-unit>
 
-		<trans-unit id="tl_wem_location.geocodeAll.0">
+		<trans-unit id="tl_wem_item.geocodeAll.0">
 			<source>Geocode</source>
 			<target>Geocode</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.geocodeAll.1">
+		<trans-unit id="tl_wem_item.geocodeAll.1">
 			<source>Geocode all locations</source>
 			<target>Geocode all locations</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.geocodeAllConfirm">
+		<trans-unit id="tl_wem_item.geocodeAllConfirm">
 			<source>Are you sure you want to geocode all locations ?</source>
 			<target>Are you sure you want to geocode all locations ?</target>
 		</trans-unit>
 
-		<trans-unit id="tl_wem_location.createdConfirmation">
+		<trans-unit id="tl_wem_item.createdConfirmation">
 			<source>%s locations have been created</source>
 			<target>%s locations have been created</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.updatedConfirmation">
+		<trans-unit id="tl_wem_item.updatedConfirmation">
 			<source>%s locations have been updated</source>
 			<target>%s locations have been updated</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_location.deletedConfirmation">
+		<trans-unit id="tl_wem_item.deletedConfirmation">
 			<source>%s locations have been deleted</source>
 			<target>%s locations have been deleted</target>
 		</trans-unit>

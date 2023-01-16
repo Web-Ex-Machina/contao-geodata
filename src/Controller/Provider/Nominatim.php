@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace WEM\GeoDataBundle\Controller\Provider;
 
 use Contao\Controller;
+use Contao\Config;
 
 /**
  * Provide Nominatim utilities functions to Locations Extension.
@@ -73,7 +74,7 @@ class Nominatim extends Controller
 
         // Then, cURL it baby.
         $ch = curl_init();
-        $strUrl = sprintf(static::$strGeocodingUrl, $strAddress, \Config::get('adminEmail'));
+        $strUrl = sprintf(static::$strGeocodingUrl, $strAddress, Config::get('adminEmail'));
         curl_setopt($ch, CURLOPT_URL, $strUrl);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_TIMEOUT, 5);

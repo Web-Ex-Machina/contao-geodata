@@ -14,9 +14,14 @@ declare(strict_types=1);
 
 namespace WEM\GeoDataBundle\Module;
 
+use Contao\BackendTemplate;
+use Contao\Environment;
+use Contao\Input;
+use Contao\PageModel;
+use Contao\System;
 use WEM\GeoDataBundle\Controller\ClassLoader;
 use WEM\GeoDataBundle\Controller\Util;
-use WEM\GeoDataBundle\Model\Location;
+use WEM\GeoDataBundle\Model\Item;
 use WEM\GeoDataBundle\Model\Map;
 
 /**
@@ -46,7 +51,7 @@ class LocationsList extends Core
     public function generate()
     {
         if (TL_MODE === 'BE') {
-            $objTemplate = new \BackendTemplate('be_wildcard');
+            $objTemplate = new BackendTemplate('be_wildcard');
 
             $objTemplate->wildcard = '### '.utf8_strtoupper($GLOBALS['TL_LANG']['FMD']['wem_display_list'][0]).' ###';
             $objTemplate->title = $this->headline;
@@ -76,17 +81,17 @@ class LocationsList extends Core
 
             // Load the libraries
             // ClassLoader::loadLibraries($this->objMap, 1);
-            \System::getCountries();
+            System::getCountries();
 
             // Build the config
             $arrConfig = ['published' => 1, 'pid' => $this->wem_location_map];
 
             // Get the jumpTo page
-            $this->objJumpTo = \PageModel::findByPk($this->objMap->jumpTo);
+            $this->objJumpTo = PageModel::findByPk($this->objMap->jumpTo);
 
             // Gather filters
             if ('nofilters' !== $this->wem_location_map_filters) {
-                \System::loadLanguageFile('tl_wem_location');
+                System::loadLanguageFile('tl_wem_item');
                 $arrFilterFields = unserialize($this->wem_location_map_filters_fields);
                 $this->filters = [];
 
@@ -97,12 +102,12 @@ class LocationsList extends Core
                             'placeholder' => 'Indiquez un nom ou un code postal...',
                             'name' => 'search',
                             'type' => 'text',
-                            'value' => \Input::get($f) ?: '',
+                            'value' => Input::get($f) ?: '',
                         ];
                     } else {
                         $this->filters[$f] = [
-                            'label' => sprintf('%s :', $GLOBALS['TL_LANG']['tl_wem_location'][$f][0]),
-                            'placeholder' => $GLOBALS['TL_LANG']['tl_wem_location'][$f][1],
+                            'label' => sprintf('%s :', $GLOBALS['TL_LANG']['tl_wem_item'][$f][0]),
+                            'placeholder' => $GLOBALS['TL_LANG']['tl_wem_item'][$f][1],
                             'name' => $f,
                             'type' => 'select',
                             'options' => [],
@@ -119,14 +124,14 @@ class LocationsList extends Core
                         }
                     }
 
-                    if (\Input::get($f)) {
-                        $arrConfig[$f] = \Input::get($f);
+                    if (Input::get($f)) {
+                        $arrConfig[$f] = Input::get($f);
                     }
                 }
 
                 $this->Template->filters = $this->filters;
                 $this->Template->filters_position = $this->wem_location_map_filters;
-                $this->Template->filters_action = \Environment::get('request');
+                $this->Template->filters_action = Environment::get('request');
                 $this->Template->filters_method = "GET";
             }
 

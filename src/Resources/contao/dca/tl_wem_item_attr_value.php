@@ -13,13 +13,13 @@ declare(strict_types=1);
  */
 
 /*
- * Table tl_wem_location_attr_value.
+ * Table tl_wem_item_attr_value.
  */
-$GLOBALS['TL_DCA']['tl_wem_location_attr_value'] = [
+$GLOBALS['TL_DCA']['tl_wem_item_attr_value'] = [
     // Config
     'config' => [
         'dataContainer' => 'Table',
-        'ptable' => 'tl_wem_location',
+        'ptable' => 'tl_wem_item',
         'switchToEdit' => true,
         'enableVersioning' => true,
         'sql' => [
@@ -38,7 +38,7 @@ $GLOBALS['TL_DCA']['tl_wem_location_attr_value'] = [
             'fields' => ['attribute ASC'],
             'headerFields' => ['title'],
             'panelLayout' => 'filter;sort,search,limit',
-            'child_record_callback' => ['tl_wem_location_attr_value', 'listItems'],
+            'child_record_callback' => ['tl_wem_item_attr_value', 'listItems'],
             'child_record_class' => 'no_padding',
         ],
         'global_operations' => [
@@ -51,28 +51,28 @@ $GLOBALS['TL_DCA']['tl_wem_location_attr_value'] = [
         ],
         'operations' => [
             'edit' => [
-                'label' => &$GLOBALS['TL_LANG']['tl_wem_location_attr_value']['edit'],
+                'label' => &$GLOBALS['TL_LANG']['tl_wem_item_attr_value']['edit'],
                 'href' => 'table=tl_content',
                 'icon' => 'edit.svg',
             ],
             'editheader' => [
-                'label' => &$GLOBALS['TL_LANG']['tl_wem_location_attr_value']['editheader'],
+                'label' => &$GLOBALS['TL_LANG']['tl_wem_item_attr_value']['editheader'],
                 'href' => 'act=edit',
                 'icon' => 'header.svg',
             ],
             'copy' => [
-                'label' => &$GLOBALS['TL_LANG']['tl_wem_location_attr_value']['copy'],
+                'label' => &$GLOBALS['TL_LANG']['tl_wem_item_attr_value']['copy'],
                 'href' => 'act=copy',
                 'icon' => 'copy.gif',
             ],
             'delete' => [
-                'label' => &$GLOBALS['TL_LANG']['tl_wem_location_attr_value']['delete'],
+                'label' => &$GLOBALS['TL_LANG']['tl_wem_item_attr_value']['delete'],
                 'href' => 'act=delete',
                 'icon' => 'delete.gif',
                 'attributes' => 'onclick="if(!confirm(\''.$GLOBALS['TL_LANG']['MSC']['deleteConfirm'].'\'))return false;Backend.getScrollOffset()"',
             ],
             'show' => [
-                'label' => &$GLOBALS['TL_LANG']['tl_wem_location_attr_value']['show'],
+                'label' => &$GLOBALS['TL_LANG']['tl_wem_item_attr_value']['show'],
                 'href' => 'act=show',
                 'icon' => 'show.gif',
             ],
@@ -102,7 +102,7 @@ $GLOBALS['TL_DCA']['tl_wem_location_attr_value'] = [
             'sql' => "int(10) unsigned NOT NULL default '0'",
         ],
         'attribute' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_location_attr_value']['attribute'],
+            'label' => &$GLOBALS['TL_LANG']['tl_wem_item_attr_value']['attribute'],
             'exclude' => true,
             'search' => true,
             'inputType' => 'text',
@@ -110,7 +110,7 @@ $GLOBALS['TL_DCA']['tl_wem_location_attr_value'] = [
             'sql' => "varchar(34) NOT NULL default ''",
         ],
         'value' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_location_attr_value']['value'],
+            'label' => &$GLOBALS['TL_LANG']['tl_wem_item_attr_value']['value'],
             'exclude' => true,
             'search' => true,
             'inputType' => 'text',
@@ -125,7 +125,7 @@ $GLOBALS['TL_DCA']['tl_wem_location_attr_value'] = [
  *
  * @author Web ex Machina <https://www.webexmachina.fr>
  */
-class tl_wem_location_attr_value extends Backend
+class tl_wem_item_attr_value extends Backend
 {
     /**
      * Import the back end user object.

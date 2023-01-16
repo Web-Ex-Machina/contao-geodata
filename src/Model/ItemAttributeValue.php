@@ -19,14 +19,14 @@ use Contao\Model;
 /**
  * Reads and writes items.
  */
-class LocationAttributeValue extends Model
+class ItemAttributeValue extends Model
 {
     /**
      * Table name.
      *
      * @var string
      */
-    protected static $strTable = 'tl_wem_location_attr_value';
+    protected static $strTable = 'tl_wem_item_attr_value';
 
     /**
      * Find items, depends on the arguments.

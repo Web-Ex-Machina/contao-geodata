@@ -38,14 +38,14 @@ class ClassLoader extends Controller
 
             // Throw error if class doesn't exists
             if (!class_exists($strClass)) {
-                throw new Exception(sprintf('Unknown class %s', $strClass));
+                throw new \Exception(sprintf('Unknown class %s', $strClass));
             }
 
             // Create the object
             return new $strClass();
 
             // And return
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw $e;
         }
     }

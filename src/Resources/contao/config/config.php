@@ -21,7 +21,7 @@ array_insert(
     [
         'wem-locations' => [
             'wem-maps' => [
-                'tables' => ['tl_wem_map', 'tl_wem_map_category', 'tl_wem_location', 'tl_content', 'tl_wem_location_attr_value'],
+                'tables' => ['tl_wem_map', 'tl_wem_map_category', 'tl_wem_item', 'tl_content', 'tl_wem_item_attr_value'],
                 'import' => ['WEM\GeoDataBundle\Backend\Callback', 'importLocations'],
                 'export' => ['WEM\GeoDataBundle\Backend\Callback', 'exportLocations'],
                 'geocode' => ['WEM\GeoDataBundle\Backend\Callback', 'geocode'],
@@ -34,18 +34,18 @@ array_insert(
 /*
  * Load icon in Contao 4.2 backend
  */
-if ('BE' === TL_MODE) {
-    if (version_compare(VERSION, '4.4', '<')) {
-        $GLOBALS['TL_CSS'][] = 'bundles/wem-geodata/backend/backend.css';
-    } else {
+// if ('BE' === TL_MODE) {
+//     if (version_compare(VERSION, '4.4', '<')) {
+//         $GLOBALS['TL_CSS'][] = 'bundles/wem-geodata/backend/backend.css';
+//     } else {
         $GLOBALS['TL_CSS'][] = 'bundles/wem-geodata/backend/backend_svg.css';
-    }
-}
+//     }
+// }
 
 /*
  * Frontend modules
  */
-array_insert(
+ArrayUtil::arrayInsert(
     $GLOBALS['FE_MOD'],
     2,
     [
@@ -61,8 +61,8 @@ array_insert(
  * Models
  */
 $GLOBALS['TL_MODELS'][\WEM\GeoDataBundle\Model\Map::getTable()] = 'WEM\GeoDataBundle\Model\Map';
-$GLOBALS['TL_MODELS'][\WEM\GeoDataBundle\Model\Location::getTable()] = 'WEM\GeoDataBundle\Model\Location';
-$GLOBALS['TL_MODELS'][\WEM\GeoDataBundle\Model\LocationAttributeValue::getTable()] = 'WEM\GeoDataBundle\Model\LocationAttributeValue';
+$GLOBALS['TL_MODELS'][\WEM\GeoDataBundle\Model\Item::getTable()] = 'WEM\GeoDataBundle\Model\Item';
+$GLOBALS['TL_MODELS'][\WEM\GeoDataBundle\Model\ItemAttributeValue::getTable()] = 'WEM\GeoDataBundle\Model\ItemAttributeValue';
 $GLOBALS['TL_MODELS'][\WEM\GeoDataBundle\Model\Category::getTable()] = 'WEM\GeoDataBundle\Model\Category';
 
 /*

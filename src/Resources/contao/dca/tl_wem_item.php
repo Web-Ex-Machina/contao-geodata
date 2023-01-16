@@ -13,21 +13,21 @@ declare(strict_types=1);
  */
 
 /*
- * Table tl_wem_location.
+ * Table tl_wem_item.
  */
-$GLOBALS['TL_DCA']['tl_wem_location'] = [
+$GLOBALS['TL_DCA']['tl_wem_item'] = [
     // Config
     'config' => [
         'dataContainer' => 'Table',
         'ptable' => 'tl_wem_map',
-        'ctable' => ['tl_content', 'tl_wem_location_attr_value'],
+        'ctable' => ['tl_content', 'tl_wem_item_attr_value'],
         'switchToEdit' => true,
         'enableVersioning' => true,
         'onload_callback' => [
-            ['tl_wem_location', 'checkIfGeocodeExists'],
+            ['tl_wem_item', 'checkIfGeocodeExists'],
         ],
         'onsubmit_callback' => [
-            //array('tl_wem_location', 'fetchCoordinates'),
+            //array('tl_wem_item', 'fetchCoordinates'),
         ],
         'sql' => [
             'keys' => [
@@ -44,24 +44,24 @@ $GLOBALS['TL_DCA']['tl_wem_location'] = [
             'fields' => ['country DESC'],
             'headerFields' => ['title'],
             'panelLayout' => 'filter;sort,search,limit',
-            'child_record_callback' => ['tl_wem_location', 'listItems'],
+            'child_record_callback' => ['tl_wem_item', 'listItems'],
             'child_record_class' => 'no_padding',
         ],
         'global_operations' => [
             'geocodeAll' => [
-                'label' => &$GLOBALS['TL_LANG']['tl_wem_location']['geocodeAll'],
+                'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['geocodeAll'],
                 'href' => 'key=geocodeAll',
                 'class' => 'header_geocodeAll',
-                'attributes' => 'onclick="Backend.getScrollOffset()" data-confirm="'.$GLOBALS['TL_LANG']['tl_wem_location']['geocodeAllConfirm'].'"',
+                'attributes' => 'onclick="Backend.getScrollOffset()" data-confirm="'.$GLOBALS['TL_LANG']['tl_wem_item']['geocodeAllConfirm'].'"',
             ],
             'import' => [
-                'label' => &$GLOBALS['TL_LANG']['tl_wem_location']['import'],
+                'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['import'],
                 'href' => 'key=import',
                 'class' => 'header_css_import',
                 'attributes' => 'onclick="Backend.getScrollOffset()"',
             ],
             'export' => [
-                'label' => &$GLOBALS['TL_LANG']['tl_wem_location']['export'],
+                'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['export'],
                 'href' => 'key=export',
                 'class' => 'header_css_import',
                 'attributes' => 'onclick="Backend.getScrollOffset()"',
@@ -75,39 +75,39 @@ $GLOBALS['TL_DCA']['tl_wem_location'] = [
         ],
         'operations' => [
             'edit' => [
-                'label' => &$GLOBALS['TL_LANG']['tl_wem_location']['edit'],
+                'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['edit'],
                 'href' => 'table=tl_content',
                 'icon' => 'edit.svg',
             ],
             'editheader' => [
-                'label' => &$GLOBALS['TL_LANG']['tl_wem_location']['editheader'],
+                'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['editheader'],
                 'href' => 'act=edit',
                 'icon' => 'header.svg',
             ],
             'copy' => [
-                'label' => &$GLOBALS['TL_LANG']['tl_wem_location']['copy'],
+                'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['copy'],
                 'href' => 'act=copy',
                 'icon' => 'copy.gif',
             ],
             'delete' => [
-                'label' => &$GLOBALS['TL_LANG']['tl_wem_location']['delete'],
+                'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['delete'],
                 'href' => 'act=delete',
                 'icon' => 'delete.gif',
                 'attributes' => 'onclick="if(!confirm(\''.$GLOBALS['TL_LANG']['MSC']['deleteConfirm'].'\'))return false;Backend.getScrollOffset()"',
             ],
             'show' => [
-                'label' => &$GLOBALS['TL_LANG']['tl_wem_location']['show'],
+                'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['show'],
                 'href' => 'act=show',
                 'icon' => 'show.gif',
             ],
             'toggle' => [
-                'label' => &$GLOBALS['TL_LANG']['tl_wem_location']['toggle'],
+                'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['toggle'],
                 'icon' => 'visible.gif',
                 'attributes' => 'onclick="Backend.getScrollOffset();return AjaxRequest.toggleVisibility(this,%s)"',
-                'button_callback' => ['tl_wem_location', 'toggleIcon'],
+                'button_callback' => ['tl_wem_item', 'toggleIcon'],
             ],
             'geocode' => [
-                'label' => &$GLOBALS['TL_LANG']['tl_wem_location']['geocode'],
+                'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['geocode'],
                 'href' => 'key=geocode',
                 'icon' => 'bundles/altradmap/backend/icon_geocode_16.png',
             ],
@@ -145,7 +145,7 @@ $GLOBALS['TL_DCA']['tl_wem_location'] = [
 
         // {location_legend},title,alias,category,published;
         'title' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_location']['title'],
+            'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['title'],
             'exclude' => true,
             'search' => true,
             'inputType' => 'text',
@@ -153,31 +153,31 @@ $GLOBALS['TL_DCA']['tl_wem_location'] = [
             'sql' => "varchar(255) NOT NULL default ''",
         ],
         'alias' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_location']['alias'],
+            'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['alias'],
             'exclude' => true,
             'search' => true,
             'inputType' => 'text',
             'eval' => ['rgxp' => 'alias', 'doNotCopy' => true, 'unique' => true, 'maxlength' => 128, 'tl_class' => 'w50'],
             'save_callback' => [
-                ['tl_wem_location', 'generateAlias'],
+                ['tl_wem_item', 'generateAlias'],
             ],
             'sql' => "varchar(128) BINARY NOT NULL default ''",
         ],
         'category' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_location']['category'],
+            'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['category'],
             'exclude' => true,
             'filter' => true,
             'sorting' => true,
             'flag' => 11,
             'inputType' => 'select',
             'foreignKey' => 'tl_wem_map_category.title',
-            'options_callback' => ['tl_wem_location', 'getMapCategories'],
+            'options_callback' => ['tl_wem_item', 'getMapCategories'],
             'eval' => ['chosen' => true, 'includeBlankOption' => true, 'tl_class' => 'w50'],
             'sql' => "int(10) unsigned NOT NULL default '0'",
             'relation' => ['type' => 'hasOne', 'load' => 'lazy'],
         ],
         'published' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_location']['published'],
+            'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['published'],
             'exclude' => true,
             'filter' => true,
             'flag' => 1,
@@ -188,14 +188,14 @@ $GLOBALS['TL_DCA']['tl_wem_location'] = [
 
         // {coords_legend},lat,lng;
         'lat' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_location']['lat'],
+            'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['lat'],
             'exclude' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 255, 'tl_class' => 'w50'],
             'sql' => "varchar(255) NOT NULL default ''",
         ],
         'lng' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_location']['lng'],
+            'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['lng'],
             'exclude' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 255, 'tl_class' => 'w50'],
@@ -204,14 +204,14 @@ $GLOBALS['TL_DCA']['tl_wem_location'] = [
 
         // {street_legend},street,postal,city,region,country;
         'street' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_location']['street'],
+            'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['street'],
             'exclude' => true,
             'inputType' => 'textarea',
             'eval' => ['tl_class' => 'w100 clr'],
             'sql' => 'text NULL',
         ],
         'postal' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_location']['postal'],
+            'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['postal'],
             'exclude' => true,
             'filter' => true,
             'inputType' => 'text',
@@ -219,7 +219,7 @@ $GLOBALS['TL_DCA']['tl_wem_location'] = [
             'sql' => "varchar(255) NOT NULL default ''",
         ],
         'city' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_location']['city'],
+            'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['city'],
             'exclude' => true,
             'filter' => true,
             'inputType' => 'text',
@@ -227,7 +227,7 @@ $GLOBALS['TL_DCA']['tl_wem_location'] = [
             'sql' => "varchar(255) NOT NULL default ''",
         ],
         'admin_lvl_1' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_location']['admin_lvl_1'],
+            'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['admin_lvl_1'],
             'exclude' => true,
             'filter' => true,
             'inputType' => 'text',
@@ -235,7 +235,7 @@ $GLOBALS['TL_DCA']['tl_wem_location'] = [
             'sql' => "varchar(64) NOT NULL default ''",
         ],
         'admin_lvl_2' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_location']['admin_lvl_2'],
+            'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['admin_lvl_2'],
             'exclude' => true,
             'filter' => true,
             'inputType' => 'text',
@@ -243,7 +243,7 @@ $GLOBALS['TL_DCA']['tl_wem_location'] = [
             'sql' => "varchar(64) NOT NULL default ''",
         ],
         'admin_lvl_3' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_location']['admin_lvl_3'],
+            'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['admin_lvl_3'],
             'exclude' => true,
             'filter' => true,
             'inputType' => 'text',
@@ -251,7 +251,7 @@ $GLOBALS['TL_DCA']['tl_wem_location'] = [
             'sql' => "varchar(64) NOT NULL default ''",
         ],
         'country' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_location']['country'],
+            'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['country'],
             'exclude' => true,
             'filter' => true,
             'sorting' => true,
@@ -263,14 +263,14 @@ $GLOBALS['TL_DCA']['tl_wem_location'] = [
 
         // {data_legend},picture,teaser;
         'picture' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_location']['picture'],
+            'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['picture'],
             'exclude' => true,
             'inputType' => 'fileTree',
             'eval' => ['filesOnly' => true, 'fieldType' => 'radio', 'tl_class' => 'clr'],
             'sql' => 'binary(16) NULL',
         ],
         'teaser' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_location']['teaser'],
+            'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['teaser'],
             'exclude' => true,
             'search' => true,
             'inputType' => 'textarea',
@@ -280,28 +280,28 @@ $GLOBALS['TL_DCA']['tl_wem_location'] = [
 
         // {contact_legend},phone,fax,cellphone,email;
         'phone' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_location']['phone'],
+            'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['phone'],
             'exclude' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 64, 'tl_class' => 'w50'],
             'sql' => "varchar(64) NOT NULL default ''",
         ],
         'fax' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_location']['fax'],
+            'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['fax'],
             'exclude' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 64, 'tl_class' => 'w50'],
             'sql' => "varchar(64) NOT NULL default ''",
         ],
         'cellphone' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_location']['cellphone'],
+            'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['cellphone'],
             'exclude' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 64, 'tl_class' => 'w50'],
             'sql' => "varchar(64) NOT NULL default ''",
         ],
         'email' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_location']['email'],
+            'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['email'],
             'exclude' => true,
             'search' => true,
             'inputType' => 'text',
@@ -311,7 +311,7 @@ $GLOBALS['TL_DCA']['tl_wem_location'] = [
 
         // {links_legend},website,facebook,twitter,instagram
         'website' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_location']['website'],
+            'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['website'],
             'exclude' => true,
             'search' => true,
             'inputType' => 'text',
@@ -319,7 +319,7 @@ $GLOBALS['TL_DCA']['tl_wem_location'] = [
             'sql' => "varchar(255) NOT NULL default ''",
         ],
         'facebook' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_location']['facebook'],
+            'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['facebook'],
             'exclude' => true,
             'search' => true,
             'inputType' => 'text',
@@ -327,7 +327,7 @@ $GLOBALS['TL_DCA']['tl_wem_location'] = [
             'sql' => "varchar(255) NOT NULL default ''",
         ],
         'twitter' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_location']['twitter'],
+            'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['twitter'],
             'exclude' => true,
             'search' => true,
             'inputType' => 'text',
@@ -335,7 +335,7 @@ $GLOBALS['TL_DCA']['tl_wem_location'] = [
             'sql' => "varchar(255) NOT NULL default ''",
         ],
         'instagram' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_location']['instagram'],
+            'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['instagram'],
             'exclude' => true,
             'search' => true,
             'inputType' => 'text',
@@ -343,9 +343,9 @@ $GLOBALS['TL_DCA']['tl_wem_location'] = [
             'sql' => "varchar(255) NOT NULL default ''",
         ],
         'attributes' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_location']['attributes'],
+            'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['attributes'],
             'inputType' => 'dcaWizard',
-            'foreignTable' => 'tl_wem_location_attr_value',
+            'foreignTable' => 'tl_wem_item_attr_value',
             'foreignField' => 'pid',
             'eval' => [
                 'fields' => ['attribute', 'value'],
@@ -368,7 +368,7 @@ $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/altradmap/backend/backend.js';
  *
  * @author Web ex Machina <https://www.webexmachina.fr>
  */
-class tl_wem_location extends Backend
+class tl_wem_item extends Backend
 {
     /**
      * Import the back end user object.
@@ -434,7 +434,7 @@ class tl_wem_location extends Backend
             }
         }
 
-        $objAlias = $this->Database->prepare('SELECT id FROM tl_wem_location WHERE alias=? AND id!=?')
+        $objAlias = $this->Database->prepare('SELECT id FROM tl_wem_item WHERE alias=? AND id!=?')
                                    ->execute($varValue, $dc->id)
         ;
 
@@ -458,7 +458,7 @@ class tl_wem_location extends Backend
         $objMap = \WEM\GeoDataBundle\Model\Map::findByPk(\Input::get('id'));
 
         if ('' === $objMap->geocodingProvider) {
-            unset($GLOBALS['TL_DCA']['tl_wem_location']['list']['global_operations']['geocodeAll'], $GLOBALS['TL_DCA']['tl_wem_location']['list']['operations']['geocode']);
+            unset($GLOBALS['TL_DCA']['tl_wem_item']['list']['global_operations']['geocodeAll'], $GLOBALS['TL_DCA']['tl_wem_item']['list']['operations']['geocode']);
         }
     }
 
@@ -503,7 +503,7 @@ class tl_wem_location extends Backend
         }
 
         // Check permissions AFTER checking the tid, so hacking attempts are logged
-        if (!$this->User->hasAccess('tl_wem_location::published', 'alexf')) {
+        if (!$this->User->hasAccess('tl_wem_item::published', 'alexf')) {
             return '';
         }
 
@@ -530,17 +530,17 @@ class tl_wem_location extends Backend
         Input::setGet('act', 'toggle');
 
         // Check permissions to publish
-        if (!$this->User->hasAccess('tl_wem_location::published', 'alexf')) {
+        if (!$this->User->hasAccess('tl_wem_item::published', 'alexf')) {
             $this->log('Not enough permissions to publish/unpublish agence item ID "'.$intId.'"', __METHOD__, TL_ERROR);
             $this->redirect('contao/main.php?act=error');
         }
 
-        $objVersions = new Versions('tl_wem_location', $intId);
+        $objVersions = new Versions('tl_wem_item', $intId);
         $objVersions->initialize();
 
         // Trigger the save_callback
-        if (\is_array($GLOBALS['TL_DCA']['tl_wem_location']['fields']['published']['save_callback'])) {
-            foreach ($GLOBALS['TL_DCA']['tl_wem_location']['fields']['published']['save_callback'] as $callback) {
+        if (\is_array($GLOBALS['TL_DCA']['tl_wem_item']['fields']['published']['save_callback'])) {
+            foreach ($GLOBALS['TL_DCA']['tl_wem_item']['fields']['published']['save_callback'] as $callback) {
                 if (\is_array($callback)) {
                     $this->import($callback[0]);
                     $blnVisible = $this->$callback[0]->$callback[1]($blnVisible, ($dc ?: $this));
@@ -551,11 +551,11 @@ class tl_wem_location extends Backend
         }
 
         // Update the database
-        $this->Database->prepare('UPDATE tl_wem_location SET tstamp='.time().", published='".($blnVisible ? '1' : '')."' WHERE id=?")
+        $this->Database->prepare('UPDATE tl_wem_item SET tstamp='.time().", published='".($blnVisible ? '1' : '')."' WHERE id=?")
                        ->execute($intId)
         ;
 
         $objVersions->create();
-        $this->log('A new version of record "tl_wem_location.id='.$intId.'" has been created'.$this->getParentEntries('tl_wem_location', $intId), __METHOD__, TL_GENERAL);
+        $this->log('A new version of record "tl_wem_item.id='.$intId.'" has been created'.$this->getParentEntries('tl_wem_item', $intId), __METHOD__, TL_GENERAL);
     }
 }

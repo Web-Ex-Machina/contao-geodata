@@ -19,7 +19,7 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
     // Config
     'config' => [
         'dataContainer' => 'Table',
-        'ctable' => ['tl_wem_map_category', 'tl_wem_location'],
+        'ctable' => ['tl_wem_map_category', 'tl_wem_item'],
         'switchToEdit' => true,
         'enableVersioning' => true,
         'sql' => [
@@ -52,7 +52,7 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
         'operations' => [
             'edit' => [
                 'label' => &$GLOBALS['TL_LANG']['tl_wem_map']['edit'],
-                'href' => 'table=tl_wem_location',
+                'href' => 'table=tl_wem_item',
                 'icon' => 'edit.gif',
             ],
             'editheader' => [

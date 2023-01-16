@@ -19,14 +19,14 @@ use WEM\UtilsBundle\Model\Model as CoreModel;
 /**
  * Reads and writes items.
  */
-class Location extends CoreModel
+class Item extends CoreModel
 {
     /**
      * Table name.
      *
      * @var string
      */
-    protected static $strTable = 'tl_wem_location';
+    protected static $strTable = 'tl_wem_item';
 
     /**
      * Search fields
@@ -75,10 +75,10 @@ class Location extends CoreModel
         switch ($strField) {
             case 'attr_value_postal':
                 return "$t.id IN(
-                    SELECT tl_wem_location_attr_value.pid
-                    FROM tl_wem_location_attr_value
-                    WHERE tl_wem_location_attr_value.attribute = 'postal'
-                    AND tl_wem_location_attr_value.value REGEXP '$varValue'
+                    SELECT tl_wem_item_attr_value.pid
+                    FROM tl_wem_item_attr_value
+                    WHERE tl_wem_item_attr_value.attribute = 'postal'
+                    AND tl_wem_item_attr_value.value REGEXP '$varValue'
                 )";
                 break;
             default:

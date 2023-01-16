@@ -16,14 +16,20 @@ namespace WEM\GeoDataBundle\Module;
 
 use WEM\GeoDataBundle\Controller\Util;
 use WEM\GeoDataBundle\Model\Category;
-use WEM\GeoDataBundle\Model\Location;
+use WEM\GeoDataBundle\Model\Item;
+use Contao\FilesModel;
+use Contao\System;
+use Contao\ContentModel;
+use Contao\PageModel;
+use Contao\Config;
+use Contao\Module;
 
 /**
  * Parent class for locations modules.
  *
  * @author Web ex Machina <https://www.webexmachina.fr>
  */
-abstract class Core extends \Module
+abstract class Core extends Module
 {
     protected function getCategories()
     {
@@ -52,7 +58,7 @@ abstract class Core extends \Module
                 $c = ['published' => 1, 'onlyWithCoords' => 1, 'pid' => $this->wem_location_map];
             }
 
-            $objLocations = Location::findItems($c);
+            $objLocations = Item::findItems($c);
 
             if (!$objLocations) {
                 throw new \Exception('No locations found for this map.');
@@ -83,7 +89,7 @@ abstract class Core extends \Module
             }
 
             // Get marker file
-            if ($arrItem['marker'] && $objFile = \FilesModel::findByUuid($arrItem['marker'])) {
+            if ($arrItem['marker'] && $objFile = FilesModel::findByUuid($arrItem['marker'])) {
                 // Get size of the picture
                 $sizes = getimagesize($objFile->path);
                 $arrItem['marker'] = [];
@@ -126,7 +132,7 @@ abstract class Core extends \Module
                 $arrItem = $varItem->row();
             } elseif (\is_array($varItem)) {
                 $arrItem = $varItem;
-            } elseif ($objItem = Location::findByIdOrAlias($varItem)) {
+            } elseif ($objItem = Item::findByIdOrAlias($varItem)) {
                 $arrItem = $objItem->row();
             } else {
                 throw new \Exception('No location found for : '.$varItem);
@@ -146,7 +152,7 @@ abstract class Core extends \Module
             }
 
             // Get location picture
-            if ($objFile = \FilesModel::findByUuid($arrItem['picture'])) {
+            if ($objFile = FilesModel::findByUuid($arrItem['picture'])) {
                 $arrItem['picture'] = [
                     'path' => $objFile->path,
                     'extension' => $objFile->extension,
@@ -157,14 +163,14 @@ abstract class Core extends \Module
             }
 
             // Get country and continent
-            \System::getCountries();
+            System::getCountries();
             $strCountry = strtoupper($arrItem['country']);
             $strContinent = Util::getCountryContinent($strCountry);
             $arrItem['country'] = ['code' => $strCountry, 'name' => $GLOBALS['TL_LANG']['CNT'][$arrItem['country']]];
             $arrItem['continent'] = ['code' => $strContinent, 'name' => $GLOBALS['TL_LANG']['CONTINENT'][$strContinent]];
 
             $strContent = '';
-            $objElement = \ContentModel::findPublishedByPidAndTable($arrItem['id'], 'tl_wem_location');
+            $objElement = ContentModel::findPublishedByPidAndTable($arrItem['id'], 'tl_wem_item');
             if (null !== $objElement) {
                 while ($objElement->next()) {
                     $strContent .= $this->getContentElement($objElement->current());
@@ -173,8 +179,8 @@ abstract class Core extends \Module
             $arrItem['content'] = $strContent;
 
             // Build the item URL
-            if ($this->objJumpTo instanceof \PageModel) {
-                $params = (\Config::get('useAutoItem') ? '/' : '/items/').($arrItem['alias'] ?: $arrItem['id']);
+            if ($this->objJumpTo instanceof PageModel) {
+                $params = (Config::get('useAutoItem') ? '/' : '/items/').($arrItem['alias'] ?: $arrItem['id']);
                 $arrItem['url'] = ampersand($blnAbsolute ? $this->objJumpTo->getAbsoluteUrl($params) : $this->objJumpTo->getFrontendUrl($params));
             }
 
