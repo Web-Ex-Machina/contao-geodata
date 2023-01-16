@@ -1,5 +1,5 @@
 var j = jQuery.noConflict();
-var ajaxLoaderSrc = 'bundles/altradmap/backend/ajax-loader_16_blue.gif';
+var ajaxLoaderSrc = 'bundles/wemgeodata/backend/ajax-loader_16_blue.gif';
 var objStatusClasses = {'success':'tl_confirm', 'error':'tl_error'};
 j(document).ready(function(){
 	j('.geocode').bind('click',function(e){

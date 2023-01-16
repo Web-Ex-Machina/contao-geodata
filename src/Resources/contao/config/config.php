@@ -36,9 +36,9 @@ declare(strict_types=1);
  */
 // if ('BE' === TL_MODE) {
 //     if (version_compare(VERSION, '4.4', '<')) {
-//         $GLOBALS['TL_CSS'][] = 'bundles/wem-geodata/backend/backend.css';
+//         $GLOBALS['TL_CSS'][] = 'bundles/wemgeodata/backend/backend.css';
 //     } else {
-        $GLOBALS['TL_CSS'][] = 'bundles/wem-geodata/backend/backend_svg.css';
+        $GLOBALS['TL_CSS'][] = 'bundles/wemgeodata/backend/backend_svg.css';
 //     }
 // }
 

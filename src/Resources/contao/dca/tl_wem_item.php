@@ -109,7 +109,7 @@ $GLOBALS['TL_DCA']['tl_wem_item'] = [
             'geocode' => [
                 'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['geocode'],
                 'href' => 'key=geocode',
-                'icon' => 'bundles/altradmap/backend/icon_geocode_16.png',
+                'icon' => 'bundles/wemgeodata/backend/icon_geocode_16.png',
             ],
         ],
     ],
@@ -361,7 +361,7 @@ $GLOBALS['TL_DCA']['tl_wem_item'] = [
 
 // Load JS to handle backend events
 $GLOBALS['TL_JAVASCRIPT'][] = 'https://code.jquery.com/jquery-3.3.1.min.js';
-$GLOBALS['TL_JAVASCRIPT'][] = 'bundles/altradmap/backend/backend.js';
+$GLOBALS['TL_JAVASCRIPT'][] = 'bundles/wemgeodata/backend/backend.js';
 
 /**
  * Provide miscellaneous methods that are used by the data configuration array.

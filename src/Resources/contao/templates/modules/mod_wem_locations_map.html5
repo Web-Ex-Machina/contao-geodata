@@ -77,7 +77,7 @@
 				mapAttribution       : 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> — Map data © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 				marker               :  
 				{
-					iconUrl          : 'bundles/altradmap/img/Icon_default.png',
+					iconUrl          : 'bundles/wemgeodata/img/Icon_default.png',
 					iconSize         : [60,60],
 				}
 			};
