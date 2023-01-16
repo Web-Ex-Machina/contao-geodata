@@ -1,3 +1,6 @@
+<?php if($this->map['doNotAddItemsToContaoSearch']): ?>
+<!-- indexer::stop -->
+<?php endif; ?>
 <div class="<?= $this->class ?> block">
 	<?php if($this->error): ?>
 	<div class="error">
@@ -6,4 +9,8 @@
 	<?php else: ?>
 		<?php print_r($this->item); ?>
 	<?php endif; ?>
+
 </div>
+<?php if($this->map['doNotAddItemsToContaoSearch']): ?>
+<!-- indexer::continue -->
+<?php endif; ?>

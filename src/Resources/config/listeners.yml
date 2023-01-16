@@ -1,5 +1,5 @@
 services:
-  wem.geodata.vent_listener.sitemap_listener:
+  wem.geodata.listener.sitemap_listener:
     class: WEM\GeoDataBundle\EventListener\SitemapListener
     tags:
         - { name: kernel.event_listener, event: contao.sitemap }

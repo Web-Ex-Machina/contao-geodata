@@ -20,6 +20,7 @@ use WEM\GeoDataBundle\Model\Item;
 use Contao\CoreBundle\Exception\PageNotFoundException;
 use Contao\Environment;
 use Contao\Input;
+use WEM\GeoDataBundle\Model\Map;
 
 /**
  * Front end module "locations reader".
@@ -87,7 +88,9 @@ class LocationsReader extends Core
             }
 
             $arrItem = $this->getLocation($objItem);
+            $objMap = Map::findByPk($objItem->pid);
             $this->Template->item = $arrItem;
+            $this->Template->map = $objMap->row();
         } catch (\Exception $e) {
             $this->Template->error = true;
             $this->Template->msg = $e->getMessage();
