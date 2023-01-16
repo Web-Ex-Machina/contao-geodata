@@ -1,0 +1,42 @@
+/* MODULE */
+.mod_wem_display_map{position:relative;display:-webkit-box;display:-ms-flexbox;display:flex;width:100%;min-height:400px;}
+
+/* MAP */
+.mod_wem_display_map .map__container{width:70%;height:100%;}
+.mod_wem_display_map .map__container.full{width:100%;}
+
+/* LIST */
+.mod_wem_display_map .map__list.rightpanel{
+  width:30%;height:100%;overflow:hidden;background-color: rgba(255,255,255,0.8); position: absolute; left: 100%; z-index: 50;
+  display: -webkit-box; display: -ms-flexbox; display: flex;
+  -webkit-box-orient: vertical; -webkit-box-direction: normal; -ms-flex-direction: column; flex-direction: column;
+  -webkit-box-shadow: -5px 5px 10px rgba(0,0,0,0.2);box-shadow: -5px 5px 10px rgba(0,0,0,0.2);
+  -webkit-transition: -webkit-transform 0.6s; transition: -webkit-transform 0.6s; -o-transition: transform 0.6s; transition: transform 0.6s; transition: transform 0.6s, -webkit-transform 0.6s;
+  -webkit-transform: translate3d(0%,0,0); transform: translate3d(0%,0,0);
+}
+.mod_wem_display_map .map__list.rightpanel.active{-webkit-transform: translate3d(-100%,0,0); transform: translate3d(-100%,0,0);}
+.mod_wem_display_map .map__list.rightpanel .map__list__title{margin-top: 0;margin-bottom: 0; text-transform: uppercase; background-color: #666; color: #fff; padding: 30px;}
+.mod_wem_display_map .map__list.rightpanel .map__list__wrapper{ height: 100%; overflow: auto;}
+.mod_wem_display_map .map__list.rightpanel .map__list__item{overflow: hidden; cursor: pointer; padding: 15px 0;  border-bottom: 1px solid #000; clear: both;}
+.mod_wem_display_map .map__list.rightpanel .map__list__item:last-of-type{border-bottom:0;}
+.mod_wem_display_map .map__list.rightpanel .map__list__item.active{display: block;}
+.mod_wem_display_map .map__list.rightpanel .map__list__item.selected,
+.mod_wem_display_map .map__list.rightpanel .map__list__item.hover,
+.mod_wem_display_map .map__list.rightpanel .map__list__item:hover{background-color: rgba(0,0,0,0.1);}
+.mod_wem_display_map .map__list.rightpanel .map__list__item *[class*="col-"]{padding:0 15px;}
+.mod_wem_display_map .map__list.rightpanel .map__list__item p{margin-top: 0;}
+
+/* RESET BUTTON */
+.mod_wem_display_map .map__reset{position: absolute; margin: 0; top: 15px;left: 15px; display: none; ;z-index:51;
+  -webkit-box-shadow: 1px 3px 10px rgba(0,0,0,.5);box-shadow: 1px 3px 10px rgba(0,0,0,.5);
+}
+.mod_wem_display_map .map__reset.active{display: block;}
+
+/* RETRACT BUTTON */
+.mod_wem_display_map .map__toggleList{position:absolute;right:0;top:0;z-index:52;}
+.mod_wem_display_map .map__toggleList span{
+  display: inline-block;
+  -webkit-transition: -webkit-transform 0.6s; transition: -webkit-transform 0.6s; -o-transition: transform 0.6s; transition: transform 0.6s; transition: transform 0.6s, -webkit-transform 0.6s;
+  -webkit-transform: rotate(180deg); transform: rotate(180deg);
+}
+.mod_wem_display_map .map__toggleList.active span{-webkit-transform: rotate(0deg); transform: rotate(0deg);}

@@ -1,0 +1,56 @@
+<div class="locations__list">
+  <div class="h3 locations__list__title"><?= $GLOBALS['TL_LANG']['WEM']['LOCATIONS']['TITLE']['PANEL'] ?> <span class="location"></span></div>
+  <?php if($this->filters && "inlist" == $this->filters_position): ?>
+  <form action="<?= $this->filters_action ?>" method="<?= $this->filters_method ?>">
+  <div class="locations__filters">
+    <?php foreach($this->filters as $f): ?>
+    <div class="filter">
+      <?php if('text' == $f['type']) : ?>
+        <label for="filter_<?= $f['name'] ?>"><?= $f['label'] ?></label>
+        <input type="text" id="filter_<?= $f['name'] ?>" name="<?= $f['name'] ?>" value="<?= $f['value'] ?>" placeholder="<?= $f['placeholder'] ?>" />
+      <?php else: ?>
+        <label for="filter_<?= $f['name'] ?>"><?= $f['label'] ?></label>
+        <select id="filter_<?= $f['name'] ?>" name="<?= $f['name'] ?>" placeholder="<?= $f['placeholder'] ?>">
+          <option value="">Tous</option>
+          <?php foreach($f['options'] as $o): ?>
+          <option value="<?= $o ?>"><?= $o ?></option>
+          <?php endforeach; ?>
+        </select>
+      <?php endif; ?>
+    </div>
+    <?php endforeach; ?>
+    <div class="filter submit">
+      <input type="submit" class="btn" value="Go" />
+    </div>
+  </div>
+  </form>
+  <?php endif; ?>
+
+  <div class="map__list__wrapper">
+    <?php foreach ($this->locations as $key => $location): ?>
+      <div class="map__list__item" data-id="<?= $location['id'] ?>" data-marker="<?= $location['country']['code'].'-'.str_replace(' ', '_', strtolower($location['title'])) ?>" data-country="<?= $location['country']['code'] ?>" data-continent="<?= $location['continent']['code'] ?>">
+        <p class="ft-b col-xs-12"><?= $location['title'] ?></p>
+        
+        <?php if($location['address']): ?>
+        <div class="col-xs-6">
+          <?= $location['address'] ?>
+        </div>
+        <?php endif; ?>
+
+        <?php if($location['phone'] || $location['email']): ?>
+        <div class="col-xs-6">
+          <?php if($location['phone']): ?><?= $location['phone'] ?><?php endif; ?>
+          <?php if($location['phone'] && $location['email']): ?><br><?php endif; ?>
+          <?php if($location['email']): ?><?= $location['email'] ?><?php endif; ?>
+        </div>
+        <?php endif; ?>
+        
+        <?php if($location['url']): ?>
+        <div class="col-xs-6">
+          <a href="<?= $location['url'] ?>" title="<?= $location['title'] ?>"><?= $GLOBALS['TL_LANG']['WEM']['LOCATIONS']['BUTTON']['READMORE'] ?></a>
+        </div>
+        <?php endif; ?>
+      </div>
+    <?php endforeach ?>
+  </div>
+</div>

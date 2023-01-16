@@ -1,0 +1,94 @@
+<?xml version="1.0" ?><xliff version="1.1">
+  <file datatype="php" original="system/modules/wem-contao-locations/languages/en/tl_module.php" source-language="en" target-language="fr">
+    <body>
+      <trans-unit id="tl_module.wem_location_map.0">
+        <source>Map</source>
+        <target>Carte</target>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_location_map.1">
+        <source>Select the map to display.</source>
+        <target>Sélectionner la carte à afficher.</target>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_location_map_list.0">
+        <source>List</source>
+        <target>Liste</target>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_location_map_list.1">
+        <source>Add a list of items to the map.</source>
+        <target>Ajouter une liste des éléments à la carte.</target>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_location_map_list.nolist">
+        <source>No list</source>
+        <target>Pas de liste</target>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_location_map_list.rightpanel">
+        <source>Right panel</source>
+        <target>Panneau à droite</target>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_location_map_list.below">
+        <source>Below</source>
+        <target>En dessous</target>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_location_map_filters.0">
+        <source>Filters</source>
+        <target>Filtres</target>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_location_map_filters.1">
+        <source>Add filters to the module.</source>
+        <target>Ajouter des filtres au module.</target>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_location_map_filters.nofilters">
+        <source>No filters</source>
+        <target>Pas de filtres</target>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_location_map_filters.inmap">
+        <source>In map</source>
+        <target>Dans la carte</target>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_location_map_filters.inlist">
+        <source>In list</source>
+        <target>Dans la liste</target>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_location_map_filters_fields.0">
+        <source>Filter fields</source>
+        <target>Champs filtrables</target>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_location_map_filters_fields.1">
+        <source>Select the filters to display.</source>
+        <target>Sélectionnez les filtres à afficher.</target>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_location_map_filters_fields.search">
+        <source>Search</source>
+        <target>Recherche</target>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_location_map_filters_fields.category">
+        <source>Category</source>
+        <target>Catégorie</target>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_location_map_filters_fields.country">
+        <source>Country</source>
+        <target>Pays</target>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_location_map_filters_fields.admin_lvl_1">
+        <source>Administrative Area (Level 1)</source>
+        <target>Zone administrative (Niveau 1)</target>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_location_map_filters_fields.admin_lvl_2">
+        <source>Administrative Area (Level 2)</source>
+        <target>Zone administrative (Niveau 2)</target>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_location_map_filters_fields.city">
+        <source>City</source>
+        <target>Ville</target>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_location_distToMerge.0">
+        <source>Merge close markers</source>
+        <target>Fusionner les marqueurs proches</target>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_location_distToMerge.1">
+        <source>The marker will be merged if they are within the distance entered (in m)</source>
+        <target>Les marqueurs seront fusionnés s'ils sont dans la distance entrée (en m)</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

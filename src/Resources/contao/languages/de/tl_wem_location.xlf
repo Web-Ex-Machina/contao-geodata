@@ -1,0 +1,237 @@
+<?xml version="1.0" ?><xliff version="1.1">
+  <file datatype="php" original="system/modules/wem-contao-locations/languages/en/tl_wem_location.php" source-language="en" target-language="de">
+    <body>
+    	<trans-unit id="tl_wem_location.location_legend">
+			<source>Global informations</source>
+			<target>Globale Informationen</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.title.0">
+			<source>Title</source>
+			<target>Name</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.title.1">
+			<source>Enter the map title</source>
+			<target>Bitte Kartennamen eingeben.</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.published.0">
+			<source>Publish</source>
+			<target>Veröffentlichen</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.published.1">
+			<source>Check to display the location on the frontend map</source>
+			<target>Auswählen um den Standort auf der Karte zu veröffentlichen</target>
+		</trans-unit>
+
+		<trans-unit id="tl_wem_location.coords_legend">
+			<source>Coordinates</source>
+			<target>Koordinaten</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.lat.0">
+			<source>Latitude</source>
+			<target>Breitengrad</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.lat.1">
+			<source>Enter the location latitude</source>
+			<target>Breitengrad eingeben</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.lng.0">
+			<source>Longitude</source>
+			<target>Längengrad</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.lng.1">
+			<source>Enter the location longitude</source>
+			<target>Längengrad eingeben</target>
+		</trans-unit>
+
+		<trans-unit id="tl_wem_location.street_legend">
+			<source>Postal address</source>
+			<target>Postanschrift</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.street.0">
+			<source>Street</source>
+			<target>Straße</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.street.1">
+			<source>Enter the location street</source>
+			<target>Straße eingeben</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.postal.0">
+			<source>Postal</source>
+			<target>PLZ</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.postal.1">
+			<source>Enter the location postal code</source>
+			<target>Postleitzahl eingeben</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.city.0">
+			<source>City</source>
+			<target>Stadt</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.city.1">
+			<source>Enter the location city</source>
+			<target>Stadt eingeben</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.region.0">
+			<source>Region</source>
+			<target>Region</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.region.1">
+			<source>Enter the location region</source>
+			<target>Region/Bundesland eingeben</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.country.0">
+			<source>Country</source>
+			<target>Land</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.country.1">
+			<source>Enter the location country</source>
+			<target>Land eingeben</target>
+		</trans-unit>
+
+		<trans-unit id="tl_wem_location.contact_legend">
+			<source>Contact Data</source>
+			<target>Kontaktdaten</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.phone.0">
+			<source>Phone</source>
+			<target>Telefon</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.phone.1">
+			<source>Enter the location phone number</source>
+			<target>Telefonnummer eingeben</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.email.0">
+			<source>Email</source>
+			<target>E-Mail</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.email.1">
+			<source>Enter the location mail address</source>
+			<target>E-Mail Adresse eingeben</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.website.0">
+			<source>Website</source>
+			<target>Internet Adresse</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.website.1">
+			<source>Enter the location website URL</source>
+			<target>Internet Adresse eingeben</target>
+		</trans-unit>
+
+		<trans-unit id="tl_wem_location.new.0">
+			<source>New location</source>
+			<target>Neuer Standort</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.new.1">
+			<source>Create a new location</source>
+			<target>Einen neuen Standort erstellen</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.edit.0">
+			<source>Edit location</source>
+			<target>Standort bearbeiten</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.edit.1">
+			<source>Edit location ID %s</source>
+			<target>Standort ID %s bearbeiten</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.copy.0">
+			<source>Copy location</source>
+			<target>Standort kopieren</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.copy.1">
+			<source>Copy location ID %s</source>
+			<target>Standort ID %s kopieren</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.delete.0">
+			<source>Delete location</source>
+			<target>Standort löschen</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.delete.1">
+			<source>Delete location ID %s</source>
+			<target>Standort ID %s löschen</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.show.0">
+			<source>Show location data</source>
+			<target>Standortdaten anzeigen</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.show.1">
+			<source>Show location data ID %s</source>
+			<target>Standortdaten von ID %s anzeigen</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.toggle.0">
+			<source>Show/Hide location</source>
+			<target>Anzeigen/Verstecken des Standorts</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.toggle.1">
+			<source>Show/Hide location ID %s</source>
+			<target>Anzeigen/Verstecken des Standorts ID %s</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.geocode.0">
+			<source>Find location coordinates</source>
+			<target>Standortdaten finden</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.geocode.1">
+			<source>Find location ID %s coordinates</source>
+			<target>Standortdaten von ID %s finden</target>
+		</trans-unit>
+
+		<trans-unit id="tl_wem_location.import.0">
+			<source>Import</source>
+			<target>Import</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.import.1">
+			<source>Import locations in this map</source>
+			<target>Importieren von Standorten in diese Karte</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.source.0">
+			<source>File</source>
+			<target>Datei</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.source.1">
+			<source>Select the Excel File with your locations</source>
+			<target>Wähle Excel Datei mit Standorten aus</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.export.0">
+			<source>Export</source>
+			<target>Export</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.export.1">
+			<source>Export locations of this map</source>
+			<target>Exportiere Standorte dieser Karte</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.importExampleTitle">
+			<source>Your Excel file should looks like this :</source>
+			<target>Die Excel Datei sollte wie folgt aussehen:</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.importListCountriesTitle">
+			<source>You will find the list of the countries below :</source>
+			<target>Eine Liste der Länder ist unten zu finden :</target>
+		</trans-unit>
+
+		<trans-unit id="tl_wem_location.geocodeAll.0">
+			<source>Geocode</source>
+			<target>Geocode</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.geocodeAll.1">
+			<source>Geocode all locations</source>
+			<target>Geocode aller Standorte</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.geocodeAllConfirm">
+			<source>Are you sure you want to geocode all locations ?</source>
+			<target>Sicher, dass alle Standorte geogecodet werden sollen ?</target>
+		</trans-unit>
+
+		<trans-unit id="tl_wem_location.createdConfirmation">
+			<source>%s locations have been created</source>
+			<target>%s Standorte wurden erstellt</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.updatedConfirmation">
+			<source>%s locations have been updated</source>
+			<target>%s Standorte wurden aktualisisert</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.deletedConfirmation">
+			<source>%s locations have been deleted</source>
+			<target>%s Standorte wurden gelöscht</target>
+		</trans-unit>
+    </body>
+  </file>
+</xliff>

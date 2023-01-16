@@ -1,0 +1,9 @@
+<div class="<?= $this->class ?> block">
+	<?php if($this->error): ?>
+	<div class="error">
+		<?= $this->msg ?>
+	</div>
+	<?php else: ?>
+		<?php print_r($this->item); ?>
+	<?php endif; ?>
+</div>

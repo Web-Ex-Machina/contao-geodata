@@ -1,0 +1,343 @@
+<?xml version="1.0" ?><xliff version="1.1">
+  <file datatype="php" original="system/modules/wem-contao-locations/languages/en/tl_wem_location.php" source-language="en" target-language="fr">
+    <body>
+    	<trans-unit id="tl_wem_location.location_legend">
+			<source>Global informations</source>
+			<target>Informations générales</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.title.0">
+			<source>Title</source>
+			<target>Intitulé</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.title.1">
+			<source>Enter the map title</source>
+			<target>Saisissez le titre de la carte</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.alias.0">
+			<source>Location alias</source>
+			<target>Alias d'emplacement</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.alias.1">
+			<source>The location alias is a unique reference to the location item which can be called instead of its numeric ID.</source>
+			<target>Un alias d'emplacement est une référence unique qui remplace l'ID numérique de l'emplacement.</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.category.0">
+			<source>Category</source>
+			<target>Catégorie</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.category.1">
+			<source>Select the location category</source>
+			<target>Sélectionnez la catégorie de l'emplacement</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.published.0">
+			<source>Publish</source>
+			<target>Publier</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.published.1">
+			<source>Check to display the location on the frontend map</source>
+			<target>Cochez pour afficher l'emplacement sur la carte en frontend</target>
+		</trans-unit>
+
+		<trans-unit id="tl_wem_location.coords_legend">
+			<source>Coordinates</source>
+			<target>Coordonnées</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.lat.0">
+			<source>Latitude</source>
+			<target>Latitude</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.lat.1">
+			<source>Enter the location latitude</source>
+			<target>Saisissez la latitude de l'emplacement</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.lng.0">
+			<source>Longitude</source>
+			<target>Longitude</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.lng.1">
+			<source>Enter the location longitude</source>
+			<target>Saisissez la longitude de l'emplacement</target>
+		</trans-unit>
+
+		<trans-unit id="tl_wem_location.street_legend">
+			<source>Postal address</source>
+			<target>Adresse postale</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.street.0">
+			<source>Street</source>
+			<target>Rue</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.street.1">
+			<source>Enter the location street</source>
+			<target>Saisissez la rue de l'emplacement</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.postal.0">
+			<source>Postal</source>
+			<target>Code postal</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.postal.1">
+			<source>Enter the location postal code</source>
+			<target>Saisissez le code postal de l'emplacement</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.city.0">
+			<source>City</source>
+			<target>Ville</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.city.1">
+			<source>Enter the location city</source>
+			<target>Saisissez la ville de l'emplacement</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.admin_lvl_1.0">
+			<source>Administrative Area (Level 1)</source>
+			<target>Région</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.admin_lvl_1.1">
+			<source>Enter the location administrative area (level 1)</source>
+			<target>Saisissez la région de l'emplacement</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.admin_lvl_2.0">
+			<source>Administrative Area (Level 2)</source>
+			<target>Département</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.admin_lvl_2.1">
+			<source>Enter the location administrative area (level 2)</source>
+			<target>Saisissez le département de l'emplacement</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.admin_lvl_3.0">
+			<source>Administrative Area (Level 3)</source>
+			<target>Zone administrative (Niveau 3)</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.admin_lvl_3.1">
+			<source>Enter the location administrative area (level 3)</source>
+			<target>Saisissez la zone administrative (niveau 3) de l'emplacement</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.country.0">
+			<source>Country</source>
+			<target>Pays</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.country.1">
+			<source>Enter the location country</source>
+			<target>Saisissez le pays de l'emplacement</target>
+		</trans-unit>
+
+		<trans-unit id="tl_wem_location.data_legend">
+			<source>Media &amp; Data</source>
+			<target>Fichiers &amp; Données</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.picture.0">
+			<source>Picture</source>
+			<target>Photo</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.picture.1">
+			<source>Select the location picture</source>
+			<target>Sélectionnez la photo de l'emplacement</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.teaser.0">
+			<source>Teaser</source>
+			<target>Accroche</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.teaser.1">
+			<source>Enter a short text about the location</source>
+			<target>Saisissez un court texte sur l'emplacement</target>
+		</trans-unit>
+
+		<trans-unit id="tl_wem_location.contact_legend">
+			<source>Contact Data</source>
+			<target>Informations de contact</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.phone.0">
+			<source>Phone</source>
+			<target>Téléphone</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.phone.1">
+			<source>Enter the location phone number</source>
+			<target>Saisissez le numéro de téléphone de l'emplacement</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.fax.0">
+			<source>Fax</source>
+			<target>Fax</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.fax.1">
+			<source>Enter the fax number</source>
+			<target>Saisissez le numéro de fax de l'emplacement</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.cellphone.0">
+			<source>Cellphone</source>
+			<target>Téléphone portable</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.cellphone.1">
+			<source>Enter the location cellphone number</source>
+			<target>Saisissez le numéro de téléphone portable de l'emplacement</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.email.0">
+			<source>Email</source>
+			<target>Email</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.email.1">
+			<source>Enter the location mail address</source>
+			<target>Saisissez l'adresse email de l'emplacement</target>
+		</trans-unit>
+		
+		<trans-unit id="tl_wem_location.links_legend">
+			<source>Links</source>
+			<target>Liens</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.website.0">
+			<source>Website</source>
+			<target>Site internet</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.website.1">
+			<source>Enter the location website URL</source>
+			<target>Saisissez l'adresse du site internet de l'emplacement</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.facebook.0">
+			<source>Facebook</source>
+			<target>Facebook</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.facebook.1">
+			<source>Enter the location facebook URL</source>
+			<target>Saisissez l'adresse du facebook de l'emplacement</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.twitter.0">
+			<source>Twitter</source>
+			<target>Twitter</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.twitter.1">
+			<source>Enter the location twitter URL</source>
+			<target>Saisissez l'adresse du twitter de l'emplacement</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.instagram.0">
+			<source>Instagram</source>
+			<target>Instagram</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.instagram.1">
+			<source>Enter the location instagram URL</source>
+			<target>Saisissez l'adresse de l'instagram de l'emplacement</target>
+		</trans-unit>
+
+		<trans-unit id="tl_wem_location.new.0">
+			<source>New location</source>
+			<target>Nouvel emplacement</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.new.1">
+			<source>Create a new location</source>
+			<target>Créer un nouvel emplacement</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.edit.0">
+			<source>Edit location contents</source>
+			<target>Editer les contenus de l'emplacement</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.edit.1">
+			<source>Edit location contents ID %s</source>
+			<target>Editer les contenus de l'emplacement ID %s</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.editheader.0">
+			<source>Edit location</source>
+			<target>Editer l'emplacement</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.editheader.1">
+			<source>Edit location ID %s</source>
+			<target>Editer l'emplacement ID %s</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.copy.0">
+			<source>Copy location</source>
+			<target>Dupliquer l'emplacement</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.copy.1">
+			<source>Copy location ID %s</source>
+			<target>Dupliquer l'emplacement ID %s</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.delete.0">
+			<source>Delete location</source>
+			<target>Supprimer l'emplacement</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.delete.1">
+			<source>Delete location ID %s</source>
+			<target>Supprimer l'emplacement ID %s</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.show.0">
+			<source>Show location data</source>
+			<target>Voir les informations de l'emplacement</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.show.1">
+			<source>Show location data ID %s</source>
+			<target>Voir les informations de l'emplacement ID %s</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.toggle.0">
+			<source>Show/Hide location</source>
+			<target>Afficher/Cacher l'emplacement</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.toggle.1">
+			<source>Show/Hide location ID %s</source>
+			<target>Afficher/Cacher l'emplacement ID %s</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.geocode.0">
+			<source>Find location coordinates</source>
+			<target>Chercher les coordonnées de l'emplacement</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.geocode.1">
+			<source>Find location ID %s coordinates</source>
+			<target>Chercher les coordonnées de l'emplacement ID %s</target>
+		</trans-unit>
+
+		<trans-unit id="tl_wem_location.import.0">
+			<source>Import</source>
+			<target>Importer</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.import.1">
+			<source>Import locations in this map</source>
+			<target>Importer des emplacements dans cette carte</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.source.0">
+			<source>File</source>
+			<target>Fichier</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.source.1">
+			<source>Select the Excel File with your locations</source>
+			<target>Sélectionnez le fichier Excel contenant vos emplacements</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.export.0">
+			<source>Export</source>
+			<target>Exporter</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.export.1">
+			<source>Export locations of this map</source>
+			<target>Export les emplacements de cette carte</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.importExampleTitle">
+			<source>Your Excel file should looks like this :</source>
+			<target>Votre ficher Excel devrait ressembler à cela :</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.importListCountriesTitle">
+			<source>You will find the list of the countries below :</source>
+			<target>Vous trouverez la liste des pays ci-dessous :</target>
+		</trans-unit>
+
+		<trans-unit id="tl_wem_location.geocodeAll.0">
+			<source>Geocode</source>
+			<target>Géocode</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.geocodeAll.1">
+			<source>Geocode all locations</source>
+			<target>Géocoder tous les emplacements</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.geocodeAllConfirm">
+			<source>Are you sure you want to geocode all locations ?</source>
+			<target>Êtes-vous sûr de vouloir géocoder tous les emplacements ?</target>
+		</trans-unit>
+
+		<trans-unit id="tl_wem_location.createdConfirmation">
+			<source>%s locations have been created</source>
+			<target>%s emplacements ont été créés</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.updatedConfirmation">
+			<source>%s locations have been updated</source>
+			<target>%s emplacements ont été mis à jour</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_location.deletedConfirmation">
+			<source>%s locations have been deleted</source>
+			<target>%s emplacements ont été supprimés</target>
+		</trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -1,0 +1,8 @@
+#tl_navigation .group-wem-locations{background: url(/bundles/altradmap/backend/icon_map_16.png) 3px 0px no-repeat;background-size:13px auto;}
+
+.header_geocodeAll{padding:3px 0 3px 21px;background-position: left center;background-repeat: no-repeat;margin-left: 15px;background-image:url(/bundles/altradmap/backend/icon_geocode_16.png);}
+
+.wem_locations_import_table{margin-top:8px;width:100%;}
+.wem_locations_import_table th, .wem_locations_import_table td{border:1px solid grey;padding:8px;}
+
+.tl_content .ajax-results{padding:8px 18px 8px 37px;margin: 6px 0 0 0;display:none;}

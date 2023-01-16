@@ -1,0 +1,82 @@
+<?xml version="1.0" ?><xliff version="1.1">
+  <file datatype="php" original="system/modules/wem-contao-locations/languages/en/default.php" source-language="en" target-language="en">
+    <body>
+    	<trans-unit id="CTE.wem_locations.0">
+			<source>Locations</source>
+			<target>Locations</target>
+		</trans-unit>
+		<trans-unit id="CTE.wem_locations.1">
+			<source>Generates a map of locations.</source>
+			<target>Generates a map of locations.</target>
+		</trans-unit>
+
+		<trans-unit id="CONTINENT.AS">
+			<source>Asia</source>
+			<target>Asia</target>
+		</trans-unit>
+		<trans-unit id="CONTINENT.AN">
+			<source>Antarctica</source>
+			<target>Antarctica</target>
+		</trans-unit>
+		<trans-unit id="CONTINENT.AF">
+			<source>Africa</source>
+			<target>Africa</target>
+		</trans-unit>
+		<trans-unit id="CONTINENT.SA">
+			<source>South America</source>
+			<target>South America</target>
+		</trans-unit>
+		<trans-unit id="CONTINENT.EU">
+			<source>Europe</source>
+			<target>Europe</target>
+		</trans-unit>
+		<trans-unit id="CONTINENT.OC">
+			<source>Oceania</source>
+			<target>Oceania</target>
+		</trans-unit>
+		<trans-unit id="CONTINENT.NA">
+			<source>North America</source>
+			<target>North America</target>
+		</trans-unit>
+
+		<trans-unit id="WEM.LOCATIONS.LABEL.CONTINENT">
+			<source>Continent</source>
+			<target>Continent</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.LABEL.COUNTRY">
+			<source>Country</source>
+			<target>Country</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.TITLE.PANEL">
+			<source>Contact details</source>
+			<target>Contact details</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.BUTTON.BACK">
+			<source>Back</source>
+			<target>Back</target>
+		</trans-unit>
+		
+		<trans-unit id="WEM.LOCATIONS.CONFIRM.locationSaved">
+			<source>Location %s saved !</source>
+			<target>Location %s saved !</target>
+		</trans-unit>
+
+		<trans-unit id="WEM.LOCATIONS.ERROR.noLocationsFound">
+			<source>No locations found for this map !</source>
+			<target>No locations found for this map !</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.countryNotFound">
+			<source>The country %s doesn't match a known ISO Code. Maybe there is a typo ?</source>
+			<target>The country %s doesn't match a known ISO Code. Maybe there is a typo ?</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.missingConfigForGeocoding">
+			<source>Config is missing for geocoding !</source>
+			<target>Config is missing for geocoding !</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.errorWhenSavingTheLocation">
+			<source>An error happened when saving the location. Please try again.</source>
+			<target>An error happened when saving the location. Please try again.</target>
+		</trans-unit>
+    </body>
+  </file>
+</xliff>
