@@ -1,7 +1,7 @@
 <?xml version="1.0" ?><xliff version="1.1">
   <file datatype="php" original="system/modules/wem-contao-locations/languages/en/modules.php" source-language="en" target-language="fr">
     <body>
-    	<trans-unit id="MOD.wem-locations">
+    	<trans-unit id="MOD.wem-geodata">
 			<source>Maps &amp; Locations</source>
 			<target>Cartes &amp; Emplacements</target>
 		</trans-unit>

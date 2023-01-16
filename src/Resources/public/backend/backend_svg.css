@@ -1,4 +1,4 @@
-#tl_navigation .group-wem-locations{background: url(/bundles/wemgeodata/backend/icon_map_16.png) 3px 0px no-repeat;background-size:13px auto;}
+#tl_navigation .group-wem-geodata{background: url(/bundles/wemgeodata/backend/icon_map_16.png) 3px 0px no-repeat;background-size:13px auto;}
 
 .header_geocodeAll{padding:3px 0 3px 21px;background-position: left center;background-repeat: no-repeat;margin-left: 15px;background-image:url(/bundles/wemgeodata/backend/icon_geocode_16.png);}
 

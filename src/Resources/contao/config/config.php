@@ -19,13 +19,14 @@ declare(strict_types=1);
     $GLOBALS['BE_MOD'],
     array_search('content', array_keys($GLOBALS['BE_MOD']), true) + 1,
     [
-        'wem-locations' => [
+        'wem-geodata' => [
             'wem-maps' => [
                 'tables' => ['tl_wem_map', 'tl_wem_map_category', 'tl_wem_item', 'tl_content', 'tl_wem_item_attr_value'],
                 'import' => ['WEM\GeoDataBundle\Backend\Callback', 'importLocations'],
                 'export' => ['WEM\GeoDataBundle\Backend\Callback', 'exportLocations'],
                 'geocode' => ['WEM\GeoDataBundle\Backend\Callback', 'geocode'],
-                'icon' => 'system/modules/wem-geodata/assets/icon_map_16_c3.png',
+                // 'icon' => 'system/modules/wem-geodata/assets/icon_map_16_c3.png',
+                'icon' => 'system/bundles/wemgeodata/backend/icon_map_16_c3.png',
             ],
         ],
     ]
