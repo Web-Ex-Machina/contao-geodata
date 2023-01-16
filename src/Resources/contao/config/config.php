@@ -25,6 +25,7 @@ declare(strict_types=1);
                 'import' => ['WEM\GeoDataBundle\Backend\Callback', 'importLocations'],
                 'export' => ['WEM\GeoDataBundle\Backend\Callback', 'exportLocations'],
                 'geocode' => ['WEM\GeoDataBundle\Backend\Callback', 'geocode'],
+                'copy_map_item' => ['WEM\GeoDataBundle\Backend\Callback', 'copyMapItem'],
                 // 'icon' => 'system/modules/wem-geodata/assets/icon_map_16_c3.png',
                 'icon' => 'system/bundles/wemgeodata/backend/icon_map_16_c3.png',
             ],

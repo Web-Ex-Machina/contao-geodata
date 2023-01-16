@@ -63,6 +63,11 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'copy' => [
                 'label' => &$GLOBALS['TL_LANG']['tl_wem_map']['copy'],
                 'href' => 'act=copy',
+                'icon' => 'copychilds.gif',
+            ],
+            'copy_map_item' => [
+                'label' => &$GLOBALS['TL_LANG']['tl_wem_map']['copy_map_item'],
+                'href' => 'key=copy_map_item',
                 'icon' => 'copy.gif',
             ],
             'delete' => [
@@ -201,7 +206,10 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'foreignField' => 'pid',
             'eval' => [
                 'fields' => ['createdAt', 'title'],
-                'headerFields' => ['Créé le', 'Intitulé'],
+                'headerFields' => [
+                    &$GLOBALS['TL_LANG']['tl_wem_map_category']['createdAt'], 
+                    &$GLOBALS['TL_LANG']['tl_wem_map_category']['title']
+                ],
                 'orderField' => 'createdAt DESC',
                 'hideButton' => false,
                 'showOperations' => true,
@@ -238,9 +246,9 @@ class tl_wem_map extends Backend
     {
         if (!$varValue) {
             switch ($objDc->activeRecord->mapProvider) {
-                case 'jvector':
-                    $arrConfig = \WEM\GeoDataBundle\Controller\Provider\JVector::getDefaultConfig();
-                    break;
+                // case 'jvector':
+                //     $arrConfig = \WEM\GeoDataBundle\Controller\Provider\JVector::getDefaultConfig();
+                //     break;
 
                 case 'leaflet':
                     $arrConfig = \WEM\GeoDataBundle\Controller\Provider\Leaflet::getDefaultConfig();

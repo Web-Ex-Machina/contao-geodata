@@ -29,6 +29,7 @@ use Contao\Environment;
 use Contao\System;
 use Contao\File;
 use Contao\Config;
+use Exception;
 use Haste\Http\Response\JsonResponse;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -399,5 +400,30 @@ class Callback extends Backend
         $writer = IOFactory::createWriter($objSpreadsheet, 'Xlsx');
         $writer->save('php://output');
         exit;
+    }
+
+    public function copyMapItem(DataContainer $dc){
+        if(!$dc->id){
+            return;
+        }
+
+        $objMapOld = Map::findByPk($dc->id);
+        if(!$objMapOld){
+            throw new Exception(sprintf('Unable to find map %s',$dc->id));
+        }
+
+        $arrData = $objMapOld->row();
+        unset($arrData['id']);
+
+        $objMap = new Map();
+        $objMap->setRow($arrData);
+        // $objMap->id = null;
+        $objMap->save();
+
+        $url = Environment::get('uri');
+        $url = str_replace(['&key=copy_map_item','&id='.$dc->id],['&act=edit','&id='.$objMap->id],$url);
+
+        $this->redirect($url);
+
     }
 }
