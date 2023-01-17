@@ -222,6 +222,18 @@
 			<source>You will find the list of the countries below :</source>
 			<target>Eine Liste der Länder ist unten zu finden :</target>
 		</trans-unit>
+		<trans-unit id="tl_wem_item.importSettingsTitle">
+			<source>Import settings</source>
+			<target>Importeinstellungen</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_item.importSettingsUpdateLabel">
+			<source>Update already existing items</source>
+			<target>Aktualisieren Sie bereits vorhandene Elemente</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_item.importSettingsDeleteLabel">
+			<source>Delete existing elements not present in import file</source>
+			<target>Löschen Sie vorhandene Elemente, die nicht in der Importdatei vorhanden sind</target>
+		</trans-unit>
 
 		<trans-unit id="tl_wem_item.geocodeAll.0">
 			<source>Geocode</source>

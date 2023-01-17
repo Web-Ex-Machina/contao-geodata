@@ -135,6 +135,9 @@ class Callback extends Backend
 
         // Import CSS
         if ('tl_wem_items_import' === Input::post('FORM_SUBMIT')) {
+            $updateExistingItems = (bool) Input::post('update_existing_items');
+            $deleteExistingItems = (bool) Input::post('delete_existing_items_not_in_import_file');
+
             $arrUploaded = $objUploader->uploadTo('system/tmp');
             if (empty($arrUploaded)) {
                 Message::addError($GLOBALS['TL_LANG']['ERR']['all_fields']);
@@ -210,16 +213,24 @@ class Callback extends Backend
                 foreach ($arrLocations as $k => $arrLocation) {
                     $arrLocation['alias'] = StringUtil::generateAlias($arrLocation['title'].'-'.$arrLocation['city'].'-'.$arrLocation['country'].'-'.($k + 1));
 
-                    $objLocation = Item::findOneBy('alias', $arrLocation['alias']);
+                    if ($updateExistingItems) {
+                        $objLocation = Item::findItems(['alias' => $arrLocation['alias'], 'pid' => $objMap->id], 1);
 
-                    // Create if don't exists
-                    if (!$objLocation) {
+                        // Create if don't exists
+                        if (!$objLocation) {
+                            $objLocation = new Item();
+                            $objLocation->pid = $objMap->id;
+                            $objLocation->published = 1;
+                            ++$intCreated;
+                        } else {
+                            $objLocation = $objLocation->next();
+                            ++$intUpdated;
+                        }
+                    } else {
                         $objLocation = new Item();
                         $objLocation->pid = $objMap->id;
                         $objLocation->published = 1;
                         ++$intCreated;
-                    } else {
-                        ++$intUpdated;
                     }
 
                     $objLocation->tstamp = time();
@@ -232,11 +243,13 @@ class Callback extends Backend
                     $arrNewLocations[] = $objLocation->id;
                 }
 
-                $objLocations = Item::findItems(['pid' => $objMap->id, 'published' => 1]);
-                while ($objLocations->next()) {
-                    if (!\in_array($objLocations->id, $arrNewLocations, true)) {
-                        $objLocations->delete();
-                        ++$intDeleted;
+                if ($deleteExistingItems) {
+                    $objLocations = Item::findItems(['pid' => $objMap->id, 'published' => 1]);
+                    while ($objLocations->next()) {
+                        if (!\in_array($objLocations->id, $arrNewLocations, true)) {
+                            $objLocations->delete();
+                            ++$intDeleted;
+                        }
                     }
                 }
             }
@@ -288,9 +301,12 @@ class Callback extends Backend
         $objTemplate->backButtonTitle = specialchars($GLOBALS['TL_LANG']['MSC']['backBTTitle']);
         $objTemplate->backButtonLabel = $GLOBALS['TL_LANG']['MSC']['backBT'];
         $objTemplate->formAction = ampersand(Environment::get('request'), true);
-        $objTemplate->widgetTitle = $GLOBALS['TL_LANG']['tl_wem_item']['source'][0];
-        $objTemplate->widgetContent = $objUploader->generateMarkup();
-        $objTemplate->widgetHelp = $GLOBALS['TL_LANG']['tl_wem_item']['source'][1] ?? '';
+        $objTemplate->widgetUploadTitle = $GLOBALS['TL_LANG']['tl_wem_item']['source'][0];
+        $objTemplate->widgetUploadContent = $objUploader->generateMarkup();
+        $objTemplate->widgetUploadHelp = $GLOBALS['TL_LANG']['tl_wem_item']['source'][1] ?? '';
+        $objTemplate->widgetSettingsTitle = $GLOBALS['TL_LANG']['tl_wem_item']['importSettingsTitle'];
+        $objTemplate->widgetSettingsUpdateLabel = $GLOBALS['TL_LANG']['tl_wem_item']['importSettingsUpdateLabel'];
+        $objTemplate->widgetSettingsDeleteLabel = $GLOBALS['TL_LANG']['tl_wem_item']['importSettingsDeleteLabel'];
         $objTemplate->formSubmitValue = specialchars($GLOBALS['TL_LANG']['tl_wem_item']['import'][0]);
         $objTemplate->importExampleTitle = $GLOBALS['TL_LANG']['tl_wem_item']['importExampleTitle'];
         $objTemplate->importExampleTh = implode('', $arrTh);
@@ -303,63 +319,6 @@ class Callback extends Backend
         $objTemplate->formMaxFileSize = Config::get('maxFileSize');
 
         return $objTemplate->parse();
-
-        // Return form
-        return '
-        <div id="tl_buttons">
-        <a href="'.ampersand(str_replace('&key=import', '', Environment::get('request'))).'" class="header_back" title="'.specialchars($GLOBALS['TL_LANG']['MSC']['backBTTitle']).'" accesskey="b">'.$GLOBALS['TL_LANG']['MSC']['backBT'].'</a>
-        </div>
-        '.Message::generate().'
-        <form action="'.ampersand(Environment::get('request'), true).'" id="tl_wem_items_import" class="tl_form" method="post" enctype="multipart/form-data">
-        <div class="tl_formbody_edit">
-        <input type="hidden" name="FORM_SUBMIT" value="tl_wem_items_import">
-        <input type="hidden" name="REQUEST_TOKEN" value="'.REQUEST_TOKEN.'">
-        <input type="hidden" name="MAX_FILE_SIZE" value="'.Config::get('maxFileSize').'">
-
-        <fieldset class="tl_tbox nolegend">
-            <div class="widget">
-              <h3>'.$GLOBALS['TL_LANG']['tl_wem_item']['source'][0].'</h3>'.$objUploader->generateMarkup().(isset($GLOBALS['TL_LANG']['tl_wem_item']['source'][1]) ? '
-              <p class="tl_help tl_tip">'.$GLOBALS['TL_LANG']['tl_wem_item']['source'][1].'</p>' : '').'
-            </div>
-        </div>
-        </fieldset>
-
-        <div class="tl_formbody_submit">
-            <div class="tl_submit_container">
-              <input type="submit" name="save" id="save" class="tl_submit" accesskey="s" value="'.specialchars($GLOBALS['TL_LANG']['tl_wem_item']['import'][0]).'">
-            </div>
-        </div>
-
-        <fieldset class="tl_tbox nolegend">
-            <div class="widget">
-            <h3>'.$GLOBALS['TL_LANG']['tl_wem_item']['importExampleTitle'].'</h3>
-            <table class="wem_locations_import_table">
-                <thead>
-                    <tr>'.implode('', $arrTh).'</tr>
-                </thead>
-                <tbody>
-                    <tr>'.implode('', $arrTd).'</tr>
-                    <tr>'.implode('', $arrTd).'</tr>
-                </tbody>
-            </table>
-            </div>
-        </fieldset>
-
-        <fieldset class="tl_tbox nolegend">
-            <div class="widget">
-            <h3>'.$GLOBALS['TL_LANG']['tl_wem_item']['importListCountriesTitle'].'</h3>
-            <table class="wem_locations_import_table">
-                <thead>
-                    <tr><th>ISOCode</th><th>'.$arrLanguages[$GLOBALS['TL_LANGUAGE']].'</th><th>'.$arrLanguages['en'].'</th></tr>
-                </thead>
-                <tbody>
-                    '.$strCountries.'
-                </tbody>
-            </table>
-            </div>
-        </fieldset>
-
-        </form>';
     }
 
     /**
