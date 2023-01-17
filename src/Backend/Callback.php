@@ -326,6 +326,60 @@ class Callback extends Backend
     /**
      * Export the Locations of the current map, according to the pattern set.
      */
+    public function exportLocationsForm()
+    {
+        if ('export_form' !== Input::get('key')) {
+            return '';
+        }
+
+        if (!Input::get('id')) {
+            return '';
+        }
+
+        $objMap = Map::findByPk(Input::get('id'));
+
+        $arrCategories = [];
+        $categories = Category::findItems(['pid' => $objMap->id]);
+        if ($categories) {
+            while ($categories->next()) {
+                $arrCategories[$categories->id] = $categories->title;
+            }
+        }
+
+        $arrCountriesSystem = System::getContainer()->get('contao.intl.countries')->getCountries();
+        $arrCountries = [];
+        $items = Item::findItems(['pid' => $objMap->id]);
+        if ($items) {
+            while ($items->next()) {
+                $arrCountries[$items->country] = $arrCountriesSystem[strtoupper($items->country)];
+            }
+        }
+
+        $objTemplate = new BackendTemplate('be_wem_geodata_export_form');
+
+        $objTemplate->backButtonHref = ampersand(str_replace('&key=export_form', '', Environment::get('request')));
+        $objTemplate->backButtonTitle = specialchars($GLOBALS['TL_LANG']['MSC']['backBTTitle']);
+        $objTemplate->backButtonLabel = $GLOBALS['TL_LANG']['MSC']['backBT'];
+        $objTemplate->formAction = ampersand(str_replace('key=export_form', 'key=export', Environment::get('request')), true);
+
+        $objTemplate->widgetSettingsTitle = $GLOBALS['TL_LANG']['tl_wem_item']['exportSettingsTitle'];
+        $objTemplate->widgetSettingsLimitToCategoriesCheckboxLabel = $GLOBALS['TL_LANG']['tl_wem_item']['exportSettingsLimitToCategoriesCheckboxLabel'];
+        $objTemplate->widgetSettingsLimitToCategoriesSelectLabel = $GLOBALS['TL_LANG']['tl_wem_item']['exportSettingsLimitToCategoriesSelectLabel'];
+        $objTemplate->widgetSettingsLimitToCountriesCheckboxLabel = $GLOBALS['TL_LANG']['tl_wem_item']['exportSettingsLimitToCountriesCheckboxLabel'];
+        $objTemplate->widgetSettingsLimitToCountriesSelectLabel = $GLOBALS['TL_LANG']['tl_wem_item']['exportSettingsLimitToCountriesSelectLabel'];
+        $objTemplate->formSubmitValue = specialchars($GLOBALS['TL_LANG']['tl_wem_item']['export'][0]);
+
+        $objTemplate->categories = $arrCategories;
+        $objTemplate->countries = $arrCountries;
+        $objTemplate->formRequestToken = REQUEST_TOKEN;
+        $objTemplate->formMaxFileSize = Config::get('maxFileSize');
+
+        return $objTemplate->parse();
+    }
+
+    /**
+     * Export the Locations of the current map, according to the pattern set.
+     */
     public function exportLocations()
     {
         if ('export' !== Input::get('key')) {
@@ -337,6 +391,19 @@ class Callback extends Backend
         }
 
         $objMap = Map::findByPk(Input::get('id'));
+
+        if (!$objMap) {
+            return '';
+        }
+
+        $params = ['pid' => $objMap->id];
+        if (Input::post('chk_limit_to_categories')) {
+            $params['where'][] = sprintf('category IN (%s)', implode(',', Input::post('limit_to_categories')));
+        }
+        if (Input::post('chk_limit_to_countries')) {
+            $params['where'][] = sprintf('country IN ("%s")', implode('","', Input::post('limit_to_countries')));
+        }
+
         $arrExcelPattern = [];
         // Preformat Excel Pattern (key = DB Column, value = Excel column)
         foreach (deserialize($objMap->excelPattern) as $arrColumn) {
@@ -345,12 +412,15 @@ class Callback extends Backend
 
         // Fetch all the locations
         $arrCountries = System::getCountries();
-        $objLocations = Item::findItems(['pid' => $objMap->id]);
+        $objLocations = Item::findItems($params);
 
         // Break if no locations
         if (!$objLocations) {
             Message::addError($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noLocationsFound']);
-            $this->reload();
+            $url = Environment::get('uri');
+            $url = str_replace(['&key=export'], ['&key=export_form'], $url);
+
+            $this->redirect($url);
         }
 
         // Format for the Excel
@@ -360,6 +430,9 @@ class Callback extends Backend
                 switch ($strDbColumn) {
                     case 'country':
                         $arrRow[$strExcelColumn] = $arrCountries[$objLocations->$strDbColumn];
+                    break;
+                    case 'region':
+                        $arrRow[$strExcelColumn] = $objLocations->admin_lvl_1;
                     break;
                     default:
                         $arrRow[$strExcelColumn] = $objLocations->$strDbColumn;

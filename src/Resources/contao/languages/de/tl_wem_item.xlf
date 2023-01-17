@@ -214,6 +214,26 @@
 			<source>Export locations of this map</source>
 			<target>Exportiere Standorte dieser Karte</target>
 		</trans-unit>
+		<trans-unit id="tl_wem_item.exportSettingsTitle">
+			<source>Export settings</source>
+			<target>Exporteinstellungen</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_item.exportSettingsLimitToCategoriesCheckboxLabel">
+			<source>Limit export to certain categories</source>
+			<target>Beschränken Sie den Export auf bestimmte Kategorien</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_item.exportSettingsLimitToCategoriesSelectLabel">
+			<source>Categories :</source>
+			<target>Kategorien :</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_item.exportSettingsLimitToCountriesCheckboxLabel">
+			<source>Limit export to certain countries</source>
+			<target>Beschränken Sie den Export auf bestimmte Länder</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_item.exportSettingsLimitToCountriesSelectLabel">
+			<source>Countries :</source>
+			<target>Länder :</target>
+		</trans-unit>
 		<trans-unit id="tl_wem_item.importExampleTitle">
 			<source>Your Excel file should looks like this :</source>
 			<target>Die Excel Datei sollte wie folgt aussehen:</target>

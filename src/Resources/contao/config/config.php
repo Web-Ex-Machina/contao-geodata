@@ -3,13 +3,13 @@
 declare(strict_types=1);
 
 /**
- * Altrad Map Bundle for Contao Open Source CMS
- * Copyright (c) 2017-2022 Web ex Machina
+ * Geodata for Contao Open Source CMS
+ * Copyright (c) 2015-2022 Web ex Machina
  *
  * @category ContaoBundle
- * @package  Web-Ex-Machina/contao-altrad-map-bundle
+ * @package  Web-Ex-Machina/contao-geodata
  * @author   Web ex Machina <contact@webexmachina.fr>
- * @link     https://github.com/Web-Ex-Machina/contao-altrad-map-bundle/
+ * @link     https://github.com/Web-Ex-Machina/contao-geodata/
  */
 
 /*
@@ -23,6 +23,7 @@ declare(strict_types=1);
             'wem-maps' => [
                 'tables' => ['tl_wem_map', 'tl_wem_map_category', 'tl_wem_item', 'tl_content', 'tl_wem_item_attr_value'],
                 'import' => ['WEM\GeoDataBundle\Backend\Callback', 'importLocations'],
+                'export_form' => ['WEM\GeoDataBundle\Backend\Callback', 'exportLocationsForm'],
                 'export' => ['WEM\GeoDataBundle\Backend\Callback', 'exportLocations'],
                 'geocode' => ['WEM\GeoDataBundle\Backend\Callback', 'geocode'],
                 'copy_map_item' => ['WEM\GeoDataBundle\Backend\Callback', 'copyMapItem'],

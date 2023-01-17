@@ -222,6 +222,26 @@
 			<source>Export locations of this map</source>
 			<target>Export locations of this map</target>
 		</trans-unit>
+		<trans-unit id="tl_wem_item.exportSettingsTitle">
+			<source>Export settings</source>
+			<target>Export settings</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_item.exportSettingsLimitToCategoriesCheckboxLabel">
+			<source>Limit export to certain categories</source>
+			<target>Limit export to certain categories</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_item.exportSettingsLimitToCategoriesSelectLabel">
+			<source>Categories :</source>
+			<target>Categories :</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_item.exportSettingsLimitToCountriesCheckboxLabel">
+			<source>Limit export to certain countries</source>
+			<target>Limit export to certain countries</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_item.exportSettingsLimitToCountriesSelectLabel">
+			<source>Countries :</source>
+			<target>Countries :</target>
+		</trans-unit>
 		<trans-unit id="tl_wem_item.importExampleTitle">
 			<source>Your Excel file should looks like this :</source>
 			<target>Your Excel file should looks like this :</target>

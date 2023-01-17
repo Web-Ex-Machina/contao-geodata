@@ -77,7 +77,7 @@ $GLOBALS['TL_DCA']['tl_wem_item'] = [
             ],
             'export' => [
                 'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['export'],
-                'href' => 'key=export',
+                'href' => 'key=export_form',
                 'class' => 'header_css_import',
                 'attributes' => 'onclick="Backend.getScrollOffset()"',
                 'button_callback' => ['tl_wem_item', 'exportButtonGlobalOperations'],
