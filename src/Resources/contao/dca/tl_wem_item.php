@@ -3,13 +3,26 @@
 declare(strict_types=1);
 
 /**
- * Altrad Map Bundle for Contao Open Source CMS
- * Copyright (c) 2017-2022 Web ex Machina
+ * Geodata for Contao Open Source CMS
+ * Copyright (c) 2015-2022 Web ex Machina
  *
  * @category ContaoBundle
- * @package  Web-Ex-Machina/contao-altrad-map-bundle
+ * @package  Web-Ex-Machina/contao-geodata
  * @author   Web ex Machina <contact@webexmachina.fr>
- * @link     https://github.com/Web-Ex-Machina/contao-altrad-map-bundle/
+ * @link     https://github.com/Web-Ex-Machina/contao-geodata/
+ */
+
+use Contao\StringUtil;
+use WEM\GeoDataBundle\Model\Map;
+
+/*
+ * Geodata for Contao Open Source CMS
+ * Copyright (c) 2015-2022 Web ex Machina
+ *
+ * @category ContaoBundle
+ * @package  Web-Ex-Machina/contao-geodata
+ * @author   Web ex Machina <contact@webexmachina.fr>
+ * @link     https://github.com/Web-Ex-Machina/contao-geodata/
  */
 
 /*
@@ -53,18 +66,21 @@ $GLOBALS['TL_DCA']['tl_wem_item'] = [
                 'href' => 'key=geocodeAll',
                 'class' => 'header_geocodeAll',
                 'attributes' => 'onclick="Backend.getScrollOffset()" data-confirm="'.$GLOBALS['TL_LANG']['tl_wem_item']['geocodeAllConfirm'].'"',
+                'button_callback' => ['tl_wem_item', 'geocodeAllButtonGlobalOperations'],
             ],
             'import' => [
                 'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['import'],
                 'href' => 'key=import',
                 'class' => 'header_css_import',
                 'attributes' => 'onclick="Backend.getScrollOffset()"',
+                'button_callback' => ['tl_wem_item', 'importButtonGlobalOperations'],
             ],
             'export' => [
                 'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['export'],
                 'href' => 'key=export',
                 'class' => 'header_css_import',
                 'attributes' => 'onclick="Backend.getScrollOffset()"',
+                'button_callback' => ['tl_wem_item', 'exportButtonGlobalOperations'],
             ],
             'all' => [
                 'label' => &$GLOBALS['TL_LANG']['MSC']['all'],
@@ -110,6 +126,7 @@ $GLOBALS['TL_DCA']['tl_wem_item'] = [
                 'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['geocode'],
                 'href' => 'key=geocode',
                 'icon' => 'bundles/wemgeodata/backend/icon_geocode_16.png',
+                'button_callback' => ['tl_wem_item', 'geocodeButtonOperations'],
             ],
         ],
     ],
@@ -557,5 +574,74 @@ class tl_wem_item extends Backend
 
         $objVersions->create();
         $this->log('A new version of record "tl_wem_item.id='.$intId.'" has been created'.$this->getParentEntries('tl_wem_item', $intId), __METHOD__, TL_GENERAL);
+    }
+
+    public function importButtonGlobalOperations(?string $href, string $label, string $title, string $class, string $attributes, string $table, array $rootIds): string
+    {
+        $objMap = Map::findByPk(\Contao\Input::get('id'));
+        if (!$objMap
+        || null === $objMap->excelPattern
+        || empty(StringUtil::deserialize($objMap->excelPattern))
+        ) {
+            return '';
+        }
+
+        $url = $this->addToUrl($href);
+
+        return sprintf('<a href="%s" title="%s" class="%s" %s>%s</a>', $url, StringUtil::specialchars($title), $class, $attributes, $label);
+    }
+
+    public function exportButtonGlobalOperations(?string $href, string $label, string $title, string $class, string $attributes, string $table, array $rootIds): string
+    {
+        $objMap = Map::findByPk(\Contao\Input::get('id'));
+        if (!$objMap
+        || null === $objMap->excelPattern
+        || empty(StringUtil::deserialize($objMap->excelPattern))
+        ) {
+            return '';
+        }
+
+        $url = $this->addToUrl($href);
+
+        return sprintf('<a href="%s" title="%s" class="%s" %s>%s</a>', $url, StringUtil::specialchars($title), $class, $attributes, $label);
+    }
+
+    public function geocodeAllButtonGlobalOperations(?string $href, string $label, string $title, string $class, string $attributes, string $table, array $rootIds): string
+    {
+        $objMap = Map::findByPk(\Contao\Input::get('id'));
+        if (!$objMap
+        || null === $objMap->geocodingProvider
+        ) {
+            return '';
+        }
+
+        $url = $this->addToUrl($href);
+
+        return sprintf('<a href="%s" title="%s" class="%s" %s>%s</a>', $url, StringUtil::specialchars($title), $class, $attributes, $label);
+    }
+
+    public function geocodeButtonOperations(
+        array $data,
+        ?string $href,
+        string $label,
+        string $title,
+        ?string $icon,
+        string $attributes,
+        string $table,
+        ?array $arrRootIds,
+        ?array $arrChildRecordIds,
+        bool $blnCircularReference,
+        ?string $strPrevious,
+        ?string $strNext,
+        Contao\DataContainer $dc
+    ): string {
+        $objMap = Map::findByPk(\Contao\Input::get('id'));
+        if (!$objMap
+        || null === $objMap->geocodingProvider
+        ) {
+            return '';
+        }
+
+        return sprintf('<a href="%s" title="%s" %s>%s</a> ', $href, StringUtil::specialchars($title), $attributes, \Contao\Image::getHtml($icon, $label));
     }
 }
