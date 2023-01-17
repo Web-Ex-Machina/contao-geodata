@@ -118,6 +118,27 @@
 			<source>Do not add items to Contao search</source>
 		</trans-unit>
 
+		<trans-unit id="tl_wem_map.import_legend">
+			<source>Import default settings</source>
+			<target>Import default settings</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.updateExistingItems.0">
+			<source>Update already existing items</source>
+			<target>Update already existing items</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.updateExistingItems.1">
+			<source>If an imported item already exists, update it instead of creating a new entry</source>
+			<target>If an imported item already exists, update it instead of creating a new entry</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.deleteExistingItemsNotInImportFile.0">
+			<source>Delete existing elements not present in import file</source>
+			<target>Delete existing elements not present in import file</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.deleteExistingItemsNotInImportFile.1">
+			<source>If an existing element isn't present in the import file, delete it</source>
+			<target>If an existing element isn't present in the import file, delete it</target>
+		</trans-unit>
+
 		<trans-unit id="tl_wem_map.new.0">
 			<source>New map</source>
 			<target>New map</target>

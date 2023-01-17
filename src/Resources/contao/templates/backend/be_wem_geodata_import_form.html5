@@ -16,16 +16,16 @@
               <p class="tl_help tl_tip"><?php echo $this->widgetUploadHelp; ?></p>
               <?php endif; ?>
             </div>     
-            
+
             <div class="widget">
                 <h3><?php echo $this->widgetSettingsTitle; ?></h3>
                 <label for="update_existing_items">
-                    <input type="checkbox" name="update_existing_items">
+                    <input type="checkbox" name="update_existing_items" <?php echo $this->widgetSettingsUpdateChecked ? 'checked' : ''; ?>>
                     <?php echo $this->widgetSettingsUpdateLabel; ?>
                 </label>
                 <br />
                 <label for="delete_existing_items_not_in_import_file">
-                    <input type="checkbox" name="delete_existing_items_not_in_import_file">
+                    <input type="checkbox" name="delete_existing_items_not_in_import_file" <?php echo $this->widgetSettingsDeleteChecked ? 'checked' : ''; ?>>
                     <?php echo $this->widgetSettingsDeleteLabel; ?>
                 </label>
             </div>

@@ -147,6 +147,28 @@
 			<target>Ne pas inclure les marqueurs à la recherche Contao</target>
 		</trans-unit>
 
+		<trans-unit id="tl_wem_map.import_legend">
+			<source>Import default settings</source>
+			<target>Paramètres par défaut de l'import</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.updateExistingItems.0">
+			<source>Update already existing items</source>
+			<target>Mettre à jour les élements déjà existant</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.updateExistingItems.1">
+			<source>If an imported item already exists, update it instead of creating a new entry</source>
+			<target>Si un marqueur existe déjà, le mettre à jour plutôt que d'en créer un nouveau</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.deleteExistingItemsNotInImportFile.0">
+			<source>Delete existing elements not present in import file</source>
+			<target>Supprimer les élements existant non présents dans le fichier d'import</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.deleteExistingItemsNotInImportFile.1">
+			<source>If an existing element isn't present in the import file, delete it</source>
+			<target>Si un marqueur existant n'est pas présent dans le fichier d'import, le supprimer</target>
+		</trans-unit>
+
+
 		<trans-unit id="tl_wem_map.new.0">
 			<source>New map</source>
 			<target>Nouvelle carte</target>

@@ -306,7 +306,9 @@ class Callback extends Backend
         $objTemplate->widgetUploadHelp = $GLOBALS['TL_LANG']['tl_wem_item']['source'][1] ?? '';
         $objTemplate->widgetSettingsTitle = $GLOBALS['TL_LANG']['tl_wem_item']['importSettingsTitle'];
         $objTemplate->widgetSettingsUpdateLabel = $GLOBALS['TL_LANG']['tl_wem_item']['importSettingsUpdateLabel'];
+        $objTemplate->widgetSettingsUpdateChecked = (bool) $objMap->updateExistingItems;
         $objTemplate->widgetSettingsDeleteLabel = $GLOBALS['TL_LANG']['tl_wem_item']['importSettingsDeleteLabel'];
+        $objTemplate->widgetSettingsDeleteChecked = (bool) $objMap->deleteExistingItemsNotInImportFile;
         $objTemplate->formSubmitValue = specialchars($GLOBALS['TL_LANG']['tl_wem_item']['import'][0]);
         $objTemplate->importExampleTitle = $GLOBALS['TL_LANG']['tl_wem_item']['importExampleTitle'];
         $objTemplate->importExampleTh = implode('', $arrTh);

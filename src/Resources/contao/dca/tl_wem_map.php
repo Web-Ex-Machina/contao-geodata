@@ -94,6 +94,7 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             {geocoding_legend},geocodingProvider;
             {categories_legend},categories;
             {markers_legend},doNotAddItemsToContaoSitemap,doNotAddItemsToContaoSearch;
+            {import_legend},updateExistingItems,deleteExistingItemsNotInImportFile;
         ',
     ],
 
@@ -228,6 +229,24 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
         ],
         'doNotAddItemsToContaoSearch' => [
             'label' => &$GLOBALS['TL_LANG']['tl_wem_map']['doNotAddItemsToContaoSearch'],
+            'exclude' => true,
+            'filter' => true,
+            'flag' => 1,
+            'inputType' => 'checkbox',
+            'eval' => ['doNotCopy' => true, 'tl_class' => 'w50 m12'],
+            'sql' => "char(1) NOT NULL default ''",
+        ],
+        'updateExistingItems' => [
+            'label' => &$GLOBALS['TL_LANG']['tl_wem_map']['updateExistingItems'],
+            'exclude' => true,
+            'filter' => true,
+            'flag' => 1,
+            'inputType' => 'checkbox',
+            'eval' => ['doNotCopy' => true, 'tl_class' => 'w50 m12'],
+            'sql' => "char(1) NOT NULL default ''",
+        ],
+        'deleteExistingItemsNotInImportFile' => [
+            'label' => &$GLOBALS['TL_LANG']['tl_wem_map']['deleteExistingItemsNotInImportFile'],
             'exclude' => true,
             'filter' => true,
             'flag' => 1,
