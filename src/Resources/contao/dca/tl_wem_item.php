@@ -392,7 +392,7 @@ $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/wemgeodata/backend/backend.js';
  *
  * @author Web ex Machina <https://www.webexmachina.fr>
  */
-class tl_wem_item extends Backend
+class tl_wem_item extends \Contao\Backend
 {
     /**
      * Import the back end user object.
