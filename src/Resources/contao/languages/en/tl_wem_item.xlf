@@ -29,6 +29,22 @@
 			<source>Check to display the location on the frontend map</source>
 			<target>Check to display the location on the frontend map</target>
 		</trans-unit>
+		<trans-unit id="tl_wem_item.publishedAt.0">
+			<source>Show from</source>
+			<target>Show from</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_item.publishedAt.1">
+			<source>If you want to prevent the element from showing on the website before a certain date/time, you can enter it here. Otherwise leave the field blank.</source>
+			<target>If you want to prevent the element from showing on the website before a certain date/time, you can enter it here. Otherwise leave target field blank.</source>
+		</trans-unit>
+		<trans-unit id="tl_wem_item.publishedUntil.0">
+			<source>Show until</source>
+			<target>Show until</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_item.publishedUntil.1">
+			<source>If you want to prevent the element from showing on the website after a certain date/time, you can enter it here. Otherwise leave the field blank.</source>
+			<target>If you want to prevent the element from showing on the website after a certain date/time, you can enter it here. Otherwise leave target field blank.</source>
+		</trans-unit>
 
 		<trans-unit id="tl_wem_item.coords_legend">
 			<source>Coordinates</source>

@@ -134,11 +134,11 @@ $GLOBALS['TL_DCA']['tl_wem_item'] = [
     // Palettes
     'palettes' => [
         'default' => '
-            {location_legend},title,alias,category,published;
-            {coords_legend},lat,lng;
+            {location_legend},title,alias,category,published, publishedAt, publishedUntil;
             {street_legend},country,admin_lvl_1,admin_lvl_2,admin_lvl_3,city,postal,street;
+            {coords_legend},lat,lng;
             {data_legend},picture,teaser;
-            {contact_legend},phone,fax,cellphone,email;
+            {contact_legend},phone,fax,email;
             {links_legend},website,facebook,twitter,instagram;
             {attributes_legend},attributes
         ',
@@ -201,6 +201,20 @@ $GLOBALS['TL_DCA']['tl_wem_item'] = [
             'inputType' => 'checkbox',
             'eval' => ['doNotCopy' => true, 'tl_class' => 'w50 m12'],
             'sql' => "char(1) NOT NULL default ''",
+        ],
+        'publishedAt' => [
+            'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['publishedAt'],
+            'exclude' => true,
+            'inputType' => 'text',
+            'eval' => ['rgxp' => 'datim', 'datepicker' => true, 'tl_class' => 'w50 wizard'],
+            'sql' => "varchar(10) NOT NULL default ''",
+        ],
+        'publishedUntil' => [
+            'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['publishedUntil'],
+            'exclude' => true,
+            'inputType' => 'text',
+            'eval' => ['rgxp' => 'datim', 'datepicker' => true, 'tl_class' => 'w50 wizard'],
+            'sql' => "varchar(10) NOT NULL default ''",
         ],
 
         // {coords_legend},lat,lng;
@@ -305,13 +319,6 @@ $GLOBALS['TL_DCA']['tl_wem_item'] = [
         ],
         'fax' => [
             'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['fax'],
-            'exclude' => true,
-            'inputType' => 'text',
-            'eval' => ['maxlength' => 64, 'tl_class' => 'w50'],
-            'sql' => "varchar(64) NOT NULL default ''",
-        ],
-        'cellphone' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_item']['cellphone'],
             'exclude' => true,
             'inputType' => 'text',
             'eval' => ['maxlength' => 64, 'tl_class' => 'w50'],
