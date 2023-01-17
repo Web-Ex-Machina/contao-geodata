@@ -648,7 +648,9 @@ class tl_wem_item extends \Contao\Backend
         ) {
             return '';
         }
+        $url = $this->addToUrl($href);
+        $url = str_replace('&amp;id='.$objMap->id, '&amp;id='.$data['id'], $url);
 
-        return sprintf('<a href="%s" title="%s" %s>%s</a> ', $href, StringUtil::specialchars($title), $attributes, \Contao\Image::getHtml($icon, $label));
+        return sprintf('<a href="%s" title="%s" %s>%s</a> ', $url, StringUtil::specialchars($title), $attributes, \Contao\Image::getHtml($icon, $label));
     }
 }
