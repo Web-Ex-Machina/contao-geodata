@@ -17,6 +17,14 @@
         <source>Select maps to display.</source>
         <target>Karten auswählen die angezeigt werden soll.</target>
       </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_customTplForGeodataItems.0">
+        <source>Model for list items</source>
+        <target>Modell für Listenelemente</target>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_customTplForGeodataItems.1">
+        <source>Here you can select the list items template.</source>
+        <target>Hier können Sie die Vorlage für Listenelemente auswählen.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

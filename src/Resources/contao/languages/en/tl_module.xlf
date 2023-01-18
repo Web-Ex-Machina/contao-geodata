@@ -17,6 +17,14 @@
         <source>Select maps to display.</source>
         <target>Select maps to display.</target>
       </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_customTplForGeodataItems.0">
+        <source>Model for list items</source>
+        <target>Model for list items</target>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_customTplForGeodataItems.1">
+        <source>Here you can select the list items template.</source>
+        <target>Here you can select the list items template.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

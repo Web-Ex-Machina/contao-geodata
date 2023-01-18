@@ -98,6 +98,14 @@
         <source>The marker will be merged if they are within the distance entered (in m)</source>
         <target>Les marqueurs seront fusionnés s'ils sont dans la distance entrée (en m)</target>
       </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_customTplForGeodataItems.0">
+        <source>Model for list items</source>
+        <target>Modèle pour les éléments de la liste</target>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_customTplForGeodataItems.1">
+        <source>Here you can select the list items template.</source>
+        <target>Ici, vous pouvez choisir un modèle pour les éléments de la liste</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
