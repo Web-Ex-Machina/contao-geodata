@@ -25,6 +25,14 @@
         <source>Here you can select the list items template.</source>
         <target>Hier können Sie die Vorlage für Listenelemente auswählen.</target>
       </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_search.0">
+        <source>Search field</source>
+        <target>Suchfeld</target>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_search.1">
+        <source>Display a search field.</source>
+        <target>Zeigen Sie ein Suchfeld an.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
