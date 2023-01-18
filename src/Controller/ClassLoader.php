@@ -3,13 +3,13 @@
 declare(strict_types=1);
 
 /**
- * Altrad Map Bundle for Contao Open Source CMS
- * Copyright (c) 2017-2022 Web ex Machina
+ * Geodata for Contao Open Source CMS
+ * Copyright (c) 2015-2022 Web ex Machina
  *
  * @category ContaoBundle
- * @package  Web-Ex-Machina/contao-altrad-map-bundle
+ * @package  Web-Ex-Machina/contao-geodata
  * @author   Web ex Machina <contact@webexmachina.fr>
- * @link     https://github.com/Web-Ex-Machina/contao-altrad-map-bundle/
+ * @link     https://github.com/Web-Ex-Machina/contao-geodata/
  */
 
 namespace WEM\GeoDataBundle\Controller;
@@ -66,17 +66,17 @@ class ClassLoader extends Controller
         $GLOBALS['TL_JAVASCRIPT'][] = 'https://code.jquery.com/jquery-3.4.1.min.js';
 
         // Load generic files
-        $objCssCombiner->add('bundles/wemlocations/css/default.css', $strVersion);
-        $objJsCombiner->add('bundles/wemlocations/js/default.js', $strVersion);
+        $objCssCombiner->add('bundles/wemgeodata/css/default.css', $strVersion);
+        $objJsCombiner->add('bundles/wemgeodata/js/default.js', $strVersion);
 
         // Depending on the provider, we will need more stuff
         switch ($objMap->mapProvider) {
             case 'jvector':
                 $objCssCombiner->addMultiple([
-                    'bundles/wemlocations/vendor/jquery-jvectormap/jquery-jvectormap-2.0.3.css', 'bundles/wemlocations/css/jvector.css',
+                    'bundles/wemgeodata/vendor/jquery-jvectormap/jquery-jvectormap-2.0.3.css', 'bundles/wemgeodata/css/jvector.css',
                 ], $strVersion);
                 $objJsCombiner->addMultiple([
-                    'bundles/wemlocations/vendor/jquery-jvectormap/jquery-jvectormap-2.0.3.min.js', 'bundles/wemlocations/vendor/jquery-jvectormap/maps/jquery-jvectormap-'.$objMap->mapFile.'-mill.js', 'bundles/wemlocations/js/jvector.js',
+                    'bundles/wemgeodata/vendor/jquery-jvectormap/jquery-jvectormap-2.0.3.min.js', 'bundles/wemgeodata/vendor/jquery-jvectormap/maps/jquery-jvectormap-'.$objMap->mapFile.'-mill.js', 'bundles/wemgeodata/js/jvector.js',
                 ], $strVersion);
                 break;
             case 'gmaps':
@@ -84,16 +84,16 @@ class ClassLoader extends Controller
                     throw new \Exception('Google Maps needs an API Key !');
                 }
 
-                $objCssCombiner->add('bundles/wemlocations/css/gmaps.css', $strVersion);
-                $objJsCombiner->add('bundles/wemlocations/js/gmaps.js', $strVersion);
+                $objCssCombiner->add('bundles/wemgeodata/css/gmaps.css', $strVersion);
+                $objJsCombiner->add('bundles/wemgeodata/js/gmaps.js', $strVersion);
                 $GLOBALS['TL_JAVASCRIPT'][] = sprintf('<script src="https://maps.googleapis.com/maps/api/js?key=%s"></script>', $objMap->mapProviderGmapKey);
                 break;
             case 'leaflet':
                 $objCssCombiner->addMultiple([
-                    'bundles/wemlocations/vendor/leaflet/leaflet.css', 'bundles/wemlocations/css/leaflet.css',
+                    'bundles/wemgeodata/vendor/leaflet/leaflet.css', 'bundles/wemgeodata/css/leaflet.css',
                 ], $strVersion);
                 $objJsCombiner->addMultiple([
-                    'bundles/wemlocations/vendor/leaflet/leaflet.js', 'bundles/wemlocations/js/leaflet.js',
+                    'bundles/wemgeodata/vendor/leaflet/leaflet.js', 'bundles/wemgeodata/js/leaflet.js',
                 ], $strVersion);
                 break;
             default:

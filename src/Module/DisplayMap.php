@@ -290,6 +290,8 @@ class DisplayMap extends Core
                 $this->Template->list = $objTemplate->parse();
                 $this->Template->list_position = $this->wem_geodata_map_list;
             }
+
+            ClassLoader::loadLibraries($this->objMap);
         } catch (\Exception $e) {
             $this->Template->error = true;
             $this->Template->msg = $e->getMessage();
