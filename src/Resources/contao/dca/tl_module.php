@@ -3,13 +3,13 @@
 declare(strict_types=1);
 
 /**
- * Altrad Map Bundle for Contao Open Source CMS
- * Copyright (c) 2017-2022 Web ex Machina
+ * Geodata for Contao Open Source CMS
+ * Copyright (c) 2015-2022 Web ex Machina
  *
  * @category ContaoBundle
- * @package  Web-Ex-Machina/contao-altrad-map-bundle
+ * @package  Web-Ex-Machina/contao-geodata
  * @author   Web ex Machina <contact@webexmachina.fr>
- * @link     https://github.com/Web-Ex-Machina/contao-altrad-map-bundle/
+ * @link     https://github.com/Web-Ex-Machina/contao-geodata/
  */
 
 $GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'wem_location_map_filters';
@@ -22,7 +22,7 @@ $GLOBALS['TL_DCA']['tl_module']['palettes']['wem_display_map'] = '
 ';
 $GLOBALS['TL_DCA']['tl_module']['palettes']['wem_location_list'] = '
     {title_legend},name,type;
-    {template_legend:hide},wem_location_map,wem_location_map_filters,customTpl;
+    {template_legend:hide},wem_location_maps,wem_location_map_filters,customTpl;
     {protected_legend:hide},protected;
     {expert_legend:hide},guests,cssID
 ';
@@ -43,6 +43,14 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['wem_location_map'] = [
     'foreignKey' => 'tl_wem_map.title',
     'eval' => ['chosen' => true, 'mandatory' => true, 'tl_class' => 'w50'],
     'sql' => "int(10) unsigned NOT NULL default '0'",
+];
+$GLOBALS['TL_DCA']['tl_module']['fields']['wem_location_maps'] = [
+    'label' => &$GLOBALS['TL_LANG']['tl_module']['wem_location_maps'],
+    'exclude' => true,
+    'inputType' => 'select',
+    'foreignKey' => 'tl_wem_map.title',
+    'eval' => ['chosen' => true, 'mandatory' => true, 'multiple' => true, 'tl_class' => 'w50'],
+    'sql' => 'blob NULL',
 ];
 $GLOBALS['TL_DCA']['tl_module']['fields']['wem_location_map_list'] = [
     'label' => &$GLOBALS['TL_LANG']['tl_module']['wem_location_map_list'],

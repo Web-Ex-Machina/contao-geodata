@@ -3,13 +3,13 @@
 declare(strict_types=1);
 
 /**
- * Altrad Map Bundle for Contao Open Source CMS
- * Copyright (c) 2017-2022 Web ex Machina
+ * Geodata for Contao Open Source CMS
+ * Copyright (c) 2015-2022 Web ex Machina
  *
  * @category ContaoBundle
- * @package  Web-Ex-Machina/contao-altrad-map-bundle
+ * @package  Web-Ex-Machina/contao-geodata
  * @author   Web ex Machina <contact@webexmachina.fr>
- * @link     https://github.com/Web-Ex-Machina/contao-altrad-map-bundle/
+ * @link     https://github.com/Web-Ex-Machina/contao-geodata/
  */
 
 namespace WEM\GeoDataBundle\Module;
@@ -18,10 +18,9 @@ use Contao\BackendTemplate;
 use Contao\Environment;
 use Contao\Input;
 use Contao\PageModel;
+use Contao\StringUtil;
 use Contao\System;
 use WEM\GeoDataBundle\Controller\ClassLoader;
-use WEM\GeoDataBundle\Controller\Util;
-use WEM\GeoDataBundle\Model\Item;
 use WEM\GeoDataBundle\Model\Map;
 
 /**
@@ -72,11 +71,14 @@ class LocationsList extends Core
     {
         try {
             // Load the map
-            $this->objMap = Map::findByPk($this->wem_location_map);
+            $this->maps = Map::findItems([
+                'where' => [
+                    sprintf('id in (%s)', implode(',', StringUtil::deserialize($this->wem_location_maps))),
+                ],
+            ]);
 
-
-            if (!$this->objMap) {
-                throw new \Exception('No map found.');
+            if (!$this->maps) {
+                throw new \Exception('No maps found.');
             }
 
             // Load the libraries
@@ -84,10 +86,10 @@ class LocationsList extends Core
             System::getCountries();
 
             // Build the config
-            $arrConfig = ['published' => 1, 'pid' => $this->wem_location_map];
+            $arrConfig = ['published' => 1, 'where' => [sprintf('pid in (%s)', implode(',', StringUtil::deserialize($this->wem_location_maps)))]];
 
             // Get the jumpTo page
-            $this->objJumpTo = PageModel::findByPk($this->objMap->jumpTo);
+            // $this->objJumpTo = PageModel::findByPk($this->objMap->jumpTo);
 
             // Gather filters
             if ('nofilters' !== $this->wem_location_map_filters) {
@@ -132,7 +134,7 @@ class LocationsList extends Core
                 $this->Template->filters = $this->filters;
                 $this->Template->filters_position = $this->wem_location_map_filters;
                 $this->Template->filters_action = Environment::get('request');
-                $this->Template->filters_method = "GET";
+                $this->Template->filters_method = 'GET';
             }
 
             // Get locations

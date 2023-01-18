@@ -9,6 +9,14 @@
         <source>Select the map to display.</source>
         <target>Select the map to display.</target>
       </trans-unit>
+      <trans-unit id="tl_module.wem_location_maps.0">
+        <source>Maps</source>
+        <target>Maps</target>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_location_maps.1">
+        <source>Select maps to display.</source>
+        <target>Select maps to display.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

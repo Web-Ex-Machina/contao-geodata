@@ -9,6 +9,14 @@
         <source>Select the map to display.</source>
         <target>Karte auswählen die angezeigt werden soll.</target>
       </trans-unit>
+      <trans-unit id="tl_module.wem_location_maps.0">
+        <source>Maps</source>
+        <target>Karten</target>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_location_maps.1">
+        <source>Select maps to display.</source>
+        <target>Karten auswählen die angezeigt werden soll.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
