@@ -206,11 +206,11 @@
 			<source>Select the Excel File with your locations</source>
 			<target>Wähle Excel Datei mit Standorten aus</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.export.0">
+		<trans-unit id="tl_wem_item.export_form.0">
 			<source>Export</source>
 			<target>Export</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.export.1">
+		<trans-unit id="tl_wem_item.export_form.1">
 			<source>Export locations of this map</source>
 			<target>Exportiere Standorte dieser Karte</target>
 		</trans-unit>

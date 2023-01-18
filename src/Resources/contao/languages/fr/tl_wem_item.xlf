@@ -304,11 +304,11 @@
 			<source>Select the Excel File with your locations</source>
 			<target>Sélectionnez le fichier Excel contenant vos emplacements</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.export.0">
+		<trans-unit id="tl_wem_item.export_form.0">
 			<source>Export</source>
 			<target>Exporter</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.export.1">
+		<trans-unit id="tl_wem_item.export_form.1">
 			<source>Export locations of this map</source>
 			<target>Export les emplacements de cette carte</target>
 		</trans-unit>

@@ -367,7 +367,7 @@ class Callback extends Backend
         $objTemplate->widgetSettingsLimitToCategoriesSelectLabel = $GLOBALS['TL_LANG']['tl_wem_item']['exportSettingsLimitToCategoriesSelectLabel'];
         $objTemplate->widgetSettingsLimitToCountriesCheckboxLabel = $GLOBALS['TL_LANG']['tl_wem_item']['exportSettingsLimitToCountriesCheckboxLabel'];
         $objTemplate->widgetSettingsLimitToCountriesSelectLabel = $GLOBALS['TL_LANG']['tl_wem_item']['exportSettingsLimitToCountriesSelectLabel'];
-        $objTemplate->formSubmitValue = specialchars($GLOBALS['TL_LANG']['tl_wem_item']['export'][0]);
+        $objTemplate->formSubmitValue = specialchars($GLOBALS['TL_LANG']['tl_wem_item']['export_form'][0]);
 
         $objTemplate->categories = $arrCategories;
         $objTemplate->countries = $arrCountries;
