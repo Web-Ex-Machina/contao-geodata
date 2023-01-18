@@ -14,7 +14,7 @@
 			<target>Karten und Standorte verwalten</target>
 		</trans-unit>
 
-		<trans-unit id="FMD.wem_locations">
+		<trans-unit id="FMD.wem_geodata">
 			<source>Cartes &amp; Locations</source>
 			<target>Karten &amp; Standorte</target>
 		</trans-unit>

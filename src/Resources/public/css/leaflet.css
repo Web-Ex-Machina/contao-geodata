@@ -1,4 +1,4 @@
 .leaflet-pane{z-index:50;}
 .leaflet-control,
-.mod_wem_locations_map .map__reset,
-.mod_wem_locations_map .map__content{z-index:51;}
+.mod_wem_geodata_map .map__reset,
+.mod_wem_geodata_map .map__content{z-index:51;}

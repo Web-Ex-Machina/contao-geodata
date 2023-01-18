@@ -41,7 +41,7 @@
     <fieldset class="tl_tbox nolegend">
         <div class="widget">
         <h3><?php echo $this->importExampleTitle; ?></h3>
-        <table class="wem_locations_import_table">
+        <table class="wem_geodata_import_table">
             <thead>
                 <tr><?php echo $this->importExampleTh; ?></tr>
             </thead>
@@ -56,7 +56,7 @@
     <fieldset class="tl_tbox nolegend">
         <div class="widget">
         <h3><?php echo $this->importListCountriesTitle; ?></h3>
-        <table class="wem_locations_import_table">
+        <table class="wem_geodata_import_table">
             <thead>
                 <tr>
                     <th>ISOCode</th>

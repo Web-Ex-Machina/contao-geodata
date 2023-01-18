@@ -1,0 +1,23 @@
+<div class="map__list__item d-grid cols-2" data-id="<?= $this->location['id'] ?>" data-marker="<?= $this->location['country']['code'].'-'.str_replace(' ', '_', strtolower($this->location['title'])) ?>" data-country="<?= $this->location['country']['code'] ?>" data-continent="<?= $this->location['continent']['code'] ?>">
+  <p class="ft-b cols-span-2"><?= $this->location['title'] ?></p>
+  
+  <div class="col-xs-6">
+  <?php if($this->location['address']): ?>
+    <?= $this->location['address'] ?>
+  <?php endif; ?>
+  </div>
+
+  <div class="col-xs-6">
+  <?php if($this->location['phone'] || $this->location['email']): ?>
+    <?php if($this->location['phone']): ?><a href="tel:<?= $this->location['phone'] ?>" rel="nofollow"><?= $this->location['phone'] ?></a><?php endif; ?>
+    <?php if($this->location['phone'] && $this->location['email']): ?><br><?php endif; ?>
+    <?php if($this->location['email']): ?><a href="mailto:<?= $this->location['email'] ?>" rel="nofollow"><?= $this->location['email'] ?></a><?php endif; ?>
+  <?php endif; ?>
+  </div>
+  
+  <div class="col-xs-6">
+  <?php if($this->location['url']): ?>
+    <a href="<?= $this->location['url'] ?>" title="<?= $this->location['title'] ?>"><?= $GLOBALS['TL_LANG']['WEM']['LOCATIONS']['BUTTON']['READMORE'] ?></a>
+  <?php endif; ?>
+  </div>
+</div>

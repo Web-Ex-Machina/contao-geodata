@@ -1,44 +1,44 @@
 <?xml version="1.0" ?><xliff version="1.1">
   <file datatype="php" original="src/Resources/contao/languages/en/explain.php" source-language="en" target-language="en">
     <body>
-      <trans-unit id="XPL.wem_locations_mapProvider.0.0">
+      <trans-unit id="XPL.wem_geodata_mapProvider.0.0">
         <source>JVector</source>
         <target>JVector</target>
       </trans-unit>
-      <trans-unit id="XPL.wem_locations_mapProvider.0.1">
+      <trans-unit id="XPL.wem_geodata_mapProvider.0.1">
         <source>For more information about JVector please visit &lt;a href=&quot;http://jvectormap.com/&quot; title=&quot;JVector Website&quot; target=&quot;_blank&quot;&gt;http://jvectormap.com/&lt;/a&gt;.</source>
         <target>For more information about JVector please visit &lt;a href=&quot;http://jvectormap.com/&quot; title=&quot;JVector Website&quot; target=&quot;_blank&quot;&gt;http://jvectormap.com/&lt;/a&gt;.</target>
       </trans-unit>
-      <trans-unit id="XPL.wem_locations_mapProvider.1.0">
+      <trans-unit id="XPL.wem_geodata_mapProvider.1.0">
         <source>Google Maps</source>
         <target>Google Maps</target>
       </trans-unit>
-      <trans-unit id="XPL.wem_locations_mapProvider.1.1">
+      <trans-unit id="XPL.wem_geodata_mapProvider.1.1">
         <source>For more information about Google Maps please visit &lt;a href=&quot;https://developers.google.com/maps/&quot; title=&quot;Google Maps Website&quot; target=&quot;_blank&quot;&gt;https://developers.google.com/maps/&lt;/a&gt;.</source>
         <target>For more information about Google Maps please visit &lt;a href=&quot;https://developers.google.com/maps/&quot; title=&quot;Google Maps Website&quot; target=&quot;_blank&quot;&gt;https://developers.google.com/maps/&lt;/a&gt;.</target>
       </trans-unit>
-      <trans-unit id="XPL.wem_locations_mapProvider.2.0">
+      <trans-unit id="XPL.wem_geodata_mapProvider.2.0">
         <source>Leaflet</source>
         <target>Leaflet</target>
       </trans-unit>
-      <trans-unit id="XPL.wem_locations_mapProvider.2.1">
+      <trans-unit id="XPL.wem_geodata_mapProvider.2.1">
         <source>For more information about Leaflet please visit &lt;a href=&quot;https://leafletjs.com/&quot; title=&quot;Leaflet Website&quot; target=&quot;_blank&quot;&gt;https://leafletjs.com/&lt;/a&gt;.</source>
         <target>For more information about Leaflet please visit &lt;a href=&quot;https://leafletjs.com/&quot; title=&quot;Leaflet Website&quot; target=&quot;_blank&quot;&gt;https://leafletjs.com/&lt;/a&gt;.</target>
       </trans-unit>
 
-      <trans-unit id="XPL.wem_locations_geocodingProvider.0.0">
+      <trans-unit id="XPL.wem_geodata_geocodingProvider.0.0">
         <source>Google Maps</source>
         <target>Google Maps</target>
       </trans-unit>
-      <trans-unit id="XPL.wem_locations_geocodingProvider.0.1">
+      <trans-unit id="XPL.wem_geodata_geocodingProvider.0.1">
         <source>For more information about Google Maps Geocoding Service please visit &lt;a href=&quot;https://developers.google.com/maps/documentation/geocoding/intro&quot; title=&quot;Google Maps Website&quot; target=&quot;_blank&quot;&gt;https://developers.google.com/maps/documentation/geocoding/intro&lt;/a&gt;.</source>
         <target>For more information about Google Maps Geocoding Service please visit &lt;a href=&quot;https://developers.google.com/maps/documentation/geocoding/intro&quot; title=&quot;Google Maps Website&quot; target=&quot;_blank&quot;&gt;https://developers.google.com/maps/documentation/geocoding/intro&lt;/a&gt;.</target>
       </trans-unit>
-      <trans-unit id="XPL.wem_locations_geocodingProvider.1.0">
+      <trans-unit id="XPL.wem_geodata_geocodingProvider.1.0">
         <source>Nominatim</source>
         <target>Nominatim</target>
       </trans-unit>
-      <trans-unit id="XPL.wem_locations_geocodingProvider.1.1">
+      <trans-unit id="XPL.wem_geodata_geocodingProvider.1.1">
         <source>For more information about Nominatim Geocoding Service please visit &lt;a href=&quot;https://wiki.openstreetmap.org/wiki/Nominatim&quot; title=&quot;Nominatim Website&quot; target=&quot;_blank&quot;&gt;https://wiki.openstreetmap.org/wiki/Nominatim&lt;/a&gt;.</source>
         <target>For more information about Nominatim Geocoding Service please visit &lt;a href=&quot;https://wiki.openstreetmap.org/wiki/Nominatim&quot; title=&quot;Nominatim Website&quot; target=&quot;_blank&quot;&gt;https://wiki.openstreetmap.org/wiki/Nominatim&lt;/a&gt;.</target>
       </trans-unit>

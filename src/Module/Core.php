@@ -3,26 +3,31 @@
 declare(strict_types=1);
 
 /**
- * Altrad Map Bundle for Contao Open Source CMS
- * Copyright (c) 2017-2022 Web ex Machina
+ * Geodata for Contao Open Source CMS
+ * Copyright (c) 2015-2022 Web ex Machina
  *
  * @category ContaoBundle
- * @package  Web-Ex-Machina/contao-altrad-map-bundle
+ * @package  Web-Ex-Machina/contao-geodata
  * @author   Web ex Machina <contact@webexmachina.fr>
- * @link     https://github.com/Web-Ex-Machina/contao-altrad-map-bundle/
+ * @link     https://github.com/Web-Ex-Machina/contao-geodata/
  */
 
 namespace WEM\GeoDataBundle\Module;
 
+use Contao\Config;
+use Contao\ContentModel;
+use Contao\Environment;
+use Contao\FilesModel;
+use Contao\Input;
+use Contao\Module;
+use Contao\PageModel;
+use Contao\Pagination;
+use Contao\StringUtil;
+use Contao\System;
 use WEM\GeoDataBundle\Controller\Util;
 use WEM\GeoDataBundle\Model\Category;
 use WEM\GeoDataBundle\Model\Item;
-use Contao\FilesModel;
-use Contao\System;
-use Contao\ContentModel;
-use Contao\PageModel;
-use Contao\Config;
-use Contao\Module;
+use WEM\GeoDataBundle\Model\Map;
 
 /**
  * Parent class for locations modules.
@@ -31,10 +36,53 @@ use Contao\Module;
  */
 abstract class Core extends Module
 {
+    /**
+     * Build Pagination.
+     *
+     * @param int $intTotal Number of items
+     *
+     * @return [Void]
+     */
+    protected function buildPagination(int $intTotal): void
+    {
+        $total = $intTotal - $this->offset;
+
+        // Split the results
+        if ($this->perPage > 0 && (!isset($this->limit) || $this->numberOfItems > $this->perPage)) {
+            // Adjust the overall limit
+            if (isset($this->limit)) {
+                $total = min($this->limit, $total);
+            }
+
+            // Get the current page
+            $id = 'page_n'.$this->id;
+            $page = Input::get($id) ?? 1;
+
+            // Do not index or cache the page if the page number is outside the range
+            if ($page < 1 || $page > max(ceil($total / $this->perPage), 1)) {
+                throw new \Exception('Page not found: '.Environment::get('uri'));
+            }
+
+            // Set limit and offset
+            $this->limit = $this->perPage;
+            $this->offset += (max($page, 1) - 1) * $this->perPage;
+            $skip = (int) $this->skipFirst;
+
+            // Overall limit
+            if ($this->offset + $this->limit > $total + $skip) {
+                $this->limit = $total + $skip - $this->offset;
+            }
+
+            // Add the pagination menu
+            $objPagination = new Pagination($total, $this->perPage, Config::get('maxPaginationLinks') ?? 7, $id);
+            $this->Template->pagination = $objPagination->generate("\n  ");
+        }
+    }
+
     protected function getCategories()
     {
         try {
-            $objCategories = Category::findItems(['published' => 1, 'pid' => $this->wem_location_map]);
+            $objCategories = Category::findItems(['published' => 1, 'pid' => $this->wem_geodata_map]);
 
             if (!$objCategories) {
                 throw new \Exception('No categories found for this map.');
@@ -55,10 +103,29 @@ abstract class Core extends Module
     {
         try {
             if (null === $c) {
-                $c = ['published' => 1, 'onlyWithCoords' => 1, 'pid' => $this->wem_location_map];
+                $c = ['published' => 1, 'onlyWithCoords' => 1];
+                if (null !== $this->wem_geodata_map) {
+                    $c['pid'] = $this->wem_geodata_map;
+                } elseif (!empty($this->wem_geodata_maps)) {
+                    $pids = StringUtil::deserialize($this->wem_geodata_maps);
+                    if (!empty($pids)) {
+                        $c['where'][] = sprintf('pid IN (%s)', implode('', $pids));
+                    }
+                }
             }
 
-            $objLocations = Item::findItems($c);
+            $limit = 0;
+            if (\array_key_exists('limit', $c)) {
+                $limit = $c['limit'];
+                unset($c['limit']);
+            }
+            $offset = 0;
+            if (\array_key_exists('offset', $c)) {
+                $offset = $c['offset'];
+                unset($c['offset']);
+            }
+
+            $objLocations = Item::findItems($c, $limit, $offset);
 
             if (!$objLocations) {
                 throw new \Exception('No locations found for this map.');
@@ -179,9 +246,14 @@ abstract class Core extends Module
             $arrItem['content'] = $strContent;
 
             // Build the item URL
-            if ($this->objJumpTo instanceof PageModel) {
+            $objMap = Map::findByPk($arrItem['pid']);
+            if ($objMap && $objMap->jumpTo) {
+                $objPage = PageModel::findByPk($objMap->jumpTo);
+            }
+            if ($objPage instanceof PageModel) {
+                // if ($this->objJumpTo instanceof PageModel) {
                 $params = (Config::get('useAutoItem') ? '/' : '/items/').($arrItem['alias'] ?: $arrItem['id']);
-                $arrItem['url'] = ampersand($blnAbsolute ? $this->objJumpTo->getAbsoluteUrl($params) : $this->objJumpTo->getFrontendUrl($params));
+                $arrItem['url'] = ampersand($blnAbsolute ? $objPage->getAbsoluteUrl($params) : $objPage->getFrontendUrl($params));
             }
 
             return $arrItem;

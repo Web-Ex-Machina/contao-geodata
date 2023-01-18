@@ -3,22 +3,22 @@
 declare(strict_types=1);
 
 /**
- * Altrad Map Bundle for Contao Open Source CMS
- * Copyright (c) 2017-2022 Web ex Machina
+ * Geodata for Contao Open Source CMS
+ * Copyright (c) 2015-2022 Web ex Machina
  *
  * @category ContaoBundle
- * @package  Web-Ex-Machina/contao-altrad-map-bundle
+ * @package  Web-Ex-Machina/contao-geodata
  * @author   Web ex Machina <contact@webexmachina.fr>
- * @link     https://github.com/Web-Ex-Machina/contao-altrad-map-bundle/
+ * @link     https://github.com/Web-Ex-Machina/contao-geodata/
  */
 
 namespace WEM\GeoDataBundle\Controller;
 
-use WEM\GeoDataBundle\Model\Item;
-use Contao\Input;
 use Contao\Database;
-use Contao\System;
+use Contao\Input;
 use Contao\StringUtil;
+use Contao\System;
+use WEM\GeoDataBundle\Model\Item;
 
 /**
  * Provide utilities function to Locations Extension.
@@ -70,7 +70,7 @@ class Util
         $arrTag = explode('::', $tag);
 
         // Exist if the tested tag doesn't concern locations
-        if ('wem_location' !== $arrTag[0]) {
+        if ('wem_geodata' !== $arrTag[0]) {
             return false;
         }
 

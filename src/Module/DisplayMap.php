@@ -3,13 +3,13 @@
 declare(strict_types=1);
 
 /**
- * Altrad Map Bundle for Contao Open Source CMS
- * Copyright (c) 2017-2022 Web ex Machina
+ * Geodata for Contao Open Source CMS
+ * Copyright (c) 2015-2022 Web ex Machina
  *
  * @category ContaoBundle
- * @package  Web-Ex-Machina/contao-altrad-map-bundle
+ * @package  Web-Ex-Machina/contao-geodata
  * @author   Web ex Machina <contact@webexmachina.fr>
- * @link     https://github.com/Web-Ex-Machina/contao-altrad-map-bundle/
+ * @link     https://github.com/Web-Ex-Machina/contao-geodata/
  */
 
 namespace WEM\GeoDataBundle\Module;
@@ -20,7 +20,6 @@ use Contao\PageModel;
 use Contao\System;
 use WEM\GeoDataBundle\Controller\ClassLoader;
 use WEM\GeoDataBundle\Controller\Util;
-use WEM\GeoDataBundle\Model\Item;
 use WEM\GeoDataBundle\Model\Map;
 
 /**
@@ -33,14 +32,14 @@ class DisplayMap extends Core
      *
      * @var string
      */
-    protected $strTemplate = 'mod_wem_locations_map';
+    protected $strTemplate = 'mod_wem_geodata_map';
 
     /**
      * List Template.
      *
      * @var string
      */
-    protected $strListTemplate = 'mod_wem_locations_list';
+    protected $strListTemplate = 'mod_wem_geodata_list';
 
     /**
      * Filters.
@@ -78,7 +77,7 @@ class DisplayMap extends Core
     {
         try {
             // Load the map
-            $this->objMap = Map::findByPk($this->wem_location_map);
+            $this->objMap = Map::findByPk($this->wem_geodata_map);
 
             if (!$this->objMap) {
                 throw new \Exception('No map found.');
@@ -122,7 +121,7 @@ class DisplayMap extends Core
 
             // Now we retrieved all the locations, we will regroup the close ones into one
             $arrMarkers = [];
-            $distToMerge = $this->wem_location_distToMerge ?: 0; // in m
+            $distToMerge = $this->wem_geodata_distToMerge ?: 0; // in m
 
             foreach ($arrLocations as $l) {
                 if ($distToMerge > 0) {
@@ -174,9 +173,9 @@ class DisplayMap extends Core
             $this->Template->config = $arrConfig;
 
             // Gather filters
-            if ('nofilters' !== $this->wem_location_map_filters) {
+            if ('nofilters' !== $this->wem_geodata_map_filters) {
                 System::loadLanguageFile('tl_wem_item');
-                $arrFilterFields = unserialize($this->wem_location_map_filters_fields);
+                $arrFilterFields = unserialize($this->wem_geodata_map_filters_fields);
                 $this->filters = [];
 
                 foreach ($arrFilterFields as $f) {
@@ -207,7 +206,7 @@ class DisplayMap extends Core
                                     case 'city':
                                         $this->filters[$f]['options'][] = [
                                             'value' => $l[$f],
-                                            'label' => $l[$f].' ('.$l['admin_lvl_2'].')'
+                                            'label' => $l[$f].' ('.$l['admin_lvl_2'].')',
                                         ];
                                     break;
                                     default:
@@ -219,7 +218,7 @@ class DisplayMap extends Core
                 }
 
                 $this->Template->filters = $this->filters;
-                $this->Template->filters_position = $this->wem_location_map_filters;
+                $this->Template->filters_position = $this->wem_geodata_map_filters;
             }
 
             // Send the fileMap
@@ -230,18 +229,18 @@ class DisplayMap extends Core
             }
 
             // If the config says so, we will generate a template with a list of the locations
-            if ('nolist' !== $this->wem_location_map_list) {
+            if ('nolist' !== $this->wem_geodata_map_list) {
                 $objTemplate = new FrontendTemplate($this->strListTemplate);
                 $objTemplate->locations = $arrLocations;
-                $objTemplate->list_position = $this->wem_location_map_list;
+                $objTemplate->list_position = $this->wem_geodata_map_list;
 
                 if ($this->filters) {
                     $objTemplate->filters = $this->filters;
-                    $objTemplate->filters_position = $this->wem_location_map_filters;
+                    $objTemplate->filters_position = $this->wem_geodata_map_filters;
                 }
 
                 $this->Template->list = $objTemplate->parse();
-                $this->Template->list_position = $this->wem_location_map_list;
+                $this->Template->list_position = $this->wem_geodata_map_list;
             }
         } catch (\Exception $e) {
             $this->Template->error = true;

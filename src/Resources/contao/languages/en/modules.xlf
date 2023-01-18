@@ -14,7 +14,7 @@
 			<target>Manage maps and locations of your website</target>
 		</trans-unit>
 
-		<trans-unit id="FMD.wem_locations">
+		<trans-unit id="FMD.wem_geodata">
 			<source>Maps &amp; Locations</source>
 			<target>Maps &amp; Locations</target>
 		</trans-unit>

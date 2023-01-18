@@ -153,7 +153,7 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'options' => ['jvector', 'gmaps', 'leaflet'],
             'reference' => &$GLOBALS['TL_LANG']['tl_wem_map']['mapProvider'],
             'eval' => ['helpwizard' => true, 'mandatory' => true, 'submitOnChange' => true, 'chosen' => true, 'includeBlankOption' => true],
-            'explanation' => 'wem_locations_mapProvider',
+            'explanation' => 'wem_geodata_mapProvider',
             'sql' => "varchar(255) NOT NULL default ''",
         ],
         'mapFile' => [
@@ -189,7 +189,7 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'options' => ['nominatim', 'gmaps'],
             'reference' => &$GLOBALS['TL_LANG']['tl_wem_map']['geocodingProvider'],
             'eval' => ['helpwizard' => true, 'includeBlankOption' => true, 'submitOnChange' => true, 'chosen' => true],
-            'explanation' => 'wem_locations_geocodingProvider',
+            'explanation' => 'wem_geodata_geocodingProvider',
             'sql' => "varchar(255) NOT NULL default ''",
         ],
         'geocodingProviderGmapKey' => [

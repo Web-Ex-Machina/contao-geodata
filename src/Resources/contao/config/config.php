@@ -52,10 +52,10 @@ declare(strict_types=1);
     $GLOBALS['FE_MOD'],
     2,
     [
-        'wem_locations' => [
+        'wem_geodata' => [
             'wem_display_map' => 'WEM\GeoDataBundle\Module\DisplayMap',
-            'wem_location_list' => 'WEM\GeoDataBundle\Module\LocationsList',
-            'wem_location_reader' => 'WEM\GeoDataBundle\Module\LocationsReader',
+            'wem_geodata_list' => 'WEM\GeoDataBundle\Module\LocationsList',
+            'wem_geodata_reader' => 'WEM\GeoDataBundle\Module\LocationsReader',
         ],
     ]
 );

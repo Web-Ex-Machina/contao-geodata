@@ -1,19 +1,19 @@
 <?xml version="1.0" ?><xliff version="1.1">
   <file datatype="php" original="system/modules/wem-contao-locations/languages/en/tl_module.php" source-language="en" target-language="en">
     <body>
-      <trans-unit id="tl_module.wem_location_map.0">
+      <trans-unit id="tl_module.wem_geodata_map.0">
         <source>Map</source>
         <target>Map</target>
       </trans-unit>
-      <trans-unit id="tl_module.wem_location_map.1">
+      <trans-unit id="tl_module.wem_geodata_map.1">
         <source>Select the map to display.</source>
         <target>Select the map to display.</target>
       </trans-unit>
-      <trans-unit id="tl_module.wem_location_maps.0">
+      <trans-unit id="tl_module.wem_geodata_maps.0">
         <source>Maps</source>
         <target>Maps</target>
       </trans-unit>
-      <trans-unit id="tl_module.wem_location_maps.1">
+      <trans-unit id="tl_module.wem_geodata_maps.1">
         <source>Select maps to display.</source>
         <target>Select maps to display.</target>
       </trans-unit>

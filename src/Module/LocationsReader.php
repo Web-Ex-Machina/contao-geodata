@@ -32,7 +32,7 @@ class LocationsReader extends Core
      *
      * @var string
      */
-    protected $strTemplate = 'mod_wem_locations_reader';
+    protected $strTemplate = 'mod_wem_geodata_reader';
 
     /**
      * Display a wildcard in the back end.

@@ -1,11 +1,11 @@
 <?xml version="1.0" ?><xliff version="1.1">
   <file datatype="php" original="system/modules/wem-contao-locations/languages/en/default.php" source-language="en" target-language="de">
     <body>
-    	<trans-unit id="CTE.wem_locations.0">
+    	<trans-unit id="CTE.wem_geodata.0">
 			<source>Locations</source>
 			<target>Standorte</target>
 		</trans-unit>
-		<trans-unit id="CTE.wem_locations.1">
+		<trans-unit id="CTE.wem_geodata.1">
 			<source>Generates a map of locations.</source>
 			<target>Erstellt Standorte auf einer Karte</target>
 		</trans-unit>
