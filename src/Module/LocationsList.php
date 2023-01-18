@@ -95,13 +95,27 @@ class LocationsList extends Core
             // $this->objJumpTo = PageModel::findByPk($this->objMap->jumpTo);
 
             // Gather filters
-            if ('nofilters' !== $this->wem_geodata_map_filters) {
-                System::loadLanguageFile('tl_wem_item');
-                $arrFilterFields = unserialize($this->wem_geodata_map_filters_fields);
-                $this->filters = [];
 
-                $arrCountries = System::getContainer()->get('contao.intl.countries')->getCountries();
+            if ('nofilters' !== $this->wem_geodata_filters) {
+                $this->filters = [];
                 $locations = Item::findItems($arrConfig);
+
+                if ($this->wem_geodata_search) {
+                    $this->filters['search'] = [
+                        'label' => 'Recherche :',
+                        'placeholder' => 'Indiquez un nom ou un code postal...',
+                        'name' => 'search',
+                        'type' => 'text',
+                        'value' => Input::get('search') ?: '',
+                    ];
+                    if (Input::get('search')) {
+                        $arrConfig['search'] = Input::get('search');
+                    }
+                }
+
+                System::loadLanguageFile('tl_wem_item');
+                $arrFilterFields = unserialize($this->wem_geodata_filters_fields);
+                $arrCountries = System::getContainer()->get('contao.intl.countries')->getCountries();
                 $arrLocations = [];
                 while ($locations->next()) {
                     $arrLocations[] = $locations->current()->row();
@@ -111,54 +125,48 @@ class LocationsList extends Core
                     if (Input::get($filterField)) {
                         $arrConfig[$filterField] = Input::get($filterField);
                     }
-                    if ('search' === $filterField) {
-                        $this->filters[$filterField] = [
-                            'label' => 'Recherche :',
-                            'placeholder' => 'Indiquez un nom ou un code postal...',
-                            'name' => 'search',
-                            'type' => 'text',
-                            'value' => Input::get($filterField) ?: '',
-                        ];
-                    } else {
-                        $this->filters[$filterField] = [
-                            'label' => sprintf('%s :', $GLOBALS['TL_LANG']['tl_wem_item'][$filterField][0]),
-                            'placeholder' => $GLOBALS['TL_LANG']['tl_wem_item'][$filterField][1],
-                            'name' => $filterField,
-                            'type' => 'select',
-                            'options' => [],
-                        ];
+                    $this->filters[$filterField] = [
+                        'label' => sprintf('%s :', $GLOBALS['TL_LANG']['tl_wem_item'][$filterField][0]),
+                        'placeholder' => $GLOBALS['TL_LANG']['tl_wem_item'][$filterField][1],
+                        'name' => $filterField,
+                        'type' => 'select',
+                        'options' => [],
+                    ];
 
-                        foreach ($arrLocations as $location) {
-                            if (!$location[$filterField]) {
-                                continue;
-                            }
+                    foreach ($arrLocations as $location) {
+                        if (!$location[$filterField]) {
+                            continue;
+                        }
 
-                            if (\array_key_exists($location[$filterField], $this->filters[$filterField]['options'])) {
-                                continue;
-                            }
-                            $this->filters[$filterField]['options'][$location[$filterField]] = [
-                                'value' => $location[$filterField],
-                                'text' => $location[$filterField],
-                                'selected' => (Input::get($filterField) && Input::get($filterField) === $location[$filterField] ? 'selected' : ''),
-                            ];
-                            switch ($filterField) {
-                                case 'category':
-                                    $objCategory = Category::findByPk($location[$filterField]);
-                                    if (!$objCategory) {
-                                        return;
-                                    }
-                                    $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $objCategory->title;
-                                break;
-                                case 'country':
-                                    $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $arrCountries[strtoupper($location[$filterField])] ?? $location[$filterField];
-                                break;
-                            }
+                        if (\array_key_exists($location[$filterField], $this->filters[$filterField]['options'])) {
+                            continue;
+                        }
+                        $this->filters[$filterField]['options'][$location[$filterField]] = [
+                            'value' => $location[$filterField],
+                            'text' => $location[$filterField],
+                            'selected' => (Input::get($filterField) && Input::get($filterField) === $location[$filterField] ? 'selected' : ''),
+                        ];
+                        switch ($filterField) {
+                            case 'city':
+                                $this->filters[$filterField]['options'][$location[$filterField]]['value'] = $location[$filterField];
+                                $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $location[$filterField].' ('.$location['admin_lvl_2'].')';
+                            break;
+                            case 'category':
+                                $objCategory = Category::findByPk($location[$filterField]);
+                                if (!$objCategory) {
+                                    return;
+                                }
+                                $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $objCategory->title;
+                            break;
+                            case 'country':
+                                $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $arrCountries[strtoupper($location[$filterField])] ?? $location[$filterField];
+                            break;
                         }
                     }
                 }
 
                 $this->Template->filters = $this->filters;
-                $this->Template->filters_position = $this->wem_geodata_map_filters;
+                $this->Template->filters_position = $this->wem_geodata_filters;
                 $this->Template->filters_action = Environment::get('request');
                 $this->Template->filters_method = 'GET';
             }

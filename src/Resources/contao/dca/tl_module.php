@@ -12,17 +12,17 @@ declare(strict_types=1);
  * @link     https://github.com/Web-Ex-Machina/contao-geodata/
  */
 
-$GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'wem_geodata_map_filters';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'wem_geodata_filters';
 $GLOBALS['TL_DCA']['tl_module']['palettes']['wem_display_map'] = '
     {title_legend},name,type;
-    {config_legend},wem_geodata_map,wem_geodata_map_list,wem_geodata_map_filters,wem_geodata_distToMerge;
+    {config_legend},wem_geodata_map,wem_geodata_map_list,wem_geodata_filters,wem_geodata_distToMerge;
     {template_legend:hide},customTpl;
     {protected_legend:hide},protected;
     {expert_legend:hide},guests,cssID
 ';
 $GLOBALS['TL_DCA']['tl_module']['palettes']['wem_geodata_list'] = '
     {title_legend},name,type;
-    {template_legend:hide},wem_geodata_maps,wem_geodata_map_filters,perPage,numberOfItems,customTpl,wem_geodata_customTplForGeodataItems;
+    {template_legend:hide},wem_geodata_maps,wem_geodata_filters,perPage,numberOfItems,customTpl,wem_geodata_customTplForGeodataItems;
     {protected_legend:hide},protected;
     {expert_legend:hide},guests,cssID
 ';
@@ -33,8 +33,8 @@ $GLOBALS['TL_DCA']['tl_module']['palettes']['wem_geodata_reader'] = '
     {expert_legend:hide},guests,cssID
 ';
 
-$GLOBALS['TL_DCA']['tl_module']['subpalettes']['wem_geodata_map_filters_inmap'] = 'wem_geodata_map_filters_fields';
-$GLOBALS['TL_DCA']['tl_module']['subpalettes']['wem_geodata_map_filters_inlist'] = 'wem_geodata_map_filters_fields';
+$GLOBALS['TL_DCA']['tl_module']['subpalettes']['wem_geodata_filters_inmap'] = 'wem_geodata_search,wem_geodata_filters_fields';
+$GLOBALS['TL_DCA']['tl_module']['subpalettes']['wem_geodata_filters_inlist'] = 'wem_geodata_search,wem_geodata_filters_fields';
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_map'] = [
     'label' => &$GLOBALS['TL_LANG']['tl_module']['wem_geodata_map'],
@@ -61,23 +61,32 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_map_list'] = [
     'eval' => ['chosen' => true, 'mandatory' => true, 'tl_class' => 'w50'],
     'sql' => "varchar(32) NOT NULL default 'nolist'",
 ];
-$GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_map_filters'] = [
-    'label' => &$GLOBALS['TL_LANG']['tl_module']['wem_geodata_map_filters'],
+$GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_filters'] = [
+    'label' => &$GLOBALS['TL_LANG']['tl_module']['wem_geodata_filters'],
     'exclude' => true,
     'inputType' => 'select',
     'options' => ['nofilters', 'inmap', 'inlist'],
-    'reference' => &$GLOBALS['TL_LANG']['tl_module']['wem_geodata_map_filters'],
+    'reference' => &$GLOBALS['TL_LANG']['tl_module']['wem_geodata_filters'],
     'eval' => ['submitOnChange' => true, 'chosen' => true, 'mandatory' => true, 'tl_class' => 'w50'],
     'sql' => "varchar(32) NOT NULL default 'nofilters'",
 ];
-$GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_map_filters_fields'] = [
-    'label' => &$GLOBALS['TL_LANG']['tl_module']['wem_geodata_map_filters_fields'],
+$GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_filters_fields'] = [
+    'label' => &$GLOBALS['TL_LANG']['tl_module']['wem_geodata_filters_fields'],
     'exclude' => true,
     'inputType' => 'select',
-    'options' => ['search', 'category', 'country', 'admin_lvl_1', 'admin_lvl_2', 'city'],
-    'reference' => &$GLOBALS['TL_LANG']['tl_module']['wem_geodata_map_filters_fields'],
+    'options' => ['category', 'country', 'admin_lvl_1', 'admin_lvl_2', 'city'],
+    'reference' => &$GLOBALS['TL_LANG']['tl_module']['wem_geodata_filters_fields'],
     'eval' => ['chosen' => true, 'mandatory' => true, 'multiple' => true, 'tl_class' => 'w50'],
     'sql' => "blob NULL'",
+];
+$GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_search'] = [
+    'label' => &$GLOBALS['TL_LANG']['tl_module']['wem_geodata_search'],
+    'exclude' => true,
+    'filter' => true,
+    'flag' => 1,
+    'inputType' => 'checkbox',
+    'eval' => ['doNotCopy' => true, 'tl_class' => 'w50 m12'],
+    'sql' => "char(1) NOT NULL default ''",
 ];
 $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_distToMerge'] = [
     'label' => &$GLOBALS['TL_LANG']['tl_module']['wem_geodata_distToMerge'],

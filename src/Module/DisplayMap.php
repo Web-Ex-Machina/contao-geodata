@@ -16,10 +16,13 @@ namespace WEM\GeoDataBundle\Module;
 
 use Contao\BackendTemplate;
 use Contao\FrontendTemplate;
+use Contao\Input;
 use Contao\PageModel;
 use Contao\System;
 use WEM\GeoDataBundle\Controller\ClassLoader;
 use WEM\GeoDataBundle\Controller\Util;
+use WEM\GeoDataBundle\Model\Category;
+use WEM\GeoDataBundle\Model\Item;
 use WEM\GeoDataBundle\Model\Map;
 
 /**
@@ -88,7 +91,7 @@ class DisplayMap extends Core
             System::getCountries();
 
             // Build the config
-            $arrConfig = [];
+            $arrMapConfig = [];
             if ($this->objMap->mapConfig) {
                 foreach (deserialize($this->objMap->mapConfig) as $arrRow) {
                     if ('true' === $arrRow['value']) {
@@ -103,18 +106,112 @@ class DisplayMap extends Core
 
                     if (false !== strpos($arrRow['key'], '_')) {
                         $arrOption = explode('_', $arrRow['key']);
-                        $arrConfig[$arrOption[0]][$arrOption[1]] = $varValue;
+                        $arrMapConfig[$arrOption[0]][$arrOption[1]] = $varValue;
                     } else {
-                        $arrConfig['map'][$arrRow['key']] = $varValue;
+                        $arrMapConfig['map'][$arrRow['key']] = $varValue;
                     }
                 }
+            }
+
+            // config for locations
+            $arrConfig = ['pid' => $this->objMap->id, 'published' => 1];
+
+            // Gather filters
+            if ('nofilters' !== $this->wem_geodata_filters) {
+                $this->filters = [];
+                $locations = Item::findItems($arrConfig);
+
+                if ($this->wem_geodata_search) {
+                    $this->filters['search'] = [
+                        'label' => 'Recherche :',
+                        'placeholder' => 'Que recherchez-vous ?',
+                        'name' => 'search',
+                        'type' => 'text',
+                        'value' => Input::get('search') ?: '',
+                    ];
+                    if (Input::get('search')) {
+                        $arrConfig['search'] = Input::get('search');
+                    }
+                }
+
+                System::loadLanguageFile('tl_wem_item');
+                $arrFilterFields = unserialize($this->wem_geodata_filters_fields);
+                $arrLocations = [];
+                while ($locations->next()) {
+                    $arrLocations[] = $locations->current()->row();
+                }
+
+                foreach ($arrFilterFields as $filterField) {
+                    if (Input::get($filterField)) {
+                        $arrConfig[$filterField] = Input::get($filterField);
+                    }
+                    $this->filters[$filterField] = [
+                        'label' => sprintf('%s :', $GLOBALS['TL_LANG']['tl_wem_item'][$filterField][0]),
+                        'placeholder' => $GLOBALS['TL_LANG']['tl_wem_item'][$filterField][1],
+                        'name' => $filterField,
+                        'type' => 'select',
+                        'options' => [],
+                    ];
+
+                    // foreach ($arrLocations as $location) {
+                    //     if (!$location[$filterField]) {
+                    //         continue;
+                    //     }
+
+                    //     if (!\in_array($location[$filterField], $this->filters[$filterField]['options'], true)) {
+                    //         switch ($filterField) {
+                    //                 case 'city':
+                    //                     $this->filters[$filterField]['options'][] = [
+                    //                         'value' => $location[$filterField],
+                    //                         'label' => $location[$filterField].' ('.$location['admin_lvl_2'].')',
+                    //                     ];
+                    //                 break;
+                    //                 default:
+                    //                     $this->filters[$filterField]['options'][] = $location[$filterField];
+                    //             }
+                    //     }
+                    // }
+
+                    foreach ($arrLocations as $location) {
+                        if (!$location[$filterField]) {
+                            continue;
+                        }
+
+                        if (\array_key_exists($location[$filterField], $this->filters[$filterField]['options'])) {
+                            continue;
+                        }
+                        $this->filters[$filterField]['options'][$location[$filterField]] = [
+                            'value' => $location[$filterField],
+                            'text' => $location[$filterField],
+                            'selected' => (Input::get($filterField) && Input::get($filterField) === $location[$filterField] ? 'selected' : ''),
+                        ];
+                        switch ($filterField) {
+                            case 'city':
+                                $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $location[$filterField].' ('.$location['admin_lvl_2'].')';
+                            break;
+                            case 'category':
+                                $objCategory = Category::findByPk($location[$filterField]);
+                                if (!$objCategory) {
+                                    return;
+                                }
+                                $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $objCategory->title;
+                            break;
+                            case 'country':
+                                $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $arrCountries[strtoupper($location[$filterField])] ?? $location[$filterField];
+                            break;
+                        }
+                    }
+                }
+
+                $this->Template->filters = $this->filters;
+                $this->Template->filters_position = $this->wem_geodata_filters;
             }
 
             // Get the jumpTo page
             $this->objJumpTo = PageModel::findByPk($this->objMap->jumpTo);
 
             // Get locations
-            $arrLocations = $this->getLocations();
+            $arrLocations = $this->getLocations($arrConfig);
 
             // Get categories
             $arrCategories = $this->getCategories();
@@ -170,56 +267,7 @@ class DisplayMap extends Core
             $this->Template->markers = $arrMarkers;
             $this->Template->locations = $arrLocations;
             $this->Template->categories = $arrCategories;
-            $this->Template->config = $arrConfig;
-
-            // Gather filters
-            if ('nofilters' !== $this->wem_geodata_map_filters) {
-                System::loadLanguageFile('tl_wem_item');
-                $arrFilterFields = unserialize($this->wem_geodata_map_filters_fields);
-                $this->filters = [];
-
-                foreach ($arrFilterFields as $f) {
-                    if ('search' === $f) {
-                        $this->filters[$f] = [
-                            'label' => 'Recherche :',
-                            'placeholder' => 'Que recherchez-vous ?',
-                            'name' => 'search',
-                            'type' => 'text',
-                            'value' => '',
-                        ];
-                    } else {
-                        $this->filters[$f] = [
-                            'label' => sprintf('%s :', $GLOBALS['TL_LANG']['tl_wem_item'][$f][0]),
-                            'placeholder' => $GLOBALS['TL_LANG']['tl_wem_item'][$f][1],
-                            'name' => $f,
-                            'type' => 'select',
-                            'options' => [],
-                        ];
-
-                        foreach ($arrLocations as $l) {
-                            if (!$l[$f]) {
-                                continue;
-                            }
-
-                            if (!\in_array($l[$f], $this->filters[$f]['options'], true)) {
-                                switch ($f) {
-                                    case 'city':
-                                        $this->filters[$f]['options'][] = [
-                                            'value' => $l[$f],
-                                            'label' => $l[$f].' ('.$l['admin_lvl_2'].')',
-                                        ];
-                                    break;
-                                    default:
-                                        $this->filters[$f]['options'][] = $l[$f];
-                                }
-                            }
-                        }
-                    }
-                }
-
-                $this->Template->filters = $this->filters;
-                $this->Template->filters_position = $this->wem_geodata_map_filters;
-            }
+            $this->Template->config = $arrMapConfig;
 
             // Send the fileMap
             if ('jvector' === $this->objMap->mapProvider
@@ -236,7 +284,7 @@ class DisplayMap extends Core
 
                 if ($this->filters) {
                     $objTemplate->filters = $this->filters;
-                    $objTemplate->filters_position = $this->wem_geodata_map_filters;
+                    $objTemplate->filters_position = $this->wem_geodata_filters;
                 }
 
                 $this->Template->list = $objTemplate->parse();

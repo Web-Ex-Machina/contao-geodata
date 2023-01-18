@@ -18,37 +18,29 @@
     	</style>
     	<?php if($this->filters && 1==1): ?>
 			<div id="map__filters">
-				<?php foreach($this->filters as $f): ?>
-					<div class="filter">
-						<?php if('text' == $f['type']) : ?>
-							<label for="filter_<?= $f['name'] ?>"><?= $f['label'] ?></label>
-							<input type="text" id="filter_<?= $f['name'] ?>" name="<?= $f['name'] ?>" value="<?= $f['value'] ?>" placeholder="<?= $f['placeholder'] ?>" />
-						<?php elseif('select' == $f['type'] && count($f['options']) > 1): ?>
-							<label for="filter_<?= $f['name'] ?>"><?= $f['label'] ?></label>
-							<select id="filter_<?= $f['name'] ?>" name="<?= $f['name'] ?>" placeholder="<?= $f['placeholder'] ?>">
-								<option value=""> - </option>
-								<?php foreach($f['options'] as $o): ?>
-									<?php 
-										switch ($f['name']) {
-											case 'category': 
-												echo '<option value="'.str_replace([' ','.'],'_', mb_strtolower($o['title'], 'UTF-8')).'">'.$o['title'].'</option>';
-											break;
-											case 'country':
-												echo '<option value="'.str_replace([' ','.'],'_', mb_strtolower($o['code'], 'UTF-8')).'">'.$o['name'].'</option>';
-											break;
-											default: 
-												if 
-													(is_string($o)) echo '<option value="'.str_replace([' ','.'],'_', mb_strtolower($o, 'UTF-8')).'">'.$o.'</option>';
-												else if(is_array($o) && array_key_exists("value",$o) && array_key_exists("label",$o))
-													echo '<option value="'.str_replace([' ','.'],'_', mb_strtolower($o['value'], 'UTF-8')).'">'.$o['label'].'</option>';
-											break;
-										}
-									?>
-								<?php endforeach; ?>
-							</select>
-						<?php endif; ?>
+  				<form action="<?= $this->filters_action ?>" method="<?= $this->filters_method ?>">
+					<?php foreach($this->filters as $f): ?>
+						<div class="filter">
+							<?php if('text' == $f['type']) : ?>
+								<label for="filter_<?= $f['name'] ?>"><?= $f['label'] ?></label>
+								<input type="text" id="filter_<?= $f['name'] ?>" name="<?= $f['name'] ?>" value="<?= $f['value'] ?>" placeholder="<?= $f['placeholder'] ?>" />
+							<?php elseif('select' == $f['type'] && count($f['options']) > 1): ?>
+								<label for="filter_<?= $f['name'] ?>"><?= $f['label'] ?></label>
+								<select id="filter_<?= $f['name'] ?>" name="<?= $f['name'] ?>" placeholder="<?= $f['placeholder'] ?>">
+									<option value=""> - </option>
+									<?php foreach($f['options'] as $o): ?>
+										<?php 
+											echo '<option value="'.str_replace([' ','.'],'_', mb_strtolower($o['value'], 'UTF-8')).'" '.$o['selected'].'>'.$o['text'].'</option>';
+										?>
+									<?php endforeach; ?>
+								</select>
+							<?php endif; ?>
+						</div>
+					<?php endforeach; ?>
+					<div class="filter submit cols-span-2">
+						<input type="submit" class="btn" value="Go" />
 					</div>
-				<?php endforeach; ?>
+				</form>
 			</div>
 		<?php endif; ?>
     	<div id="map" style="<?= $this->config['map']['width'] ? 'width: '.$this->config['map']['width'].';':'' ?> height:<?= $this->config['map']['height'] ?: '80vh' ?>">
@@ -58,6 +50,7 @@
 			</div>
     	</div>
 		<script type="text/javascript">
+			var categories     = <?= $this->categories ? json_encode($this->categories):'{}' ?>;
 		    var map;
 			var objMapData        = <?= json_encode($this->locations) ?>;
 			var objMapConfig      = <?= json_encode($this->config) ?>;
@@ -111,6 +104,13 @@
 		    if (objMapFilters.category) {
 			    for(var c in objMapFilters.category.options) {
 			    	var category = objMapFilters.category.options[c];
+			    	// find selected category in categories list
+			    	for(var i in categories){
+			    		if(categories[i].id === category.value){
+			    			category = categories[i];
+			    			break;
+			    		}
+			    	}
 			    	category.alias = normalize(category.title);
 			    	if (category.marker) {
 			    		// console.log(category.marker);
