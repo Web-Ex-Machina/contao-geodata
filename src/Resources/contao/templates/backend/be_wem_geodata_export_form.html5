@@ -10,9 +10,22 @@
         <fieldset class="tl_tbox">
             <legend><?php echo $this->widgetSettingsTitle; ?></legend>
             <div class="widget">
+                <fieldset class="tl_radio_container">
+                    <legend><?php echo $this->widgetSettingsFormatLabel; ?></legend>
+                    <input type="radio" name="format" id="format_xslx" value="xslx"  class="tl_radio" checked>
+                    <label for="format_xslx">
+                        XSLX
+                    </label>
+                    <input type="radio" name="format" id="format_csv" value="csv" class="tl_radio" >
+                    <label for="format_csv">
+                        CSV
+                    </label>
+                </fieldset>
+            </div>
+            <div class="widget">
                 <h3>
                     <label for="chk_limit_to_categories">
-                        <input type="checkbox" name="chk_limit_to_categories" value="1">
+                        <input type="checkbox" name="chk_limit_to_categories" value="1" class="tl_checkbox">
                         <?php echo $this->widgetSettingsLimitToCategoriesCheckboxLabel; ?>
                     </label>
                 </h3>
@@ -33,7 +46,7 @@
             <div class="widget">
                 <h3>
                     <label for="chk_limit_to_countries">
-                        <input type="checkbox" name="chk_limit_to_countries" value="1">
+                        <input type="checkbox" name="chk_limit_to_countries" value="1" class="tl_checkbox">
                         <?php echo $this->widgetSettingsLimitToCountriesCheckboxLabel; ?>
                     </label>
                 </h3>

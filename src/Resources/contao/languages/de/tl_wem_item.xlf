@@ -218,6 +218,10 @@
 			<source>Export settings</source>
 			<target>Exporteinstellungen</target>
 		</trans-unit>
+		<trans-unit id="tl_wem_item.exportSettingsFormatLabel">
+			<source>Export format</source>
+			<target>Exportformat</target>
+		</trans-unit>
 		<trans-unit id="tl_wem_item.exportSettingsLimitToCategoriesCheckboxLabel">
 			<source>Limit export to certain categories</source>
 			<target>Beschränken Sie den Export auf bestimmte Kategorien</target>

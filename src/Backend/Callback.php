@@ -363,6 +363,8 @@ class Callback extends Backend
         $objTemplate->formAction = ampersand(str_replace('key=export_form', 'key=export', Environment::get('request')), true);
 
         $objTemplate->widgetSettingsTitle = $GLOBALS['TL_LANG']['tl_wem_item']['exportSettingsTitle'];
+        $objTemplate->widgetSettingsFormatLabel = $GLOBALS['TL_LANG']['tl_wem_item']['exportSettingsFormatLabel'];
+
         $objTemplate->widgetSettingsLimitToCategoriesCheckboxLabel = $GLOBALS['TL_LANG']['tl_wem_item']['exportSettingsLimitToCategoriesCheckboxLabel'];
         $objTemplate->widgetSettingsLimitToCategoriesSelectLabel = $GLOBALS['TL_LANG']['tl_wem_item']['exportSettingsLimitToCategoriesSelectLabel'];
         $objTemplate->widgetSettingsLimitToCountriesCheckboxLabel = $GLOBALS['TL_LANG']['tl_wem_item']['exportSettingsLimitToCountriesCheckboxLabel'];
@@ -454,10 +456,32 @@ class Callback extends Backend
 
         // And send to browser
         $strFilename = date('Y-m-d_H-i').'_export-locations';
+        switch (Input::post('format')) {
+            case 'csv':
+                $format = IOFactory::WRITER_CSV;
+                header('Content-Disposition: attachment;filename="'.$strFilename.'.csv"');
+            break;
+            case 'xlsx':
+                $format = IOFactory::WRITER_XLSX;
+                header('Content-Disposition: attachment;filename="'.$strFilename.'.xlsx"');
+            break;
+            default:
+                throw new Exception('Unknown export format. Known formats are : "csv", "xslx".');
+            break;
+        }
+
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="'.$strFilename.'.xlsx"');
         header('Cache-Control: max-age=0');
-        $writer = IOFactory::createWriter($objSpreadsheet, 'Xlsx');
+
+        $writer = IOFactory::createWriter($objSpreadsheet, $format);
+
+        if (IOFactory::WRITER_CSV === $format) {
+            $writer->setDelimiter(';');
+            $writer->setEnclosure('"');
+            $writer->setLineEnding("\r\n");
+            $writer->setSheetIndex(0);
+        }
+
         $writer->save('php://output');
         exit;
     }
