@@ -284,6 +284,15 @@
 			<source>%s locations have been deleted</source>
 			<target>%s Standorte wurden gelöscht</target>
 		</trans-unit>
+
+		<trans-unit id="tl_wem_item.search.0">
+			<source>Search :</source>
+			<target>Suche :</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_item.search.1">
+			<source>What are you looking for ?</source>
+			<target>Wonach suchen Sie ?</target>
+		</trans-unit>
     </body>
   </file>
 </xliff>

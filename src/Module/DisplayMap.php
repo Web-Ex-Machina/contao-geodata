@@ -120,11 +120,12 @@ class DisplayMap extends Core
             if ('nofilters' !== $this->wem_geodata_filters) {
                 $this->filters = [];
                 $locations = Item::findItems($arrConfig);
+                System::loadLanguageFile('tl_wem_item');
 
                 if ($this->wem_geodata_search) {
                     $this->filters['search'] = [
-                        'label' => 'Recherche :',
-                        'placeholder' => 'Que recherchez-vous ?',
+                        'label' => $GLOBALS['TL_LANG']['tl_wem_item']['search'][0],
+                        'placeholder' => $GLOBALS['TL_LANG']['tl_wem_item']['search'][1],
                         'name' => 'search',
                         'type' => 'text',
                         'value' => Input::get('search') ?: '',
@@ -134,7 +135,6 @@ class DisplayMap extends Core
                     }
                 }
 
-                System::loadLanguageFile('tl_wem_item');
                 $arrFilterFields = unserialize($this->wem_geodata_filters_fields);
                 $arrLocations = [];
                 while ($locations->next()) {
