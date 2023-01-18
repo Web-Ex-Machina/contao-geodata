@@ -3,13 +3,13 @@
 declare(strict_types=1);
 
 /**
- * Altrad Map Bundle for Contao Open Source CMS
- * Copyright (c) 2017-2022 Web ex Machina
+ * Geodata for Contao Open Source CMS
+ * Copyright (c) 2015-2022 Web ex Machina
  *
  * @category ContaoBundle
- * @package  Web-Ex-Machina/contao-altrad-map-bundle
+ * @package  Web-Ex-Machina/contao-geodata
  * @author   Web ex Machina <contact@webexmachina.fr>
- * @link     https://github.com/Web-Ex-Machina/contao-altrad-map-bundle/
+ * @link     https://github.com/Web-Ex-Machina/contao-geodata/
  */
 
 namespace WEM\GeoDataBundle\Model;
@@ -29,7 +29,7 @@ class Item extends CoreModel
     protected static $strTable = 'tl_wem_item';
 
     /**
-     * Search fields
+     * Search fields.
      *
      * @var array
      */
@@ -84,5 +84,15 @@ class Item extends CoreModel
             default:
                 return parent::formatSearchStatement($strField, $varValue);
         }
+    }
+
+    public function isPublishedForTimestamp(?int $timestamp = null): bool
+    {
+        $timestamp ?? (new \DateTime())->getTimestamp();
+
+        return $this->published
+            && (empty($this->publishedAt) || (!empty($this->publishedAt) && (int) $this->publishedAt < $timestamp))
+            && (empty($this->publishedUntil) || (!empty($this->publishedUntil) && (int) $this->publishedUntil > $timestamp))
+        ;
     }
 }

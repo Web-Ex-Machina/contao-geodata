@@ -3,23 +3,23 @@
 declare(strict_types=1);
 
 /**
- * Altrad Map Bundle for Contao Open Source CMS
- * Copyright (c) 2017-2022 Web ex Machina
+ * Geodata for Contao Open Source CMS
+ * Copyright (c) 2015-2022 Web ex Machina
  *
  * @category ContaoBundle
- * @package  Web-Ex-Machina/contao-altrad-map-bundle
+ * @package  Web-Ex-Machina/contao-geodata
  * @author   Web ex Machina <contact@webexmachina.fr>
- * @link     https://github.com/Web-Ex-Machina/contao-altrad-map-bundle/
+ * @link     https://github.com/Web-Ex-Machina/contao-geodata/
  */
 
 namespace WEM\GeoDataBundle\Module;
 
 use Contao\BackendTemplate;
 use Contao\Config;
-use WEM\GeoDataBundle\Model\Item;
 use Contao\CoreBundle\Exception\PageNotFoundException;
 use Contao\Environment;
 use Contao\Input;
+use WEM\GeoDataBundle\Model\Item;
 use WEM\GeoDataBundle\Model\Map;
 
 /**
@@ -83,7 +83,7 @@ class LocationsReader extends Core
             $objItem = Item::findByIdOrAlias(Input::get('items'));
 
             // The location item does not exist or has an external target (see #33)
-            if (null === $objItem) {
+            if (null === $objItem || !$objItem->isPublishedForTimestamp()) {
                 throw new PageNotFoundException('Page not found: '.Environment::get('uri'));
             }
 
@@ -91,6 +91,7 @@ class LocationsReader extends Core
             $objMap = Map::findByPk($objItem->pid);
             $this->Template->item = $arrItem;
             $this->Template->map = $objMap->row();
+            $this->Template->shouldBeIndexed = $objMap->row();
         } catch (\Exception $e) {
             $this->Template->error = true;
             $this->Template->msg = $e->getMessage();
