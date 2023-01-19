@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace WEM\GeoDataBundle\Model;
 
+use DateTime;
 use WEM\UtilsBundle\Model\Model as CoreModel;
 
 /**
@@ -52,6 +53,20 @@ class Item extends CoreModel
         switch ($strField) {
             case 'onlyWithCoords':
                 $arrColumns[] = "$t.lat != '' AND $t.lng != ''";
+            break;
+            case 'published':
+                $timestamp = (new DateTime())->getTimestamp();
+                if (1 === (int) $varValue) {
+                    $arrColumns[] = sprintf("$t.published = 1
+                        AND ($t.publishedAt = '' OR $t.publishedAt <= %s)
+                        AND ($t.publishedUntil = '' OR $t.publishedUntil >= %s)", $timestamp, $timestamp
+                    );
+                } else {
+                    $arrColumns[] = sprintf("$t.published = 0
+                        OR ($t.published = 1 AND $t.publishedAt >= %s)
+                        OR ($t.published = 1 AND $t.publishedUntil <= %s)", $timestamp, $timestamp
+                    );
+                }
             break;
 
             default:

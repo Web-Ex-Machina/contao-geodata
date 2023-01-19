@@ -27,9 +27,9 @@
   <?php endif; ?>
 
   <div class="map__list__wrapper">
-    <?php foreach ($this->locations as $key => $location): ?>
-      <?php $this->insert($this->itemCustomTpl, array_merge($this->getData(), ['location'=>$location])); ?>
-    <?php endforeach ?>
+    <?php if($this->locations): ?>
+    <?php echo implode('',$this->locations); ?>
+    <?php endif ?>
     <?php echo $this->pagination; ?>
   </div>
 </div>

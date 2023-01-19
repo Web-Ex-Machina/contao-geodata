@@ -87,7 +87,7 @@ class DisplayMap extends Core
             }
 
             // Load the libraries
-            // ClassLoader::loadLibraries($this->objMap, 1);
+            ClassLoader::loadLibraries($this->objMap, 1);
             System::getCountries();
 
             // Build the config
@@ -183,7 +183,7 @@ class DisplayMap extends Core
                         $this->filters[$filterField]['options'][$location[$filterField]] = [
                             'value' => $location[$filterField],
                             'text' => $location[$filterField],
-                            'selected' => (Input::get($filterField) && Input::get($filterField) === $location[$filterField] ? 'selected' : ''),
+                            'selected' => (\array_key_exists($filterField, $arrConfig) && $arrConfig[$filterField] === str_replace([' ', '.'], '_', mb_strtolower($location[$filterField], 'UTF-8')) ? 'selected' : ''),
                         ];
                         switch ($filterField) {
                             case 'city':
@@ -191,10 +191,9 @@ class DisplayMap extends Core
                             break;
                             case 'category':
                                 $objCategory = Category::findByPk($location[$filterField]);
-                                if (!$objCategory) {
-                                    return;
+                                if ($objCategory) {
+                                    $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $objCategory->title;
                                 }
-                                $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $objCategory->title;
                             break;
                             case 'country':
                                 $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $arrCountries[strtoupper($location[$filterField])] ?? $location[$filterField];
@@ -279,7 +278,7 @@ class DisplayMap extends Core
             // If the config says so, we will generate a template with a list of the locations
             if ('nolist' !== $this->wem_geodata_map_list) {
                 $objTemplate = new FrontendTemplate($this->strListTemplate);
-                $objTemplate->locations = $arrLocations;
+                $objTemplate->locations = $this->parseItems($arrLocations);
                 $objTemplate->list_position = $this->wem_geodata_map_list;
 
                 if ($this->filters) {
@@ -288,14 +287,52 @@ class DisplayMap extends Core
                 }
 
                 $this->Template->list = $objTemplate->parse();
-                $this->Template->list_position = $this->wem_geodata_map_list;
+                // $this->Template->list_position = $this->wem_geodata_map_list;
             }
-
-            ClassLoader::loadLibraries($this->objMap);
         } catch (\Exception $e) {
             $this->Template->error = true;
             $this->Template->msg = $e->getMessage();
             $this->Template->trace = $e->getTraceAsString();
+        }
+    }
+
+    /**
+     * Parse multiple items.
+     *
+     * @param string $strTemplate
+     */
+    protected function parseItems(array $objItems, ?string $strTemplate = 'mod_wem_geodata_list_item'): array
+    {
+        try {
+            $limit = \count($objItems);
+            if ($limit < 1) {
+                return [];
+            }
+
+            $count = 0;
+            $arrItems = [];
+            foreach ($objItems as $location) {
+                $arrItems[] = $this->parseItem($location, $strTemplate, ((1 === ++$count) ? ' first' : '').(($count === $limit) ? ' last' : '').((0 === ($count % 2)) ? ' odd' : ' even'), $count);
+            }
+
+            return $arrItems;
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    protected function parseItem(array $objItem, $strTemplate = 'mod_wem_geodata_list_item', $strClass = '', $intCount = 0)
+    {
+        try {
+            /** @var FrontendTemplate $objTemplate */
+            $objTemplate = new FrontendTemplate($strTemplate);
+            $objTemplate->setData($objItem);
+            $objTemplate->class = $strClass;
+            $objTemplate->count = $intCount;
+
+            return $objTemplate->parse();
+        } catch (\Exception $e) {
+            throw $e;
         }
     }
 }

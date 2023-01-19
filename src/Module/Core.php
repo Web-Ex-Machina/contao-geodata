@@ -99,7 +99,28 @@ abstract class Core extends Module
         }
     }
 
-    protected function getLocations($c = null)
+    protected function countLocations($c = null): int
+    {
+        try {
+            if (null === $c) {
+                $c = ['published' => 1, 'onlyWithCoords' => 1];
+                if (null !== $this->wem_geodata_map) {
+                    $c['pid'] = $this->wem_geodata_map;
+                } elseif (!empty($this->wem_geodata_maps)) {
+                    $pids = StringUtil::deserialize($this->wem_geodata_maps);
+                    if (!empty($pids)) {
+                        $c['where'][] = sprintf('pid IN (%s)', implode('', $pids));
+                    }
+                }
+            }
+
+            return Item::countItems($c);
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    protected function getLocations($c = null): array
     {
         try {
             if (null === $c) {
