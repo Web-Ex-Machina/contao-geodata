@@ -132,13 +132,16 @@ class LocationsList extends Core
             // $arrLocations = $this->getLocations($this->arrConfig);
             $arrLocations = $this->fetchItems(($limit ?: 0), $offset);
 
+            $this->Template->locations = $arrLocations;
+
             // Add the items
-            if (!empty($arrLocations)) {
-                $this->Template->locations = $this->parseItems($arrLocations, $this->wem_geodata_customTplForGeodataItems);
-            }
+            // if (!empty($arrLocations)) {
+            //     $this->Template->locations = $this->parseItems($arrLocations, $this->wem_geodata_customTplForGeodataItems);
+            // }
 
             // Send the data to Map template
             $this->Template->config = $this->arrConfig;
+            $this->Template->customTplForGeodataItems = $this->wem_geodata_customTplForGeodataItems ?? 'mod_wem_geodata_list_item';
         } catch (\Exception $e) {
             $this->Template->error = true;
             $this->Template->msg = $e->getMessage();

@@ -114,7 +114,8 @@ class DisplayMap extends Core
             }
 
             // config for locations
-            $arrConfig = ['pid' => $this->objMap->id, 'published' => 1];
+            $arrConfigBase = ['pid' => $this->objMap->id, 'published' => 1];
+            $arrConfig = $arrConfigBase;
 
             // Gather filters
             if ('nofilters' !== $this->wem_geodata_filters) {
@@ -193,6 +194,7 @@ class DisplayMap extends Core
                                 $objCategory = Category::findByPk($location[$filterField]);
                                 if ($objCategory) {
                                     $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $objCategory->title;
+                                    // $this->filters[$filterField]['options'][$location[$filterField]]['value'] = $objCategory->title;
                                 }
                             break;
                             case 'country':
@@ -210,7 +212,7 @@ class DisplayMap extends Core
             $this->objJumpTo = PageModel::findByPk($this->objMap->jumpTo);
 
             // Get locations
-            $arrLocations = $this->getLocations($arrConfig);
+            $arrLocations = $this->getLocations($arrConfigBase);
 
             // Get categories
             $arrCategories = $this->getCategories();
@@ -278,7 +280,8 @@ class DisplayMap extends Core
             // If the config says so, we will generate a template with a list of the locations
             if ('nolist' !== $this->wem_geodata_map_list) {
                 $objTemplate = new FrontendTemplate($this->strListTemplate);
-                $objTemplate->locations = $this->parseItems($arrLocations);
+                // $objTemplate->locations = $this->parseItems($arrLocations);
+                $objTemplate->locations = $arrLocations;
                 $objTemplate->list_position = $this->wem_geodata_map_list;
 
                 if ($this->filters) {
@@ -286,6 +289,7 @@ class DisplayMap extends Core
                     $objTemplate->filters_position = $this->wem_geodata_filters;
                 }
 
+                $objTemplate->customTplForGeodataItems = 'mod_wem_geodata_list_item';
                 $this->Template->list = $objTemplate->parse();
                 // $this->Template->list_position = $this->wem_geodata_map_list;
             }

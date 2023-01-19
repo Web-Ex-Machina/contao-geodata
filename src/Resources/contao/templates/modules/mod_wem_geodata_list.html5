@@ -27,9 +27,9 @@
   <?php endif; ?>
 
   <div class="map__list__wrapper">
-    <?php if($this->locations): ?>
-    <?php echo implode('',$this->locations); ?>
-    <?php endif ?>
+    <?php foreach($this->locations as $location): ?>
+      <?php $this->insert($this->customTplForGeodataItems,['location'=>$location]); ?>
+    <?php endforeach; ?>
     <?php echo $this->pagination; ?>
   </div>
 </div>
