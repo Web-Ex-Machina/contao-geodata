@@ -28,78 +28,98 @@
 		<h1 class="m-right m-bottom-0 ft-notrs" itemprop="name"><?= $this->item['title'] ?></h1>
 	</div>
 
-	<div class="reader__text ce_text block">
+	<div class="reader__text ce_text block" itemprop="description">
 		<?= $this->item['teaser'] ?>
 	</div>
 
 	<!-- contacts -->
-	<div class="reader__contact block">
+	<div class="reader__contact block mb-4">
 		<?php if($this->item['phone']): ?>
-			<a href="tel:<?= $this->item['phone']; ?>" rel="nofollow">
-				<i class="fal fa-phone"></i>&nbsp;<?= $this->item['phone']; ?>
-			</a>
-			<br />
+			<div class="mb-2">
+				<a href="tel:<?= $this->item['phone']; ?>" rel="nofollow">
+					<i class="fas fa-phone fa-lg"></i>&nbsp;<span itemprop="telephone"><?= $this->item['phone']; ?></span>
+				</a>
+			</div>
 		<?php endif; ?>
 		<?php if($this->item['fax']): ?>
+			<div class="mb-2">
 			<a href="fax:<?= $this->item['fax']; ?>" rel="nofollow">
-				<i class="fal fa-fax"></i>&nbsp;<?= $this->item['fax']; ?>
+				<i class="fas fa-fax fa-lg"></i>&nbsp;<span itemprop="faxNumber"><?= $this->item['fax']; ?></span>
 			</a>
-			<br />
+			</div>
 		<?php endif; ?>
 		<?php if($this->item['email']): ?>
+			<div class="mb-2">
 			<a href="mailto:<?= $this->item['email']; ?>" rel="nofollow">
-				<i class="fa fa-email"></i>&nbsp;<?= $this->item['email']; ?>
+				<i class="fa-solid fa-envelope fa-lg"></i>&nbsp;<span itemprop="faxNumber"><?= $this->item['email']; ?></span>
 			</a>
-			<br />
+			</div>
 		<?php endif; ?>
 	</div>
 
 	<!-- social networks -->
-	<div class="reader__social-networks block">
+	<div class="reader__social-networks block mb-4">
 		<?php if($this->item['website']): ?>
-			<a href="<?= $this->item['website']; ?>" rel="nofollow" target="_blank">
-				<i class="fal fa-globe"></i>
+			<a href="<?= $this->item['website']; ?>" rel="nofollow" target="_blank" itemprop="sameAs">
+				<i class="fal fa-globe fa-2xl"></i>
 			</a>
 		<?php endif; ?>
 		<?php if($this->item['facebook']): ?>
 			<a href="<?= $this->item['facebook']; ?>" rel="nofollow" target="_blank">
-				<i class="fab fa-facebook-square"></i>
+				<i class="fab fa-facebook-square fa-2xl"></i>
 			</a>
 		<?php endif; ?>
 		<?php if($this->item['twitter']): ?>
 			<a href="<?= $this->item['twitter']; ?>" rel="nofollow" target="_blank">
-				<i class="fab fa-twitter-square"></i>
+				<i class="fab fa-twitter-square fa-2xl"></i>
 			</a>
 		<?php endif; ?>
 		<?php if($this->item['instagram']): ?>
 			<a href="<?= $this->item['instagram']; ?>" rel="nofollow" target="_blank">
-				<i class="fab fa-instagram-square"></i>
+				<i class="fab fa-instagram-square fa-2xl"></i>
 			</a>
 		<?php endif; ?>
 	</div>
 
 
-    <div class="reader__location" itemprop="location" itemscope itemtype="http://schema.org/Place">
-		<i class="fal fa-map-marker-alt"></i>&nbsp;
+    <div class="reader__location">
 		<?php if ($this->item['address']): ?>
+			<i class="fal fa-map-marker-alt"></i>&nbsp;
 			<span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
 				<?= $this->item['address'] ?>
 			</span>
 		<?php endif; ?>
+		<br />
+		<?= $this->item['admin_lvl_1'] ?>
+		<?php if($this->item['admin_lvl_2']): ?>
+			- <?= $this->item['admin_lvl_2'] ?>
+		<?php endif; ?>
+		<?php if($this->item['admin_lvl_3']): ?>
+			- <?= $this->item['admin_lvl_3'] ?>
+		<?php endif; ?>
     </div>
-	<?= $this->item['admin_lvl_1'] ?>
-	<?php if($this->item['admin_lvl_2']): ?>
-		- <?= $this->item['admin_lvl_2'] ?>
-	<?php endif; ?>
-	<?php if($this->item['admin_lvl_3']): ?>
-		- <?= $this->item['admin_lvl_3'] ?>
-	<?php endif; ?>
 
     <?php if (!empty($this->item['lat']) && !empty($this->item['lng'])): ?>
+	    <div itemprop="geo" itemscope itemtype="https://schema.org/GeoCoordinates">
+	    	<meta itemprop="latitude" content="<?= $this->item['lat']; ?>" />
+	    	<meta itemprop="longitude" content="<?= $this->item['lng']; ?>" />
+	    </div>
 		<div id="map-<?= $this->id ?>" class="reader__map" style="height:512px;" data-lat="<?= $this->item['lat']; ?>" data-lon="<?= $this->item['lng']; ?>"></div>
     <?php endif; ?>
 </div>
 <?php if (!empty($this->item['lat']) && !empty($this->item['lng'])): ?>
+
+	<link rel="stylesheet"href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+	<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+	<link rel="stylesheet"href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css"/>
+	<link rel="stylesheet"href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css"/>
+	<script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+	<style>
+		.leaflet-tile-loaded {filter: brightness(0.75) invert(1); }
+	    .leaflet-container a {color: #000000;}
+	</style>
+
 	<link rel="stylesheet" href="bundles/wemgeodata/css/leaflet.css" />
 	<script src="bundles/wemgeodata/js/leaflet.js"></script>
 	<script type="text/javascript">
