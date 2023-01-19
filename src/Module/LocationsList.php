@@ -25,6 +25,7 @@ use Contao\System;
 use WEM\GeoDataBundle\Controller\ClassLoader;
 use WEM\GeoDataBundle\Model\Category;
 use WEM\GeoDataBundle\Model\Map;
+use WEM\GeoDataBundle\Model\MapItem;
 
 /**
  * Front end module "locations list".

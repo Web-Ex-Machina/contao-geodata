@@ -153,8 +153,9 @@ class MapItem extends Backend
      */
     public function toggleIcon($row, $href, $label, $title, $icon, $attributes)
     {
-        if (\strlen(Input::get('tid') ?? '')) {
-            $this->toggleVisibility(Input::get('tid'), (1 === Input::get('state')), (@func_get_arg(12) ?: null));
+        // if (\strlen(Input::get('tid') ?? '')) {
+        if (Input::get('tid')) {
+            $this->toggleVisibility(Input::get('tid'), ('1' === Input::get('state') ? true : false), (@func_get_arg(12) ?: null));
             $this->redirect($this->getReferer());
         }
 
@@ -163,13 +164,13 @@ class MapItem extends Backend
             return '';
         }
 
-        $href .= '&amp;tid='.$row['id'].'&amp;state='.($row['published'] ? '' : 1);
+        $href .= '&amp;tid='.$row['id'].'&amp;state='.($row['published'] ? '1' : '0');
 
         if (!$row['published']) {
             $icon = 'invisible.gif';
         }
 
-        return '<a href="'.$this->addToUrl($href).'" title="'.specialchars($title).'"'.$attributes.'>'.Image::getHtml($icon, $label).'</a> ';
+        return '<a href="'.$this->addToUrl($href).'" title="'.specialchars($title).'"'.$attributes.'">'.Image::getHtml($icon, $label, 'data-state="'.($row['published'] ? '1' : '0').'"').'</a> ';
     }
 
     /**
