@@ -19,8 +19,8 @@ use Contao\Config;
 use Contao\CoreBundle\Exception\PageNotFoundException;
 use Contao\Environment;
 use Contao\Input;
-use WEM\GeoDataBundle\Model\Item;
 use WEM\GeoDataBundle\Model\Map;
+use WEM\GeoDataBundle\Model\MapItem;
 
 /**
  * Front end module "locations reader".
@@ -80,7 +80,7 @@ class LocationsReader extends Core
             $this->Template->back = $GLOBALS['TL_LANG']['MSC']['goBack'];
 
             // Get the location item
-            $objItem = Item::findByIdOrAlias(Input::get('items'));
+            $objItem = MapItem::findByIdOrAlias(Input::get('items'));
 
             // The location item does not exist or has an external target (see #33)
             if (null === $objItem || !$objItem->isPublishedForTimestamp()) {

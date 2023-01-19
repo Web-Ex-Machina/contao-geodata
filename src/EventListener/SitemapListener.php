@@ -17,8 +17,8 @@ namespace WEM\GeoDataBundle\EventListener;
 use Contao\CoreBundle\Event\SitemapEvent;
 use Contao\Model\Collection;
 use Contao\PageModel;
-use WEM\GeoDataBundle\Model\Item;
 use WEM\GeoDataBundle\Model\Map;
+use WEM\GeoDataBundle\Model\MapItem;
 
 class SitemapListener
 {
@@ -58,7 +58,7 @@ class SitemapListener
             return;
         }
 
-        $items = Item::findItems(['pid' => $map->id, 'published' => 1]);
+        $items = MapItem::findItems(['pid' => $map->id, 'published' => 1]);
         if (!$items) {
             return;
         }

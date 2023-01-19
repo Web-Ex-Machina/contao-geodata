@@ -24,7 +24,6 @@ use Contao\StringUtil;
 use Contao\System;
 use WEM\GeoDataBundle\Controller\ClassLoader;
 use WEM\GeoDataBundle\Model\Category;
-use WEM\GeoDataBundle\Model\Item;
 use WEM\GeoDataBundle\Model\Map;
 
 /**
@@ -153,15 +152,15 @@ class LocationsList extends Core
     {
         $arrFilters = [];
         if ('nofilters' !== $this->wem_geodata_filters) {
-            $locations = Item::findItems($this->arrConfig);
-            System::loadLanguageFile('tl_wem_item');
+            $locations = MapItem::findItems($this->arrConfig);
+            System::loadLanguageFile('tl_wem_map_item');
 
             if ($this->wem_geodata_search) {
                 $arrFilters['search'] = [
                     // 'label' => 'Recherche :',
                     // 'placeholder' => 'Indiquez un nom ou un code postal...',
-                    'label' => $GLOBALS['TL_LANG']['tl_wem_item']['search'][0],
-                    'placeholder' => $GLOBALS['TL_LANG']['tl_wem_item']['search'][1],
+                    'label' => $GLOBALS['TL_LANG']['tl_wem_map_item']['search'][0],
+                    'placeholder' => $GLOBALS['TL_LANG']['tl_wem_map_item']['search'][1],
                     'name' => 'search',
                     'type' => 'text',
                     'value' => Input::get('search') ?: '',
@@ -183,8 +182,8 @@ class LocationsList extends Core
                     $this->arrConfig[$filterField] = Input::get($filterField);
                 }
                 $arrFilters[$filterField] = [
-                    'label' => sprintf('%s :', $GLOBALS['TL_LANG']['tl_wem_item'][$filterField][0]),
-                    'placeholder' => $GLOBALS['TL_LANG']['tl_wem_item'][$filterField][1],
+                    'label' => sprintf('%s :', $GLOBALS['TL_LANG']['tl_wem_map_item'][$filterField][0]),
+                    'placeholder' => $GLOBALS['TL_LANG']['tl_wem_map_item'][$filterField][1],
                     'name' => $filterField,
                     'type' => 'select',
                     'options' => [],

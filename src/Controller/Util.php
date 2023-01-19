@@ -18,7 +18,7 @@ use Contao\Database;
 use Contao\Input;
 use Contao\StringUtil;
 use Contao\System;
-use WEM\GeoDataBundle\Model\Item;
+use WEM\GeoDataBundle\Model\MapItem;
 
 /**
  * Provide utilities function to Locations Extension.
@@ -84,12 +84,12 @@ class Util
         }
 
         // Before trying to find a specific location, make sure the field we want exists
-        if (!Database::getInstance()->fieldExists($strField, Item::getTable())) {
+        if (!Database::getInstance()->fieldExists($strField, MapItem::getTable())) {
             return false;
         }
 
         // Try to find the location, with the item given (return false if not found)
-        if (!$objLocation = Item::findByIdOrAlias($varLocation)) {
+        if (!$objLocation = MapItem::findByIdOrAlias($varLocation)) {
             return false;
         }
 

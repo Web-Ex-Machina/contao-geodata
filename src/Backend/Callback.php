@@ -32,8 +32,8 @@ use WEM\GeoDataBundle\Controller\Provider\GoogleMaps;
 use WEM\GeoDataBundle\Controller\Provider\Nominatim;
 use WEM\GeoDataBundle\Controller\Util;
 use WEM\GeoDataBundle\Model\Category;
-use WEM\GeoDataBundle\Model\Item;
 use WEM\GeoDataBundle\Model\Map;
+use WEM\GeoDataBundle\Model\MapItem;
 
 /**
  * Provide backend functions to Locations Extension.
@@ -54,7 +54,7 @@ class Callback extends Backend
         }
 
         try {
-            $objLocation = Item::findByPk($objDc->id);
+            $objLocation = MapItem::findByPk($objDc->id);
             $objMap = Map::findByPk($objLocation->pid);
 
             if (!$objMap->geocodingProvider) {
@@ -214,11 +214,11 @@ class Callback extends Backend
                     $arrLocation['alias'] = StringUtil::generateAlias($arrLocation['title'].'-'.$arrLocation['city'].'-'.$arrLocation['country'].'-'.($k + 1));
 
                     if ($updateExistingItems) {
-                        $objLocation = Item::findItems(['alias' => $arrLocation['alias'], 'pid' => $objMap->id], 1);
+                        $objLocation = MapItem::findItems(['alias' => $arrLocation['alias'], 'pid' => $objMap->id], 1);
 
                         // Create if don't exists
                         if (!$objLocation) {
-                            $objLocation = new Item();
+                            $objLocation = new MapItem();
                             $objLocation->pid = $objMap->id;
                             $objLocation->published = 1;
                             ++$intCreated;
@@ -227,7 +227,7 @@ class Callback extends Backend
                             ++$intUpdated;
                         }
                     } else {
-                        $objLocation = new Item();
+                        $objLocation = new MapItem();
                         $objLocation->pid = $objMap->id;
                         $objLocation->published = 1;
                         ++$intCreated;
@@ -244,7 +244,7 @@ class Callback extends Backend
                 }
 
                 if ($deleteExistingItems) {
-                    $objLocations = Item::findItems(['pid' => $objMap->id, 'published' => 1]);
+                    $objLocations = MapItem::findItems(['pid' => $objMap->id, 'published' => 1]);
                     while ($objLocations->next()) {
                         if (!\in_array($objLocations->id, $arrNewLocations, true)) {
                             $objLocations->delete();
@@ -254,9 +254,9 @@ class Callback extends Backend
                 }
             }
 
-            Message::addConfirmation(sprintf($GLOBALS['TL_LANG']['tl_wem_item']['createdConfirmation'], $intCreated));
-            Message::addInfo(sprintf($GLOBALS['TL_LANG']['tl_wem_item']['updatedConfirmation'], $intUpdated));
-            Message::addInfo(sprintf($GLOBALS['TL_LANG']['tl_wem_item']['deletedConfirmation'], $intDeleted));
+            Message::addConfirmation(sprintf($GLOBALS['TL_LANG']['tl_wem_map_item']['createdConfirmation'], $intCreated));
+            Message::addInfo(sprintf($GLOBALS['TL_LANG']['tl_wem_map_item']['updatedConfirmation'], $intUpdated));
+            Message::addInfo(sprintf($GLOBALS['TL_LANG']['tl_wem_map_item']['deletedConfirmation'], $intDeleted));
 
             System::setCookie('BE_PAGE_OFFSET', 0, 0);
             $this->reload();
@@ -268,7 +268,7 @@ class Callback extends Backend
         foreach ($arrExcelPattern as $strExcelColumn => $strDbColumn) {
             $strDbColumn = 'region' === $strDbColumn ? 'admin_lvl_1' : $strDbColumn;
             $arrTh[] = '<th>'.$strExcelColumn.'</th>';
-            $arrTd[] = '<td>'.$GLOBALS['TL_LANG']['tl_wem_item'][$strDbColumn][0].'</td>';
+            $arrTd[] = '<td>'.$GLOBALS['TL_LANG']['tl_wem_map_item'][$strDbColumn][0].'</td>';
         }
 
         // Build the country array, to give the correct syntax to users
@@ -301,19 +301,19 @@ class Callback extends Backend
         $objTemplate->backButtonTitle = specialchars($GLOBALS['TL_LANG']['MSC']['backBTTitle']);
         $objTemplate->backButtonLabel = $GLOBALS['TL_LANG']['MSC']['backBT'];
         $objTemplate->formAction = ampersand(Environment::get('request'), true);
-        $objTemplate->widgetUploadTitle = $GLOBALS['TL_LANG']['tl_wem_item']['source'][0];
+        $objTemplate->widgetUploadTitle = $GLOBALS['TL_LANG']['tl_wem_map_item']['source'][0];
         $objTemplate->widgetUploadContent = $objUploader->generateMarkup();
-        $objTemplate->widgetUploadHelp = $GLOBALS['TL_LANG']['tl_wem_item']['source'][1] ?? '';
-        $objTemplate->widgetSettingsTitle = $GLOBALS['TL_LANG']['tl_wem_item']['importSettingsTitle'];
-        $objTemplate->widgetSettingsUpdateLabel = $GLOBALS['TL_LANG']['tl_wem_item']['importSettingsUpdateLabel'];
+        $objTemplate->widgetUploadHelp = $GLOBALS['TL_LANG']['tl_wem_map_item']['source'][1] ?? '';
+        $objTemplate->widgetSettingsTitle = $GLOBALS['TL_LANG']['tl_wem_map_item']['importSettingsTitle'];
+        $objTemplate->widgetSettingsUpdateLabel = $GLOBALS['TL_LANG']['tl_wem_map_item']['importSettingsUpdateLabel'];
         $objTemplate->widgetSettingsUpdateChecked = (bool) $objMap->updateExistingItems;
-        $objTemplate->widgetSettingsDeleteLabel = $GLOBALS['TL_LANG']['tl_wem_item']['importSettingsDeleteLabel'];
+        $objTemplate->widgetSettingsDeleteLabel = $GLOBALS['TL_LANG']['tl_wem_map_item']['importSettingsDeleteLabel'];
         $objTemplate->widgetSettingsDeleteChecked = (bool) $objMap->deleteExistingItemsNotInImportFile;
-        $objTemplate->formSubmitValue = specialchars($GLOBALS['TL_LANG']['tl_wem_item']['import'][0]);
-        $objTemplate->importExampleTitle = $GLOBALS['TL_LANG']['tl_wem_item']['importExampleTitle'];
+        $objTemplate->formSubmitValue = specialchars($GLOBALS['TL_LANG']['tl_wem_map_item']['import'][0]);
+        $objTemplate->importExampleTitle = $GLOBALS['TL_LANG']['tl_wem_map_item']['importExampleTitle'];
         $objTemplate->importExampleTh = implode('', $arrTh);
         $objTemplate->importExampleTd = implode('', $arrTd);
-        $objTemplate->importListCountriesTitle = $GLOBALS['TL_LANG']['tl_wem_item']['importListCountriesTitle'];
+        $objTemplate->importListCountriesTitle = $GLOBALS['TL_LANG']['tl_wem_map_item']['importListCountriesTitle'];
         $objTemplate->importListCountriesNameCurrentLanguage = $arrLanguages[$GLOBALS['TL_LANGUAGE']];
         $objTemplate->importListCountriesNameEnglish = $arrLanguages['en'];
         $objTemplate->importListCountries = $strCountries;
@@ -348,7 +348,7 @@ class Callback extends Backend
 
         $arrCountriesSystem = System::getContainer()->get('contao.intl.countries')->getCountries();
         $arrCountries = [];
-        $items = Item::findItems(['pid' => $objMap->id]);
+        $items = MapItem::findItems(['pid' => $objMap->id]);
         if ($items) {
             while ($items->next()) {
                 $arrCountries[$items->country] = $arrCountriesSystem[strtoupper($items->country)];
@@ -362,14 +362,14 @@ class Callback extends Backend
         $objTemplate->backButtonLabel = $GLOBALS['TL_LANG']['MSC']['backBT'];
         $objTemplate->formAction = ampersand(str_replace('key=export_form', 'key=export', Environment::get('request')), true);
 
-        $objTemplate->widgetSettingsTitle = $GLOBALS['TL_LANG']['tl_wem_item']['exportSettingsTitle'];
-        $objTemplate->widgetSettingsFormatLabel = $GLOBALS['TL_LANG']['tl_wem_item']['exportSettingsFormatLabel'];
+        $objTemplate->widgetSettingsTitle = $GLOBALS['TL_LANG']['tl_wem_map_item']['exportSettingsTitle'];
+        $objTemplate->widgetSettingsFormatLabel = $GLOBALS['TL_LANG']['tl_wem_map_item']['exportSettingsFormatLabel'];
 
-        $objTemplate->widgetSettingsLimitToCategoriesCheckboxLabel = $GLOBALS['TL_LANG']['tl_wem_item']['exportSettingsLimitToCategoriesCheckboxLabel'];
-        $objTemplate->widgetSettingsLimitToCategoriesSelectLabel = $GLOBALS['TL_LANG']['tl_wem_item']['exportSettingsLimitToCategoriesSelectLabel'];
-        $objTemplate->widgetSettingsLimitToCountriesCheckboxLabel = $GLOBALS['TL_LANG']['tl_wem_item']['exportSettingsLimitToCountriesCheckboxLabel'];
-        $objTemplate->widgetSettingsLimitToCountriesSelectLabel = $GLOBALS['TL_LANG']['tl_wem_item']['exportSettingsLimitToCountriesSelectLabel'];
-        $objTemplate->formSubmitValue = specialchars($GLOBALS['TL_LANG']['tl_wem_item']['export_form'][0]);
+        $objTemplate->widgetSettingsLimitToCategoriesCheckboxLabel = $GLOBALS['TL_LANG']['tl_wem_map_item']['exportSettingsLimitToCategoriesCheckboxLabel'];
+        $objTemplate->widgetSettingsLimitToCategoriesSelectLabel = $GLOBALS['TL_LANG']['tl_wem_map_item']['exportSettingsLimitToCategoriesSelectLabel'];
+        $objTemplate->widgetSettingsLimitToCountriesCheckboxLabel = $GLOBALS['TL_LANG']['tl_wem_map_item']['exportSettingsLimitToCountriesCheckboxLabel'];
+        $objTemplate->widgetSettingsLimitToCountriesSelectLabel = $GLOBALS['TL_LANG']['tl_wem_map_item']['exportSettingsLimitToCountriesSelectLabel'];
+        $objTemplate->formSubmitValue = specialchars($GLOBALS['TL_LANG']['tl_wem_map_item']['export_form'][0]);
 
         $objTemplate->categories = $arrCategories;
         $objTemplate->countries = $arrCountries;
@@ -414,7 +414,7 @@ class Callback extends Backend
 
         // Fetch all the locations
         $arrCountries = System::getCountries();
-        $objLocations = Item::findItems($params);
+        $objLocations = MapItem::findItems($params);
 
         // Break if no locations
         if (!$objLocations) {

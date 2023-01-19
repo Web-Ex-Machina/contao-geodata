@@ -15,6 +15,14 @@ declare(strict_types=1);
 namespace WEM\GeoDataBundle\DataContainer;
 
 use Contao\Backend;
+use Contao\DataContainer;
+use Contao\Image;
+use Contao\Input;
+use Contao\PageModel;
+use Contao\StringUtil;
+use Contao\System;
+use Contao\Versions;
+use WEM\GeoDataBundle\Model\Map;
 
 class MapItem extends Backend
 {
@@ -82,14 +90,14 @@ class MapItem extends Backend
             }
         }
 
-        $objAlias = $this->Database->prepare('SELECT id FROM tl_wem_item WHERE alias=? AND id!=?')
+        $objAlias = $this->Database->prepare('SELECT id FROM tl_wem_map_item WHERE alias=? AND id!=?')
                                    ->execute($varValue, $dc->id)
         ;
 
         // Check whether the news alias exists
         if ($objAlias->numRows) {
             if (!$autoAlias) {
-                throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['aliasExists'], $varValue));
+                throw new \Exception(sprintf($GLOBALS['TL_LANG']['ERR']['aliasExists'], $varValue));
             }
 
             $varValue .= '-'.$dc->id;
@@ -103,10 +111,10 @@ class MapItem extends Backend
      */
     public function checkIfGeocodeExists(): void
     {
-        $objMap = \WEM\GeoDataBundle\Model\Map::findByPk(\Input::get('id'));
+        $objMap = \WEM\GeoDataBundle\Model\Map::findByPk(Input::get('id'));
 
         if ('' === $objMap->geocodingProvider) {
-            unset($GLOBALS['TL_DCA']['tl_wem_item']['list']['global_operations']['geocodeAll'], $GLOBALS['TL_DCA']['tl_wem_item']['list']['operations']['geocode']);
+            unset($GLOBALS['TL_DCA']['tl_wem_map_item']['list']['global_operations']['geocodeAll'], $GLOBALS['TL_DCA']['tl_wem_map_item']['list']['operations']['geocode']);
         }
     }
 
@@ -145,13 +153,13 @@ class MapItem extends Backend
      */
     public function toggleIcon($row, $href, $label, $title, $icon, $attributes)
     {
-        if (\strlen(Input::get('tid'))) {
+        if (\strlen(Input::get('tid') ?? '')) {
             $this->toggleVisibility(Input::get('tid'), (1 === Input::get('state')), (@func_get_arg(12) ?: null));
             $this->redirect($this->getReferer());
         }
 
         // Check permissions AFTER checking the tid, so hacking attempts are logged
-        if (!$this->User->hasAccess('tl_wem_item::published', 'alexf')) {
+        if (!$this->User->hasAccess('tl_wem_map_item::published', 'alexf')) {
             return '';
         }
 
@@ -178,17 +186,17 @@ class MapItem extends Backend
         Input::setGet('act', 'toggle');
 
         // Check permissions to publish
-        if (!$this->User->hasAccess('tl_wem_item::published', 'alexf')) {
+        if (!$this->User->hasAccess('tl_wem_map_item::published', 'alexf')) {
             $this->log('Not enough permissions to publish/unpublish agence item ID "'.$intId.'"', __METHOD__, TL_ERROR);
             $this->redirect('contao/main.php?act=error');
         }
 
-        $objVersions = new Versions('tl_wem_item', $intId);
+        $objVersions = new Versions('tl_wem_map_item', $intId);
         $objVersions->initialize();
 
         // Trigger the save_callback
-        if (\is_array($GLOBALS['TL_DCA']['tl_wem_item']['fields']['published']['save_callback'])) {
-            foreach ($GLOBALS['TL_DCA']['tl_wem_item']['fields']['published']['save_callback'] as $callback) {
+        if (\is_array($GLOBALS['TL_DCA']['tl_wem_map_item']['fields']['published']['save_callback'])) {
+            foreach ($GLOBALS['TL_DCA']['tl_wem_map_item']['fields']['published']['save_callback'] as $callback) {
                 if (\is_array($callback)) {
                     $this->import($callback[0]);
                     $blnVisible = $this->$callback[0]->$callback[1]($blnVisible, ($dc ?: $this));
@@ -199,12 +207,12 @@ class MapItem extends Backend
         }
 
         // Update the database
-        $this->Database->prepare('UPDATE tl_wem_item SET tstamp='.time().", published='".($blnVisible ? '1' : '')."' WHERE id=?")
+        $this->Database->prepare('UPDATE tl_wem_map_item SET tstamp='.time().", published='".($blnVisible ? '1' : '')."' WHERE id=?")
                        ->execute($intId)
         ;
 
         $objVersions->create();
-        $this->log('A new version of record "tl_wem_item.id='.$intId.'" has been created'.$this->getParentEntries('tl_wem_item', $intId), __METHOD__, TL_GENERAL);
+        $this->log('A new version of record "tl_wem_map_item.id='.$intId.'" has been created'.$this->getParentEntries('tl_wem_map_item', $intId), __METHOD__, TL_GENERAL);
     }
 
     public function importButtonGlobalOperations(?string $href, string $label, string $title, string $class, string $attributes, string $table, array $rootIds): string
@@ -264,9 +272,9 @@ class MapItem extends Backend
         bool $blnCircularReference,
         ?string $strPrevious,
         ?string $strNext,
-        Contao\DataContainer $dc
+        DataContainer $dc
     ): string {
-        $objMap = Map::findByPk(\Contao\Input::get('id'));
+        $objMap = Map::findByPk(Input::get('id'));
         if (!$objMap
         || null === $objMap->geocodingProvider
         ) {
@@ -275,6 +283,6 @@ class MapItem extends Backend
         $url = $this->addToUrl($href);
         $url = str_replace('&amp;id='.$objMap->id, '&amp;id='.$data['id'], $url);
 
-        return sprintf('<a href="%s" title="%s" %s>%s</a> ', $url, StringUtil::specialchars($title), $attributes, \Contao\Image::getHtml($icon, $label));
+        return sprintf('<a href="%s" title="%s" %s>%s</a> ', $url, StringUtil::specialchars($title), $attributes, Image::getHtml($icon, $label));
     }
 }

@@ -21,7 +21,7 @@ declare(strict_types=1);
     [
         'wem-geodata' => [
             'wem-maps' => [
-                'tables' => ['tl_wem_map', 'tl_wem_map_category', 'tl_wem_item', 'tl_content', 'tl_wem_item_attr_value'],
+                'tables' => ['tl_wem_map', 'tl_wem_map_category', 'tl_wem_map_item', 'tl_content', 'tl_wem_map_item_attribute_value'],
                 'import' => ['WEM\GeoDataBundle\Backend\Callback', 'importLocations'],
                 'export_form' => ['WEM\GeoDataBundle\Backend\Callback', 'exportLocationsForm'],
                 'export' => ['WEM\GeoDataBundle\Backend\Callback', 'exportLocations'],
@@ -64,8 +64,8 @@ declare(strict_types=1);
  * Models
  */
 $GLOBALS['TL_MODELS'][\WEM\GeoDataBundle\Model\Map::getTable()] = 'WEM\GeoDataBundle\Model\Map';
-$GLOBALS['TL_MODELS'][\WEM\GeoDataBundle\Model\Item::getTable()] = 'WEM\GeoDataBundle\Model\Item';
-$GLOBALS['TL_MODELS'][\WEM\GeoDataBundle\Model\ItemAttributeValue::getTable()] = 'WEM\GeoDataBundle\Model\ItemAttributeValue';
+$GLOBALS['TL_MODELS'][\WEM\GeoDataBundle\Model\MapItem::getTable()] = 'WEM\GeoDataBundle\Model\MapItem';
+$GLOBALS['TL_MODELS'][\WEM\GeoDataBundle\Model\MapItemAttributeValue::getTable()] = 'WEM\GeoDataBundle\Model\MapItemAttributeValue';
 $GLOBALS['TL_MODELS'][\WEM\GeoDataBundle\Model\Category::getTable()] = 'WEM\GeoDataBundle\Model\Category';
 
 /*

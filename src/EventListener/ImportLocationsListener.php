@@ -3,38 +3,30 @@
 declare(strict_types=1);
 
 /**
- * Altrad Map Bundle for Contao Open Source CMS
- * Copyright (c) 2017-2022 Web ex Machina
+ * Geodata for Contao Open Source CMS
+ * Copyright (c) 2015-2022 Web ex Machina
  *
  * @category ContaoBundle
- * @package  Web-Ex-Machina/contao-altrad-map-bundle
+ * @package  Web-Ex-Machina/contao-geodata
  * @author   Web ex Machina <contact@webexmachina.fr>
- * @link     https://github.com/Web-Ex-Machina/contao-altrad-map-bundle/
+ * @link     https://github.com/Web-Ex-Machina/contao-geodata/
  */
 
 namespace WEM\GeoDataBundle\EventListener;
 
-use WEM\GeoDataBundle\Controller\Provider\GoogleMaps;
-use WEM\GeoDataBundle\Controller\Provider\Nominatim;
-use WEM\GeoDataBundle\Controller\Util;
-use WEM\GeoDataBundle\Model\Item;
-use WEM\GeoDataBundle\Model\LocationAttributeValue;
-use WEM\GeoDataBundle\Model\Map;
-use Contao\Backend;
-use Contao\File;
-use Contao\StringUtil;
 use Contao\Database;
+use Contao\File;
 use Contao\Message;
-use Haste\Http\Response\JsonResponse;
+use Contao\StringUtil;
 use PhpOffice\PhpSpreadsheet\IOFactory;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use WEM\GeoDataBundle\Model\ItemAttributeValue;
 
 /**
  * Provide utilities function to Locations Extension.
  */
 class ImportLocationsListener
 {
-    public function importPostalCodes($arrUploaded, $arrExcelPattern, $objMap, $objModule)
+    public function importPostalCodes($arrUploaded, $arrExcelPattern, $objMap, $objModule): void
     {
         foreach ($arrUploaded as $strFile) {
             $objFile = new File($strFile, true);
@@ -56,11 +48,11 @@ class ImportLocationsListener
                 }
 
                 // Find parent
-                $objLocation = Item::findItems(['pid' => $objMap->id, 'title' => $arrRow['F']], 1);
+                $objLocation = MapItem::findItems(['pid' => $objMap->id, 'title' => $arrRow['F']], 1);
 
                 // Create if don't exists
                 if (!$objLocation) {
-                    $objLocation = new Item();
+                    $objLocation = new MapItem();
                     $objLocation->createdAt = time();
                     $objLocation->pid = $objMap->id;
                     $objLocation->published = 1;
@@ -78,8 +70,8 @@ class ImportLocationsListener
                 // Extract admin_lvl_2 (2 first chars) and add it to perso sheet
                 $strDep = substr($arrRow['A'], 0, 2);
 
-                if ($strDep && "" !== $strDep) {
-                    if (in_array($objLocation->id, $arrDepCache)) {
+                if ($strDep && '' !== $strDep) {
+                    if (\in_array($objLocation->id, $arrDepCache, true)) {
                         $arrLocationDeps = $arrDepCache[$objLocation->id];
                     } else {
                         if (' / ' === substr($objLocation->admin_lvl_2, 0, 3)) {
@@ -90,7 +82,7 @@ class ImportLocationsListener
                         sort($arrLocationDeps);
                     }
 
-                    if (!in_array($strDep, $arrLocationDeps)) {
+                    if (!\in_array($strDep, $arrLocationDeps, true)) {
                         $arrLocationDeps[] = $strDep;
                         sort($arrLocationDeps);
                         $arrDepCache[$objLocation->id] = $arrLocationDeps;
@@ -119,7 +111,7 @@ class ImportLocationsListener
                 $arrNewLocationAttributes[] = $objLocationAttributeValue->id;
             }
 
-            $objLocations = Item::findItems(['pid' => $objMap->id]);
+            $objLocations = MapItem::findItems(['pid' => $objMap->id]);
             while ($objLocations->next()) {
                 if (!\in_array($objLocations->id, $arrNewLocations, true)) {
                     $objLocations->delete();
@@ -127,12 +119,12 @@ class ImportLocationsListener
                 }
             }
 
-            $strSql = sprintf('DELETE FROM tl_wem_item_attr_value WHERE pid IN (%s) AND attribute = "postal" AND id NOT IN(%s)', implode(',', $arrNewLocations), implode(',', $arrNewLocationAttributes));
+            $strSql = sprintf('DELETE FROM tl_wem_map_item_attribute_value WHERE pid IN (%s) AND attribute = "postal" AND id NOT IN(%s)', implode(',', $arrNewLocations), implode(',', $arrNewLocationAttributes));
             Database::getInstance()->prepare($strSql)->execute();
 
-            Message::addConfirmation(sprintf($GLOBALS['TL_LANG']['tl_wem_item']['createdConfirmation'], $intCreated));
-            Message::addInfo(sprintf($GLOBALS['TL_LANG']['tl_wem_item']['updatedConfirmation'], $intUpdated));
-            Message::addInfo(sprintf($GLOBALS['TL_LANG']['tl_wem_item']['deletedConfirmation'], $intDeleted));
+            Message::addConfirmation(sprintf($GLOBALS['TL_LANG']['tl_wem_map_item']['createdConfirmation'], $intCreated));
+            Message::addInfo(sprintf($GLOBALS['TL_LANG']['tl_wem_map_item']['updatedConfirmation'], $intUpdated));
+            Message::addInfo(sprintf($GLOBALS['TL_LANG']['tl_wem_map_item']['deletedConfirmation'], $intDeleted));
         }
     }
 }

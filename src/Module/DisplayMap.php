@@ -22,8 +22,8 @@ use Contao\System;
 use WEM\GeoDataBundle\Controller\ClassLoader;
 use WEM\GeoDataBundle\Controller\Util;
 use WEM\GeoDataBundle\Model\Category;
-use WEM\GeoDataBundle\Model\Item;
 use WEM\GeoDataBundle\Model\Map;
+use WEM\GeoDataBundle\Model\MapItem;
 
 /**
  * Front end module "locations map".
@@ -120,13 +120,13 @@ class DisplayMap extends Core
             // Gather filters
             if ('nofilters' !== $this->wem_geodata_filters) {
                 $this->filters = [];
-                $locations = Item::findItems($arrConfig);
-                System::loadLanguageFile('tl_wem_item');
+                $locations = MapItem::findItems($arrConfig);
+                System::loadLanguageFile('tl_wem_map_item');
 
                 if ($this->wem_geodata_search) {
                     $this->filters['search'] = [
-                        'label' => $GLOBALS['TL_LANG']['tl_wem_item']['search'][0],
-                        'placeholder' => $GLOBALS['TL_LANG']['tl_wem_item']['search'][1],
+                        'label' => $GLOBALS['TL_LANG']['tl_wem_map_item']['search'][0],
+                        'placeholder' => $GLOBALS['TL_LANG']['tl_wem_map_item']['search'][1],
                         'name' => 'search',
                         'type' => 'text',
                         'value' => Input::get('search') ?: '',
@@ -147,8 +147,8 @@ class DisplayMap extends Core
                         $arrConfig[$filterField] = Input::get($filterField);
                     }
                     $this->filters[$filterField] = [
-                        'label' => sprintf('%s :', $GLOBALS['TL_LANG']['tl_wem_item'][$filterField][0]),
-                        'placeholder' => $GLOBALS['TL_LANG']['tl_wem_item'][$filterField][1],
+                        'label' => sprintf('%s :', $GLOBALS['TL_LANG']['tl_wem_map_item'][$filterField][0]),
+                        'placeholder' => $GLOBALS['TL_LANG']['tl_wem_map_item'][$filterField][1],
                         'name' => $filterField,
                         'type' => 'select',
                         'options' => [],

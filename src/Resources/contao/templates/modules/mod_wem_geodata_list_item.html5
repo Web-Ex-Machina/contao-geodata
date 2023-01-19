@@ -1,48 +1,51 @@
 <div class="block-card location layout_list" data-preset="inline" itemscope itemtype="http://schema.org/Place" 
-      data-id="<?php echo $this->location['id']; ?>" 
-      data-category="<?php echo str_replace([' ','.'],'_', mb_strtolower($this->location['category']['id'], 'UTF-8'));?>" 
-      data-category-title="<?php echo str_replace([' ','.'],'_', mb_strtolower($this->location['category']['title'], 'UTF-8'));?>" 
-      data-city="<?php echo str_replace([' ','.'],'_', mb_strtolower($this->location['city'], 'UTF-8'));?>" 
-      data-admin_lvl_1="<?php echo str_replace([' ','.'],'_', mb_strtolower($this->location['admin_lvl_1'], 'UTF-8'));?>" 
-      data-admin_lvl_2="<?php echo str_replace([' ','.'],'_', mb_strtolower($this->location['admin_lvl_2'], 'UTF-8'));?>" 
-      data-country="<?php echo str_replace([' ','.'],'_', mb_strtolower($this->location['country'], 'UTF-8'));?>"
-      >
-      <div class="block-card__wrapper">
-        <?php if ($this->location['picture']['path']): ?>
-          <<?php echo $this->location['url']?'a href="'.$this->location['url'].'" title="'.$GLOBALS['TL_LANG']['MSC']['more'].'"':'div' ?> class="block-card__figure">
-            <img src="<?= $this->location['picture']['path'] ?>" alt="<?= $this->location['title'] ?>" itemprop="image">
-          </<?php echo $this->location['url']?'a':'div' ?> >
-        <?php endif; ?>
-        <div class="block-card__content">
-          <<?php echo $this->location['url']?'a href="'.$this->location['url'].'"':'div' ?>  class="block-card__title h2" title="<?= $this->location['title'] ?>" itemprop="name">
-            <?= $this->location['title'] ?>
-          </<?php echo $this->location['url']?'a':'div' ?> >
-          <div class="reader__location">
-            <i class="fal fa-map-marker-alt"></i>&nbsp;
-              <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
-                <?= $this->location['address'] ?>
-              </span>
-          </div>
-          <?= $this->location['admin_lvl_1'] ?>
-          <?php if($this->location['admin_lvl_2']): ?>
-          - <?= $this->location['admin_lvl_2'] ?>
-          <?php endif; ?>
-          <?php if($this->location['admin_lvl_3']): ?>
-          - <?= $this->location['admin_lvl_3'] ?>
-          <?php endif; ?>
+  data-id="<?php echo $this->location['id']; ?>" 
+  data-category="<?php echo str_replace([' ','.'],'_', mb_strtolower($this->location['category']['id'], 'UTF-8'));?>" 
+  data-category-title="<?php echo str_replace([' ','.'],'_', mb_strtolower($this->location['category']['title'], 'UTF-8'));?>" 
+  data-city="<?php echo str_replace([' ','.'],'_', mb_strtolower($this->location['city'], 'UTF-8'));?>" 
+  data-admin_lvl_1="<?php echo str_replace([' ','.'],'_', mb_strtolower($this->location['admin_lvl_1'], 'UTF-8'));?>" 
+  data-admin_lvl_2="<?php echo str_replace([' ','.'],'_', mb_strtolower($this->location['admin_lvl_2'], 'UTF-8'));?>" 
+  data-country="<?php echo str_replace([' ','.'],'_', mb_strtolower($this->location['country'], 'UTF-8'));?>"
+>
+  <div class="block-card__wrapper">
+    <?php if ($this->location['picture']['path']): ?>
+      <<?php echo $this->location['url']?'a href="'.$this->location['url'].'" title="'.$GLOBALS['TL_LANG']['MSC']['more'].'"':'div' ?> class="block-card__figure">
+        <img src="<?= $this->location['picture']['path'] ?>" alt="<?= $this->location['title'] ?>" itemprop="image">
+      </<?php echo $this->location['url']?'a':'div' ?> >
+    <?php endif; ?>
 
-          <div class="block-card__text">
-            <?php if (!empty($this->location['teaser'])): ?>
-              <div class="ce_text block <?= ($this->location['picture']['path'])? 'cols-span-2 cols-span-md-1':'' ?>" itemprop="description">
-                <?= $this->location['teaser'] ?>
-              </div>
-            <?php endif; ?>
-          </div>
-          <?php if ($this->location['url']): ?>
-            <div class="event__link">
-              <a href="<?= $this->location['url'] ?>" title="<?= $GLOBALS['TL_LANG']['MSC']['more'] ?>"></a>
-            </div>
-          <?php endif ?>
-        </div>
+    <div class="block-card__content">
+      <<?php echo $this->location['url']?'a href="'.$this->location['url'].'"':'div' ?>  class="block-card__title h2" title="<?= $this->location['title'] ?>" itemprop="name">
+        <?= $this->location['title'] ?>
+      </<?php echo $this->location['url']?'a':'div' ?> >
+
+      <div class="reader__location">
+        <i class="fal fa-map-marker-alt"></i>&nbsp;
+        <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+          <?= $this->location['address'] ?>
+        </span>
       </div>
+      <?= $this->location['admin_lvl_1'] ?>
+      <?php if($this->location['admin_lvl_2']): ?>
+      - <?= $this->location['admin_lvl_2'] ?>
+      <?php endif; ?>
+      <?php if($this->location['admin_lvl_3']): ?>
+      - <?= $this->location['admin_lvl_3'] ?>
+      <?php endif; ?>
+
+      <div class="block-card__text">
+        <?php if (!empty($this->location['teaser'])): ?>
+          <div class="ce_text block <?= ($this->location['picture']['path'])? 'cols-span-2 cols-span-md-1':'' ?>" itemprop="description">
+            <?= $this->location['teaser'] ?>
+          </div>
+        <?php endif; ?>
+      </div>
+      
+      <?php if ($this->location['url']): ?>
+        <div class="event__link">
+          <a href="<?= $this->location['url'] ?>" title="<?= $GLOBALS['TL_LANG']['MSC']['more'] ?>"></a>
+        </div>
+      <?php endif ?>
     </div>
+  </div>
+</div>

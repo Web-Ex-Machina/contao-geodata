@@ -32,6 +32,24 @@
 		<?= $this->item['teaser'] ?>
 	</div>
 
+	<?php if($this->item['content']): ?>
+		<div class="reader__content block mb-4">
+			<?php echo $this->item['content']; ?>
+		</div>
+	<?php endif; ?>
+	
+	<?php if(!empty($this->item['attributes'])): ?>
+	<div class="reader__attributes block mb-4">
+		<ul>
+			<?php foreach($this->item['attributes'] as $attribute): ?>
+			<li>
+				<span class="ft-bold"><?php echo $attribute['attribute']; ?>:</span>&nbsp;<?php echo $attribute['value']; ?>
+			</li>
+			<?php endforeach; ?>
+		</ul>
+	</div>
+	<?php endif; ?>
+
 	<!-- contacts -->
 	<div class="reader__contact block mb-4">
 		<?php if($this->item['phone']): ?>

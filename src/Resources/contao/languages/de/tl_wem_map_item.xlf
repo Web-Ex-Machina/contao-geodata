@@ -1,295 +1,308 @@
 <?xml version="1.0" ?><xliff version="1.1">
-  <file datatype="php" original="system/modules/wem-contao-locations/languages/en/tl_wem_item.php" source-language="en" target-language="de">
+  <file datatype="php" original="system/modules/wem-contao-locations/languages/en/tl_wem_map_item.php" source-language="en" target-language="de">
     <body>
-    	<trans-unit id="tl_wem_item.location_legend">
+    	<trans-unit id="tl_wem_map_item.location_legend">
 			<source>Global informations</source>
 			<target>Globale Informationen</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.title.0">
+		<trans-unit id="tl_wem_map_item.title.0">
 			<source>Title</source>
 			<target>Name</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.title.1">
+		<trans-unit id="tl_wem_map_item.title.1">
 			<source>Enter the map title</source>
 			<target>Bitte Kartennamen eingeben.</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.published.0">
+		<trans-unit id="tl_wem_map_item.published.0">
 			<source>Publish</source>
 			<target>Veröffentlichen</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.published.1">
+		<trans-unit id="tl_wem_map_item.published.1">
 			<source>Check to display the location on the frontend map</source>
 			<target>Auswählen um den Standort auf der Karte zu veröffentlichen</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.publishedAt.0">
+		<trans-unit id="tl_wem_map_item.publishedAt.0">
         <source>Show from</source>
         <target>Anzeigen ab</target>
       </trans-unit>
-      <trans-unit id="tl_wem_item.publishedAt.1">
+      <trans-unit id="tl_wem_map_item.publishedAt.1">
         <source>If you want to prevent the element from showing on the website before a certain date/time, you can enter it here. Otherwise leave the field blank.</source>
         <target>Wenn Sie das Inhaltselement erst ab einem bestimmten Zeitpunkt auf der Webseite anzeigen möchten, können Sie diesen hier eingeben. Andernfalls lassen Sie das Feld leer. </target>
       </trans-unit>
-      <trans-unit id="tl_wem_item.publishedUntil.0">
+      <trans-unit id="tl_wem_map_item.publishedUntil.0">
         <source>Show until</source>
         <target>Anzeigen bis</target>
       </trans-unit>
-      <trans-unit id="tl_wem_item.publishedUntil.1">
+      <trans-unit id="tl_wem_map_item.publishedUntil.1">
         <source>If you want to prevent the element from showing on the website after a certain date/time, you can enter it here. Otherwise leave the field blank.</source>
         <target>Wenn Sie das Inhaltselement nur bis zu einem bestimmten Zeitpunkt auf der Webseite anzeigen möchten, können Sie diesen hier eingeben. Andernfalls lassen Sie das Feld leer. </target>
       </trans-unit>
 
-		<trans-unit id="tl_wem_item.coords_legend">
+		<trans-unit id="tl_wem_map_item.coords_legend">
 			<source>Coordinates</source>
 			<target>Koordinaten</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.lat.0">
+		<trans-unit id="tl_wem_map_item.lat.0">
 			<source>Latitude</source>
 			<target>Breitengrad</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.lat.1">
+		<trans-unit id="tl_wem_map_item.lat.1">
 			<source>Enter the location latitude</source>
 			<target>Breitengrad eingeben</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.lng.0">
+		<trans-unit id="tl_wem_map_item.lng.0">
 			<source>Longitude</source>
 			<target>Längengrad</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.lng.1">
+		<trans-unit id="tl_wem_map_item.lng.1">
 			<source>Enter the location longitude</source>
 			<target>Längengrad eingeben</target>
 		</trans-unit>
 
-		<trans-unit id="tl_wem_item.street_legend">
+		<trans-unit id="tl_wem_map_item.street_legend">
 			<source>Postal address</source>
 			<target>Postanschrift</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.street.0">
+		<trans-unit id="tl_wem_map_item.street.0">
 			<source>Street</source>
 			<target>Straße</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.street.1">
+		<trans-unit id="tl_wem_map_item.street.1">
 			<source>Enter the location street</source>
 			<target>Straße eingeben</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.postal.0">
+		<trans-unit id="tl_wem_map_item.postal.0">
 			<source>Postal</source>
 			<target>PLZ</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.postal.1">
+		<trans-unit id="tl_wem_map_item.postal.1">
 			<source>Enter the location postal code</source>
 			<target>Postleitzahl eingeben</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.city.0">
+		<trans-unit id="tl_wem_map_item.city.0">
 			<source>City</source>
 			<target>Stadt</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.city.1">
+		<trans-unit id="tl_wem_map_item.city.1">
 			<source>Enter the location city</source>
 			<target>Stadt eingeben</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.region.0">
+		<trans-unit id="tl_wem_map_item.region.0">
 			<source>Region</source>
 			<target>Region</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.region.1">
+		<trans-unit id="tl_wem_map_item.region.1">
 			<source>Enter the location region</source>
 			<target>Region/Bundesland eingeben</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.country.0">
+		<trans-unit id="tl_wem_map_item.country.0">
 			<source>Country</source>
 			<target>Land</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.country.1">
+		<trans-unit id="tl_wem_map_item.country.1">
 			<source>Enter the location country</source>
 			<target>Land eingeben</target>
 		</trans-unit>
 
-		<trans-unit id="tl_wem_item.contact_legend">
+		<trans-unit id="tl_wem_map_item.contact_legend">
 			<source>Contact Data</source>
 			<target>Kontaktdaten</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.phone.0">
+		<trans-unit id="tl_wem_map_item.phone.0">
 			<source>Phone</source>
 			<target>Telefon</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.phone.1">
+		<trans-unit id="tl_wem_map_item.phone.1">
 			<source>Enter the location phone number</source>
 			<target>Telefonnummer eingeben</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.email.0">
+		<trans-unit id="tl_wem_map_item.email.0">
 			<source>Email</source>
 			<target>E-Mail</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.email.1">
+		<trans-unit id="tl_wem_map_item.email.1">
 			<source>Enter the location mail address</source>
 			<target>E-Mail Adresse eingeben</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.website.0">
+		<trans-unit id="tl_wem_map_item.website.0">
 			<source>Website</source>
 			<target>Internet Adresse</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.website.1">
+		<trans-unit id="tl_wem_map_item.website.1">
 			<source>Enter the location website URL</source>
 			<target>Internet Adresse eingeben</target>
 		</trans-unit>
 
-		<trans-unit id="tl_wem_item.new.0">
+		<trans-unit id="tl_wem_map_item.attributes_legend">
+			<source>Attributes</source>
+			<target>Attribute</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map_item.attributes.0">
+			<source>Location attributes</source>
+			<target>Standortattribute</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map_item.attributes.1">
+			<source>Manage the location attributes</source>
+			<target>Verwalten Sie die Standortattribute</target>
+		</trans-unit>
+
+		<trans-unit id="tl_wem_map_item.new.0">
 			<source>New location</source>
 			<target>Neuer Standort</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.new.1">
+		<trans-unit id="tl_wem_map_item.new.1">
 			<source>Create a new location</source>
 			<target>Einen neuen Standort erstellen</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.edit.0">
+		<trans-unit id="tl_wem_map_item.edit.0">
 			<source>Edit location</source>
 			<target>Standort bearbeiten</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.edit.1">
+		<trans-unit id="tl_wem_map_item.edit.1">
 			<source>Edit location ID %s</source>
 			<target>Standort ID %s bearbeiten</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.copy.0">
+		<trans-unit id="tl_wem_map_item.copy.0">
 			<source>Copy location</source>
 			<target>Standort kopieren</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.copy.1">
+		<trans-unit id="tl_wem_map_item.copy.1">
 			<source>Copy location ID %s</source>
 			<target>Standort ID %s kopieren</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.delete.0">
+		<trans-unit id="tl_wem_map_item.delete.0">
 			<source>Delete location</source>
 			<target>Standort löschen</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.delete.1">
+		<trans-unit id="tl_wem_map_item.delete.1">
 			<source>Delete location ID %s</source>
 			<target>Standort ID %s löschen</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.show.0">
+		<trans-unit id="tl_wem_map_item.show.0">
 			<source>Show location data</source>
 			<target>Standortdaten anzeigen</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.show.1">
+		<trans-unit id="tl_wem_map_item.show.1">
 			<source>Show location data ID %s</source>
 			<target>Standortdaten von ID %s anzeigen</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.toggle.0">
+		<trans-unit id="tl_wem_map_item.toggle.0">
 			<source>Show/Hide location</source>
 			<target>Anzeigen/Verstecken des Standorts</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.toggle.1">
+		<trans-unit id="tl_wem_map_item.toggle.1">
 			<source>Show/Hide location ID %s</source>
 			<target>Anzeigen/Verstecken des Standorts ID %s</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.geocode.0">
+		<trans-unit id="tl_wem_map_item.geocode.0">
 			<source>Find location coordinates</source>
 			<target>Standortdaten finden</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.geocode.1">
+		<trans-unit id="tl_wem_map_item.geocode.1">
 			<source>Find location ID %s coordinates</source>
 			<target>Standortdaten von ID %s finden</target>
 		</trans-unit>
 
-		<trans-unit id="tl_wem_item.import.0">
+		<trans-unit id="tl_wem_map_item.import.0">
 			<source>Import</source>
 			<target>Import</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.import.1">
+		<trans-unit id="tl_wem_map_item.import.1">
 			<source>Import locations in this map</source>
 			<target>Importieren von Standorten in diese Karte</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.source.0">
+		<trans-unit id="tl_wem_map_item.source.0">
 			<source>File</source>
 			<target>Datei</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.source.1">
+		<trans-unit id="tl_wem_map_item.source.1">
 			<source>Select the Excel File with your locations</source>
 			<target>Wähle Excel Datei mit Standorten aus</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.export_form.0">
+		<trans-unit id="tl_wem_map_item.export_form.0">
 			<source>Export</source>
 			<target>Export</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.export_form.1">
+		<trans-unit id="tl_wem_map_item.export_form.1">
 			<source>Export locations of this map</source>
 			<target>Exportiere Standorte dieser Karte</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.exportSettingsTitle">
+		<trans-unit id="tl_wem_map_item.exportSettingsTitle">
 			<source>Export settings</source>
 			<target>Exporteinstellungen</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.exportSettingsFormatLabel">
+		<trans-unit id="tl_wem_map_item.exportSettingsFormatLabel">
 			<source>Export format</source>
 			<target>Exportformat</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.exportSettingsLimitToCategoriesCheckboxLabel">
+		<trans-unit id="tl_wem_map_item.exportSettingsLimitToCategoriesCheckboxLabel">
 			<source>Limit export to certain categories</source>
 			<target>Beschränken Sie den Export auf bestimmte Kategorien</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.exportSettingsLimitToCategoriesSelectLabel">
+		<trans-unit id="tl_wem_map_item.exportSettingsLimitToCategoriesSelectLabel">
 			<source>Categories :</source>
 			<target>Kategorien :</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.exportSettingsLimitToCountriesCheckboxLabel">
+		<trans-unit id="tl_wem_map_item.exportSettingsLimitToCountriesCheckboxLabel">
 			<source>Limit export to certain countries</source>
 			<target>Beschränken Sie den Export auf bestimmte Länder</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.exportSettingsLimitToCountriesSelectLabel">
+		<trans-unit id="tl_wem_map_item.exportSettingsLimitToCountriesSelectLabel">
 			<source>Countries :</source>
 			<target>Länder :</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.importExampleTitle">
+		<trans-unit id="tl_wem_map_item.importExampleTitle">
 			<source>Your Excel file should looks like this :</source>
 			<target>Die Excel Datei sollte wie folgt aussehen:</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.importListCountriesTitle">
+		<trans-unit id="tl_wem_map_item.importListCountriesTitle">
 			<source>You will find the list of the countries below :</source>
 			<target>Eine Liste der Länder ist unten zu finden :</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.importSettingsTitle">
+		<trans-unit id="tl_wem_map_item.importSettingsTitle">
 			<source>Import settings</source>
 			<target>Importeinstellungen</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.importSettingsUpdateLabel">
+		<trans-unit id="tl_wem_map_item.importSettingsUpdateLabel">
 			<source>Update already existing items</source>
 			<target>Aktualisieren Sie bereits vorhandene Elemente</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.importSettingsDeleteLabel">
+		<trans-unit id="tl_wem_map_item.importSettingsDeleteLabel">
 			<source>Delete existing elements not present in import file</source>
 			<target>Löschen Sie vorhandene Elemente, die nicht in der Importdatei vorhanden sind</target>
 		</trans-unit>
 
-		<trans-unit id="tl_wem_item.geocodeAll.0">
+		<trans-unit id="tl_wem_map_item.geocodeAll.0">
 			<source>Geocode</source>
 			<target>Geocode</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.geocodeAll.1">
+		<trans-unit id="tl_wem_map_item.geocodeAll.1">
 			<source>Geocode all locations</source>
 			<target>Geocode aller Standorte</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.geocodeAllConfirm">
+		<trans-unit id="tl_wem_map_item.geocodeAllConfirm">
 			<source>Are you sure you want to geocode all locations ?</source>
 			<target>Sicher, dass alle Standorte geogecodet werden sollen ?</target>
 		</trans-unit>
 
-		<trans-unit id="tl_wem_item.createdConfirmation">
+		<trans-unit id="tl_wem_map_item.createdConfirmation">
 			<source>%s locations have been created</source>
 			<target>%s Standorte wurden erstellt</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.updatedConfirmation">
+		<trans-unit id="tl_wem_map_item.updatedConfirmation">
 			<source>%s locations have been updated</source>
 			<target>%s Standorte wurden aktualisisert</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.deletedConfirmation">
+		<trans-unit id="tl_wem_map_item.deletedConfirmation">
 			<source>%s locations have been deleted</source>
 			<target>%s Standorte wurden gelöscht</target>
 		</trans-unit>
 
-		<trans-unit id="tl_wem_item.search.0">
+		<trans-unit id="tl_wem_map_item.search.0">
 			<source>Search :</source>
 			<target>Suche :</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_item.search.1">
+		<trans-unit id="tl_wem_map_item.search.1">
 			<source>What are you looking for ?</source>
 			<target>Wonach suchen Sie ?</target>
 		</trans-unit>

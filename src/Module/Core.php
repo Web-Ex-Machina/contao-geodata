@@ -26,8 +26,9 @@ use Contao\StringUtil;
 use Contao\System;
 use WEM\GeoDataBundle\Controller\Util;
 use WEM\GeoDataBundle\Model\Category;
-use WEM\GeoDataBundle\Model\Item;
 use WEM\GeoDataBundle\Model\Map;
+use WEM\GeoDataBundle\Model\MapItem;
+use WEM\GeoDataBundle\Model\MapItemAttributeValue;
 
 /**
  * Parent class for locations modules.
@@ -114,7 +115,7 @@ abstract class Core extends Module
                 }
             }
 
-            return Item::countItems($c);
+            return MapItem::countItems($c);
         } catch (\Exception $e) {
             throw $e;
         }
@@ -146,7 +147,7 @@ abstract class Core extends Module
                 unset($c['offset']);
             }
 
-            $objLocations = Item::findItems($c, $limit, $offset);
+            $objLocations = MapItem::findItems($c, $limit, $offset);
 
             if (!$objLocations) {
                 throw new \Exception('No locations found for this map.');
@@ -220,7 +221,7 @@ abstract class Core extends Module
                 $arrItem = $varItem->row();
             } elseif (\is_array($varItem)) {
                 $arrItem = $varItem;
-            } elseif ($objItem = Item::findByIdOrAlias($varItem)) {
+            } elseif ($objItem = MapItem::findByIdOrAlias($varItem)) {
                 $arrItem = $objItem->row();
             } else {
                 throw new \Exception('No location found for : '.$varItem);
@@ -258,13 +259,25 @@ abstract class Core extends Module
             $arrItem['continent'] = ['code' => $strContinent, 'name' => $GLOBALS['TL_LANG']['CONTINENT'][$strContinent]];
 
             $strContent = '';
-            $objElement = ContentModel::findPublishedByPidAndTable($arrItem['id'], 'tl_wem_item');
+            $objElement = ContentModel::findPublishedByPidAndTable($arrItem['id'], 'tl_wem_map_item');
             if (null !== $objElement) {
                 while ($objElement->next()) {
                     $strContent .= $this->getContentElement($objElement->current());
                 }
             }
             $arrItem['content'] = $strContent;
+
+            // get attributes
+            $arrItem['attributes'] = [];
+            $attributes = MapItemAttributeValue::findItems(['pid' => $arrItem['id']]);
+            if ($attributes) {
+                while ($attributes->next()) {
+                    $arrItem['attributes'][$attributes->attribute] = [
+                        'attribute' => $attributes->attribute,
+                        'value' => $attributes->value,
+                    ];
+                }
+            }
 
             // Build the item URL
             $objMap = Map::findByPk($arrItem['pid']);
