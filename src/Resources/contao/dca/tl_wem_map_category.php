@@ -39,7 +39,7 @@ $GLOBALS['TL_DCA']['tl_wem_map_category'] = [
             'fields' => ['createdAt DESC'],
             'headerFields' => ['title'],
             'panelLayout' => 'filter;sort,search,limit',
-            'child_record_callback' => ['tl_wem_map_category', 'listItems'],
+            'child_record_callback' => [\WEM\GeoDataBundle\DataContainer\MapCategory::class, 'listItems'],
             'child_record_class' => 'no_padding',
         ],
         'global_operations' => [
@@ -118,36 +118,9 @@ $GLOBALS['TL_DCA']['tl_wem_map_category'] = [
             'exclude' => true,
             'inputType' => 'keyValueWizard',
             'load_callback' => [
-                ['tl_wem_map', 'getDefaultMapConfig'],
+                [\WEM\GeoDataBundle\DataContainer\Map::class, 'getDefaultMapConfig'],
             ],
             'sql' => 'blob NULL',
         ],
     ],
 ];
-
-/**
- * Provide miscellaneous methods that are used by the data configuration array.
- *
- * @author Web ex Machina <https://www.webexmachina.fr>
- */
-class tl_wem_map_category extends \Contao\Backend
-{
-    /**
-     * Import the back end user object.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->import('BackendUser', 'User');
-    }
-
-    /**
-     * Design each row of the DCA.
-     *
-     * @return string
-     */
-    public function listItems($row)
-    {
-        return $row['title'];
-    }
-}
