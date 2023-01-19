@@ -404,6 +404,15 @@
 			<source>%s locations have been deleted</source>
 			<target>%s emplacements ont été supprimés</target>
 		</trans-unit>
+		<trans-unit id="tl_wem_map_item.errorsConfirmation">
+			<source>%s locations have not been imported</source>
+			<target>%s emplacements n'ont pas été importés</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map_item.errorOnItemImport">
+			<source>Location "%s" has not been imported : %s</source>
+			<target>L'emplacement "%s" n'a pas été importé : %s</target>
+		</trans-unit>
+
 
 		<trans-unit id="tl_wem_map_item.search.0">
 			<source>Search :</source>

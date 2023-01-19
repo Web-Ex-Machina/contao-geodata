@@ -208,39 +208,55 @@ class Callback extends Backend
                 $intCreated = 0;
                 $intUpdated = 0;
                 $intDeleted = 0;
+                $intErrors = 0;
                 $arrNewLocations = [];
 
                 foreach ($arrLocations as $k => $arrLocation) {
-                    $arrLocation['alias'] = StringUtil::generateAlias($arrLocation['title'].'-'.$arrLocation['city'].'-'.$arrLocation['country'].'-'.($k + 1));
+                    try {
+                        $blnCreated = false;
+                        $blnUpdated = false;
+                        $arrLocation['alias'] = StringUtil::generateAlias($arrLocation['title'].'-'.$arrLocation['city'].'-'.$arrLocation['country'].'-'.($k + 1));
 
-                    if ($updateExistingItems) {
-                        $objLocation = MapItem::findItems(['alias' => $arrLocation['alias'], 'pid' => $objMap->id], 1);
+                        if ($updateExistingItems) {
+                            $objLocation = MapItem::findItems(['alias' => $arrLocation['alias'], 'pid' => $objMap->id], 1);
 
-                        // Create if don't exists
-                        if (!$objLocation) {
+                            // Create if don't exists
+                            if (!$objLocation) {
+                                $objLocation = new MapItem();
+                                $objLocation->pid = $objMap->id;
+                                $objLocation->published = 1;
+                                ++$intCreated;
+                                $blnCreated = true;
+                            } else {
+                                $objLocation = $objLocation->next();
+                                ++$intUpdated;
+                                $blnUpdated = true;
+                            }
+                        } else {
                             $objLocation = new MapItem();
                             $objLocation->pid = $objMap->id;
                             $objLocation->published = 1;
                             ++$intCreated;
-                        } else {
-                            $objLocation = $objLocation->next();
-                            ++$intUpdated;
+                            $blnCreated = true;
                         }
-                    } else {
-                        $objLocation = new MapItem();
-                        $objLocation->pid = $objMap->id;
-                        $objLocation->published = 1;
-                        ++$intCreated;
+
+                        $objLocation->tstamp = time();
+
+                        foreach ($arrLocation as $strColumn => $varValue) {
+                            $objLocation->$strColumn = $varValue;
+                        }
+
+                        $objLocation->save();
+                        $arrNewLocations[] = $objLocation->id;
+                    } catch (\Exception $e) {
+                        ++$intErrors;
+                        if ($blnCreated) {
+                            --$intCreated;
+                        } elseif ($blnUpdated) {
+                            --$intUpdated;
+                        }
+                        Message::addError(sprintf($GLOBALS['TL_LANG']['tl_wem_map_item']['errorOnItemImport'], $objLocation->title, $e->getMessage()));
                     }
-
-                    $objLocation->tstamp = time();
-
-                    foreach ($arrLocation as $strColumn => $varValue) {
-                        $objLocation->$strColumn = $varValue;
-                    }
-
-                    $objLocation->save();
-                    $arrNewLocations[] = $objLocation->id;
                 }
 
                 if ($deleteExistingItems) {
@@ -257,6 +273,7 @@ class Callback extends Backend
             Message::addConfirmation(sprintf($GLOBALS['TL_LANG']['tl_wem_map_item']['createdConfirmation'], $intCreated));
             Message::addInfo(sprintf($GLOBALS['TL_LANG']['tl_wem_map_item']['updatedConfirmation'], $intUpdated));
             Message::addInfo(sprintf($GLOBALS['TL_LANG']['tl_wem_map_item']['deletedConfirmation'], $intDeleted));
+            Message::addError(sprintf($GLOBALS['TL_LANG']['tl_wem_map_item']['errorsConfirmation'], $intErrors));
 
             System::setCookie('BE_PAGE_OFFSET', 0, 0);
             $this->reload();
