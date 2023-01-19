@@ -279,64 +279,21 @@ class DisplayMap extends Core
 
             // If the config says so, we will generate a template with a list of the locations
             if ('nolist' !== $this->wem_geodata_map_list) {
-                $objTemplate = new FrontendTemplate($this->strListTemplate);
-                // $objTemplate->locations = $this->parseItems($arrLocations);
+                $objTemplate = new FrontendTemplate('rightpanel' === $this->wem_geodata_map_list ? 'mod_wem_geodata_list_inmap' : 'mod_wem_geodata_list');
                 $objTemplate->locations = $arrLocations;
                 $objTemplate->list_position = $this->wem_geodata_map_list;
+                $objTemplate->customTplForGeodataItems = 'mod_wem_geodata_list_item';
 
                 if ($this->filters) {
                     $objTemplate->filters = $this->filters;
                     $objTemplate->filters_position = $this->wem_geodata_filters;
                 }
-
-                $objTemplate->customTplForGeodataItems = 'mod_wem_geodata_list_item';
                 $this->Template->list = $objTemplate->parse();
-                // $this->Template->list_position = $this->wem_geodata_map_list;
             }
         } catch (\Exception $e) {
             $this->Template->error = true;
             $this->Template->msg = $e->getMessage();
             $this->Template->trace = $e->getTraceAsString();
-        }
-    }
-
-    /**
-     * Parse multiple items.
-     *
-     * @param string $strTemplate
-     */
-    protected function parseItems(array $objItems, ?string $strTemplate = 'mod_wem_geodata_list_item'): array
-    {
-        try {
-            $limit = \count($objItems);
-            if ($limit < 1) {
-                return [];
-            }
-
-            $count = 0;
-            $arrItems = [];
-            foreach ($objItems as $location) {
-                $arrItems[] = $this->parseItem($location, $strTemplate, ((1 === ++$count) ? ' first' : '').(($count === $limit) ? ' last' : '').((0 === ($count % 2)) ? ' odd' : ' even'), $count);
-            }
-
-            return $arrItems;
-        } catch (\Exception $e) {
-            throw $e;
-        }
-    }
-
-    protected function parseItem(array $objItem, $strTemplate = 'mod_wem_geodata_list_item', $strClass = '', $intCount = 0)
-    {
-        try {
-            /** @var FrontendTemplate $objTemplate */
-            $objTemplate = new FrontendTemplate($strTemplate);
-            $objTemplate->setData($objItem);
-            $objTemplate->class = $strClass;
-            $objTemplate->count = $intCount;
-
-            return $objTemplate->parse();
-        } catch (\Exception $e) {
-            throw $e;
         }
     }
 }

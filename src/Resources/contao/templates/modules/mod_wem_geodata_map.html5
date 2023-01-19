@@ -43,15 +43,20 @@
 				</form>
 			</div>
 		<?php endif; ?>
-    	<div id="map" style="<?= $this->config['map']['width'] ? 'width: '.$this->config['map']['width'].';':'width:100%;' ?> height:<?= $this->config['map']['height'] ?: '80vh' ?>">
+		<?php if('rightpanel' === $this->wem_geodata_map_list): ?>
+			<?php echo $this->list; ?>
+		<?php endif; ?>
+    	<div id="map" style="<?= $this->config['map']['width'] ? 'width: '.$this->config['map']['width'].';':'width:100%;' ?> height:<?= $this->config['map']['height'] ?: '80vh;' ?> z-index:49; position:relative;">
     		<span id="map__legend__button" class="btn squared hidden">Legend</span>
 			<div id="map__legend">
 				<span class="close"><i class="fal fa-times"></i></span>
 			</div>
-			<div style="z-index:1000;position:relative;width:200px;margin-right:220px;margin-left:auto;">
-				<?php echo $this->list; ?>
-			</div>
     	</div>
+		<?php if('below' === $this->wem_geodata_map_list): ?>
+		<div style="flex: 1 1 100%">
+			<?php echo $this->list; ?>
+		</div>
+		<?php endif; ?>
 		<script type="text/javascript">
 			var categories     = <?= $this->categories ? json_encode($this->categories):'{}' ?>;
 		    var map;
@@ -278,8 +283,10 @@
 		    		arrMarkersInListAll.forEach(item=>{
 		    			if(-1 === arrMarkersInListCurrent.indexOf(item)){
 		    				$('.location[data-id="'+item.id+'"]').addClass('hidden');
+		    				$('.map__list__item[data-id="'+item.id+'"]').addClass('hidden');
 		    			}else{
 		    				$('.location[data-id="'+item.id+'"]').removeClass('hidden');
+		    				$('.map__list__item[data-id="'+item.id+'"]').removeClass('hidden');
 		    			}
 		    		});
 		    		markersCluster.addLayers(arrMarkersCurrent);
