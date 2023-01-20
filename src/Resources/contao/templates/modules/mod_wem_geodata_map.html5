@@ -18,7 +18,7 @@
     	</style>
 		<!-- <link rel="stylesheet" href="bundles/wemgeodata/css/leaflet.css" />
 		<script src="bundles/wemgeodata/js/leaflet.js"></script> -->
-    	<?php if($this->filters && 1==1): ?>
+    	<?php if($this->filters  && "inmap" == $this->filters_position): ?>
 			<div id="map__filters">
   				<form action="<?= $this->filters_action ?>" method="<?= $this->filters_method ?>">
 					<?php foreach($this->filters as $f): ?>
@@ -266,10 +266,20 @@
 
 		    window.addEventListener("load", function(e) {
 		    	var filters = {};
+		    	$('.locations__filters  [id^=filter_]').on('change', function(){
+		    		$('.locations__filters [id^=filter_]').each(function(){
+		    			filters[this.name] = this.value;
+		    		});
+		    		applyFilters();
+		    	});
 		    	$('#map__filters [id^=filter_]').on('change', function(){
 		    		$('#map__filters [id^=filter_]').each(function(){
 		    			filters[this.name] = this.value;
 		    		});
+		    		applyFilters();
+		    	});
+
+		    	function applyFilters(){
 		    		markersCluster.removeLayers(arrMarkersCurrent);
 		    		arrMarkersCurrent = arrMarkersAll.filter( item => {
 		    			var match = true;
@@ -293,19 +303,27 @@
 		    			}
 		    			return match;
 		    		});
+    				// console.log(arrMarkersInListCurrent);
 
 		    		arrMarkersInListAll.forEach(item=>{
+		    			var item1 = $('.location[data-id="'+item.id+'"]');
+		    			var item2 = $('.map__list__item[data-id="'+item.id+'"]');
 		    			if(-1 === arrMarkersInListCurrent.indexOf(item)){
-		    				$('.location[data-id="'+item.id+'"]').addClass('hidden');
-		    				$('.map__list__item[data-id="'+item.id+'"]').addClass('hidden');
+		    				if(item1)
+		    					item1.addClass('hidden');
+
+		    				if(item2)
+		    					item2.addClass('hidden');
 		    			}else{
-		    				$('.location[data-id="'+item.id+'"]').removeClass('hidden');
-		    				$('.map__list__item[data-id="'+item.id+'"]').removeClass('hidden');
+		    				if(item1)
+		    					item1.removeClass('hidden');
+		    				if(item2)
+		    					item2.removeClass('hidden');
 		    			}
 		    		});
 		    		markersCluster.addLayers(arrMarkersCurrent);
 		    		map.setView(objMarkersBounds.getCenter(), objMapConfig.map.zoom);
-		    	});
+		    	}
 
 		    	// set legend
 				if (objMapFilters.category) {
@@ -336,8 +354,12 @@
 				    	$('#map__legend__button').removeClass('hidden');
 				    }
 				}
-					
-				$('#map__filters [id^=filter_]').trigger('change');
+
+				if($('#map__filters [id^=filter_]'))
+					$('#map__filters [id^=filter_]').trigger('change');
+
+				if($('.locations__filters [id^=filter_]'))
+					$('.locations__filters [id^=filter_]').trigger('change');
 		    });
 
 		    initialize();
