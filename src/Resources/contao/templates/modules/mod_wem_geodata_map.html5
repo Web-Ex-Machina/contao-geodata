@@ -24,7 +24,7 @@
 							<?php if('text' == $f['type']) : ?>
 								<label for="filter_<?= $f['name'] ?>"><?= $f['label'] ?></label>
 								<input type="text" id="filter_<?= $f['name'] ?>" name="<?= $f['name'] ?>" value="<?= $f['value'] ?>" placeholder="<?= $f['placeholder'] ?>" />
-							<?php elseif('select' == $f['type'] && count($f['options']) > 1): ?>
+							<?php elseif('select' == $f['type'] /*&& count($f['options']) > 1*/): ?>
 								<label for="filter_<?= $f['name'] ?>"><?= $f['label'] ?></label>
 								<select id="filter_<?= $f['name'] ?>" name="<?= $f['name'] ?>" placeholder="<?= $f['placeholder'] ?>">
 									<option value=""> - </option>
@@ -171,11 +171,15 @@
 		        // MARKERS
 				for(var location of objMapData){
 					// setup marker parameters
-					var latLng = L.latLng({lat: parseFloat(location.lat), lng: parseFloat(location.lng)});;
+					if('' != location.lat && '' != location.lng){
+						var latLng = L.latLng({lat: parseFloat(location.lat), lng: parseFloat(location.lng)});
+					}else{
+						var latLng = L.latLng({lat: 0, lng: 0});
+					}
 					var options = {
 						locationID: location.id,
 					}; 
-					if(location.category){
+					if(location.category && location.category.title){
 						if (objMarkersConfig.hasOwnProperty(normalize(location.category.title)))
 							options.icon = objMarkersConfig[normalize(location.category.title)];
 						else
@@ -195,10 +199,14 @@
 						if (location.hasOwnProperty(f)) {
 							switch(f){
 								case 'category': 
-									// marker['filter_'+f] = normalize(location[f].title);
-									marker['filter_'+f] = normalize(location[f].id);
-									// markerInList['filter_'+f] = normalize(location[f].title);
-									markerInList['filter_'+f] = normalize(location[f].id);
+									if(location[f].id){
+										marker['filter_'+f] = normalize(location[f].id);
+										markerInList['filter_'+f] = normalize(location[f].id);
+									}else{
+										marker['filter_'+f] = '';
+										markerInList['filter_'+f] = '';
+
+									}
 								break;
 								case 'country':
 									marker['filter_'+f] = normalize(location[f].code);
@@ -269,9 +277,13 @@
 		    			}
 		    			return match;
 		    		});
+		    		console.log("==========");
+    				console.log(arrMarkersInListAll);
 		    		arrMarkersInListCurrent = arrMarkersInListAll.filter( item => {
+	    				console.log(item);
 		    			var match = true;
 		    			for(var f in filters){
+		    				console.log(filters[f],item['filter_'+f],filters[f] !== '' && item['filter_'+f] !== filters[f]);
 		    				if (filters[f] !== '' && item['filter_'+f] !== filters[f]){
 		    					match = false;
 		    					return false;
@@ -297,6 +309,12 @@
 				if (objMapFilters.category) {
 					for(var c in objMapFilters.category.options) {
 				    	var category = objMapFilters.category.options[c];
+				    	for(var i in categories){
+				    		if(categories[i].id === category.value){
+				    			category = categories[i];
+				    			break;
+				    		}
+				    	}
 				    	if (category.marker) {
 							// add marker to legend
 							$('#map__legend').append(`

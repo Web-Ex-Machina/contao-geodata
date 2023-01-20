@@ -142,6 +142,7 @@ class DisplayMap extends Core
                     $arrLocations[] = $locations->current()->row();
                 }
 
+                $arrCountries = Util::getCountries();
                 foreach ($arrFilterFields as $filterField) {
                     if (Input::get($filterField)) {
                         $arrConfig[$filterField] = Input::get($filterField);
@@ -154,25 +155,6 @@ class DisplayMap extends Core
                         'options' => [],
                     ];
 
-                    // foreach ($arrLocations as $location) {
-                    //     if (!$location[$filterField]) {
-                    //         continue;
-                    //     }
-
-                    //     if (!\in_array($location[$filterField], $this->filters[$filterField]['options'], true)) {
-                    //         switch ($filterField) {
-                    //                 case 'city':
-                    //                     $this->filters[$filterField]['options'][] = [
-                    //                         'value' => $location[$filterField],
-                    //                         'label' => $location[$filterField].' ('.$location['admin_lvl_2'].')',
-                    //                     ];
-                    //                 break;
-                    //                 default:
-                    //                     $this->filters[$filterField]['options'][] = $location[$filterField];
-                    //             }
-                    //     }
-                    // }
-
                     foreach ($arrLocations as $location) {
                         if (!$location[$filterField]) {
                             continue;
@@ -182,7 +164,7 @@ class DisplayMap extends Core
                             continue;
                         }
                         $this->filters[$filterField]['options'][$location[$filterField]] = [
-                            'value' => $location[$filterField],
+                            'value' => str_replace([' ', '.'], '_', mb_strtolower($location[$filterField], 'UTF-8')),
                             'text' => $location[$filterField],
                             'selected' => (\array_key_exists($filterField, $arrConfig) && $arrConfig[$filterField] === str_replace([' ', '.'], '_', mb_strtolower($location[$filterField], 'UTF-8')) ? 'selected' : ''),
                         ];
@@ -198,7 +180,7 @@ class DisplayMap extends Core
                                 }
                             break;
                             case 'country':
-                                $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $arrCountries[strtoupper($location[$filterField])] ?? $location[$filterField];
+                                $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $arrCountries[$location[$filterField]] ?? $location[$filterField];
                             break;
                         }
                     }
