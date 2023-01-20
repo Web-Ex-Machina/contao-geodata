@@ -87,7 +87,7 @@ class DisplayMap extends Core
             }
 
             // Load the libraries
-            ClassLoader::loadLibraries($this->objMap, 1);
+            // ClassLoader::loadLibraries($this->objMap, 1);
             Util::getCountries();
 
             // Build the config
@@ -114,7 +114,7 @@ class DisplayMap extends Core
             }
 
             // config for locations
-            $arrConfigBase = ['pid' => $this->objMap->id, 'published' => 1];
+            $arrConfigBase = ['pid' => $this->objMap->id, 'published' => 1, 'onlyWithCoords' => 1];
             $arrConfig = $arrConfigBase;
 
             // Gather filters

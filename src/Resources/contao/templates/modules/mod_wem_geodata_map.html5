@@ -16,6 +16,8 @@
     		.leaflet-tile-loaded {filter: brightness(0.75) invert(1); }
 		    .leaflet-container a {color: #000000;}
     	</style>
+		<!-- <link rel="stylesheet" href="bundles/wemgeodata/css/leaflet.css" />
+		<script src="bundles/wemgeodata/js/leaflet.js"></script> -->
     	<?php if($this->filters && 1==1): ?>
 			<div id="map__filters">
   				<form action="<?= $this->filters_action ?>" method="<?= $this->filters_method ?>">
@@ -38,7 +40,7 @@
 						</div>
 					<?php endforeach; ?>
 					<div class="filter submit cols-span-2">
-						<input type="submit" class="btn" value="Go" />
+						<input type="submit" class="btn" value="<?= $GLOBALS['TL_LANG']['MSC']['filter'] ?>" />
 					</div>
 				</form>
 			</div>
@@ -46,7 +48,7 @@
 		<?php if('rightpanel' === $this->wem_geodata_map_list): ?>
 			<?php echo $this->list; ?>
 		<?php endif; ?>
-    	<div id="map" style="<?= $this->config['map']['width'] ? 'width: '.$this->config['map']['width'].';':'width:100%;' ?> height:<?= $this->config['map']['height'] ?: '80vh;' ?> z-index:49; position:relative;">
+    	<div id="map" class="map__container" style="<?= $this->config['map']['width'] ? 'width: '.$this->config['map']['width'].';':'width:100%;' ?> height:<?= $this->config['map']['height'] ?: '80vh;' ?> z-index:49; position:relative;">
     		<span id="map__legend__button" class="btn squared hidden">Legend</span>
 			<div id="map__legend">
 				<span class="close"><i class="fal fa-times"></i></span>
@@ -152,7 +154,7 @@
 		        	(objMapConfig.tileLayer.url?objMapConfig.tileLayer.url:'https://stamen-tiles-{s}.a.ssl.fastly.net/toner-background/{z}/{x}/{y}{r}.{ext}'), 
 		        	{
 						attribution: (objMapConfig.tileLayer.attribution?objMapConfig.tileLayer.attribution:'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> — Map data © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'),
-						subdomains: 'abcd',
+						subdomains: 'abc',
 						minZoom: (objMapConfig.tileLayer.minZoom?objMapConfig.tileLayer.minZoom:3),
 						maxZoom: (objMapConfig.tileLayer.maxZoom?objMapConfig.tileLayer.maxZoom:13),
 						ext: 'png',
@@ -277,13 +279,13 @@
 		    			}
 		    			return match;
 		    		});
-		    		console.log("==========");
-    				console.log(arrMarkersInListAll);
+		    		// console.log("==========");
+    				// console.log(arrMarkersInListAll);
 		    		arrMarkersInListCurrent = arrMarkersInListAll.filter( item => {
-	    				console.log(item);
+	    				// console.log(item);
 		    			var match = true;
 		    			for(var f in filters){
-		    				console.log(filters[f],item['filter_'+f],filters[f] !== '' && item['filter_'+f] !== filters[f]);
+		    				// console.log(filters[f],item['filter_'+f],filters[f] !== '' && item['filter_'+f] !== filters[f]);
 		    				if (filters[f] !== '' && item['filter_'+f] !== filters[f]){
 		    					match = false;
 		    					return false;

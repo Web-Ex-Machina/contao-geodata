@@ -7,9 +7,12 @@ var LocationMarker = L.Marker.extend({
 
 function initMap() {
 	objMapData.forEach(function(location,index){
-		objMarkers[location.id].latLng = L.latLng({lat: parseFloat(location.lat), lng: parseFloat(location.lng)});
+		if(''!=location.lat && ''!=location.lng)
+			objMarkers[location.id].latLng = L.latLng({lat: parseFloat(location.lat), lng: parseFloat(location.lng)});
+		else
+			objMarkers[location.id].latLng = L.latLng({lat: 0, lng: 0});
 	});
-
+	objMap = map.remove();
 	objMap = L.map($map[0]);
 	objMapBounds = L.latLngBounds();
 	var options = {};

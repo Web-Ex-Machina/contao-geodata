@@ -20,7 +20,7 @@
     </div>
     <?php endforeach; ?>
     <div class="filter submit cols-span-2">
-      <input type="submit" class="btn" value="Go" />
+      <input type="submit" class="btn" value="<?= $GLOBALS['TL_LANG']['MSC']['filter'] ?>" />
     </div>
   </div>
   </form>

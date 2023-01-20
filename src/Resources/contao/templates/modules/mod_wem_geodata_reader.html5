@@ -137,7 +137,6 @@
 		.leaflet-tile-loaded {filter: brightness(0.75) invert(1); }
 	    .leaflet-container a {color: #000000;}
 	</style>
-
 	<link rel="stylesheet" href="bundles/wemgeodata/css/leaflet.css" />
 	<script src="bundles/wemgeodata/js/leaflet.js"></script>
 	<script type="text/javascript">
