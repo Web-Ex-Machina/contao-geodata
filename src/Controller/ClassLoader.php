@@ -71,14 +71,14 @@ class ClassLoader extends Controller
 
         // Depending on the provider, we will need more stuff
         switch ($objMap->mapProvider) {
-            case 'jvector':
-                $objCssCombiner->addMultiple([
-                    'bundles/wemgeodata/vendor/jquery-jvectormap/jquery-jvectormap-2.0.3.css', 'bundles/wemgeodata/css/jvector.css',
-                ], $strVersion);
-                $objJsCombiner->addMultiple([
-                    'bundles/wemgeodata/vendor/jquery-jvectormap/jquery-jvectormap-2.0.3.min.js', 'bundles/wemgeodata/vendor/jquery-jvectormap/maps/jquery-jvectormap-'.$objMap->mapFile.'-mill.js', 'bundles/wemgeodata/js/jvector.js',
-                ], $strVersion);
-                break;
+            // case 'jvector':
+            //     $objCssCombiner->addMultiple([
+            //         'bundles/wemgeodata/vendor/jquery-jvectormap/jquery-jvectormap-2.0.3.css', 'bundles/wemgeodata/css/jvector.css',
+            //     ], $strVersion);
+            //     $objJsCombiner->addMultiple([
+            //         'bundles/wemgeodata/vendor/jquery-jvectormap/jquery-jvectormap-2.0.3.min.js', 'bundles/wemgeodata/vendor/jquery-jvectormap/maps/jquery-jvectormap-'.$objMap->mapFile.'-mill.js', 'bundles/wemgeodata/js/jvector.js',
+            //     ], $strVersion);
+            //     break;
             case 'gmaps':
                 if (!$objMap->mapProviderGmapKey) {
                     throw new \Exception('Google Maps needs an API Key !');
