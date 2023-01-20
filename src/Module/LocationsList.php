@@ -142,7 +142,7 @@ class LocationsList extends Core
 
             // Send the data to Map template
             $this->Template->config = $this->arrConfig;
-            $this->Template->customTplForGeodataItems = $this->wem_geodata_customTplForGeodataItems ?? 'mod_wem_geodata_list_item';
+            $this->Template->customTplForGeodataItems = !empty($this->wem_geodata_customTplForGeodataItems) ? $this->wem_geodata_customTplForGeodataItems : 'mod_wem_geodata_list_item';
         } catch (\Exception $e) {
             $this->Template->error = true;
             $this->Template->msg = $e->getMessage();
