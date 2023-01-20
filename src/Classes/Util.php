@@ -12,7 +12,7 @@ declare(strict_types=1);
  * @link     https://github.com/Web-Ex-Machina/contao-geodata/
  */
 
-namespace WEM\GeoDataBundle\Controller;
+namespace WEM\GeoDataBundle\Classes;
 
 use Contao\Database;
 use Contao\Input;
@@ -98,11 +98,21 @@ class Util
     }
 
     /**
+     * Copy of System::getCountries (because it is deprecated but handful).
+     */
+    public static function getCountries(): array
+    {
+        $arrCountries = System::getContainer()->get('contao.intl.countries')->getCountries();
+
+        return array_combine(array_map('strtolower', array_keys($arrCountries)), $arrCountries);
+    }
+
+    /**
      * Try to find an ISO Code from the Country fullname.
      */
     public static function getCountryISOCodeFromFullname($strFullname)
     {
-        $arrCountries = System::getCountries();
+        $arrCountries = self::getCountries();
 
         foreach ($arrCountries as $strIsoCode => $strName) {
             // Use Generate Alias to handle little imperfections

@@ -23,8 +23,7 @@ use Contao\Module;
 use Contao\PageModel;
 use Contao\Pagination;
 use Contao\StringUtil;
-use Contao\System;
-use WEM\GeoDataBundle\Controller\Util;
+use WEM\GeoDataBundle\Classes\Util;
 use WEM\GeoDataBundle\Model\Category;
 use WEM\GeoDataBundle\Model\Map;
 use WEM\GeoDataBundle\Model\MapItem;
@@ -252,7 +251,7 @@ abstract class Core extends Module
             }
 
             // Get country and continent
-            System::getCountries();
+            Util::getCountries();
             $strCountry = strtoupper($arrItem['country']);
             $strContinent = Util::getCountryContinent($strCountry);
             $arrItem['country'] = ['code' => $strCountry, 'name' => $GLOBALS['TL_LANG']['CNT'][$arrItem['country']]];

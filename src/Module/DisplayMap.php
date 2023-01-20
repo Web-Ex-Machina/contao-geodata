@@ -19,8 +19,8 @@ use Contao\FrontendTemplate;
 use Contao\Input;
 use Contao\PageModel;
 use Contao\System;
+use WEM\GeoDataBundle\Classes\Util;
 use WEM\GeoDataBundle\Controller\ClassLoader;
-use WEM\GeoDataBundle\Controller\Util;
 use WEM\GeoDataBundle\Model\Category;
 use WEM\GeoDataBundle\Model\Map;
 use WEM\GeoDataBundle\Model\MapItem;
@@ -88,7 +88,7 @@ class DisplayMap extends Core
 
             // Load the libraries
             ClassLoader::loadLibraries($this->objMap, 1);
-            System::getCountries();
+            Util::getCountries();
 
             // Build the config
             $arrMapConfig = [];

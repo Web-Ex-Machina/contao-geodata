@@ -284,7 +284,7 @@ $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
             'filter' => true,
             'sorting' => true,
             'inputType' => 'select',
-            'options' => System::getCountries(),
+            'options' => \WEM\GeoDataBundle\Classes\Util::getCountries(),
             'eval' => ['includeBlankOption' => true, 'chosen' => true, 'tl_class' => 'w50'],
             'sql' => "varchar(2) NOT NULL default ''",
         ],

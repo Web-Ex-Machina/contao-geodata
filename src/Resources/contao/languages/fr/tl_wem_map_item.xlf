@@ -321,6 +321,16 @@
 			<source>Select the Excel File with your locations</source>
 			<target>Sélectionnez le fichier Excel contenant vos emplacements</target>
 		</trans-unit>
+		<trans-unit id="tl_wem_map_item.downloadSampleBTTitle">
+			<source>Download a sample file as example</source>
+			<target>Télécharger un fichier d'exemple</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map_item.downloadSampleBT">
+			<source>Download a sample file as example</source>
+			<target>Télécharger un fichier d'exemple</target>
+		</trans-unit>
+
+
 		<trans-unit id="tl_wem_map_item.export_form.0">
 			<source>Export</source>
 			<target>Exporter</target>
@@ -337,7 +347,6 @@
 			<source>Export format</source>
 			<target>Format de l'export</target>
 		</trans-unit>
-
 		<trans-unit id="tl_wem_map_item.exportSettingsLimitToCategoriesCheckboxLabel">
 			<source>Limit export to certain categories</source>
 			<target>Limiter l'export à certaines catégories</target>

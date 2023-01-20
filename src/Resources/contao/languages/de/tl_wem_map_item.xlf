@@ -219,6 +219,15 @@
 			<source>Select the Excel File with your locations</source>
 			<target>Wähle Excel Datei mit Standorten aus</target>
 		</trans-unit>
+		<trans-unit id="tl_wem_map_item.downloadSampleBTTitle">
+			<source>Download a sample file as example</source>
+			<target>Laden Sie eine Beispieldatei als Beispiel herunter</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map_item.downloadSampleBT">
+			<source>Download a sample file as example</source>
+			<target>Laden Sie eine Beispieldatei als Beispiel herunter</target>
+		</trans-unit>
+
 		<trans-unit id="tl_wem_map_item.export_form.0">
 			<source>Export</source>
 			<target>Export</target>

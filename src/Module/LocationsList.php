@@ -22,6 +22,7 @@ use Contao\PageModel;
 use Contao\Pagination;
 use Contao\StringUtil;
 use Contao\System;
+use WEM\GeoDataBundle\Classes\Util;
 use WEM\GeoDataBundle\Controller\ClassLoader;
 use WEM\GeoDataBundle\Model\Category;
 use WEM\GeoDataBundle\Model\Map;
@@ -104,7 +105,7 @@ class LocationsList extends Core
 
             // Load the libraries
             // ClassLoader::loadLibraries($this->objMap, 1);
-            System::getCountries();
+            Util::getCountries();
 
             // Build the config (do not manage pagination here !)
             $this->arrConfig = ['published' => 1, 'where' => [
@@ -172,7 +173,7 @@ class LocationsList extends Core
             }
 
             $arrFilterFields = unserialize($this->wem_geodata_filters_fields);
-            $arrCountries = System::getContainer()->get('contao.intl.countries')->getCountries();
+            $arrCountries = Util::getCountries();
             $arrLocations = [];
             while ($locations->next()) {
                 $arrLocations[] = $locations->current()->row();

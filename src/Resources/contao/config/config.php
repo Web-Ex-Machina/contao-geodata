@@ -23,11 +23,11 @@ declare(strict_types=1);
             'wem-maps' => [
                 'tables' => ['tl_wem_map', 'tl_wem_map_category', 'tl_wem_map_item', 'tl_content', 'tl_wem_map_item_attribute_value'],
                 'import' => ['WEM\GeoDataBundle\Backend\Callback', 'importLocations'],
+                'download_import_sample' => ['WEM\GeoDataBundle\Backend\Callback', 'downloadImportSample'],
                 'export_form' => ['WEM\GeoDataBundle\Backend\Callback', 'exportLocationsForm'],
                 'export' => ['WEM\GeoDataBundle\Backend\Callback', 'exportLocations'],
                 'geocode' => ['WEM\GeoDataBundle\Backend\Callback', 'geocode'],
                 'copy_map_item' => ['WEM\GeoDataBundle\Backend\Callback', 'copyMapItem'],
-                // 'icon' => 'system/modules/wem-geodata/assets/icon_map_16_c3.png',
                 'icon' => 'system/bundles/wemgeodata/backend/icon_map_16_c3.png',
             ],
         ],

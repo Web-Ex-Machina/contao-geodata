@@ -28,9 +28,9 @@ use Exception;
 use Haste\Http\Response\JsonResponse;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use WEM\GeoDataBundle\Classes\Util;
 use WEM\GeoDataBundle\Controller\Provider\GoogleMaps;
 use WEM\GeoDataBundle\Controller\Provider\Nominatim;
-use WEM\GeoDataBundle\Controller\Util;
 use WEM\GeoDataBundle\Model\Category;
 use WEM\GeoDataBundle\Model\Map;
 use WEM\GeoDataBundle\Model\MapItem;
@@ -317,6 +317,11 @@ class Callback extends Backend
         $objTemplate->backButtonHref = ampersand(str_replace('&key=import', '', Environment::get('request')));
         $objTemplate->backButtonTitle = specialchars($GLOBALS['TL_LANG']['MSC']['backBTTitle']);
         $objTemplate->backButtonLabel = $GLOBALS['TL_LANG']['MSC']['backBT'];
+
+        $objTemplate->downloadSampleButtonHref = ampersand(str_replace('&key=import', '&key=download_import_sample', Environment::get('request')));
+        $objTemplate->downloadSampleButtonTitle = specialchars($GLOBALS['TL_LANG']['tl_wem_map_item']['downloadSampleBTTitle']);
+        $objTemplate->downloadSampleButtonLabel = $GLOBALS['TL_LANG']['tl_wem_map_item']['downloadSampleBT'];
+
         $objTemplate->formAction = ampersand(Environment::get('request'), true);
         $objTemplate->widgetUploadTitle = $GLOBALS['TL_LANG']['tl_wem_map_item']['source'][0];
         $objTemplate->widgetUploadContent = $objUploader->generateMarkup();
@@ -338,6 +343,51 @@ class Callback extends Backend
         $objTemplate->formMaxFileSize = Config::get('maxFileSize');
 
         return $objTemplate->parse();
+    }
+
+    public function downloadImportSample()
+    {
+        if ('download_import_sample' !== Input::get('key')) {
+            return '';
+        }
+
+        if (!Input::get('id')) {
+            return '';
+        }
+
+        $objMap = Map::findByPk(Input::get('id'));
+
+        if (!$objMap) {
+            return '';
+        }
+
+        // Generate the spreadsheet
+        $objSpreadsheet = new Spreadsheet();
+        $objSheet = $objSpreadsheet->getActiveSheet();
+
+        $arrExcelPattern = [];
+        // Preformat Excel Pattern (key = Excel column, value = DB Column)
+        foreach (deserialize($objMap->excelPattern) as $arrColumn) {
+            $arrExcelPattern[$arrColumn['value']] = $arrColumn['key'];
+        }
+
+        foreach ($arrExcelPattern as $strExcelColumn => $strDbColumn) {
+            $strDbColumn = 'region' === $strDbColumn ? 'admin_lvl_1' : $strDbColumn;
+            $objSheet->setCellValue($strExcelColumn.'1', $GLOBALS['TL_LANG']['tl_wem_map_item'][$strDbColumn][0]);
+            $objSheet->setCellValue($strExcelColumn.'2', $GLOBALS['TL_LANG']['tl_wem_map_item'][$strDbColumn][0]);
+        }
+
+        // And send to browser
+        $strFilename = date('Y-m-d_H-i').'_import-locations-sample';
+        $format = IOFactory::WRITER_XLSX;
+        header('Content-Disposition: attachment;filename="'.$strFilename.'.xlsx"');
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Cache-Control: max-age=0');
+
+        $writer = IOFactory::createWriter($objSpreadsheet, $format);
+        $writer->save('php://output');
+        exit;
     }
 
     /**
@@ -363,7 +413,7 @@ class Callback extends Backend
             }
         }
 
-        $arrCountriesSystem = System::getContainer()->get('contao.intl.countries')->getCountries();
+        $arrCountriesSystem = Util::getCountries();
         $arrCountries = [];
         $items = MapItem::findItems(['pid' => $objMap->id]);
         if ($items) {
@@ -430,7 +480,7 @@ class Callback extends Backend
         }
 
         // Fetch all the locations
-        $arrCountries = System::getCountries();
+        $arrCountries = Util::getCountries();
         $objLocations = MapItem::findItems($params);
 
         // Break if no locations

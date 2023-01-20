@@ -13,7 +13,7 @@
               <h3><?php echo $this->widgetUploadTitle; ?></h3>
               <?php echo $this->widgetUploadContent; ?>
               <?php if('' !== $this->widgetUploadHelp): ?>
-              <p class="tl_help tl_tip"><?php echo $this->widgetUploadHelp; ?></p>
+                <p class="tl_help tl_tip"><?php echo $this->widgetUploadHelp; ?></p>
               <?php endif; ?>
             </div>     
 
@@ -41,15 +41,19 @@
     <fieldset class="tl_tbox nolegend">
         <div class="widget">
         <h3><?php echo $this->importExampleTitle; ?></h3>
-        <table class="wem_geodata_import_table">
-            <thead>
-                <tr><?php echo $this->importExampleTh; ?></tr>
-            </thead>
-            <tbody>
-                <tr><?php echo $this->importExampleTd; ?></tr>
-                <tr><?php echo $this->importExampleTd; ?></tr>
-            </tbody>
-        </table>
+            <table class="wem_geodata_import_table">
+                <thead>
+                    <tr><?php echo $this->importExampleTh; ?></tr>
+                </thead>
+                <tbody>
+                    <tr><?php echo $this->importExampleTd; ?></tr>
+                    <tr><?php echo $this->importExampleTd; ?></tr>
+                </tbody>
+            </table>
+            <br />
+            <a class="tl_submit" href="<?php echo $this->downloadSampleButtonHref; ?>" title="<?php echo $this->downloadSampleButtonTitle; ?>">
+                <?php echo $this->downloadSampleButtonLabel; ?>
+            </a>
         </div>
     </fieldset>
 

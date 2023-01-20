@@ -227,6 +227,15 @@
 			<source>Select the Excel File with your locations</source>
 			<target>Select the Excel File with your locations</target>
 		</trans-unit>
+		<trans-unit id="tl_wem_map_item.downloadSampleBTTitle">
+			<source>Download a sample file as example</source>
+			<target>Download a sample file as example</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map_item.downloadSampleBT">
+			<source>Download a sample file as example</source>
+			<target>Download a sample file as example</target>
+		</trans-unit>
+
 		<trans-unit id="tl_wem_map_item.export_form.0">
 			<source>Export</source>
 			<target>Export</target>
