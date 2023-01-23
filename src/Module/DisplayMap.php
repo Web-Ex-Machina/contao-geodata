@@ -247,6 +247,8 @@ class DisplayMap extends Core
             }
 
             // Send the data to Map template
+            $this->Template->mapProvider = $this->objMap->mapProvider;
+            $this->Template->geocodingProvider = $this->objMap->geocodingProvider;
             $this->Template->markers = $arrMarkers;
             $this->Template->locations = $arrLocations;
             $this->Template->categories = $arrCategories;
