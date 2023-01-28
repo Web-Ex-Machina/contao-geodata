@@ -63,7 +63,7 @@ class ClassLoader extends Controller
         $objJsCombiner = new Combiner();
 
         // Load jQuery
-        $GLOBALS['TL_JAVASCRIPT'][] = 'https://code.jquery.com/jquery-3.4.1.min.js';
+        // $GLOBALS['TL_JAVASCRIPT'][] = 'https://code.jquery.com/jquery-3.4.1.min.js';
 
         // Load generic files
         $objCssCombiner->add('bundles/wemgeodata/css/default.css', $strVersion);
@@ -89,11 +89,17 @@ class ClassLoader extends Controller
                 $GLOBALS['TL_JAVASCRIPT'][] = sprintf('<script src="https://maps.googleapis.com/maps/api/js?key=%s"></script>', $objMap->mapProviderGmapKey);
                 break;
             case 'leaflet':
+                $GLOBALS['TL_HEAD'][] = sprintf('<link rel="stylesheet" href="https://unpkg.com/leaflet@latest/dist/leaflet.css">');
+                $GLOBALS['TL_HEAD'][] = sprintf('<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@latest/dist/MarkerCluster.css">');
+                $GLOBALS['TL_HEAD'][] = sprintf('<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@latest/dist/MarkerCluster.Default.css">');
                 $objCssCombiner->addMultiple([
-                    'bundles/wemgeodata/vendor/leaflet/leaflet.css', 'bundles/wemgeodata/css/leaflet.css',
+                    'bundles/wemgeodata/css/leaflet.css',
                 ], $strVersion);
+
+                $GLOBALS['TL_JAVASCRIPT'][] = 'https://unpkg.com/leaflet@latest/dist/leaflet.js';
+                $GLOBALS['TL_JAVASCRIPT'][] = 'https://unpkg.com/leaflet.markercluster@latest/dist/leaflet.markercluster.js';
                 $objJsCombiner->addMultiple([
-                    'bundles/wemgeodata/vendor/leaflet/leaflet.js', 'bundles/wemgeodata/js/leaflet.js',
+                    'bundles/wemgeodata/js/leaflet.js',
                 ], $strVersion);
                 break;
             default:
