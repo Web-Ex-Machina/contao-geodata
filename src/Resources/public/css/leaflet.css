@@ -1,4 +1,10 @@
-.leaflet-pane{z-index:50;}
-.leaflet-control,
-.mod_wem_geodata_map .map__reset,
-.mod_wem_geodata_map .map__content{z-index:51;}
+.mod_wem_display_map .leaflet-pane{z-index:50;}
+.mod_wem_display_map .leaflet-control,
+.mod_wem_display_map .map__reset,
+.mod_wem_display_map .map__content{z-index:51;}
+
+.mod_wem_display_map .leaflet-popup-content-wrapper{border-radius: 0;}
+.mod_wem_display_map .leaflet-popup-content{margin: 1em 1.5em;}
+
+.leaflet-marker-pane.has-selected .leaflet-marker-icon:not(.marker-cluster){opacity: 0.5 !important;}
+.leaflet-marker-pane.has-selected .leaflet-marker-icon.selected{opacity: 1 !important;}
