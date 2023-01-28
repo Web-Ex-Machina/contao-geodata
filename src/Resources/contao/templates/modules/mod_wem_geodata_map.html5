@@ -6,363 +6,55 @@
 			<?= $this->trace ?>
 		</div>
 	<?php else: ?>
-		<link rel="stylesheet"href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
-    	<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-
-		<link rel="stylesheet"href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css"/>
-		<link rel="stylesheet"href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css"/>
-    	<script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
-    	<style>
-    		.leaflet-tile-loaded {filter: brightness(0.75) invert(1); }
-		    .leaflet-container a {color: #000000;}
-    	</style>
-		<!-- <link rel="stylesheet" href="bundles/wemgeodata/css/leaflet.css" />
-		<script src="bundles/wemgeodata/js/leaflet.js"></script> -->
-    	<?php if($this->filters  && "inmap" == $this->filters_position): ?>
-			<div id="map__filters">
-  				<form action="<?= $this->filters_action ?>" method="<?= $this->filters_method ?>">
-					<?php foreach($this->filters as $f): ?>
-						<div class="filter">
-							<?php if('text' == $f['type']) : ?>
-								<label for="filter_<?= $f['name'] ?>"><?= $f['label'] ?></label>
-								<input type="text" id="filter_<?= $f['name'] ?>" name="<?= $f['name'] ?>" value="<?= $f['value'] ?>" placeholder="<?= $f['placeholder'] ?>" />
-							<?php elseif('select' == $f['type'] /*&& count($f['options']) > 1*/): ?>
-								<label for="filter_<?= $f['name'] ?>"><?= $f['label'] ?></label>
-								<select id="filter_<?= $f['name'] ?>" name="<?= $f['name'] ?>" placeholder="<?= $f['placeholder'] ?>">
-									<option value=""> - </option>
-									<?php foreach($f['options'] as $o): ?>
-										<?php 
-											echo '<option value="'.str_replace([' ','.'],'_', mb_strtolower($o['value'], 'UTF-8')).'" '.$o['selected'].'>'.$o['text'].'</option>';
-										?>
-									<?php endforeach; ?>
-								</select>
-							<?php endif; ?>
-						</div>
-					<?php endforeach; ?>
-					<div class="filter submit cols-span-2">
-						<input type="submit" class="btn" value="<?= $GLOBALS['TL_LANG']['MSC']['filter'] ?>" />
-					</div>
-				</form>
-			</div>
-		<?php endif; ?>
-		<?php if('rightpanel' === $this->wem_geodata_map_list): ?>
-			<?php echo $this->list; ?>
-		<?php endif; ?>
-    	<div id="map" class="map__container" style="<?= $this->config['map']['width'] ? 'width: '.$this->config['map']['width'].';':'width:100%;' ?> height:<?= $this->config['map']['height'] ?: '80vh;' ?> z-index:49; position:relative;">
-    		<span id="map__legend__button" class="btn squared hidden">Legend</span>
-			<div id="map__legend">
-				<span class="close"><i class="fal fa-times"></i></span>
-			</div>
-    	</div>
-		<?php if('below' === $this->wem_geodata_map_list): ?>
-		<div style="flex: 1 1 100%">
-			<?php echo $this->list; ?>
-		</div>
-		<?php endif; ?>
-		<script type="text/javascript">
-			var categories     = <?= $this->categories ? json_encode($this->categories):'{}' ?>;
-		    var map;
-			var objMapData        = <?= json_encode($this->locations) ?>;
-			var objMapConfig      = <?= json_encode($this->config) ?>;
-			var objMapFilters     = <?= $this->filters ? json_encode($this->filters):'{}' ?>;
-		    var normalize 		  = function(str){return str.toLowerCase().replace(/ |\./g,'_'); }
-			var markersCluster    = new L.MarkerClusterGroup();
-			var arrMarkersInListAll     = [];
-			var arrMarkersInListCurrent     = [];
-			var arrMarkersAll     = [];
-			var arrMarkersCurrent = [];
-			var objMarkersBounds  = L.latLngBounds();
-			var mapDefaultConfig  = {
-				zoom                 : 3,
-				minZoom              : 3,
-				maxZoom              : 13,
-				zoomControl          : true,
-				zoomControlPosition  : 'topright',
-				mapUrl               : 'https://stamen-tiles-{s}.a.ssl.fastly.net/toner-background/{z}/{x}/{y}{r}.{ext}',
-				mapAttribution       : 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> — Map data © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-				marker               :  
-				{
-					iconUrl          : 'bundles/wemgeodata/img/Icon_default.png',
-					iconSize         : [60,60],
-				}
-			};
-
-	    	if (objMapConfig.map                	 === undefined ) objMapConfig.map               	  = {};
-	    	if (objMapConfig.map.zoom                === undefined ) objMapConfig.map.zoom                = mapDefaultConfig.zoom;
-	    	if (objMapConfig.map.zoomControl         === undefined ) objMapConfig.map.zoomControl         = mapDefaultConfig.zoomControl;
-	    	if (objMapConfig.map.zoomControlPosition === undefined ) objMapConfig.map.zoomControlPosition = mapDefaultConfig.zoomControlPosition;
-
-	    	if (objMapConfig.tileLayer               === undefined) objMapConfig.tileLayer                = {};
-	    	if (objMapConfig.tileLayer.url           === undefined) objMapConfig.tileLayer.url            = mapDefaultConfig.mapUrl;
-	    	if (objMapConfig.tileLayer.attribution   === undefined) objMapConfig.tileLayer.attribution    = mapDefaultConfig.mapAttribution;
-	    	if (objMapConfig.tileLayer.minZoom       === undefined) objMapConfig.tileLayer.minZoom        = mapDefaultConfig.minZoom;
-	    	if (objMapConfig.tileLayer.maxZoom       === undefined) objMapConfig.tileLayer.maxZoom        = mapDefaultConfig.maxZoom;
-	    	
-
-	    	if (parseInt(objMapConfig.map.zoom)<parseInt(objMapConfig.tileLayer.minZoom)) objMapConfig.map.zoom = objMapConfig.tileLayer.minZoom;
-	    	if (parseInt(objMapConfig.map.zoom)>parseInt(objMapConfig.tileLayer.maxZoom)) objMapConfig.map.zoom = objMapConfig.tileLayer.maxZoom;
-	    	
-	    	var refSize = objMapConfig.icon?.iconSize?.split(',').map(Number) || mapDefaultConfig.marker.iconSize;
-		    var objMarkersConfig = {
-		    	'default': L.icon({
-					iconUrl: 	   	objMapConfig.icon?.iconUrl 								|| mapDefaultConfig.marker.iconUrl,
-				    iconSize:      	refSize, // taille de l'icone
-				    iconAnchor:    	objMapConfig.icon?.iconAnchor?.split(',').map(Number) 	|| [refSize[0]/2,refSize[1]], // point de l'icone qui correspondra à la position du marker
-				    popupAnchor:   	objMapConfig.icon?.popupAnchor?.split(',').map(Number) 	|| [0,refSize[1]*-1], // point depuis lequel la popup doit s'ouvrir relativement à l'iconAnchor
-				    tooltipAnchor: 	objMapConfig.icon?.popupAnchor?.split(',').map(Number) 	|| [refSize[0]/3,refSize[1]*-0.5],
-				})
-		    }
-
-		    if (objMapFilters.category) {
-			    for(var c in objMapFilters.category.options) {
-			    	var category = objMapFilters.category.options[c];
-			    	// find selected category in categories list
-			    	for(var i in categories){
-			    		if(categories[i].id === category.value){
-			    			category = categories[i];
-			    			break;
-			    		}
-			    	}
-			    	category.alias = normalize(category.title);
-			    	if (category.marker) {
-			    		// console.log(category.marker);
-			    		objMarkersConfig[category.alias] = L.icon({
-							iconUrl: 		 (category.marker.icon.iconUrl       !== undefined)													      ? category.marker.icon.iconUrl 				   : objMarkersConfig.default.options.iconUrl,
-						    iconSize:     	 (category.marker.icon.iconSize      !== undefined && Array.isArray(category.marker.icon.iconSize))	      ? category.marker.icon.iconSize.map(Number)  	   : objMarkersConfig.default.options.iconSize,
-						    iconAnchor:   	 (category.marker.icon.iconAnchor    !== undefined && Array.isArray(category.marker.icon.iconAnchor))     ? category.marker.icon.iconAnchor.map(Number)    : objMarkersConfig.default.options.iconAnchor,
-						    popupAnchor:  	 (category.marker.icon.popupAnchor   !== undefined && Array.isArray(category.marker.icon.popupAnchor))	  ? category.marker.icon.popupAnchor.map(Number)   : objMarkersConfig.default.options.popupAnchor,
-						    tooltipAnchor: 	 (category.marker.icon.tooltipAnchor !== undefined && Array.isArray(category.marker.icon.tooltipAnchor))  ? category.marker.icon.tooltipAnchor.map(Number) : objMarkersConfig.default.options.tooltipAnchor,
-						});
-			    	}
-			    }
-		    }
-		    // console.log(objMarkersConfig);
-		    // console.log(mapDefaultConfig);
-		    // console.log(objMapConfig);
-
-		    
-
-		    function initialize() {
-		    	var zoomControl = objMapConfig.map.zoomControl || mapDefaultConfig.zoomControl;
-		        map = L.map('map',{
-					zoomControl : zoomControl,
-		        }).setView([48.833, 2.333], objMapConfig.map.zoom); // LIGNE 18
-				if (zoomControl)
-					map.zoomControl.setPosition(mapDefaultConfig.zoomControlPosition);
-
-		        var layer = L.tileLayer(
-		        	(objMapConfig.tileLayer.url?objMapConfig.tileLayer.url:'https://stamen-tiles-{s}.a.ssl.fastly.net/toner-background/{z}/{x}/{y}{r}.{ext}'), 
-		        	{
-						attribution: (objMapConfig.tileLayer.attribution?objMapConfig.tileLayer.attribution:'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> — Map data © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'),
-						subdomains: 'abc',
-						minZoom: (objMapConfig.tileLayer.minZoom?objMapConfig.tileLayer.minZoom:3),
-						maxZoom: (objMapConfig.tileLayer.maxZoom?objMapConfig.tileLayer.maxZoom:13),
-						ext: 'png',
-						noWrap: true,
-					}
-				);
-				map.addLayer(layer);
-
-		        var southWest = objMapConfig.map.southWestBound ? L.latLng(parseFloat(objMapConfig.map.southWestBound.split(',')[0]), parseFloat(objMapConfig.map.southWestBound.split(',')[1])) : L.latLng(-65, -180);
-		        var northEast = objMapConfig.map.northEastBound ? L.latLng(parseFloat(objMapConfig.map.northEastBound.split(',')[0]), parseFloat(objMapConfig.map.northEastBound.split(',')[1])) : L.latLng(88, 180);
-				var bounds = L.latLngBounds(southWest, northEast);
-				map.setMaxBounds(bounds);
-				map.on('drag', function() {map.panInsideBounds(bounds, { animate: false }); });
-		        
-
-		        // MARKERS
-				for(var location of objMapData){
-					// setup marker parameters
-					if('' != location.lat && '' != location.lng){
-						var latLng = L.latLng({lat: parseFloat(location.lat), lng: parseFloat(location.lng)});
-					}else{
-						var latLng = L.latLng({lat: 0, lng: 0});
-					}
-					var options = {
-						locationID: location.id,
-					}; 
-					if(location.category && location.category.title){
-						if (objMarkersConfig.hasOwnProperty(normalize(location.category.title)))
-							options.icon = objMarkersConfig[normalize(location.category.title)];
-						else
-							options.icon = objMarkersConfig.default;
-					} else {
-						options.icon = objMarkersConfig.default;
-					}
-
-					// construct marker
-					var marker = new L.marker(latLng, options);
-					var markerInList = {id:location.id};
-					marker.bindTooltip(location.title);
-					marker.bindPopup(getPopupHTML(location));
-					for(var f in objMapFilters) {
-						marker['filter_'+f] = '';
-						markerInList['filter_'+f] = '';
-						if (location.hasOwnProperty(f)) {
-							switch(f){
-								case 'category': 
-									if(location[f].id){
-										marker['filter_'+f] = normalize(location[f].id);
-										markerInList['filter_'+f] = normalize(location[f].id);
-									}else{
-										marker['filter_'+f] = '';
-										markerInList['filter_'+f] = '';
-
-									}
-								break;
-								case 'country':
-									marker['filter_'+f] = normalize(location[f].code);
-									markerInList['filter_'+f] = normalize(location[f].code);
-								break;
-								default: 
-									if (typeof location[f] === 'string')
-										marker['filter_'+f] = normalize(location[f]);
-										markerInList['filter_'+f] = normalize(location[f]);
-								break;
-							}
-						}
-					}
-
-					// register marker
-					objMarkersBounds.extend(latLng); 
-					arrMarkersAll.push(marker); 
-					arrMarkersInListAll.push(markerInList); 
-				};
-				
-				arrMarkersCurrent = arrMarkersAll.slice();
-				arrMarkersInListCurrent = arrMarkersInListAll.slice();
-				markersCluster.addLayers(arrMarkersCurrent);
-				map.addLayer(markersCluster);
-
-				// map.fitBounds(objMarkersBounds);
-				map.setView(objMarkersBounds.getCenter(), objMapConfig.map.zoom);
-		    }
-
-		    function getPopupHTML(obj){
-		    	return `
-						<div class="map__popup">
-							${obj.picture ? `
-								<div class="map__popup__picture"><img src="${obj.picture.path}" alt="${obj.title}" /></div>
-							` :''}
-							<div class="map__popup__title">${obj.title}</div>
-							<div class="map__popup__infos">
-								<div class="map__popup__infos__line">
-									${obj.category.title ? '<i class="fa fa-list ft-primary"></i> '+obj.category.title:''}
-								</div>
-								${obj.address ?'<div class="map__popup__infos__line"><i class="fa fa-map-marker-alt ft-primary"></i> '+obj.address+'</div>':''}
-								${obj.phone	?'<div class="map__popup__infos__line"><i class="fa fa-phone ft-primary"></i> <a href="tel:'+obj.phone+'">'+obj.phone+'</a></div>':''}
-								${obj.fax		?'<div class="map__popup__infos__line"><i class="fa fa-fax ft-primary"></i> '+obj.fax+'</div>':''}
-								${obj.email	?'<div class="map__popup__infos__line"><i class="fa fa-envelope ft-primary"></i> <a href="mailto:'+obj.email+'">'+obj.email+'</a></div>':''}
-								${obj.website	?'<div class="map__popup__infos__line"><i class="fa fa-globe ft-primary"></i> <a href="'+obj.website+'">'+obj.website+'</a></div>':''}
+		<div class="map__wrapper"  style="width: <?= $this->config['map']['width'] ?:'100%' ?>; height:<?= $this->config['map']['height'] ?: '60vh;' ?>">
+			<?php if($this->filters  && "inmap" == $this->filters_position): ?>
+				<div class="map__filters map__panel left">
+					<span class="map__filters__toggler"><i class="far fa-sort-shapes-down-alt"></i></span>
+	  				<form class="map__filters__wrapper scroll-custom" action="<?= $this->filters_action ?>" method="<?= $this->filters_method ?>">
+						<?php foreach($this->filters as $f): ?>
+							<div class="map__filter form-group">
+								<?php if('text' == $f['type']) : ?>
+									<label for="filter_<?= $f['name'] ?>"><?= $f['label'] ?></label>
+									<input type="text" id="filter_<?= $f['name'] ?>" name="<?= $f['name'] ?>" value="<?= $f['value'] ?>" placeholder="<?= $f['placeholder'] ?>" />
+								<?php elseif('select' == $f['type'] /*&& count($f['options']) > 1*/): ?>
+									<label for="filter_<?= $f['name'] ?>"><?= $f['label'] ?></label>
+									<select id="filter_<?= $f['name'] ?>" name="<?= $f['name'] ?>" placeholder="<?= $f['placeholder'] ?>">
+										<option value=""> - </option>
+										<?php foreach($f['options'] as $o): ?>
+											<?php 
+												echo '<option value="'.str_replace([' ','.'],'_', mb_strtolower($o['value'], 'UTF-8')).'" '.$o['selected'].'>'.$o['text'].'</option>';
+											?>
+										<?php endforeach; ?>
+									</select>
+								<?php endif; ?>
 							</div>
-							${obj.url	? `
-								<div class="map__popup__actions">
-									<a class="btn" href="${obj.url}">${ document.querySelector('html').getAttribute('lang') == 'fr' ? 'En savoir plus' : 'See more'}</a>
-								</div>
-							`:''}
+						<?php endforeach; ?>
+						<div class="submit txt-center">
+							<input type="submit" class="btn-sm w-100" value="<?= $GLOBALS['TL_LANG']['MSC']['filter'] ?>" />
 						</div>
-					`;
-		    }
-
-		    window.addEventListener("load", function(e) {
-		    	var filters = {};
-		    	$('.locations__filters  [id^=filter_]').on('change', function(){
-		    		$('.locations__filters [id^=filter_]').each(function(){
-		    			filters[this.name] = this.value;
-		    		});
-		    		applyFilters();
-		    	});
-		    	$('#map__filters [id^=filter_]').on('change', function(){
-		    		$('#map__filters [id^=filter_]').each(function(){
-		    			filters[this.name] = this.value;
-		    		});
-		    		applyFilters();
-		    	});
-
-		    	function applyFilters(){
-		    		markersCluster.removeLayers(arrMarkersCurrent);
-		    		arrMarkersCurrent = arrMarkersAll.filter( item => {
-		    			var match = true;
-		    			for(var f in filters){
-		    				if (filters[f] !== '' && item['filter_'+f] !== filters[f])
-		    					match = false;
-		    			}
-		    			return match;
-		    		});
-		    		// console.log("==========");
-    				// console.log(arrMarkersInListAll);
-		    		arrMarkersInListCurrent = arrMarkersInListAll.filter( item => {
-	    				// console.log(item);
-		    			var match = true;
-		    			for(var f in filters){
-		    				// console.log(filters[f],item['filter_'+f],filters[f] !== '' && item['filter_'+f] !== filters[f]);
-		    				if (filters[f] !== '' && item['filter_'+f] !== filters[f]){
-		    					match = false;
-		    					return false;
-		    				}
-		    			}
-		    			return match;
-		    		});
-    				// console.log(arrMarkersInListCurrent);
-
-		    		arrMarkersInListAll.forEach(item=>{
-		    			var item1 = $('.location[data-id="'+item.id+'"]');
-		    			var item2 = $('.map__list__item[data-id="'+item.id+'"]');
-		    			if(-1 === arrMarkersInListCurrent.indexOf(item)){
-		    				if(item1)
-		    					item1.addClass('hidden');
-
-		    				if(item2)
-		    					item2.addClass('hidden');
-		    			}else{
-		    				if(item1)
-		    					item1.removeClass('hidden');
-		    				if(item2)
-		    					item2.removeClass('hidden');
-		    			}
-		    		});
-		    		markersCluster.addLayers(arrMarkersCurrent);
-		    		map.setView(objMarkersBounds.getCenter(), objMapConfig.map.zoom);
-		    	}
-
-		    	// set legend
-				if (objMapFilters.category) {
-					for(var c in objMapFilters.category.options) {
-				    	var category = objMapFilters.category.options[c];
-				    	for(var i in categories){
-				    		if(categories[i].id === category.value){
-				    			category = categories[i];
-				    			break;
-				    		}
-				    	}
-				    	if (category.marker) {
-							// add marker to legend
-							$('#map__legend').append(`
-								<div class="map__legend__item">
-									<img src="${objMarkersConfig[category.alias].options.iconUrl}" width="${objMarkersConfig[category.alias].options.iconSize[0]}" alt="Icon for ${category.title} category"><span>${category.title}</span>
-								</div>
-							`);
-				    	}
-				    }
-				    $('#map__legend__button').on('click',()=>{
-				    	$('#map__legend').addClass('active');
-				    });
-				    $('#map__legend .close').on('click',()=>{
-				    	$('#map__legend').removeClass('active');
-				    });
-				    if ($('#map__legend .map__legend__item').length){
-				    	$('#map__legend__button').removeClass('hidden');
-				    }
-				}
-
-				if($('#map__filters [id^=filter_]'))
-					$('#map__filters [id^=filter_]').trigger('change');
-
-				if($('.locations__filters [id^=filter_]'))
-					$('.locations__filters [id^=filter_]').trigger('change');
-		    });
-
-		    initialize();
+					</form>
+				</div>
+			<?php endif; ?>
+			<div id="map" class="map__container">
+	    		<span class="map__legend__toggler btn-sm m-0 squared hidden">Legend</span>
+				<div class="map__legend">
+					<span class="close"><i class="fal fa-times"></i></span>
+				</div>
+	    	</div>
+			<?php if('rightpanel' === $this->wem_geodata_map_list): ?>
+				<?php echo $this->list; ?>
+			<?php endif; ?>
+		</div>
+    	<?php if('below' === $this->wem_geodata_map_list): ?>
+			<?php echo $this->list; ?>
+		<?php endif; ?>
+    	<script type="text/javascript">
+			objMapData        = <?= json_encode($this->locations) ?>;
+			objMapConfig      = <?= json_encode($this->config) ?>;
+		    categories        = <?= $this->categories ? json_encode($this->categories):'{}' ?>;
+			objMapFilters     = <?= $this->filters ? json_encode($this->filters):'{}' ?>;
 		</script>
 	<?php endif; ?>
 </div>
+
+

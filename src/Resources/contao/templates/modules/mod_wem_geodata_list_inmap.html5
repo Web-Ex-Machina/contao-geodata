@@ -1,62 +1,51 @@
-<div class="map__list active <?= $this->list_position ?>">
-  <div class="h3 map__list__title"><?= $GLOBALS['TL_LANG']['WEM']['LOCATIONS']['TITLE']['PANEL'] ?> <span class="location"></span></div>
-  <?php if($this->filters && "inlist" == $this->filters_position): ?>
-  <div class="map__filters">
-    <?php foreach($this->filters as $f): ?>
-      <div class="filter">
-        <?php if('text' == $f['type']) : ?>
-          <label for="filter_<?= $f['name'] ?>"><?= $f['label'] ?></label>
-          <input type="text" id="filter_<?= $f['name'] ?>" name="<?= $f['name'] ?>" value="<?= $f['value'] ?>" placeholder="<?= $f['placeholder'] ?>" />
-        <?php else: ?>
-          <label for="filter_<?= $f['name'] ?>"><?= $f['label'] ?></label>
-          <select id="filter_<?= $f['name'] ?>" name="<?= $f['name'] ?>" placeholder="<?= $f['placeholder'] ?>">
-            <option value="">Tous</option>
-            <?php foreach($f['options'] as $o): ?>
-            <option value="<?= $o ?>"><?= $o ?></option>
-            <?php endforeach; ?>
-          </select>
-        <?php endif; ?>
-      </div>
-    <?php endforeach; ?>
-  </div>
-  <?php endif; ?>
-
-  <div class="map__list__wrapper">
+<div class="map__list map__panel right active">
+  <span class="map__list__toggler active">
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+  </span>
+  <div class="map__list__wrapper scroll-custom">
     <?php foreach ($this->locations as $key => $location): ?>
       <div class="map__list__item" data-id="<?= $location['id'] ?>" data-marker="<?= $location['country']['code'].'-'.str_replace(' ', '_', strtolower($location['title'])) ?>"
-       data-country="<?= $location['country']['code'] ?>" 
-       data-continent="<?= $location['continent']['code'] ?>"
-        data-category="<?php echo str_replace([' ','.'],'_', mb_strtolower($this->location['category']['id'], 'UTF-8'));?>" 
-        data-category-title="<?php echo str_replace([' ','.'],'_', mb_strtolower($this->location['category']['title'], 'UTF-8'));?>" 
-        data-city="<?php echo str_replace([' ','.'],'_', mb_strtolower($this->location['city'], 'UTF-8'));?>" 
-        data-admin_lvl_1="<?php echo str_replace([' ','.'],'_', mb_strtolower($this->location['admin_lvl_1'], 'UTF-8'));?>" 
-        data-admin_lvl_2="<?php echo str_replace([' ','.'],'_', mb_strtolower($this->location['admin_lvl_2'], 'UTF-8'));?>" 
+        data-country        ="<?= $location['country']['code'] ?>" 
+        data-continent      ="<?= $location['continent']['code'] ?>"
+        data-category       ="<?php echo str_replace([' ','.'],'_', mb_strtolower($this->location['category']['id'], 'UTF-8'));?>" 
+        data-category-title ="<?php echo str_replace([' ','.'],'_', mb_strtolower($this->location['category']['title'], 'UTF-8'));?>" 
+        data-city           ="<?php echo str_replace([' ','.'],'_', mb_strtolower($this->location['city'], 'UTF-8'));?>" 
+        data-admin_lvl_1    ="<?php echo str_replace([' ','.'],'_', mb_strtolower($this->location['admin_lvl_1'], 'UTF-8'));?>" 
+        data-admin_lvl_2    ="<?php echo str_replace([' ','.'],'_', mb_strtolower($this->location['admin_lvl_2'], 'UTF-8'));?>" 
        >
-        <p class="ft-b col-xs-12"><?= $location['title'] ?></p>
+        <span class="map__list__item__title "><?= $location['title'] ?></span>
         
         <?php if($location['address']): ?>
-        <div class="col-xs-6">
-          <?= $location['address'] ?>
+        <div class="map__list__item__location"itemprop="location" itemscope itemtype="http://schema.org/Place">
+          <i class="fal fa-map-marker-alt"></i>
+          <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress"><?= $location['address'] ?></span>
         </div>
         <?php endif; ?>
 
-        <?php if($location['phone'] || $location['email']): ?>
-        <div class="col-xs-6">
-          <?php if($location['phone']): ?><?= $location['phone'] ?><?php endif; ?>
-          <?php if($location['phone'] && $location['email']): ?><br><?php endif; ?>
-          <?php if($location['email']): ?><?= $location['email'] ?><?php endif; ?>
+        <div class="map__list__item__text">
+          <?php if ($location['teaser']): ?>
+            <?= $location['teaser'] ?>
+          <?php else: ?>
+            <?php if($location['phone'] || $location['email']): ?>
+              <?php if($location['phone']): ?>
+                <div><i class="fal fa-phone"></i>&nbsp;&nbsp;<?= $location['phone'] ?></div>
+              <?php endif; ?>
+              <!-- <?php if($location['phone'] && $location['email']): ?><br><?php endif; ?> -->
+              <?php if($location['email']): ?>
+                <div><i class="fal fa-envelope"></i>&nbsp;&nbsp;<?= $location['email'] ?></div>
+              <?php endif; ?>
+            <?php endif; ?>
+          <?php endif ?>
         </div>
-        <?php endif; ?>
         
         <?php if($location['url']): ?>
-        <div class="col-xs-6">
-          <a href="<?= $location['url'] ?>" title="<?= $location['title'] ?>"><?= $GLOBALS['TL_LANG']['WEM']['LOCATIONS']['BUTTON']['READMORE'] ?></a>
-        </div>
-        <?php endif; ?>
+          <div class="map__list__item__link">
+            <a href="<?= $location['url'] ?>" title="<?= $location['title'] ?>: <?= $GLOBALS['TL_LANG']['WEM']['LOCATIONS']['BUTTON']['READMORE'] ?>"></a>
+          </div>
+        <?php endif ?>
       </div>
     <?php endforeach ?>
   </div>
 </div>
-<?php if("rightpanel" == $this->list_position): ?>
-<button class="map__toggleList active"><span>&#x2192;</span></button>
-<?php endif; ?>
