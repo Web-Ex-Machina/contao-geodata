@@ -3,19 +3,21 @@
 declare(strict_types=1);
 
 /**
- * Altrad Map Bundle for Contao Open Source CMS
- * Copyright (c) 2017-2022 Web ex Machina
+ * Geodata for Contao Open Source CMS
+ * Copyright (c) 2015-2022 Web ex Machina
  *
  * @category ContaoBundle
- * @package  Web-Ex-Machina/contao-altrad-map-bundle
+ * @package  Web-Ex-Machina/contao-geodata
  * @author   Web ex Machina <contact@webexmachina.fr>
- * @link     https://github.com/Web-Ex-Machina/contao-altrad-map-bundle/
+ * @link     https://github.com/Web-Ex-Machina/contao-geodata/
  */
 
 namespace WEM\GeoDataBundle\Controller\Provider;
 
-use Contao\Controller;
 use Contao\Config;
+use Contao\Controller;
+use WEM\GeoDataBundle\Model\Map;
+use WEM\GeoDataBundle\Model\MapItem;
 
 /**
  * Provide Nominatim utilities functions to Locations Extension.
@@ -32,13 +34,15 @@ class Nominatim extends Controller
     /**
      * Return the coords lat/lng for a given address.
      *
-     * @param [Mixed]   $varAddress [Address to geocode, can be a String, or a Location Model]
-     * @param [Object]  $objMap     [Map Model]
-     * @param [Integer] $intResults [Number of API results wanted]
+     * @param string|MapItem $varAddress Address to geocode
+     * @param Map            $objMap     Map Model
+     * @param int            $intResults Number of API results wanted
      *
-     * @return [Array] [Address Components]
+     * @throws Exception
+     *
+     * @return array [Address Components]
      */
-    public static function geocoder($varAddress, $objMap, $intResults = 1)
+    public static function geocoder($varAddress, Map $objMap, ?int $intResults = 1): array
     {
         // Before everything, check if we can geocode this
         if ('nominatim' !== $objMap->geocodingProvider) {
@@ -46,7 +50,7 @@ class Nominatim extends Controller
         }
         // Standardize the address to geocode
         $args = [];
-        if (\is_object($varAddress)) {
+        if (is_a($varAddress, MapItem::class)) {
             if ($varAddress->street) {
                 $args[] = 'street='.trim(preg_replace('/\s+/', ' ', strip_tags($varAddress->street)));
             }
@@ -59,12 +63,14 @@ class Nominatim extends Controller
             if ($varAddress->region) {
                 $args[] = 'state='.$varAddress->region;
             }
+            if ($varAddress->admin_lvl_1) {
+                $args[] = 'state='.$varAddress->admin_lvl_1;
+            }
             if ($varAddress->country) {
                 $args[] = 'countrycodes='.$varAddress->country;
             }
 
-            $strAddress = '?' . implode('&', $args);
-
+            $strAddress = '?'.implode('&', $args);
         } else {
             $strAddress = $varAddress;
         }

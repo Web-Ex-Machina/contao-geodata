@@ -17,6 +17,8 @@ namespace WEM\GeoDataBundle\Controller\Provider;
 use Contao\Controller;
 use Contao\Encryption;
 use WEM\GeoDataBundle\Classes\Util;
+use WEM\GeoDataBundle\Model\Map;
+use WEM\GeoDataBundle\Model\MapItem;
 
 /**
  * Provide Google Maps utilities functions to Locations Extension.
@@ -33,13 +35,15 @@ class GoogleMaps extends Controller
     /**
      * Return the coords lat/lng for a given address.
      *
-     * @param [Mixed]   $varAddress [Address to geocode, can be a String, or a Location Model]
-     * @param [Object]  $objMap     [Map Model]
-     * @param [Integer] $intResults [Number of API results wanted]
+     * @param string|MapItem $varAddress Address to geocode
+     * @param Map            $objMap     Map Model
+     * @param int            $intResults Number of API results wanted
      *
-     * @return [Array] [Address Components]
+     * @throws Exception
+     *
+     * @return array [Address Components]
      */
-    public static function geocoder($varAddress, $objMap, $intResults = 1)
+    public static function geocoder($varAddress, Map $objMap, ?int $intResults = 1): array
     {
         // Before everything, check if we can geocode this
         if ('gmaps' !== $objMap->geocodingProvider || !$objMap->geocodingProviderGmapKey) {
@@ -48,7 +52,7 @@ class GoogleMaps extends Controller
         // Standardize the address to geocode
         $strAddress = '';
         $arrCountries = Util::getCountries();
-        if (\is_object($varAddress)) {
+        if (is_a($varAddress, MapItem::class)) {
             if ($varAddress->street) {
                 $strAddress .= trim(preg_replace('/\s+/', ' ', strip_tags($varAddress->street)));
             }
@@ -60,6 +64,9 @@ class GoogleMaps extends Controller
             }
             if ($varAddress->region) {
                 $strAddress .= ','.$varAddress->region;
+            }
+            if ($varAddress->admin_lvl_1) {
+                $args[] = 'state='.$varAddress->admin_lvl_1;
             }
             if ($varAddress->country) {
                 $strAddress .= '&amp;region='.$arrCountries[$varAddress->country];
