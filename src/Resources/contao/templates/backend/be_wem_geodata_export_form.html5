@@ -12,9 +12,9 @@
             <div class="widget">
                 <fieldset class="tl_radio_container">
                     <legend><?php echo $this->widgetSettingsFormatLabel; ?></legend>
-                    <input type="radio" name="format" id="format_xslx" value="xslx"  class="tl_radio" checked>
-                    <label for="format_xslx">
-                        XSLX
+                    <input type="radio" name="format" id="format_xslx" value="xlsx"  class="tl_radio" checked>
+                    <label for="format_xlsx">
+                        XLSX
                     </label>
                     <input type="radio" name="format" id="format_csv" value="csv" class="tl_radio" >
                     <label for="format_csv">

@@ -47,7 +47,9 @@
                 </thead>
                 <tbody>
                     <tr><?php echo $this->importExampleTd; ?></tr>
-                    <tr><?php echo $this->importExampleTd; ?></tr>
+                    <?php foreach($this->importExampleTd as $td): ?>
+                    <tr><?php echo implode('',$td); ?></tr>
+                    <?php endforeach; ?>
                 </tbody>
             </table>
             <br />

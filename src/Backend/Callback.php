@@ -285,7 +285,15 @@ class Callback extends Backend
         foreach ($arrExcelPattern as $strExcelColumn => $strDbColumn) {
             $strDbColumn = 'region' === $strDbColumn ? 'admin_lvl_1' : $strDbColumn;
             $arrTh[] = '<th>'.$strExcelColumn.'</th>';
-            $arrTd[] = '<td>'.$GLOBALS['TL_LANG']['tl_wem_map_item'][$strDbColumn][0].'</td>';
+            $arrTd[0][] = '<td>'.$GLOBALS['TL_LANG']['tl_wem_map_item'][$strDbColumn][0].'</td>';
+            $arrTd[1][] = '<td>'.$GLOBALS['TL_LANG']['tl_wem_map_item'][$strDbColumn][0].'</td>';
+        }
+
+        // HOOK: add custom logic
+        if (isset($GLOBALS['TL_HOOKS']['WEMGEODATADISPLAYLOCATIONSSAMPLE']) && \is_array($GLOBALS['TL_HOOKS']['WEMGEODATADISPLAYLOCATIONSSAMPLE'])) {
+            foreach ($GLOBALS['TL_HOOKS']['WEMGEODATADISPLAYLOCATIONSSAMPLE'] as $callback) {
+                [$arrTh, $arrTd] = static::importStatic($callback[0])->{$callback[1]}($arrTh, $arrTd, $arrExcelPattern, $objMap, $this);
+            }
         }
 
         // Build the country array, to give the correct syntax to users
@@ -334,7 +342,7 @@ class Callback extends Backend
         $objTemplate->formSubmitValue = specialchars($GLOBALS['TL_LANG']['tl_wem_map_item']['import'][0]);
         $objTemplate->importExampleTitle = $GLOBALS['TL_LANG']['tl_wem_map_item']['importExampleTitle'];
         $objTemplate->importExampleTh = implode('', $arrTh);
-        $objTemplate->importExampleTd = implode('', $arrTd);
+        $objTemplate->importExampleTd = $arrTd;
         $objTemplate->importListCountriesTitle = $GLOBALS['TL_LANG']['tl_wem_map_item']['importListCountriesTitle'];
         $objTemplate->importListCountriesNameCurrentLanguage = $arrLanguages[$GLOBALS['TL_LANGUAGE']];
         $objTemplate->importListCountriesNameEnglish = $arrLanguages['en'];
@@ -380,6 +388,17 @@ class Callback extends Backend
         // And send to browser
         $strFilename = date('Y-m-d_H-i').'_import-locations-sample';
         $format = IOFactory::WRITER_XLSX;
+
+        // HOOK: add custom logic
+        if (isset($GLOBALS['TL_HOOKS']['WEMGEODATADOWNLOADLOCATIONSSAMPLE']) && \is_array($GLOBALS['TL_HOOKS']['WEMGEODATADOWNLOADLOCATIONSSAMPLE'])) {
+            foreach ($GLOBALS['TL_HOOKS']['WEMGEODATADOWNLOADLOCATIONSSAMPLE'] as $callback) {
+                $objSpreadsheetTemp = static::importStatic($callback[0])->{$callback[1]}($objSpreadsheet, $arrExcelPattern, $objMap, $this);
+                if ($objSpreadsheetTemp) {
+                    $objSpreadsheet = $objSpreadsheetTemp;
+                }
+            }
+        }
+
         header('Content-Disposition: attachment;filename="'.$strFilename.'.xlsx"');
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -523,7 +542,7 @@ class Callback extends Backend
 
         // And send to browser
         $strFilename = date('Y-m-d_H-i').'_export-locations';
-        switch (Input::post('format')) {
+        switch (strtolower(Input::post('format') ?? '')) {
             case 'csv':
                 $format = IOFactory::WRITER_CSV;
                 header('Content-Disposition: attachment;filename="'.$strFilename.'.csv"');
@@ -535,6 +554,16 @@ class Callback extends Backend
             default:
                 throw new Exception('Unknown export format. Known formats are : "csv", "xslx".');
             break;
+        }
+
+        // HOOK: add custom logic
+        if (isset($GLOBALS['TL_HOOKS']['WEMGEODATADOWNLOADLOCATIONSEXPORT']) && \is_array($GLOBALS['TL_HOOKS']['WEMGEODATADOWNLOADLOCATIONSEXPORT'])) {
+            foreach ($GLOBALS['TL_HOOKS']['WEMGEODATADOWNLOADLOCATIONSEXPORT'] as $callback) {
+                $objSpreadsheetTemp = static::importStatic($callback[0])->{$callback[1]}($objSpreadsheet, $arrExcelPattern, $objLocations->reset(), $arrCountries, $objMap, $exportFormat, $this);
+                if ($objSpreadsheetTemp) {
+                    $objSpreadsheet = $objSpreadsheetTemp;
+                }
+            }
         }
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
