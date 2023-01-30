@@ -197,9 +197,9 @@ var selectMapItem = function(itemID){
 	}
 }
 
-// // ------------------------------------------------------------------------------------------------------------------------------
-// // UTILITIES
-var normalize = function(str){return str.toLowerCase().replace(/ |\./g,'_'); }
+// ------------------------------------------------------------------------------------------------------------------------------
+// UTILITIES
+var normalize = function(str = ''){return str.toLowerCase().replace(/ |\./g,'_'); }
 
 window.addEventListener("load", function(e) {
 	$.fn.filterByData = function(prop, val) {
