@@ -119,13 +119,60 @@ window.addEventListener('load', (event) => {
 	// console.log('arrMarkersAll',arrMarkersAll);
 	// console.log('arrMarkersCurrent',arrMarkersCurrent);
 });
+
+var applyFilters = function(){
+	arrMarkersCurrent = arrMarkersAll.filter( item => {
+		var match = true;
+		for(var f in filters){
+			if (filters[f] !== '' && item['filter_'+f] !== filters[f])
+				match = false;
+		}
+		return match;
+	});
+	// console.log("==========");
+	// console.log(arrMarkersInListAll);
+	arrMarkersInListCurrent = arrMarkersInListAll.filter( item => {
+		// console.log(item);
+		var match = true;
+		for(var f in filters){
+			// console.log(filters[f],item['filter_'+f],filters[f] !== '' && item['filter_'+f] !== filters[f]);
+			if (filters[f] !== '' && item['filter_'+f] !== filters[f]){
+				match = false;
+				return false;
+			}
+		}
+		return match;
+	});
+	// console.log(arrMarkersInListCurrent);
+
+	arrMarkersInListAll.forEach(item=>{
+		var item1 = $('.location[data-id="'+item.id+'"]');
+		var item2 = $('.map__list__item[data-id="'+item.id+'"]');
+		if(-1 === arrMarkersInListCurrent.indexOf(item)){
+			if(item1)
+				item1.addClass('hidden');
+			if(item2)
+				item2.addClass('hidden');
+		}else{
+			if(item1)
+				item1.removeClass('hidden');
+			if(item2)
+				item2.removeClass('hidden');
+		}
+	});
+	
+	applyFilters_callback();
+}
+
 var getPopupHTML = function(obj){
 	return `
 		<div class="map__popup ">
-			<div class="map__popup__title map__list__item__title">${obj.title}</div>
+			<div class="map__popup__title map__list__item__title">
+				${obj.category.title ? '<div class="ft-b ft-0-8-em opa-4 ft-upper">'+obj.category.title+'</div>':''} 
+				${obj.title}
+			</div>
 			${obj.picture ? `<div class="map__popup__picture"><img src="${obj.picture.path}" alt="${obj.title}" /></div>` :''}
 			<div class="map__popup__infos map__list__item__text">
-				${obj.category.title ? '<div class="map__popup__infos__line"><i class="fa fa-list"></i> '+obj.category.title+'</div>':''} 
 				${obj.address ?'<div class="map__popup__infos__line "><i class="fa fa-map-marker-alt"></i> <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">'+obj.address+'</span></div>':''}
 				${obj.phone	?'<div class="map__popup__infos__line"><i class="fa fa-phone"></i> <a href="tel:'+obj.phone+'">'+obj.phone+'</a></div>':''}
 				${obj.fax		?'<div class="map__popup__infos__line"><i class="fa fa-fax"></i> '+obj.fax+'</div>':''}
