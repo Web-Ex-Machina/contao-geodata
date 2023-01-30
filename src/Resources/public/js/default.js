@@ -1,21 +1,5 @@
-// // ------------------------------------------------------------------------------------------------------------------------------
-// // DATA SETTINGS
-// var arrCountries = [];
-// var arrCountriesAvailable = [];
-// var objContinents = {};
-// var objCountries = {};
-// var objMarkers = {};
-// var objMap;
-// var objMapCenter;
-// var objMapBounds;
-// var $map = $('.map__container');
-// var $list = $('.map__list');
-// var $reset = $('.map__reset');
-// var $toggleList = $('.map__toggleList');
-// //var $dropdowns = $list.next('.map__dropdowns');
-
-// // ------------------------------------------------------------------------------------------------------------------------------
-// // DATA SETTINGS
+// ------------------------------------------------------------------------------------------------------------------------------
+// DATA SETTINGS
 var map;
 var categories;
 var objMapData;
@@ -26,7 +10,13 @@ var arrMarkersInListAll = [];
 var arrMarkersInListCurrent = [];
 var arrMarkersAll= [];
 var arrMarkersCurrent = [];
+var filters = {};
 
+// providers functions, needs to be overriden in the proper dedicated file (eg. leaflet.js)
+var applyFilters_callback = function(){};
+var initMap = function(){};
+
+// ONLAD
 window.addEventListener('load', (event) => {
 	$map           = $('.map__container');
 	$legend        = $('.map__legend');
@@ -36,55 +26,30 @@ window.addEventListener('load', (event) => {
 	$filters       = $('.map__filters');
 	$toggleFilters = $('.map__filters__toggler');
 
-// 	// ------------------------------------------------------------------------------------------------------------------------------
-// 	// RESIZE EVENT
-// 	$(window).resize(function(){
-// 		var mapHeight = window.innerHeight;
-// 		if($('#header').length)
-// 			mapHeight -= $('#header').outerHeight();
-// 		if($('#footer').length)
-// 			mapHeight -= $('#footer').outerHeight();
-// 		if($('.topbar').length)
-// 			mapHeight -= $('.topbar').outerHeight();
-// 		$map.parent().outerHeight(0).outerHeight(mapHeight);
-// 	}).trigger('resize');
 
+	// LIST events
 	$toggleList.bind('click', function(){
-		$(this).toggleClass('active');
 		$list.toggleClass('active');
-		$legend.removeClass('active');
+		// $legend.removeClass('active');
 	});
 	$toggleFilters.bind('click', function(){
-		$(this).toggleClass('active');
 		$filters.toggleClass('active');
 	});
 	$list.find('.map__list__item').on('click', function(e) {
 		selectMapItem($(this).data('id'));
 	});
 
-// 	$.each(objMapData,function(index,location){
-// 		if(!Object.hasKey(objContinents, location.continent.code)){
-// 			objContinents[location.continent.code] = location.continent;
-// 			objContinents[location.continent.code].countries = {};
-// 		}
-// 		if(!Object.hasKey(objContinents[location.continent.code].countries, location.country.code)){
-// 			objContinents[location.continent.code].countries[location.country.code] = location.country;
-// 			objCountries[location.country.code] = location.country;
-// 			arrCountries.push(location.country.code);
-// 			arrCountriesAvailable.push(location.country.code);
-// 		}
-// 		objMarkers[location.id]=location;
-// 	});
+	// FILTERS events
+	$('.map__filters [id^=filter_]').on('change', function(){
+		$('.map__filters [id^=filter_]').each(function(){
+			filters[this.name] = this.value;
+		});
+		applyFilters();
+	});
 
-// 	// Define a default value for zoom
-// 	if(!objMapConfig.map.zoom)
-// 		objMapConfig.map.zoom = 7;
-// 	// Define a default value for lockZoom
-// 	if(!objMapConfig.map.lockZoom)
-// 		objMapConfig.map.lockZoom = false;
 	initMap();
 
-	// set legend
+	// set legend aftre map init
 	if (objMapFilters.category) {
 		for(var c in objMapFilters.category.options) {
 	    	var category = objMapFilters.category.options[c];
