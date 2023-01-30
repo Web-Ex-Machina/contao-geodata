@@ -20,6 +20,7 @@ use Contao\FrontendTemplate;
 use Contao\Input;
 use Contao\PageModel;
 use Contao\Pagination;
+use Contao\RequestToken;
 use Contao\StringUtil;
 use Contao\System;
 use WEM\GeoDataBundle\Classes\Util;
@@ -90,12 +91,17 @@ class LocationsList extends Core
 
             $this->objMap = $this->maps->first();
 
+            // Build the config (do not manage pagination here !)
+            $this->arrConfig = ['published' => 1, 'where' => [
+                sprintf('pid in (%s)', implode(',', StringUtil::deserialize($this->wem_geodata_maps))),
+            ]];
+
             // Catch AJAX request
-            // if (Input::post('TL_AJAX')) {
-            //     if ($this->id === Input::post('module')) {
-            //         $this->handleAjaxRequest(Input::post('action'));
-            //     }
-            // }
+            if (Input::post('TL_AJAX')) {
+                if ($this->id === Input::post('module')) {
+                    $this->handleAjaxRequests(Input::post('action'));
+                }
+            }
             $limit = null;
             $offset = (int) $this->skipFirst;
 
@@ -107,11 +113,6 @@ class LocationsList extends Core
             // Load the libraries
             ClassLoader::loadLibraries($this->objMap, 1);
             Util::getCountries();
-
-            // Build the config (do not manage pagination here !)
-            $this->arrConfig = ['published' => 1, 'where' => [
-                sprintf('pid in (%s)', implode(',', StringUtil::deserialize($this->wem_geodata_maps))),
-            ]];
 
             // Get the jumpTo page
             // $this->objJumpTo = PageModel::findByPk($this->objMap->jumpTo);
@@ -149,6 +150,32 @@ class LocationsList extends Core
             $this->Template->msg = $e->getMessage();
             $this->Template->trace = $e->getTraceAsString();
         }
+    }
+
+    /**
+     * Catch Ajax Requests.
+     */
+    protected function handleAjaxRequests(): void
+    {
+        try {
+            switch (Input::post('action')) {
+                case 'getLocations':
+                    $arrResponse = [
+                        'status'=>'success',
+                        'locations'=>$this->getLocationsAjax()
+                    ];
+                break;
+                default:
+                    throw new \Exception(sprintf($GLOBALS['TL_LANG']['MS']['ERR']['unknownAjaxRequest'], Input::post('action')));
+            }
+        } catch (\Exception $e) {
+            $arrResponse = ['status' => 'error', 'msg' => $e->getMessage(), 'trace' => $e->getTrace()];
+        }
+
+        // Add Request Token to JSON answer and return
+        $arrResponse['rt'] = RequestToken::get();
+        echo json_encode($arrResponse);
+        exit;
     }
 
     protected function buildFilters(): array
@@ -237,9 +264,9 @@ class LocationsList extends Core
      *
      * @return int
      */
-    protected function countItems()
+    protected function countItems(array $c = [])
     {
-        $c = $this->getListConfig();
+        $c = !empty($c) ? $c :  $this->getListConfig();
 
         return $this->countLocations($c);
     }
@@ -247,13 +274,14 @@ class LocationsList extends Core
     /**
      * Fetch the matching items.
      *
-     * @param int   $limit
-     * @param int   $offset
-     * @param array $options
+     * @param null|array   $c configuration. If none provided, the default one will be used
+     * @param null|int   $limit
+     * @param null|int   $offset
+     * @param null|array $options
      */
-    protected function fetchItems($limit, $offset, $options = []): ?array
+    protected function fetchItems(array $c = [], $limit = 0, $offset = 0, $options = []): ?array
     {
-        $c = $this->getListConfig();
+        $c = !empty($c) ? $c :  $this->getListConfig();
 
         $c['limit'] = $limit;
         $c['offset'] = $offset;
@@ -299,5 +327,18 @@ class LocationsList extends Core
         } catch (\Exception $e) {
             throw $e;
         }
+    }
+
+    protected function getLocationsAjax(): array
+    {
+        $config = $this->arrConfig;
+        $arrFilterFields = unserialize($this->wem_geodata_filters_fields);
+        foreach ($arrFilterFields as $filterField) {
+            if (Input::get($filterField)) {
+                $config[$filterField] = Input::get($filterField);
+            }
+        }
+
+        return $this->fetchItems($config);
     }
 }

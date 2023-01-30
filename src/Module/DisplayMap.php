@@ -19,6 +19,7 @@ use Contao\FrontendTemplate;
 use Contao\Input;
 use Contao\PageModel;
 use Contao\System;
+use Contao\RequestToken;
 use WEM\GeoDataBundle\Classes\Util;
 use WEM\GeoDataBundle\Controller\ClassLoader;
 use WEM\GeoDataBundle\Model\Category;
@@ -114,142 +115,34 @@ class DisplayMap extends Core
             }
 
             // config for locations
-            $arrConfigBase = ['pid' => $this->objMap->id, 'published' => 1, 'onlyWithCoords' => 1];
-            $arrConfig = $arrConfigBase;
+            // $arrConfigBase = ['pid' => $this->objMap->id, 'published' => 1, 'onlyWithCoords' => 1];
+            // $arrConfig = $arrConfigBase;
+
+            $this->arrConfig = ['pid' => $this->objMap->id, 'published' => 1, 'onlyWithCoords' => 1];
+
+            // Catch AJAX request
+            if (Input::post('TL_AJAX')) {
+                if ($this->id === Input::post('module')) {
+                    $this->handleAjaxRequests(Input::post('action'));
+                }
+            }
 
             // Gather filters
-            if ('nofilters' !== $this->wem_geodata_filters) {
-                $this->filters = [];
-                $locations = MapItem::findItems($arrConfig);
-                System::loadLanguageFile('tl_wem_map_item');
-
-                if ($this->wem_geodata_search) {
-                    $this->filters['search'] = [
-                        'label' => $GLOBALS['TL_LANG']['tl_wem_map_item']['search'][0],
-                        'placeholder' => $GLOBALS['TL_LANG']['tl_wem_map_item']['search'][1],
-                        'name' => 'search',
-                        'type' => 'text',
-                        'value' => Input::get('search') ?: '',
-                    ];
-                    if (Input::get('search')) {
-                        $arrConfig['search'] = Input::get('search');
-                    }
-                }
-
-                $arrFilterFields = unserialize($this->wem_geodata_filters_fields);
-                $arrLocations = [];
-                while ($locations->next()) {
-                    $arrLocations[] = $locations->current()->row();
-                }
-
-                $arrCountries = Util::getCountries();
-                foreach ($arrFilterFields as $filterField) {
-                    if (Input::get($filterField)) {
-                        $arrConfig[$filterField] = Input::get($filterField);
-                    }
-                    $this->filters[$filterField] = [
-                        'label' => sprintf('%s :', $GLOBALS['TL_LANG']['tl_wem_map_item'][$filterField][0]),
-                        'placeholder' => $GLOBALS['TL_LANG']['tl_wem_map_item'][$filterField][1],
-                        'name' => $filterField,
-                        'type' => 'select',
-                        'options' => [],
-                    ];
-
-                    foreach ($arrLocations as $location) {
-                        if (!$location[$filterField]) {
-                            continue;
-                        }
-
-                        if (\array_key_exists($location[$filterField], $this->filters[$filterField]['options'])) {
-                            continue;
-                        }
-                        $this->filters[$filterField]['options'][$location[$filterField]] = [
-                            'value' => str_replace([' ', '.'], '_', mb_strtolower($location[$filterField], 'UTF-8')),
-                            'text' => $location[$filterField],
-                            'selected' => (\array_key_exists($filterField, $arrConfig) && $arrConfig[$filterField] === str_replace([' ', '.'], '_', mb_strtolower($location[$filterField], 'UTF-8')) ? 'selected' : ''),
-                        ];
-                        switch ($filterField) {
-                            case 'city':
-                                $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $location[$filterField].' ('.$location['admin_lvl_2'].')';
-                            break;
-                            case 'category':
-                                $objCategory = Category::findByPk($location[$filterField]);
-                                if ($objCategory) {
-                                    $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $objCategory->title;
-                                    // $this->filters[$filterField]['options'][$location[$filterField]]['value'] = $objCategory->title;
-                                }
-                            break;
-                            case 'country':
-                                $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $arrCountries[$location[$filterField]] ?? $location[$filterField];
-                            break;
-                        }
-                    }
-                }
-
-                $this->Template->filters = $this->filters;
-                $this->Template->filters_position = $this->wem_geodata_filters;
-            }
+            $this->buildFilters();
+            $this->Template->filters = $this->filters;
+            $this->Template->filters_position = $this->wem_geodata_filters;
 
             // Get the jumpTo page
             $this->objJumpTo = PageModel::findByPk($this->objMap->jumpTo);
 
-            // Get locations (will be filtered by the map)
-            // $arrLocations = $this->getLocations($arrConfigBase);
-            try{
-                $arrLocations = $this->getLocations($arrConfig);
-            }catch(\Exception $e){
-                $arrLocations = [];
-            }
+            // Get locations
+            $arrLocations = $this->fetchItems();
 
             // Get categories
             $arrCategories = $this->getCategories();
 
             // Now we retrieved all the locations, we will regroup the close ones into one
-            $arrMarkers = [];
-            $distToMerge = $this->wem_geodata_distToMerge ?: 0; // in m
-
-            foreach ($arrLocations as $l) {
-                if ($distToMerge > 0) {
-                    // For each markers we will need to check the proximity with the other markers
-                    // If it's too close, we will merge them and place the marker on the middle of them
-                    // Nota 1 : Maybe we shall regroup them before moving the markers (because we could have more and more unprecise markers ?)
-                    foreach ($arrMarkers as $k => $m) {
-                        // First make sure we stay in the same country
-                        // Either way, we will hide items too close from a same border
-                        if ($m['country']['code'] !== $l['country']['code']) {
-                            continue;
-                        }
-
-                        // Calculate the distance between the current location and the markers stored
-                        $d = Util::vincentyGreatCircleDistance(
-                            $l['lat'],
-                            $l['lng'],
-                            $m['lat'],
-                            $m['lng']
-                        );
-
-                        // If proximity too close :
-                        // add the location to this marker and continue
-                        // adjust marker pos
-                        if ($d < $distToMerge) {
-                            $arrMarkers[$k]['lat'] = ($l['lat'] + $m['lat']) / 2;
-                            $arrMarkers[$k]['lng'] = ($l['lng'] + $m['lng']) / 2;
-                            $arrMarkers[$k]['items'][] = $l;
-                            continue 2;
-                        }
-                    }
-                }
-
-                $arrMarkers[] = [
-                    'lat' => $l['lat'],
-                    'lng' => $l['lng'],
-                    'continent' => $l['continent'],
-                    'country' => $l['country'],
-                    'items' => [
-                        0 => $l,
-                    ],
-                ];
-            }
+            $arrMarkers = $this->buildMarkers($arrLocations);
 
             // Send the data to Map template
             $this->Template->mapProvider = $this->objMap->mapProvider;
@@ -277,5 +170,207 @@ class DisplayMap extends Core
             $this->Template->msg = $e->getMessage();
             $this->Template->trace = $e->getTraceAsString();
         }
+    }
+
+    /**
+     * Catch Ajax Requests.
+     */
+    protected function handleAjaxRequests(): void
+    {
+        try {
+            switch (Input::post('action')) {
+                case 'getLocations':
+                    $arrLocations = $this->getLocationsAjax();
+                    $arrResponse = [
+                        'status'=>'success',
+                        'locations'=>$arrLocations,
+                        'markers'=>!empty($arrLocations) ? $this->buildMarkers($arrLocations) : []
+                    ];
+                break;
+                default:
+                    throw new \Exception(sprintf($GLOBALS['TL_LANG']['MS']['ERR']['unknownAjaxRequest'], Input::post('action')));
+            }
+        } catch (\Exception $e) {
+            $arrResponse = ['status' => 'error', 'msg' => $e->getMessage(), 'trace' => $e->getTrace()];
+        }
+
+        // Add Request Token to JSON answer and return
+        $arrResponse['rt'] = RequestToken::get();
+        echo json_encode($arrResponse);
+        exit;
+    }
+
+    protected function buildFilters(): void
+    {
+        // Gather filters
+        if ('nofilters' !== $this->wem_geodata_filters) {
+            $this->filters = [];
+            $locations = MapItem::findItems($this->arrConfig);
+            System::loadLanguageFile('tl_wem_map_item');
+
+            if ($this->wem_geodata_search) {
+                $this->filters['search'] = [
+                    'label' => $GLOBALS['TL_LANG']['tl_wem_map_item']['search'][0],
+                    'placeholder' => $GLOBALS['TL_LANG']['tl_wem_map_item']['search'][1],
+                    'name' => 'search',
+                    'type' => 'text',
+                    'value' => Input::get('search') ?: '',
+                ];
+                if (Input::get('search')) {
+                    $this->arrConfig['search'] = Input::get('search');
+                }
+            }
+
+            $arrFilterFields = unserialize($this->wem_geodata_filters_fields);
+            $arrLocations = [];
+            while ($locations->next()) {
+                $arrLocations[] = $locations->current()->row();
+            }
+
+            $arrCountries = Util::getCountries();
+            foreach ($arrFilterFields as $filterField) {
+                if (Input::get($filterField)) {
+                    $this->arrConfig[$filterField] = Input::get($filterField);
+                }
+                $this->filters[$filterField] = [
+                    'label' => sprintf('%s :', $GLOBALS['TL_LANG']['tl_wem_map_item'][$filterField][0]),
+                    'placeholder' => $GLOBALS['TL_LANG']['tl_wem_map_item'][$filterField][1],
+                    'name' => $filterField,
+                    'type' => 'select',
+                    'options' => [],
+                ];
+
+                foreach ($arrLocations as $location) {
+                    if (!$location[$filterField]) {
+                        continue;
+                    }
+
+                    if (\array_key_exists($location[$filterField], $this->filters[$filterField]['options'])) {
+                        continue;
+                    }
+                    $this->filters[$filterField]['options'][$location[$filterField]] = [
+                        'value' => str_replace([' ', '.'], '_', mb_strtolower($location[$filterField], 'UTF-8')),
+                        'text' => $location[$filterField],
+                        'selected' => (\array_key_exists($filterField, $this->arrConfig) && $this->arrConfig[$filterField] === str_replace([' ', '.'], '_', mb_strtolower($location[$filterField], 'UTF-8')) ? 'selected' : ''),
+                    ];
+                    switch ($filterField) {
+                        case 'city':
+                            $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $location[$filterField].' ('.$location['admin_lvl_2'].')';
+                        break;
+                        case 'category':
+                            $objCategory = Category::findByPk($location[$filterField]);
+                            if ($objCategory) {
+                                $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $objCategory->title;
+                                // $this->filters[$filterField]['options'][$location[$filterField]]['value'] = $objCategory->title;
+                            }
+                        break;
+                        case 'country':
+                            $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $arrCountries[$location[$filterField]] ?? $location[$filterField];
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+
+
+    protected function getListConfig()
+    {
+        return $this->arrConfig;
+    }
+
+    /**
+     * Count the total matching items.
+     *
+     * @return int
+     */
+    protected function countItems(array $c = [])
+    {
+        $c = !empty($c) ? $c :  $this->getListConfig();
+
+        return $this->countLocations($c);
+    }
+
+    /**
+     * Fetch the matching items.
+     *
+     * @param null|array   $c configuration. If none provided, the default one will be used
+     * @param null|int   $limit
+     * @param null|int   $offset
+     * @param null|array $options
+     */
+    protected function fetchItems(array $c = [], $limit = 0, $offset = 0, $options = []): ?array
+    {
+        $c = !empty($c) ? $c :  $this->getListConfig();
+
+        $c['limit'] = $limit;
+        $c['offset'] = $offset;
+
+        return $this->getLocations($c);
+    }
+
+    protected function buildMarkers(array $arrLocations): array
+    {
+        $arrMarkers = [];
+        $distToMerge = $this->wem_geodata_distToMerge ?: 0; // in m
+
+        foreach ($arrLocations as $l) {
+            if ($distToMerge > 0) {
+                // For each markers we will need to check the proximity with the other markers
+                // If it's too close, we will merge them and place the marker on the middle of them
+                // Nota 1 : Maybe we shall regroup them before moving the markers (because we could have more and more unprecise markers ?)
+                foreach ($arrMarkers as $k => $m) {
+                    // First make sure we stay in the same country
+                    // Either way, we will hide items too close from a same border
+                    if ($m['country']['code'] !== $l['country']['code']) {
+                        continue;
+                    }
+
+                    // Calculate the distance between the current location and the markers stored
+                    $d = Util::vincentyGreatCircleDistance(
+                        $l['lat'],
+                        $l['lng'],
+                        $m['lat'],
+                        $m['lng']
+                    );
+
+                    // If proximity too close :
+                    // add the location to this marker and continue
+                    // adjust marker pos
+                    if ($d < $distToMerge) {
+                        $arrMarkers[$k]['lat'] = ($l['lat'] + $m['lat']) / 2;
+                        $arrMarkers[$k]['lng'] = ($l['lng'] + $m['lng']) / 2;
+                        $arrMarkers[$k]['items'][] = $l;
+                        continue 2;
+                    }
+                }
+            }
+
+            $arrMarkers[] = [
+                'lat' => $l['lat'],
+                'lng' => $l['lng'],
+                'continent' => $l['continent'],
+                'country' => $l['country'],
+                'items' => [
+                    0 => $l,
+                ],
+            ];
+        }
+
+        return $arrMarkers;
+    }
+
+    protected function getLocationsAjax(): array
+    {
+        $config = $this->arrConfig;
+        $arrFilterFields = unserialize($this->wem_geodata_filters_fields);
+        foreach ($arrFilterFields as $filterField) {
+            if (Input::get($filterField)) {
+                $config[$filterField] = Input::get($filterField);
+            }
+        }
+
+        return $this->fetchItems($config);
     }
 }
