@@ -102,9 +102,10 @@ class Util
      */
     public static function getCountries(): array
     {
-        $arrCountries = System::getContainer()->get('contao.intl.countries')->getCountries();
+        return System::getCountries();
+        // $arrCountries = System::getContainer()->get('contao.intl.countries')->getCountries();
 
-        return array_combine(array_map('strtolower', array_keys($arrCountries)), $arrCountries);
+        // return array_combine(array_map('strtolower', array_keys($arrCountries)), $arrCountries);
     }
 
     /**
