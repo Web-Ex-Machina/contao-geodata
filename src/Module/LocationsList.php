@@ -88,13 +88,14 @@ class LocationsList extends Core
                 throw new \Exception('No maps found.');
             }
 
-            // Catch AJAX request
-            if (Input::post('TL_AJAX')) {
-                if ($this->id === Input::post('module')) {
-                    $this->handleAjaxRequest(Input::post('action'));
-                }
-            }
+            $this->objMap = $this->maps->first();
 
+            // Catch AJAX request
+            // if (Input::post('TL_AJAX')) {
+            //     if ($this->id === Input::post('module')) {
+            //         $this->handleAjaxRequest(Input::post('action'));
+            //     }
+            // }
             $limit = null;
             $offset = (int) $this->skipFirst;
 

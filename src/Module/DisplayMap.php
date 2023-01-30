@@ -194,7 +194,12 @@ class DisplayMap extends Core
             $this->objJumpTo = PageModel::findByPk($this->objMap->jumpTo);
 
             // Get locations (will be filtered by the map)
-            $arrLocations = $this->getLocations($arrConfigBase);
+            // $arrLocations = $this->getLocations($arrConfigBase);
+            try{
+                $arrLocations = $this->getLocations($arrConfig);
+            }catch(\Exception $e){
+                $arrLocations = [];
+            }
 
             // Get categories
             $arrCategories = $this->getCategories();
