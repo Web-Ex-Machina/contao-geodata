@@ -18,8 +18,8 @@ use Contao\BackendTemplate;
 use Contao\FrontendTemplate;
 use Contao\Input;
 use Contao\PageModel;
-use Contao\System;
 use Contao\RequestToken;
+use Contao\System;
 use WEM\GeoDataBundle\Classes\Util;
 use WEM\GeoDataBundle\Controller\ClassLoader;
 use WEM\GeoDataBundle\Model\Category;
@@ -182,9 +182,9 @@ class DisplayMap extends Core
                 case 'getLocations':
                     $arrLocations = $this->getLocationsAjax();
                     $arrResponse = [
-                        'status'=>'success',
-                        'locations'=>$arrLocations,
-                        'markers'=>!empty($arrLocations) ? $this->buildMarkers($arrLocations) : []
+                        'status' => 'success',
+                        'locations' => $arrLocations,
+                        'markers' => !empty($arrLocations) ? $this->buildMarkers($arrLocations) : [],
                     ];
                 break;
                 default:
@@ -273,8 +273,6 @@ class DisplayMap extends Core
         }
     }
 
-
-
     protected function getListConfig()
     {
         return $this->arrConfig;
@@ -287,7 +285,7 @@ class DisplayMap extends Core
      */
     protected function countItems(array $c = [])
     {
-        $c = !empty($c) ? $c :  $this->getListConfig();
+        $c = !empty($c) ? $c : $this->getListConfig();
 
         return $this->countLocations($c);
     }
@@ -295,14 +293,14 @@ class DisplayMap extends Core
     /**
      * Fetch the matching items.
      *
-     * @param null|array   $c configuration. If none provided, the default one will be used
-     * @param null|int   $limit
-     * @param null|int   $offset
-     * @param null|array $options
+     * @param array|null $c       configuration. If none provided, the default one will be used
+     * @param int|null   $limit
+     * @param int|null   $offset
+     * @param array|null $options
      */
-    protected function fetchItems(array $c = [], $limit = 0, $offset = 0, $options = []): ?array
+    protected function fetchItems(?array $c = [], $limit = 0, $offset = 0, $options = []): ?array
     {
-        $c = !empty($c) ? $c :  $this->getListConfig();
+        $c = !empty($c) ? $c : $this->getListConfig();
 
         $c['limit'] = $limit;
         $c['offset'] = $offset;

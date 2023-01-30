@@ -133,7 +133,7 @@ class LocationsList extends Core
             // $this->arrConfig['offset'] = $this->perPage * ((Input::get('page_n'.$this->id) ? (int) Input::get('page_n'.$this->id) : 1) - 1);
             $offset = $this->perPage * ((Input::get('page_n'.$this->id) ? (int) Input::get('page_n'.$this->id) : 1) - 1);
             // $arrLocations = $this->getLocations($this->arrConfig);
-            $arrLocations = $this->fetchItems(($limit ?: 0), $offset);
+            $arrLocations = $this->fetchItems(null, ($limit ?: 0), $offset);
 
             $this->Template->locations = $arrLocations;
 
@@ -161,8 +161,8 @@ class LocationsList extends Core
             switch (Input::post('action')) {
                 case 'getLocations':
                     $arrResponse = [
-                        'status'=>'success',
-                        'locations'=>$this->getLocationsAjax()
+                        'status' => 'success',
+                        'locations' => $this->getLocationsAjax(),
                     ];
                 break;
                 default:
@@ -266,7 +266,7 @@ class LocationsList extends Core
      */
     protected function countItems(array $c = [])
     {
-        $c = !empty($c) ? $c :  $this->getListConfig();
+        $c = !empty($c) ? $c : $this->getListConfig();
 
         return $this->countLocations($c);
     }
@@ -274,14 +274,14 @@ class LocationsList extends Core
     /**
      * Fetch the matching items.
      *
-     * @param null|array   $c configuration. If none provided, the default one will be used
-     * @param null|int   $limit
-     * @param null|int   $offset
-     * @param null|array $options
+     * @param array|null $c       configuration. If none provided, the default one will be used
+     * @param int|null   $limit
+     * @param int|null   $offset
+     * @param array|null $options
      */
-    protected function fetchItems(array $c = [], $limit = 0, $offset = 0, $options = []): ?array
+    protected function fetchItems(?array $c = [], $limit = 0, $offset = 0, $options = []): ?array
     {
-        $c = !empty($c) ? $c :  $this->getListConfig();
+        $c = !empty($c) ? $c : $this->getListConfig();
 
         $c['limit'] = $limit;
         $c['offset'] = $offset;

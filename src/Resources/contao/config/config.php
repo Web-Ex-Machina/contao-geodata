@@ -15,7 +15,8 @@ declare(strict_types=1);
 /*
  * Backend modules.
  */
-\Contao\ArrayUtil::arrayInsert(
+// \Contao\ArrayUtil::arrayInsert(
+array_insert(
     $GLOBALS['BE_MOD'],
     array_search('content', array_keys($GLOBALS['BE_MOD']), true) + 1,
     [
@@ -48,7 +49,8 @@ declare(strict_types=1);
 /*
  * Frontend modules
  */
-\Contao\ArrayUtil::arrayInsert(
+// \Contao\ArrayUtil::arrayInsert(
+array_insert(
     $GLOBALS['FE_MOD'],
     2,
     [
