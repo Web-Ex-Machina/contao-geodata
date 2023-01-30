@@ -38,10 +38,6 @@ class Map extends Backend
     {
         if (!$varValue) {
             switch ($objDc->activeRecord->mapProvider) {
-                // case 'jvector':
-                //     $arrConfig = \WEM\GeoDataBundle\Controller\Provider\JVector::getDefaultConfig();
-                //     break;
-
                 case 'leaflet':
                     $arrConfig = \WEM\GeoDataBundle\Controller\Provider\Leaflet::getDefaultConfig();
                     break;

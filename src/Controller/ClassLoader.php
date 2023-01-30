@@ -71,14 +71,6 @@ class ClassLoader extends Controller
 
         // Depending on the provider, we will need more stuff
         switch ($objMap->mapProvider) {
-            // case 'jvector':
-            //     $objCssCombiner->addMultiple([
-            //         'bundles/wemgeodata/vendor/jquery-jvectormap/jquery-jvectormap-2.0.3.css', 'bundles/wemgeodata/css/jvector.css',
-            //     ], $strVersion);
-            //     $objJsCombiner->addMultiple([
-            //         'bundles/wemgeodata/vendor/jquery-jvectormap/jquery-jvectormap-2.0.3.min.js', 'bundles/wemgeodata/vendor/jquery-jvectormap/maps/jquery-jvectormap-'.$objMap->mapFile.'-mill.js', 'bundles/wemgeodata/js/jvector.js',
-            //     ], $strVersion);
-            //     break;
             case 'gmaps':
                 if (!$objMap->mapProviderGmapKey) {
                     throw new \Exception('Google Maps needs an API Key !');
@@ -89,9 +81,9 @@ class ClassLoader extends Controller
                 $GLOBALS['TL_JAVASCRIPT'][] = sprintf('<script src="https://maps.googleapis.com/maps/api/js?key=%s"></script>', $objMap->mapProviderGmapKey);
                 break;
             case 'leaflet':
-                $GLOBALS['TL_HEAD'][] = sprintf('<link rel="stylesheet" href="https://unpkg.com/leaflet@latest/dist/leaflet.css">');
-                $GLOBALS['TL_HEAD'][] = sprintf('<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@latest/dist/MarkerCluster.css">');
-                $GLOBALS['TL_HEAD'][] = sprintf('<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@latest/dist/MarkerCluster.Default.css">');
+                $GLOBALS['TL_HEAD'][] = '<link rel="stylesheet" href="https://unpkg.com/leaflet@latest/dist/leaflet.css">';
+                $GLOBALS['TL_HEAD'][] = '<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@latest/dist/MarkerCluster.css">';
+                $GLOBALS['TL_HEAD'][] = '<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@latest/dist/MarkerCluster.Default.css">';
                 $objCssCombiner->addMultiple([
                     'bundles/wemgeodata/css/leaflet.css',
                 ], $strVersion);

@@ -55,18 +55,6 @@
 			<source>Enter the map options</source>
 			<target>Saisissez les options de la carte</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_map.mapFile.0">
-			<source>Map file</source>
-			<target>Fichier de la carte</target>
-		</trans-unit>
-		<trans-unit id="tl_wem_map.mapFile.1">
-			<source>Select the JVector map file</source>
-			<target>Sélectionnez le fichier JVector de la carte</target>
-		</trans-unit>
-		<trans-unit id="tl_wem_map.mapProvider.jvector">
-			<source>JVector</source>
-			<target>JVector</target>
-		</trans-unit>
 		<trans-unit id="tl_wem_map.mapProvider.gmaps">
 			<source>Google Maps</source>
 			<target>Google Maps</target>

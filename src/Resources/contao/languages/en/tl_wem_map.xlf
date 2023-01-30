@@ -47,10 +47,6 @@
 			<source>Enter the map options</source>
 			<target>Enter the map options</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_map.mapProvider.jvector">
-			<source>JVector</source>
-			<target>JVector</target>
-		</trans-unit>
 		<trans-unit id="tl_wem_map.mapProvider.gmaps">
 			<source>Google Maps</source>
 			<target>Google Maps</target>

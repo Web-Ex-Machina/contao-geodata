@@ -100,7 +100,6 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
 
     // Subpalettes
     'subpalettes' => [
-        // 'mapProvider_jvector' => 'mapFile,mapConfig',
         'mapProvider_leaflet' => 'mapConfig',
         'mapProvider_gmaps' => 'mapProviderGmapKey,mapConfig',
         'geocodingProvider_gmaps' => 'geocodingProviderGmapKey',
@@ -150,21 +149,11 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'default' => '',
             'exclude' => true,
             'inputType' => 'select',
-            'options' => [/*'jvector',*/ 'gmaps', 'leaflet'],
+            'options' => ['gmaps', 'leaflet'],
             'reference' => &$GLOBALS['TL_LANG']['tl_wem_map']['mapProvider'],
             'eval' => ['helpwizard' => true, 'mandatory' => true, 'submitOnChange' => true, 'chosen' => true, 'includeBlankOption' => true],
             'explanation' => 'wem_geodata_mapProvider',
             'sql' => "varchar(255) NOT NULL default ''",
-        ],
-        'mapFile' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_map']['mapFile'],
-            'default' => 'world',
-            'exclude' => true,
-            'inputType' => 'select',
-            'options' => ['world', 'continents', 'africa', 'asia', 'europe', 'fr_regions', 'fr_departments', 'north_america', 'oceania', 'south_america'],
-            'reference' => &$GLOBALS['TL_LANG']['tl_wem_map']['mapFile'],
-            'eval' => ['mandatory' => true, 'chosen' => true],
-            'sql' => "varchar(255) NOT NULL default 'world'",
         ],
         'mapConfig' => [
             'label' => &$GLOBALS['TL_LANG']['tl_wem_map']['mapConfig'],

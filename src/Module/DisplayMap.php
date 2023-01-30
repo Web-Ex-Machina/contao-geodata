@@ -254,13 +254,6 @@ class DisplayMap extends Core
             $this->Template->categories = $arrCategories;
             $this->Template->config = $arrMapConfig;
 
-            // Send the fileMap
-            // if ('jvector' === $this->objMap->mapProvider
-            //     && '' !== $this->objMap->mapFile
-            // ) {
-            $this->Template->mapFile = $this->objMap->mapFile;
-            // }
-
             // If the config says so, we will generate a template with a list of the locations
             if ('nolist' !== $this->wem_geodata_map_list) {
                 $objTemplate = new FrontendTemplate('rightpanel' === $this->wem_geodata_map_list ? 'mod_wem_geodata_list_inmap' : 'mod_wem_geodata_list');
