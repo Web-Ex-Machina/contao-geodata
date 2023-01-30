@@ -216,7 +216,7 @@ class MapItem extends Backend
         $this->log('A new version of record "tl_wem_map_item.id='.$intId.'" has been created'.$this->getParentEntries('tl_wem_map_item', $intId), __METHOD__, TL_GENERAL);
     }
 
-    public function importButtonGlobalOperations(?string $href, string $label, string $title, string $class, string $attributes, string $table, array $rootIds): string
+    public function importButtonGlobalOperations(?string $href, string $label, string $title, string $class, string $attributes, string $table, ?array $rootIds): string
     {
         $objMap = Map::findByPk(\Contao\Input::get('id'));
         if (!$objMap
@@ -231,7 +231,7 @@ class MapItem extends Backend
         return sprintf('<a href="%s" title="%s" class="%s" %s>%s</a>', $url, StringUtil::specialchars($title), $class, $attributes, $label);
     }
 
-    public function exportButtonGlobalOperations(?string $href, string $label, string $title, string $class, string $attributes, string $table, array $rootIds): string
+    public function exportButtonGlobalOperations(?string $href, string $label, string $title, string $class, string $attributes, string $table, ?array $rootIds): string
     {
         $objMap = Map::findByPk(\Contao\Input::get('id'));
         if (!$objMap
@@ -246,7 +246,7 @@ class MapItem extends Backend
         return sprintf('<a href="%s" title="%s" class="%s" %s>%s</a>', $url, StringUtil::specialchars($title), $class, $attributes, $label);
     }
 
-    public function geocodeAllButtonGlobalOperations(?string $href, string $label, string $title, string $class, string $attributes, string $table, array $rootIds): string
+    public function geocodeAllButtonGlobalOperations(?string $href, string $label, string $title, string $class, string $attributes, string $table, ?array $rootIds): string
     {
         $objMap = Map::findByPk(\Contao\Input::get('id'));
         if (!$objMap
