@@ -15,34 +15,34 @@
     <?php endif; ?>
 
     <div class="block-card__content">
-      <<?php echo $this->location['url']?'a href="'.$this->location['url'].'"':'div' ?>  class="block-card__title h2" title="<?= $this->location['title'] ?>" itemprop="name">
+      <<?php echo $this->location['url']?'a href="'.$this->location['url'].'"':'div' ?>  class="block-card__title h2 " title="<?= $this->location['title'] ?>" itemprop="name">
         <?= $this->location['title'] ?>
       </<?php echo $this->location['url']?'a':'div' ?> >
 
-      <div class="reader__location">
-        <i class="fal fa-map-marker-alt"></i>&nbsp;
-        <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
-          <?= $this->location['address'] ?>
-        </span>
-      </div>
-      <?= $this->location['admin_lvl_1'] ?>
-      <?php if($this->location['admin_lvl_2']): ?>
-      - <?= $this->location['admin_lvl_2'] ?>
-      <?php endif; ?>
-      <?php if($this->location['admin_lvl_3']): ?>
-      - <?= $this->location['admin_lvl_3'] ?>
-      <?php endif; ?>
-
       <div class="block-card__text">
+        <div class="map__list__item__line">
+          <i class="fa fa-map-marker-alt"></i>
+          <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+            <?= $this->location['address'] ?>
+          </span>
+        </div>
+          <?php if($this->location['phone']): ?>
+            <div class="map__list__item__line"><i class="fa fa-phone"></i><a href="tel:<?= $this->location['phone'] ?>"><?= $this->location['phone'] ?></a></div>
+          <?php endif; ?>
+          <?php if($this->location['email']): ?>
+            <div class="map__list__item__line"><i class="fa fa-envelope"></i><a href="mailto:<?= $this->location['email'] ?>"><?= $this->location['email'] ?></a></div>
+          <?php endif; ?>
+          <?php if($this->location['website']): ?>
+            <div class="map__list__item__line"><i class="fa fa-globe"></i> <a href="<?= $this->location['website'] ?>" target="_blank"><?= $this->location['website'] ?></a></div>
+          <?php endif; ?>
         <?php if (!empty($this->location['teaser'])): ?>
-          <div class="ce_text block <?= ($this->location['picture']['path'])? 'cols-span-2 cols-span-md-1':'' ?>" itemprop="description">
-            <?= $this->location['teaser'] ?>
-          </div>
+          <br>
+          <?= $this->location['teaser'] ?>
         <?php endif; ?>
       </div>
       
       <?php if ($this->location['url']): ?>
-        <div class="event__link">
+        <div class="event__link m-top-0">
           <a href="<?= $this->location['url'] ?>" title="<?= $GLOBALS['TL_LANG']['MSC']['more'] ?>"></a>
         </div>
       <?php endif ?>

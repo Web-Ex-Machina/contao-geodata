@@ -1,43 +1,14 @@
-<div class="locations__list">
-  <div class="<?= $this->class ?> block">
+<div class="locations__list <?= $this->class ?> ">
   <?php if($this->error): ?>
     <div class="error">
       <?= $this->msg ?>
     </div>
   <?php else: ?>
-  <div class="h3 locations__list__title"><?= $GLOBALS['TL_LANG']['WEM']['LOCATIONS']['TITLE']['PANEL'] ?> <span class="location"></span></div>
-  <?php if($this->filters && "inlist" == $this->filters_position): ?>
-  <form action="<?= $this->filters_action ?>" method="<?= $this->filters_method ?>">
-  <div class="locations__filters d-grid cols-2">
-    <?php foreach($this->filters as $f): ?>
-    <div class="filter <?php echo ('text' == $f['type']) ? 'cols-span-2' : '';?>">
-      <?php if('text' == $f['type']) : ?>
-        <label for="filter_<?= $f['name'] ?>"><?= $f['label'] ?></label>
-        <input type="text" id="filter_<?= $f['name'] ?>" name="<?= $f['name'] ?>" value="<?= $f['value'] ?>" placeholder="<?= $f['placeholder'] ?>" />
-      <?php else: ?>
-        <label for="filter_<?= $f['name'] ?>"><?= $f['label'] ?></label>
-        <select id="filter_<?= $f['name'] ?>" name="<?= $f['name'] ?>" placeholder="<?= $f['placeholder'] ?>">
-          <option value="">Tous</option>
-          <?php foreach($f['options'] as $o): ?>
-          <option value="<?= $o['value'] ?>" <?= $o['selected'] ?>><?= $o['text'] ?></option>
-          <?php endforeach; ?>
-        </select>
-      <?php endif; ?>
+    <div class="location__list__wrapper flex-wrap">
+      <?php foreach($this->locations as $location): ?>
+        <?php $this->insert($this->customTplForGeodataItems,['location'=>$location]); ?>
+      <?php endforeach; ?>
+      <?php echo $this->pagination; ?>
     </div>
-    <?php endforeach; ?>
-    <div class="filter submit cols-span-2">
-      <input type="submit" class="btn" value="<?= $GLOBALS['TL_LANG']['MSC']['filter'] ?>" />
-    </div>
-  </div>
-  </form>
   <?php endif; ?>
-
-  <div class="map__list__wrapper">
-    <?php foreach($this->locations as $location): ?>
-      <?php $this->insert($this->customTplForGeodataItems,['location'=>$location]); ?>
-    <?php endforeach; ?>
-    <?php echo $this->pagination; ?>
-  </div>
-  <?php endif; ?>
-
 </div>

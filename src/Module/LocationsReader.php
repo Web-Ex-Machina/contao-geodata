@@ -14,12 +14,14 @@ declare(strict_types=1);
 
 namespace WEM\GeoDataBundle\Module;
 
+use Contao\Combiner;
 use Contao\BackendTemplate;
 use Contao\Config;
 use Contao\Environment;
 use Contao\Input;
 use WEM\GeoDataBundle\Model\Map;
 use WEM\GeoDataBundle\Model\MapItem;
+use WEM\GeoDataBundle\Controller\ClassLoader;
 
 /**
  * Front end module "locations reader".
@@ -86,11 +88,24 @@ class LocationsReader extends Core
                 throw new \Exception(sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['pageNotFound'], Environment::get('uri')));
             }
 
+
             $arrItem = $this->getLocation($objItem);
             $objMap = Map::findByPk($objItem->pid);
             $this->Template->item = $arrItem;
             $this->Template->map = $objMap->row();
             $this->Template->shouldBeIndexed = $objMap->row();
+            
+            // Load the libraries
+            $strVersion = 1;
+            $objCssCombiner = new Combiner();
+            $objCssCombiner->add('bundles/wemgeodata/css/default.css', $strVersion);
+            $objCssCombiner->add('bundles/wemgeodata/css/leaflet.css', $strVersion);
+            $GLOBALS['TL_HEAD'][] = '<link rel="stylesheet" href="https://unpkg.com/leaflet@latest/dist/leaflet.css">';
+            $GLOBALS['TL_JAVASCRIPT'][] = 'https://unpkg.com/leaflet@latest/dist/leaflet.js';
+            $GLOBALS['TL_HEAD'][] = '<link rel="stylesheet" href="https://unpkg.com/leaflet-gesture-handling@latest/dist/leaflet-gesture-handling.min.css">';
+            $GLOBALS['TL_JAVASCRIPT'][] = 'https://unpkg.com/leaflet-gesture-handling@latest/dist/leaflet-gesture-handling.min.js';
+            // And add them to pages
+            $GLOBALS['TL_HEAD'][] = sprintf('<link rel="stylesheet" href="%s">', $objCssCombiner->getCombinedFile());
         } catch (\Exception $e) {
             $this->Template->error = true;
             $this->Template->msg = $e->getMessage();

@@ -92,12 +92,13 @@ var applyFilters = function(){
 	// console.log(filters);
 	arrMarkersCurrent = arrMarkersAll.filter( item => {
 		var match = true;
+		// console.log(item);
 		for(var f in filters){
 			if (f !== "search") {
 				if (filters[f] !== '' && item['filter_'+f] !== filters[f])
 					match = false;
 			} else { // input search code
-				if (item.filter_text.search(new RegExp(filters[f],'i')) == -1)
+				if (item.filter_search.search(new RegExp(filters[f],'i')) == -1)
 					match = false;
 			}
 		}
@@ -115,7 +116,7 @@ var applyFilters = function(){
 					return false;
 				}
 			} else { // input search code
-				if (item.filter_text.search(new RegExp(filters[f],'i')) == -1){
+				if (item.filter_search.search(new RegExp(filters[f],'i')) == -1){
 					match = false;
 					return false;
 				}
