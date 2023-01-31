@@ -255,7 +255,8 @@ class DisplayMap extends Core
                     ];
                     switch ($filterField) {
                         case 'city':
-                            $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $location[$filterField].' ('.$location['admin_lvl_2'].')';
+                            // $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $location[$filterField].' ('.$location['admin_lvl_2'].')';
+                            $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $location[$filterField].($location['admin_lvl_2'] ? ' ('.$location['admin_lvl_2'].')' : '');
                         break;
                         case 'category':
                             $objCategory = Category::findByPk($location[$filterField]);

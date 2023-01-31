@@ -235,7 +235,7 @@ class LocationsList extends Core
                     switch ($filterField) {
                         case 'city':
                             $arrFilters[$filterField]['options'][$location[$filterField]]['value'] = $location[$filterField];
-                            $arrFilters[$filterField]['options'][$location[$filterField]]['text'] = $location[$filterField].' ('.$location['admin_lvl_2'].')';
+                            $arrFilters[$filterField]['options'][$location[$filterField]]['text'] = $location[$filterField].($location['admin_lvl_2'] ? ' ('.$location['admin_lvl_2'].')' : '');
                         break;
                         case 'category':
                             $objCategory = Category::findByPk($location[$filterField]);
