@@ -163,48 +163,64 @@ class Callback extends Backend
                 $spreadsheet = IOFactory::load(TL_ROOT.'/'.$objFile->path);
                 $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
                 $arrLocations = [];
-
+                $nbRow = 0;
                 foreach ($sheetData as $arrRow) {
-                    $arrLocation = [];
-                    $arrLocation['country'] = '';
-                    $arrLocation['city'] = '';
+                    if (empty(array_filter($arrRow))) {
+                        continue;
+                    }
+                    ++$nbRow;
+                    try {
+                        $arrLocation = [];
+                        $arrLocation['country'] = '';
+                        $arrLocation['city'] = '';
 
-                    foreach ($arrRow as $strColumn => $strValue) {
-                        // strColumn = Excel Column
-                        // strValue = Value in the current arrRow, at the column strColumn
-                        switch ($arrExcelPattern[$strColumn]) {
-                            case 'category':
-                                $objCategory = Category::findOneByTitle($strValue);
+                        foreach ($arrRow as $strColumn => $strValue) {
+                            // strColumn = Excel Column
+                            // strValue = Value in the current arrRow, at the column strColumn
+                            $strValue = \is_string($strValue) ? trim($strValue) : $strValue;
+                            switch ($arrExcelPattern[$strColumn]) {
+                                case 'category':
+                                    $objCategory = Category::findOneByTitle($strValue);
 
-                                if (!$objCategory) {
-                                    break;
-                                }
+                                    if (!$objCategory) {
+                                        break;
+                                    }
 
-                                $arrLocation['category'] = $objCategory->id;
-                            break;
-                            case 'region':
-                                $arrLocation['admin_lvl_1'] = $strValue;
-                            break;
-                            case 'country':
-                                if (2 === \strlen($strValue)) {
-                                    $arrLocation['country'] = $strValue;
-                                } else {
-                                    $arrLocation['country'] = Util::getCountryISOCodeFromFullname($strValue);
-                                }
-                            break;
-                            default:
-                                if (null === $strValue) {
-                                    break;
-                                }
+                                    $arrLocation['category'] = $objCategory->id;
+                                break;
+                                case 'region':
+                                    if (null !== $strValue) {
+                                        $arrLocation['admin_lvl_1'] = $strValue;
+                                    }
+                                break;
+                                case 'country':
+                                    if (null === $strValue || empty($strValue)) {
+                                        throw new Exception(sprintf('Empty value for columns %s (%s)', $strColumn, $arrExcelPattern[$strColumn]));
+                                    }
+                                    if (2 === \strlen($strValue)) {
+                                        $arrLocation['country'] = $strValue;
+                                    } else {
+                                        $arrLocation['country'] = Util::getCountryISOCodeFromFullname($strValue);
+                                    }
+                                break;
+                                default:
+                                    if (null === $strValue) {
+                                        break;
+                                    }
 
-                                $arrLocation[$arrExcelPattern[$strColumn]] = $strValue;
+                                    $arrLocation[$arrExcelPattern[$strColumn]] = $strValue;
+                            }
+                        }
+
+                        $arrLocation['continent'] = Util::getCountryContinent($arrLocation['country']);
+                        $arrLocations[$nbRow] = $arrLocation;
+                    } catch (\Exception $e) {
+                        Message::addError(sprintf($GLOBALS['TL_LANG']['tl_wem_map_item']['errorOnItemImport'], $nbRow, $e->getMessage()));
+                        if (\array_key_exists($nbRow, $arrLocations)) {
+                            unset($arrLocations[$nbRow]);
                         }
                     }
-
-                    $arrLocation['continent'] = Util::getCountryContinent($arrLocation['country']);
-                    $arrLocations[] = $arrLocation;
                 }
-
                 $intCreated = 0;
                 $intUpdated = 0;
                 $intDeleted = 0;
@@ -282,6 +298,7 @@ class Callback extends Backend
         // Build an Excel pattern to show
         $arrTh = [];
         $arrTd = [];
+        ksort($arrExcelPattern);
         foreach ($arrExcelPattern as $strExcelColumn => $strDbColumn) {
             $strDbColumn = 'region' === $strDbColumn ? 'admin_lvl_1' : $strDbColumn;
             $arrTh[] = '<th>'.$strExcelColumn.'</th>';
