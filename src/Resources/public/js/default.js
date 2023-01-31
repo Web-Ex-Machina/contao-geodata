@@ -1,21 +1,5 @@
-// // ------------------------------------------------------------------------------------------------------------------------------
-// // DATA SETTINGS
-// var arrCountries = [];
-// var arrCountriesAvailable = [];
-// var objContinents = {};
-// var objCountries = {};
-// var objMarkers = {};
-// var objMap;
-// var objMapCenter;
-// var objMapBounds;
-// var $map = $('.map__container');
-// var $list = $('.map__list');
-// var $reset = $('.map__reset');
-// var $toggleList = $('.map__toggleList');
-// //var $dropdowns = $list.next('.map__dropdowns');
-
-// // ------------------------------------------------------------------------------------------------------------------------------
-// // DATA SETTINGS
+// ------------------------------------------------------------------------------------------------------------------------------
+// DATA SETTINGS
 var map;
 var categories;
 var objMapData;
@@ -26,7 +10,13 @@ var arrMarkersInListAll = [];
 var arrMarkersInListCurrent = [];
 var arrMarkersAll= [];
 var arrMarkersCurrent = [];
+var filters = {};
 
+// providers functions, needs to be overriden in the proper dedicated file (eg. leaflet.js)
+var applyFilters_callback = function(){};
+var initMap = function(){};
+
+// ONLAD
 window.addEventListener('load', (event) => {
 	$map           = $('.map__container');
 	$legend        = $('.map__legend');
@@ -36,55 +26,30 @@ window.addEventListener('load', (event) => {
 	$filters       = $('.map__filters');
 	$toggleFilters = $('.map__filters__toggler');
 
-// 	// ------------------------------------------------------------------------------------------------------------------------------
-// 	// RESIZE EVENT
-// 	$(window).resize(function(){
-// 		var mapHeight = window.innerHeight;
-// 		if($('#header').length)
-// 			mapHeight -= $('#header').outerHeight();
-// 		if($('#footer').length)
-// 			mapHeight -= $('#footer').outerHeight();
-// 		if($('.topbar').length)
-// 			mapHeight -= $('.topbar').outerHeight();
-// 		$map.parent().outerHeight(0).outerHeight(mapHeight);
-// 	}).trigger('resize');
 
+	// LIST events
 	$toggleList.bind('click', function(){
-		$(this).toggleClass('active');
 		$list.toggleClass('active');
-		$legend.removeClass('active');
+		// $legend.removeClass('active');
 	});
 	$toggleFilters.bind('click', function(){
-		$(this).toggleClass('active');
 		$filters.toggleClass('active');
 	});
 	$list.find('.map__list__item').on('click', function(e) {
 		selectMapItem($(this).data('id'));
 	});
 
-// 	$.each(objMapData,function(index,location){
-// 		if(!Object.hasKey(objContinents, location.continent.code)){
-// 			objContinents[location.continent.code] = location.continent;
-// 			objContinents[location.continent.code].countries = {};
-// 		}
-// 		if(!Object.hasKey(objContinents[location.continent.code].countries, location.country.code)){
-// 			objContinents[location.continent.code].countries[location.country.code] = location.country;
-// 			objCountries[location.country.code] = location.country;
-// 			arrCountries.push(location.country.code);
-// 			arrCountriesAvailable.push(location.country.code);
-// 		}
-// 		objMarkers[location.id]=location;
-// 	});
+	// FILTERS events
+	$('.map__filters [id^=filter_]').on('change', function(){
+		$('.map__filters [id^=filter_]').each(function(){
+			filters[this.name] = this.value;
+		});
+		applyFilters();
+	});
 
-// 	// Define a default value for zoom
-// 	if(!objMapConfig.map.zoom)
-// 		objMapConfig.map.zoom = 7;
-// 	// Define a default value for lockZoom
-// 	if(!objMapConfig.map.lockZoom)
-// 		objMapConfig.map.lockZoom = false;
 	initMap();
 
-	// set legend
+	// set legend aftre map init
 	if (objMapFilters.category) {
 		for(var c in objMapFilters.category.options) {
 	    	var category = objMapFilters.category.options[c];
@@ -119,13 +84,60 @@ window.addEventListener('load', (event) => {
 	// console.log('arrMarkersAll',arrMarkersAll);
 	// console.log('arrMarkersCurrent',arrMarkersCurrent);
 });
+
+var applyFilters = function(){
+	arrMarkersCurrent = arrMarkersAll.filter( item => {
+		var match = true;
+		for(var f in filters){
+			if (filters[f] !== '' && item['filter_'+f] !== filters[f])
+				match = false;
+		}
+		return match;
+	});
+	// console.log("==========");
+	// console.log(arrMarkersInListAll);
+	arrMarkersInListCurrent = arrMarkersInListAll.filter( item => {
+		// console.log(item);
+		var match = true;
+		for(var f in filters){
+			// console.log(filters[f],item['filter_'+f],filters[f] !== '' && item['filter_'+f] !== filters[f]);
+			if (filters[f] !== '' && item['filter_'+f] !== filters[f]){
+				match = false;
+				return false;
+			}
+		}
+		return match;
+	});
+	// console.log(arrMarkersInListCurrent);
+
+	arrMarkersInListAll.forEach(item=>{
+		var item1 = $('.location[data-id="'+item.id+'"]');
+		var item2 = $('.map__list__item[data-id="'+item.id+'"]');
+		if(-1 === arrMarkersInListCurrent.indexOf(item)){
+			if(item1)
+				item1.addClass('hidden');
+			if(item2)
+				item2.addClass('hidden');
+		}else{
+			if(item1)
+				item1.removeClass('hidden');
+			if(item2)
+				item2.removeClass('hidden');
+		}
+	});
+	
+	applyFilters_callback();
+}
+
 var getPopupHTML = function(obj){
 	return `
 		<div class="map__popup ">
-			<div class="map__popup__title map__list__item__title">${obj.title}</div>
+			<div class="map__popup__title map__list__item__title">
+				${obj.category.title ? '<div class="ft-b ft-0-8-em opa-4 ft-upper">'+obj.category.title+'</div>':''} 
+				${obj.title}
+			</div>
 			${obj.picture ? `<div class="map__popup__picture"><img src="${obj.picture.path}" alt="${obj.title}" /></div>` :''}
 			<div class="map__popup__infos map__list__item__text">
-				${obj.category.title ? '<div class="map__popup__infos__line"><i class="fa fa-list"></i> '+obj.category.title+'</div>':''} 
 				${obj.address ?'<div class="map__popup__infos__line "><i class="fa fa-map-marker-alt"></i> <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">'+obj.address+'</span></div>':''}
 				${obj.phone	?'<div class="map__popup__infos__line"><i class="fa fa-phone"></i> <a href="tel:'+obj.phone+'">'+obj.phone+'</a></div>':''}
 				${obj.fax		?'<div class="map__popup__infos__line"><i class="fa fa-fax"></i> '+obj.fax+'</div>':''}
@@ -150,9 +162,9 @@ var selectMapItem = function(itemID){
 	}
 }
 
-// // ------------------------------------------------------------------------------------------------------------------------------
-// // UTILITIES
-var normalize = function(str){return str.toLowerCase().replace(/ |\./g,'_'); }
+// ------------------------------------------------------------------------------------------------------------------------------
+// UTILITIES
+var normalize = function(str = ''){return str.toLowerCase().replace(/ |\./g,'_'); }
 
 window.addEventListener("load", function(e) {
 	$.fn.filterByData = function(prop, val) {

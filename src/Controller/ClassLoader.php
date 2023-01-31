@@ -84,12 +84,14 @@ class ClassLoader extends Controller
                 $GLOBALS['TL_HEAD'][] = '<link rel="stylesheet" href="https://unpkg.com/leaflet@latest/dist/leaflet.css">';
                 $GLOBALS['TL_HEAD'][] = '<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@latest/dist/MarkerCluster.css">';
                 $GLOBALS['TL_HEAD'][] = '<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@latest/dist/MarkerCluster.Default.css">';
+                $GLOBALS['TL_HEAD'][] = '<link rel="stylesheet" href="https://unpkg.com/leaflet-gesture-handling@latest/dist/leaflet-gesture-handling.min.css">';
                 $objCssCombiner->addMultiple([
                     'bundles/wemgeodata/css/leaflet.css',
                 ], $strVersion);
 
                 $GLOBALS['TL_JAVASCRIPT'][] = 'https://unpkg.com/leaflet@latest/dist/leaflet.js';
                 $GLOBALS['TL_JAVASCRIPT'][] = 'https://unpkg.com/leaflet.markercluster@latest/dist/leaflet.markercluster.js';
+                $GLOBALS['TL_JAVASCRIPT'][] = 'https://unpkg.com/leaflet-gesture-handling@latest/dist/leaflet-gesture-handling.min.js';
                 $objJsCombiner->addMultiple([
                     'bundles/wemgeodata/js/leaflet.js',
                 ], $strVersion);

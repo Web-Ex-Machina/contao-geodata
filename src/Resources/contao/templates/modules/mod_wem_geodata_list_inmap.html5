@@ -1,5 +1,5 @@
-<div class="map__list map__panel right active">
-  <span class="map__list__toggler active">
+<div class="map__list map__panel right ">
+  <span class="map__list__toggler ">
     <div class="bar"></div>
     <div class="bar"></div>
     <div class="bar"></div>
@@ -16,29 +16,24 @@
         data-admin_lvl_2    ="<?php echo str_replace([' ','.'],'_', mb_strtolower($this->location['admin_lvl_2'], 'UTF-8'));?>" 
        >
         <span class="map__list__item__title "><?= $location['title'] ?></span>
-        
-        <?php if($location['address']): ?>
-        <div class="map__list__item__location"itemprop="location" itemscope itemtype="http://schema.org/Place">
-          <i class="fal fa-map-marker-alt"></i>
-          <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress"><?= $location['address'] ?></span>
-        </div>
-        <?php endif; ?>
-
         <div class="map__list__item__text">
-          <?php if ($location['teaser']): ?>
-            <?= $location['teaser'] ?>
-          <?php else: ?>
-            <?php if($location['phone'] || $location['email']): ?>
-              <?php if($location['phone']): ?>
-                <div><i class="fal fa-phone"></i>&nbsp;&nbsp;<?= $location['phone'] ?></div>
-              <?php endif; ?>
-              <!-- <?php if($location['phone'] && $location['email']): ?><br><?php endif; ?> -->
-              <?php if($location['email']): ?>
-                <div><i class="fal fa-envelope"></i>&nbsp;&nbsp;<?= $location['email'] ?></div>
-              <?php endif; ?>
-            <?php endif; ?>
-          <?php endif ?>
+          <?php if($location['address']): ?>
+            <div class="map__list__item__line" itemprop="location" itemscope itemtype="http://schema.org/Place">
+              <i class="fa fa-map-marker-alt"></i><span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress"><?= $location['address'] ?></span>
+            </div>
+          <?php endif; ?>
+          <?php if($location['phone']): ?>
+            <div class="map__list__item__line"><i class="fa fa-phone"></i><?= $location['phone'] ?></div>
+          <?php endif; ?>
+          <?php if($location['email']): ?>
+            <div class="map__list__item__line"><i class="fa fa-envelope"></i><?= $location['email'] ?></div>
+          <?php endif; ?>
         </div>
+        <?php if ($location['teaser']): ?>
+          <div class="map__list__item__text">
+            <?= $location['teaser'] ?>
+          </div>
+        <?php endif ?>
         
         <?php if($location['url']): ?>
           <div class="map__list__item__link">
@@ -47,5 +42,9 @@
         <?php endif ?>
       </div>
     <?php endforeach ?>
+  </div>
+  <span class="map__legend__toggler btn-sm m-y-0 squared hidden">Legend</span>
+  <div class="map__legend">
+    <span class="close"><i class="fa fa-times"></i></span>
   </div>
 </div>
