@@ -1,0 +1,130 @@
+<?xml version="1.0" ?><xliff version="1.1">
+  <file datatype="php" original="system/modules/wem-contao-locations/languages/en/default.php" source-language="en" target-language="fr">
+    <body>
+    	<trans-unit id="CTE.wem_geodata.0">
+			<source>Locations</source>
+			<target>Emplacements</target>
+		</trans-unit>
+		<trans-unit id="CTE.wem_geodata.1">
+			<source>Generates a map of locations.</source>
+			<target>Génère une carte d'emplacements.</target>
+		</trans-unit>
+
+		<trans-unit id="CONTINENT.AS">
+			<source>Asia</source>
+			<target>Asie</target>
+		</trans-unit>
+		<trans-unit id="CONTINENT.AN">
+			<source>Antarctica</source>
+			<target>Antartique</target>
+		</trans-unit>
+		<trans-unit id="CONTINENT.AF">
+			<source>Africa</source>
+			<target>Afrique</target>
+		</trans-unit>
+		<trans-unit id="CONTINENT.SA">
+			<source>South America</source>
+			<target>Amérique du Sud</target>
+		</trans-unit>
+		<trans-unit id="CONTINENT.EU">
+			<source>Europe</source>
+			<target>Europe</target>
+		</trans-unit>
+		<trans-unit id="CONTINENT.OC">
+			<source>Oceania</source>
+			<target>Océanie</target>
+		</trans-unit>
+		<trans-unit id="CONTINENT.NA">
+			<source>North America</source>
+			<target>Amérique du Nord</target>
+		</trans-unit>
+
+		<trans-unit id="WEM.LOCATIONS.LABEL.CONTINENT">
+			<source>Continent</source>
+			<target>Continent</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.LABEL.COUNTRY">
+			<source>Country</source>
+			<target>Pays</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.TITLE.PANEL">
+			<source>Contact details</source>
+			<target>Coordonnées</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.BUTTON.BACK">
+			<source>Back</source>
+			<target>Retour</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.BUTTON.READMORE">
+			<source>Read more</source>
+			<target>En savoir plus</target>
+		</trans-unit>
+		
+		<trans-unit id="WEM.LOCATIONS.CONFIRM.locationSaved">
+			<source>Location %s saved !</source>
+			<target>Emplacement %s sauvegardé !</target>
+		</trans-unit>
+
+		<trans-unit id="WEM.LOCATIONS.ERROR.unknownAjaxRequest">
+			<source>Unknown AJAX action : "%s"</source>
+			<target>Action AJAX inconnue : "%s"</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.noLocationsFound">
+			<source>No locations found for this map !</source>
+			<target>Aucun emplacement trouvé pour cette carte !</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.countryNotFound">
+			<source>The country "%s" doesn't match a known ISO Code. Maybe there is a typo ?</source>
+			<target>Le pays "%s" ne correspond à aucun ISO code connu. Peut-être qu'il y a une faute ?</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.missingConfigForGeocoding">
+			<source>Config is missing for geocoding !</source>
+			<target>Absence de configuration pour le geocoding !</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.errorWhenSavingTheLocation">
+			<source>An error happened when saving the location. Please try again.</source>
+			<target>Une erreur est survenue lors de la sauvegarde de l'emplacement. Veuillez réessayer.</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.unknownExportFormat">
+			<source>Unknown export format. Known formats are : "%s".</source>
+			<target>Format d'export inconnu. Les formats supportés sont : "%s"</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.gmapNeedsAPIKey">
+			<source>Google Maps needs an API Key !</source>
+			<target>Google Maps necessite une clef API</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.unknownProvider">
+			<source>This provider is unknown.</source>
+			<target>Ce service est inconnu.</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.invalidRequest">
+			<source>Invalid request : "%s".</source>
+			<target>Requête invalide : "%s".</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.pageNotFound">
+			<source>Page not found : "%s".</source>
+			<target>Page introuvable : "%s".</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.categoriesNotFound">
+			<source>No categories found for this map.</source>
+			<target>Aucune catégorie trouvée pour cette carte.</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.categoryNotFound">
+			<source>No category found for : "%s".</source>
+			<target>Aucune catégorie trouvée pour : "%s".</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.locationNotFound">
+			<source>No location found for : "%s".</source>
+			<target>Aucun emplacement trouvé pour : "%s".</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.mapsNotFound">
+			<source>No maps found.</source>
+			<target>Aucune carte trouvée.</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.mapNotFound">
+			<source>No map found.</source>
+			<target>Aucune carte trouvée.</target>
+		</trans-unit>
+    </body>
+  </file>
+</xliff>

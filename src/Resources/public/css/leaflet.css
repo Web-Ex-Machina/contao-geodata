@@ -1,0 +1,13 @@
+.mod_wem_display_map .leaflet-pane{z-index:50;}
+.mod_wem_display_map .leaflet-control,
+.mod_wem_display_map .map__reset,
+.mod_wem_display_map .map__content{z-index:51;}
+
+.mod_wem_display_map .leaflet-popup-content-wrapper{border-radius: 0;}
+.mod_wem_display_map .leaflet-popup-content{margin: 1em 1.5em;}
+
+img.leaflet-marker-icon{-o-object-fit: contain;object-fit: contain;}
+.leaflet-marker-pane.has-selected .leaflet-marker-icon:not(.marker-cluster){opacity: 0.5 !important;}
+.leaflet-marker-pane.has-selected .leaflet-marker-icon.selected{opacity: 1 !important;}
+
+.leaflet-control-container a[role=button]:hover{text-decoration: none;}

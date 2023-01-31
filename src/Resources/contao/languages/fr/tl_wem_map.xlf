@@ -1,0 +1,218 @@
+<?xml version="1.0" ?><xliff version="1.1">
+  <file datatype="php" original="system/modules/wem-contao-locations/languages/en/tl_wem_map.php" source-language="en" target-language="fr">
+    <body>
+    	<trans-unit id="tl_wem_map.title_legend">
+			<source>Global informations</source>
+			<target>Informations générales</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.title.0">
+			<source>Title</source>
+			<target>Intitulé</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.title.1">
+			<source>Enter the map title</source>
+			<target>Saisissez le titre de la carte</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.jumpTo.0">
+			<source>Redirect page</source>
+			<target>Page de redirection</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.jumpTo.1">
+			<source>Please choose the map reader page to which visitors will be redirected when clicking a map location.</source>
+			<target>Choisir la page vers laquelle les visiteurs seront réorientés en cliquant sur un emplacement.</target>
+		</trans-unit>
+
+		<trans-unit id="tl_wem_map.import_legend">
+			<source>Import/Export settings</source>
+			<target>Paramètres Import/Export</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.excelPattern.0">
+			<source>Columns Association</source>
+			<target>Correspondance des colonnes</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.excelPattern.1">
+			<source>Enter the columns schema the system will find in Excel ("title" => "A" for example)</source>
+			<target>Entrez le schéma de colonnes que le système trouvera dans les fichiers Excels ("title" => "A" par exemple)</target>
+		</trans-unit>
+
+		<trans-unit id="tl_wem_map.map_legend">
+			<source>Map settings</source>
+			<target>Paramètres de la carte</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.mapProvider.0">
+			<source>Provider</source>
+			<target>Service</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.mapProvider.1">
+			<source>Select the map provider</source>
+			<target>Sélectionnez le service utilisé pour la carte</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.mapConfig.0">
+			<source>Options</source>
+			<target>Options</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.mapConfig.1">
+			<source>Enter the map options</source>
+			<target>Saisissez les options de la carte</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.mapProvider.gmaps">
+			<source>Google Maps</source>
+			<target>Google Maps</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.mapProvider.leaflet">
+			<source>Leaflet</source>
+			<target>Leaflet</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.mapProviderGmapKey.0">
+			<source>API Key</source>
+			<target>Clef API</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.mapProviderGmapKey.1">
+			<source>Enter the Google Maps API Key</source>
+			<target>Saisissez la clef API Google Maps</target>
+		</trans-unit>
+
+		<trans-unit id="tl_wem_map.geocoding_legend">
+			<source>Geocoding settings</source>
+			<target>Paramètres Geocoding</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.geocodingProvider.0">
+			<source>Provider</source>
+			<target>Service</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.geocodingProvider.1">
+			<source>Select the geocoding provider</source>
+			<target>Sélectionnez le service utilisé pour le geocoding</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.geocodingProvider.gmaps">
+			<source>Google Maps</source>
+			<target>Google Maps</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.geocodingProvider.nominatim">
+			<source>Nominatim</source>
+			<target>Nominatim</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.geocodingProviderGmapKey.0">
+			<source>API Key</source>
+			<target>Clef API</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.geocodingProviderGmapKey.1">
+			<source>Enter the Google Maps API Key</source>
+			<target>Saisissez la clef API Google Maps</target>
+		</trans-unit>
+
+		<trans-unit id="tl_wem_map.categories_legend">
+			<source>Categories settings</source>
+			<target>Paramètres des catégories</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.categories.0">
+			<source>Categories</source>
+			<target>Catégories</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.categories.1">
+			<source>Manage the map categories</source>
+			<target>Gérez les catégories de la map</target>
+		</trans-unit>
+
+		<trans-unit id="tl_wem_map.markers_legend">
+			<source>Markers settings</source>
+			<target>Paramètres des marqueurs</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.doNotAddItemsToContaoSitemap.0">
+			<source>Exclude from sitemap</source>
+			<target>Exclure du sitemap</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.doNotAddItemsToContaoSitemap.1">
+			<source>Do not add items to Contao sitemap</source>
+			<target>Ne pas ajouter les marqueurs au sitemap Contao</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.doNotAddItemsToContaoSearch.0">
+			<source>Exclude from Contao search</source>
+			<target>Exclure de la recherche Contao</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.doNotAddItemsToContaoSearch.1">
+			<source>Do not add items to Contao search</source>
+			<target>Ne pas inclure les marqueurs à la recherche Contao</target>
+		</trans-unit>
+
+		<trans-unit id="tl_wem_map.import_legend">
+			<source>Import default settings</source>
+			<target>Paramètres par défaut de l'import</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.updateExistingItems.0">
+			<source>Update already existing items</source>
+			<target>Mettre à jour les élements déjà existant</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.updateExistingItems.1">
+			<source>If an imported item already exists, update it instead of creating a new entry</source>
+			<target>Si un marqueur existe déjà, le mettre à jour plutôt que d'en créer un nouveau</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.deleteExistingItemsNotInImportFile.0">
+			<source>Delete existing elements not present in import file</source>
+			<target>Supprimer les élements existant non présents dans le fichier d'import</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.deleteExistingItemsNotInImportFile.1">
+			<source>If an existing element isn't present in the import file, delete it</source>
+			<target>Si un marqueur existant n'est pas présent dans le fichier d'import, le supprimer</target>
+		</trans-unit>
+
+
+		<trans-unit id="tl_wem_map.new.0">
+			<source>New map</source>
+			<target>Nouvelle carte</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.new.1">
+			<source>Create a new map</source>
+			<target>Créer une nouvelle carte</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.edit.0">
+			<source>Edit map locations</source>
+			<target>Editer les emplacements de la carte</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.edit.1">
+			<source>Edit locations of map ID %s</source>
+			<target>Editer les emplacements de la carte ID %s</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.editheader.0">
+			<source>Edit map</source>
+			<target>Editer la carte</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.editheader.1">
+			<source>Edit map ID %s</source>
+			<target>Editer la carte ID %s</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.copy.0">
+			<source>Copy map and its markers</source>
+			<target>Dupliquer la carte et ses marqueurs</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.copy.1">
+			<source>Copy map ID %s and its markers</source>
+			<target>Dupliquer la carte ID %s et ses marqueurs</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.copy_map_item.0">
+			<source>Copy map</source>
+			<target>Dupliquer la carte</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.copy_map_item.1">
+			<source>Copy map ID %s</source>
+			<target>Dupliquer la carte ID %s</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.delete.0">
+			<source>Delete map</source>
+			<target>Supprimer la carte</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.delete.1">
+			<source>Delete map ID %s</source>
+			<target>Supprimer la carte ID %s</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.show.0">
+			<source>Show map data</source>
+			<target>Voir les informations de la carte</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.show.1">
+			<source>Show map data ID %s</source>
+			<target>Voir les informations de la carte ID %s</target>
+		</trans-unit>
+    </body>
+  </file>
+</xliff>
