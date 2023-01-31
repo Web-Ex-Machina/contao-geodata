@@ -1,0 +1,76 @@
+<?xml version="1.0" ?><xliff version="1.1">
+  <file datatype="php" original="system/modules/wem-contao-locations/languages/en/tl_wem_map_category.php" source-language="en" target-language="fr">
+    <body>
+    	<trans-unit id="tl_wem_map_category.general_legend">
+			<source>Global informations</source>
+			<target>Global informations</target>			
+		</trans-unit>
+		<trans-unit id="tl_wem_map_category.title.0">
+			<source>Title</source>
+			<target>Title</target>			
+		</trans-unit>
+		<trans-unit id="tl_wem_map_category.title.1">
+			<source>Enter the category title</source>
+			<target>Enter the category title</target>			
+		</trans-unit>
+
+		<trans-unit id="tl_wem_map_category.marker_legend">
+			<source>Marker settings</source>
+			<target>Marker settings</target>			
+		</trans-unit>
+		<trans-unit id="tl_wem_map_category.marker.0">
+			<source>Marker</source>
+			<target>Marker</target>			
+		</trans-unit>
+		<trans-unit id="tl_wem_map_category.marker.1">
+			<source>Select the category marker</source>
+			<target>Select the category marker</target>			
+		</trans-unit>
+		<trans-unit id="tl_wem_map_category.markerConfig.0">
+			<source>Settings</source>
+			<target>Settings</target>			
+		</trans-unit>
+		<trans-unit id="tl_wem_map_category.markerConfig.1">
+			<source>Configure the marker</source>
+			<target>Configure the marker</target>			
+		</trans-unit>
+		<trans-unit id="tl_wem_map_category.createdAt.0">
+			<source>Created at</source>
+			<target>Created at</target>			
+		</trans-unit>
+
+		<trans-unit id="tl_wem_map_category.new.0">
+			<source>New map category</source>
+			<target>New map category</target>			
+		</trans-unit>
+		<trans-unit id="tl_wem_map_category.new.1">
+			<source>Create a new map category</source>
+			<target>Create a new map category</target>			
+		</trans-unit>
+		<trans-unit id="tl_wem_map_category.edit.0">
+			<source>Edit map category locations</source>
+			<target>Edit map category locations</target>			
+		</trans-unit>
+		<trans-unit id="tl_wem_map_category.edit.1">
+			<source>Edit locations of map category ID %s</source>
+			<target>Edit locations of map category ID %s</target>			
+		</trans-unit>
+		<trans-unit id="tl_wem_map_category.delete.0">
+			<source>Delete map category</source>
+			<target>Delete map category</target>			
+		</trans-unit>
+		<trans-unit id="tl_wem_map_category.delete.1">
+			<source>Delete map category ID %s</source>
+			<target>Delete map category ID %s</target>			
+		</trans-unit>
+		<trans-unit id="tl_wem_map_category.show.0">
+			<source>Show map category data</source>
+			<target>Show map category data</target>			
+		</trans-unit>
+		<trans-unit id="tl_wem_map_category.show.1">
+			<source>Show map category data ID %s</source>
+			<target>Show map category data ID %s</target>			
+		</trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -1,0 +1,91 @@
+<div id="tl_buttons">
+    <a href="<?php echo $this->backButtonHref; ?>" class="header_back" title="'<?php echo $this->backButtonTitle; ?>" accesskey="b"><?php echo $this->backButtonLabel; ?></a>
+</div>
+    <?php echo Message::generate(); ?>
+<form action="<?php echo $this->formAction; ?>" id="tl_wem_items_export" class="tl_form" method="post">
+    <div class="tl_formbody_edit">
+        <input type="hidden" name="FORM_SUBMIT" value="tl_wem_items_export">
+        <input type="hidden" name="REQUEST_TOKEN" value="<?php echo $this->formRequestToken; ?>">
+
+        <fieldset class="tl_tbox">
+            <legend><?php echo $this->widgetSettingsTitle; ?></legend>
+            <div class="widget">
+                <fieldset class="tl_radio_container">
+                    <legend><?php echo $this->widgetSettingsFormatLabel; ?></legend>
+                    <input type="radio" name="format" id="format_xslx" value="xlsx"  class="tl_radio" checked>
+                    <label for="format_xlsx">
+                        XLSX
+                    </label>
+                    <input type="radio" name="format" id="format_csv" value="csv" class="tl_radio" >
+                    <label for="format_csv">
+                        CSV
+                    </label>
+                </fieldset>
+            </div>
+            <div class="widget">
+                <h3>
+                    <label for="chk_limit_to_categories">
+                        <input type="checkbox" name="chk_limit_to_categories" value="1" class="tl_checkbox">
+                        <?php echo $this->widgetSettingsLimitToCategoriesCheckboxLabel; ?>
+                    </label>
+                </h3>
+                <div id="limit_to_categories_container" class="hidden">
+                    <br/>
+                    <label for="limit_to_categories[]">
+                        <?php echo $this->widgetSettingsLimitToCategoriesSelectLabel; ?>
+                    </label>
+                    <select name="limit_to_categories[]" multiple class="tl_select tl_chosen">
+                        <?php foreach($this->categories as $id => $label): ?>
+                        <option value="<?php echo $id; ?>">
+                            <?php echo $label; ?>
+                        </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+            <div class="widget">
+                <h3>
+                    <label for="chk_limit_to_countries">
+                        <input type="checkbox" name="chk_limit_to_countries" value="1" class="tl_checkbox">
+                        <?php echo $this->widgetSettingsLimitToCountriesCheckboxLabel; ?>
+                    </label>
+                </h3>
+                <div id="limit_to_countries_container" class="hidden">
+                    <br/>
+                    <label for="limit_to_countries[]">
+                        <?php echo $this->widgetSettingsLimitToCountriesSelectLabel; ?>
+                    </label>
+                    <select name="limit_to_countries[]" multiple class="tl_select tl_chosen">
+                        <?php foreach($this->countries as $id => $label): ?>
+                        <option value="<?php echo $id; ?>">
+                            <?php echo $label; ?>
+                        </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+
+    <div class="tl_formbody_submit">
+        <div class="tl_submit_container">
+          <input type="submit" name="save" id="save" class="tl_submit" accesskey="s" value="<?php echo $this->formSubmitValue; ?>">
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+    document.querySelector('input[name="chk_limit_to_categories"]').addEventListener('click',function(e){
+        let select = document.querySelector('select[name="limit_to_categories[]"]');
+        let container = document.querySelector('#limit_to_categories_container');
+        container.toggleClass('hidden');
+        select.required = e.target.checked;
+        $('select[name="limit_to_categories[]"]').attr("required",e.target.checked).trigger('chosen:updated');
+    });
+    document.querySelector('input[name="chk_limit_to_countries"]').addEventListener('click',function(e){
+        let select = document.querySelector('select[name="limit_to_countries[]"]');
+        let container = document.querySelector('#limit_to_countries_container');
+        container.toggleClass('hidden');
+        select.required = e.target.checked;
+        $('select[name="limit_to_categories[]"]').attr("required",e.target.checked).trigger('chosen:updated');
+    });
+</script>

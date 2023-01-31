@@ -1,0 +1,140 @@
+<?php if($this->map['doNotAddItemsToContaoSearch']): ?>
+<!-- indexer::stop -->
+<?php endif; ?>
+<div class="<?= $this->class ?> block">
+	<?php if($this->error): ?>
+	<div class="error">
+		<?= $this->msg ?>
+	</div>
+	<?php else: ?>
+		<div class="location layout_full block<?= $this->class ?>"  itemprop="location" itemscope itemtype="http://schema.org/Place">
+			<?php if ($this->item['picture']['path']): ?>
+				<div class="reader__picture img-container r_2-1">
+					<?php $this->insert('image', [
+						'picture'=>[
+							'img'=>[
+								'src'=>$this->item['picture']['path']
+							]
+						]
+					]); ?>
+				</div>
+			<?php endif; ?>
+
+			<div class="reader__headline">
+				<h1 class="m-right m-bottom-0 ft-notrs" itemprop="name"><?= $this->item['title'] ?></h1>
+			</div>
+
+			<div class="reader__text ce_text block" itemprop="description">
+				<?php if($this->item['content']): ?>
+					<?php echo $this->item['content']; ?>
+				<?php else: ?>
+					<?= $this->item['teaser'] ?>
+				<?php endif; ?>
+			</div>
+
+			
+			<?php if(!empty($this->item['attributes'])): ?>
+			<div class="reader__attributes block m-bottom">
+				<ul>
+					<?php foreach($this->item['attributes'] as $attribute): ?>
+					<li>
+						<span class="ft-bold"><?php echo $attribute['attribute']; ?>:</span>&nbsp;<?php echo $attribute['value']; ?>
+					</li>
+					<?php endforeach; ?>
+				</ul>
+			</div>
+			<?php endif; ?>
+
+			<!-- contacts -->
+			<div class="reader__contact block m-bottom">
+				<?php if($this->item['phone']): ?>
+					<div class="map__list__item__line">
+						<a href="tel:<?= $this->item['phone']; ?>" rel="nofollow">
+							<i class="fas fa-phone fa-lg"></i>&nbsp;<span itemprop="telephone"><?= $this->item['phone']; ?></span>
+						</a>
+					</div>
+				<?php endif; ?>
+				<?php if($this->item['fax']): ?>
+					<div class="map__list__item__line">
+					<a href="fax:<?= $this->item['fax']; ?>" rel="nofollow">
+						<i class="fas fa-fax fa-lg"></i>&nbsp;<span itemprop="faxNumber"><?= $this->item['fax']; ?></span>
+					</a>
+					</div>
+				<?php endif; ?>
+				<?php if($this->item['email']): ?>
+					<div class="map__list__item__line">
+					<a href="mailto:<?= $this->item['email']; ?>" rel="nofollow">
+						<i class="fa-solid fa-envelope fa-lg"></i>&nbsp;<span itemprop="faxNumber"><?= $this->item['email']; ?></span>
+					</a>
+					</div>
+				<?php endif; ?>
+			</div>
+
+			<!-- social networks -->
+			<div class="share-buttons__container block m-bottom-x2">
+				<?php if($this->item['website']): ?>
+					<a href="<?= $this->item['website']; ?>" rel="nofollow" target="_blank" itemprop="sameAs">
+						<i class="fal fa-globe fa-2xl"></i>
+					</a>
+				<?php endif; ?>
+				<?php if($this->item['facebook']): ?>
+					<a href="<?= $this->item['facebook']; ?>" rel="nofollow" target="_blank">
+						<i class="fab fa-facebook fa-2xl"></i>
+					</a>
+				<?php endif; ?>
+				<?php if($this->item['twitter']): ?>
+					<a href="<?= $this->item['twitter']; ?>" rel="nofollow" target="_blank">
+						<i class="fab fa-twitter fa-2xl"></i>
+					</a>
+				<?php endif; ?>
+				<?php if($this->item['instagram']): ?>
+					<a href="<?= $this->item['instagram']; ?>" rel="nofollow" target="_blank">
+						<i class="fab fa-instagram fa-2xl"></i>
+					</a>
+				<?php endif; ?>
+			</div>
+
+
+		    <div class="reader__location">
+				<?php if ($this->item['address']): ?>
+					<i class="fal fa-map-marker-alt"></i>&nbsp;
+					<span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+						<?= $this->item['address'] ?>
+					</span>
+				<?php endif; ?>
+<!-- 				<br />
+				<?= $this->item['admin_lvl_1'] ?>
+				<?php if($this->item['admin_lvl_2']): ?>
+					- <?= $this->item['admin_lvl_2'] ?>
+				<?php endif; ?>
+				<?php if($this->item['admin_lvl_3']): ?>
+					- <?= $this->item['admin_lvl_3'] ?>
+				<?php endif; ?> -->
+		    </div>
+
+		    <?php if (!empty($this->item['lat']) && !empty($this->item['lng'])): ?>
+			    <div itemprop="geo" itemscope itemtype="https://schema.org/GeoCoordinates">
+			    	<meta itemprop="latitude" content="<?= $this->item['lat']; ?>" />
+			    	<meta itemprop="longitude" content="<?= $this->item['lng']; ?>" />
+			    </div>
+				<div id="map-<?= $this->id ?>" class="reader__map" style="height:512px;" data-lat="<?= $this->item['lat']; ?>" data-lon="<?= $this->item['lng']; ?>"></div>
+				<script type="text/javascript">
+				  var mapContainer = document.querySelector('#map-<?= $this->id ?>');
+				  var map = L.map('map-<?= $this->id ?>',{
+				    gestureHandling: true,
+				  }).setView([mapContainer.getAttribute('data-lat'),mapContainer.getAttribute('data-lon')], 16);
+				  var OpenStreetMap_Layer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+				    maxZoom: 18,
+				    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+				  })
+				  .addTo(map);
+				  var marker = L.marker([mapContainer.getAttribute('data-lat'),mapContainer.getAttribute('data-lon')]).addTo(map);
+				</script>
+		    <?php endif; ?>
+		</div>
+	<?php endif; ?>
+</div>
+
+<?php if($this->map['doNotAddItemsToContaoSearch']): ?>
+<!-- indexer::continue -->
+<?php endif; ?>

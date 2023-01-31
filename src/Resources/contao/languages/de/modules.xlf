@@ -1,0 +1,31 @@
+<?xml version="1.0" ?><xliff version="1.1">
+  <file datatype="php" original="system/modules/wem-contao-locations/languages/en/modules.php" source-language="en" target-language="de">
+    <body>
+    	<trans-unit id="MOD.wem-geodata">
+			<source>Cartes &amp; Locations</source>
+			<target>Karten &amp; Standorte</target>
+		</trans-unit>
+		<trans-unit id="MOD.wem-maps.0">
+			<source>Maps</source>
+			<target>Karten</target>
+		</trans-unit>
+		<trans-unit id="MOD.wem-maps.1">
+			<source>Manage maps and locations of your website</source>
+			<target>Karten und Standorte verwalten</target>
+		</trans-unit>
+
+		<trans-unit id="FMD.wem_geodata">
+			<source>Cartes &amp; Locations</source>
+			<target>Karten &amp; Standorte</target>
+		</trans-unit>
+		<trans-unit id="FMD.wem_display_map.0">
+			<source>Map</source>
+			<target>Karte</target>
+		</trans-unit>
+		<trans-unit id="FMD.wem_display_map.1">
+			<source>Display a map on your website</source>
+			<target>Karte auf der Webseite anzeigen</target>
+		</trans-unit>
+    </body>
+  </file>
+</xliff>

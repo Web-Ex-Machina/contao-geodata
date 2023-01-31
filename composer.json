@@ -18,8 +18,10 @@
     },
     "require": {
         "php": ">=7.4",
-        "contao/core-bundle": "~4.13",
-        "webexmachina/contao-utils": "^0.3"
+        "contao/core-bundle": "~4.9",
+        "webexmachina/contao-utils": "^0.3",
+        "phpoffice/phpspreadsheet": "^1.21",
+        "terminal42/dcawizard":"^2.5"
     },
     "require-dev":
     {
