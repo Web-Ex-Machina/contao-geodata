@@ -86,7 +86,7 @@ class LocationsList extends Core
             ]);
 
             if (!$this->maps) {
-                throw new \Exception('No maps found.');
+                throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noMapsFound']);
             }
 
             $this->objMap = $this->maps->first();
@@ -125,6 +125,9 @@ class LocationsList extends Core
 
             // pagination
             $this->numberOfItems = $this->countItems();
+            if (0 === $this->numberOfItems) {
+                throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noLocationsFound']);
+            }
             $this->buildPagination($this->numberOfItems);
 
             // Get locations
@@ -166,7 +169,7 @@ class LocationsList extends Core
                     ];
                 break;
                 default:
-                    throw new \Exception(sprintf($GLOBALS['TL_LANG']['MS']['ERR']['unknownAjaxRequest'], Input::post('action')));
+                    throw new \Exception(sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['unknownAjaxRequest'], Input::post('action')));
             }
         } catch (\Exception $e) {
             $arrResponse = ['status' => 'error', 'msg' => $e->getMessage(), 'trace' => $e->getTrace()];
@@ -203,8 +206,10 @@ class LocationsList extends Core
             $arrFilterFields = unserialize($this->wem_geodata_filters_fields);
             $arrCountries = Util::getCountries();
             $arrLocations = [];
-            while ($locations->next()) {
-                $arrLocations[] = $locations->current()->row();
+            if ($locations) {
+                while ($locations->next()) {
+                    $arrLocations[] = $locations->current()->row();
+                }
             }
 
             foreach ($arrFilterFields as $filterField) {

@@ -88,7 +88,7 @@ class Nominatim extends Controller
 
         // Catch Error
         if (!$geoloc) {
-            throw new \Exception('invalid request : '.$strUrl);
+            throw new \Exception(sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['invalidRequest'], $strUrl));
         }
         // And return them
         if (1 === $intResults) {

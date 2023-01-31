@@ -2,8 +2,6 @@
 	<?php if($this->error): ?>
 		<div class="error">
 			<?= $this->msg ?>
-			<br />
-			<?= $this->trace ?>
 		</div>
 	<?php else: ?>
 		<div class="map__wrapper"  style="width: <?= $this->config['map']['width'] ?:'100%' ?>; height:<?= $this->config['map']['height'] ?: '60vh;' ?>">

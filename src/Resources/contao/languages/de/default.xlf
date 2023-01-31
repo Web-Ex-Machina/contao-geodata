@@ -61,6 +61,10 @@
 			<target>Standort %s gespeichert!</target>
 		</trans-unit>
 
+		<trans-unit id="WEM.LOCATIONS.ERROR.unknownAjaxRequest">
+			<source>Unknown AJAX action : "%s"</source>
+			<target>Unbekannte AJAX aktion : "%s"</target>
+		</trans-unit>
 		<trans-unit id="WEM.LOCATIONS.ERROR.noLocationsFound">
 			<source>No locations found for this map !</source>
 			<target>Keine Standorte für diese Karte gefunden</target>
@@ -76,6 +80,46 @@
 		<trans-unit id="WEM.LOCATIONS.ERROR.errorWhenSavingTheLocation">
 			<source>An error happened when saving the location. Please try again.</source>
 			<target>Es ist ein Fehler beim Speichern des Standorts aufgetreten. Bitte nochmal versuchen.</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.unknownExportFormat">
+			<source>Unknown export format. Known formats are : "%s".</source>
+			<target>Unbekanntes Exportformat. Bekannte Formate sind : "%s".</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.gmapNeedsAPIKey">
+			<source>Google Maps needs an API Key !</source>
+			<target>Google Maps benötigt einen API Key !</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.unknownProvider">
+			<source>This provider is unknown.</source>
+			<target>Dieser Anbieter ist unbekannt.</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.invalidRequest">
+			<source>Invalid request : "%s".</source>
+			<target>Ungültige Anfrage : "%s".</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.pageNotFound">
+			<source>Page not found : "%s".</source>
+			<target>Seite nicht gefunden : "%s".</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.categoriesNotFound">
+			<source>No categories found for this map.</source>
+			<target>Keine Kategorien für diese Karte gefunden.</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.categoryNotFound">
+			<source>No category found for : "%s".</source>
+			<target>Keine Kategorie gefunden für : "%s".</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.locationNotFound">
+			<source>No location found for : "%s".</source>
+			<target>Kein Ort gefunden für : "%s".</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.mapsNotFound">
+			<source>No maps found.</source>
+			<target>Keine Karten gefunden.</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.mapNotFound">
+			<source>No map found.</source>
+			<target>Keine Karte gefunden.</target>
 		</trans-unit>
     </body>
   </file>

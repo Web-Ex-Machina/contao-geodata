@@ -84,7 +84,7 @@ class DisplayMap extends Core
             $this->objMap = Map::findByPk($this->wem_geodata_map);
 
             if (!$this->objMap) {
-                throw new \Exception('No map found.');
+                throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noMapFound']);
             }
 
             // Load the libraries
@@ -188,7 +188,7 @@ class DisplayMap extends Core
                     ];
                 break;
                 default:
-                    throw new \Exception(sprintf($GLOBALS['TL_LANG']['MS']['ERR']['unknownAjaxRequest'], Input::post('action')));
+                    throw new \Exception(sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['unknownAjaxRequest'], Input::post('action')));
             }
         } catch (\Exception $e) {
             $arrResponse = ['status' => 'error', 'msg' => $e->getMessage(), 'trace' => $e->getTrace()];
@@ -223,8 +223,10 @@ class DisplayMap extends Core
 
             $arrFilterFields = unserialize($this->wem_geodata_filters_fields);
             $arrLocations = [];
-            while ($locations->next()) {
-                $arrLocations[] = $locations->current()->row();
+            if ($locations) {
+                while ($locations->next()) {
+                    $arrLocations[] = $locations->current()->row();
+                }
             }
 
             $arrCountries = Util::getCountries();

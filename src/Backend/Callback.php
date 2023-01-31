@@ -552,7 +552,7 @@ class Callback extends Backend
                 header('Content-Disposition: attachment;filename="'.$strFilename.'.xlsx"');
             break;
             default:
-                throw new Exception('Unknown export format. Known formats are : "csv", "xslx".');
+                throw new Exception(sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['unknownExportFormat'], implode('","', ['csv', 'xlsx'])));
             break;
         }
 

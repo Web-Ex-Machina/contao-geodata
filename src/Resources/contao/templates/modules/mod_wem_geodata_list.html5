@@ -1,4 +1,10 @@
 <div class="locations__list">
+  <div class="<?= $this->class ?> block">
+  <?php if($this->error): ?>
+    <div class="error">
+      <?= $this->msg ?>
+    </div>
+  <?php else: ?>
   <div class="h3 locations__list__title"><?= $GLOBALS['TL_LANG']['WEM']['LOCATIONS']['TITLE']['PANEL'] ?> <span class="location"></span></div>
   <?php if($this->filters && "inlist" == $this->filters_position): ?>
   <form action="<?= $this->filters_action ?>" method="<?= $this->filters_method ?>">
@@ -32,4 +38,6 @@
     <?php endforeach; ?>
     <?php echo $this->pagination; ?>
   </div>
+  <?php endif; ?>
+
 </div>

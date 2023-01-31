@@ -73,7 +73,7 @@ class ClassLoader extends Controller
         switch ($objMap->mapProvider) {
             case 'gmaps':
                 if (!$objMap->mapProviderGmapKey) {
-                    throw new \Exception('Google Maps needs an API Key !');
+                    throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['gmapNeedsAPIKey']);
                 }
 
                 $objCssCombiner->add('bundles/wemgeodata/css/gmaps.css', $strVersion);
@@ -97,7 +97,7 @@ class ClassLoader extends Controller
                 ], $strVersion);
                 break;
             default:
-                throw new \Exception('This provider is unknown');
+                throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['unknownProvider']);
         }
 
         // And add them to pages

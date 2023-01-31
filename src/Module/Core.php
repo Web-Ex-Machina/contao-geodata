@@ -60,7 +60,7 @@ abstract class Core extends Module
 
             // Do not index or cache the page if the page number is outside the range
             if ($page < 1 || $page > max(ceil($total / $this->perPage), 1)) {
-                throw new \Exception('Page not found: '.Environment::get('uri'));
+                throw new \Exception(sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['pageNotFound'], Environment::get('uri')));
             }
 
             // Set limit and offset
@@ -85,7 +85,7 @@ abstract class Core extends Module
             $objCategories = Category::findItems(['published' => 1, 'pid' => $this->wem_geodata_map]);
 
             if (!$objCategories) {
-                throw new \Exception('No categories found for this map.');
+                throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noCategoriesFound']);
             }
 
             $arrCategories = [];
@@ -149,7 +149,7 @@ abstract class Core extends Module
             $objLocations = MapItem::findItems($c, $limit, $offset);
 
             if (!$objLocations) {
-                throw new \Exception('No locations found for this map.');
+                throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noLocationsFound']);
             }
 
             $arrLocations = [];
@@ -173,7 +173,7 @@ abstract class Core extends Module
             } elseif ($objItem = Category::findByPk($varItem)) {
                 $arrItem = $objItem->row();
             } else {
-                throw new \Exception('No category found for : '.$varItem);
+                throw new \Exception(sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noCategoryFound'], $varItem));
             }
 
             // Get marker file
@@ -223,7 +223,7 @@ abstract class Core extends Module
             } elseif ($objItem = MapItem::findByIdOrAlias($varItem)) {
                 $arrItem = $objItem->row();
             } else {
-                throw new \Exception('No location found for : '.$varItem);
+                throw new \Exception(sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noLocationFound'], $varItem));
             }
 
             // Format Address

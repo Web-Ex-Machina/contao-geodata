@@ -16,7 +16,6 @@ namespace WEM\GeoDataBundle\Module;
 
 use Contao\BackendTemplate;
 use Contao\Config;
-use Contao\CoreBundle\Exception\PageNotFoundException;
 use Contao\Environment;
 use Contao\Input;
 use WEM\GeoDataBundle\Model\Map;
@@ -84,7 +83,7 @@ class LocationsReader extends Core
 
             // The location item does not exist or has an external target (see #33)
             if (null === $objItem || !$objItem->isPublishedForTimestamp()) {
-                throw new PageNotFoundException('Page not found: '.Environment::get('uri'));
+                throw new \Exception(sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['pageNotFound'], Environment::get('uri')));
             }
 
             $arrItem = $this->getLocation($objItem);
