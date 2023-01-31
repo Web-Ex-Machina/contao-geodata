@@ -121,3 +121,8 @@
 .map__legend__item{ font-size: 1.25em; display: flex; align-items: center; padding-right: 1rem;}
 .map__legend__item+.map__legend__item{ margin-top: 0.5em; }
 .map__legend__item img{margin-right: 0.65em; width: 2em;}
+
+
+
+.map__wrapper+*{margin-top: 1em;}
+.locations__filters+*{margin-top: 1em;}

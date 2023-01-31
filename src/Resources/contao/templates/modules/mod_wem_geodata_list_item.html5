@@ -15,9 +15,10 @@
     <?php endif; ?>
 
     <div class="block-card__content">
-      <<?php echo $this->location['url']?'a href="'.$this->location['url'].'"':'div' ?>  class="block-card__title h2" title="<?= $this->location['title'] ?>" itemprop="name">
+      <<?php echo $this->location['url']?'a href="'.$this->location['url'].'"':'div' ?>  class="block-card__title h2 m-bottom-0" title="<?= $this->location['title'] ?>" itemprop="name">
         <?= $this->location['title'] ?>
       </<?php echo $this->location['url']?'a':'div' ?> >
+
 
       <div class="reader__location">
         <i class="fal fa-map-marker-alt"></i>&nbsp;
@@ -25,24 +26,21 @@
           <?= $this->location['address'] ?>
         </span>
       </div>
-      <?= $this->location['admin_lvl_1'] ?>
-      <?php if($this->location['admin_lvl_2']): ?>
-      - <?= $this->location['admin_lvl_2'] ?>
-      <?php endif; ?>
-      <?php if($this->location['admin_lvl_3']): ?>
-      - <?= $this->location['admin_lvl_3'] ?>
-      <?php endif; ?>
-
-      <div class="block-card__text">
+      <div class="block-card__text reader__text  m-bottom">
+        <?= $this->location['admin_lvl_1'] ?>
+        <?php if($this->location['admin_lvl_2']): ?>
+        - <?= $this->location['admin_lvl_2'] ?>
+        <?php endif; ?>
+        <?php if($this->location['admin_lvl_3']): ?>
+        - <?= $this->location['admin_lvl_3'] ?>
+        <?php endif; ?>
         <?php if (!empty($this->location['teaser'])): ?>
-          <div class="ce_text block <?= ($this->location['picture']['path'])? 'cols-span-2 cols-span-md-1':'' ?>" itemprop="description">
-            <?= $this->location['teaser'] ?>
-          </div>
+          <?= $this->location['teaser'] ?>
         <?php endif; ?>
       </div>
       
       <?php if ($this->location['url']): ?>
-        <div class="event__link">
+        <div class="event__link m-top-0">
           <a href="<?= $this->location['url'] ?>" title="<?= $GLOBALS['TL_LANG']['MSC']['more'] ?>"></a>
         </div>
       <?php endif ?>
