@@ -40,8 +40,8 @@ window.addEventListener('load', (event) => {
 	});
 
 	// FILTERS events
-	$('.map__filters [id^=filter_]').on('change', function(){
-		$('.map__filters [id^=filter_]').each(function(){
+	$('.locations__filters, .map__filters').find('[id^=filter_]').on('change keyup', function(){
+		$('.locations__filters, .map__filters').find('[id^=filter_]').each(function(){
 			filters[this.name] = this.value;
 		});
 		applyFilters();
@@ -49,7 +49,7 @@ window.addEventListener('load', (event) => {
 
 	initMap();
 
-	// set legend aftre map init
+	// set legend after map init
 	if (objMapFilters.category) {
 		for(var c in objMapFilters.category.options) {
 	    	var category = objMapFilters.category.options[c];
@@ -79,6 +79,9 @@ window.addEventListener('load', (event) => {
 	    
 	}
 
+	// manually trigger filters
+	$('.locations__filters, .map__filters').find('[id^=filter_]').first().trigger('change');
+
 	// console.log('arrMarkersInListAll',arrMarkersInListAll);
 	// console.log('arrMarkersInListCurrent',arrMarkersInListCurrent);
 	// console.log('arrMarkersAll',arrMarkersAll);
@@ -86,24 +89,36 @@ window.addEventListener('load', (event) => {
 });
 
 var applyFilters = function(){
+	// console.log(filters);
 	arrMarkersCurrent = arrMarkersAll.filter( item => {
 		var match = true;
 		for(var f in filters){
-			if (filters[f] !== '' && item['filter_'+f] !== filters[f])
-				match = false;
+			if (f !== "search") {
+				if (filters[f] !== '' && item['filter_'+f] !== filters[f])
+					match = false;
+			} else { // input search code
+				if (item.filter_text.search(new RegExp(filters[f],'i')) == -1)
+					match = false;
+			}
 		}
 		return match;
 	});
 	// console.log("==========");
 	// console.log(arrMarkersInListAll);
 	arrMarkersInListCurrent = arrMarkersInListAll.filter( item => {
-		// console.log(item);
 		var match = true;
 		for(var f in filters){
-			// console.log(filters[f],item['filter_'+f],filters[f] !== '' && item['filter_'+f] !== filters[f]);
-			if (filters[f] !== '' && item['filter_'+f] !== filters[f]){
-				match = false;
-				return false;
+			if (f !== "search") {
+				// console.log(filters[f], item['filter_'+f], filters[f] !== '' && item['filter_'+f] !== filters[f] );
+				if (filters[f] !== '' && item['filter_'+f] !== filters[f]){
+					match = false;
+					return false;
+				}
+			} else { // input search code
+				if (item.filter_text.search(new RegExp(filters[f],'i')) == -1){
+					match = false;
+					return false;
+				}
 			}
 		}
 		return match;

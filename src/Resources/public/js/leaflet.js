@@ -142,6 +142,10 @@ initMap = function() {
 			for(var f in objMapFilters) {
 				marker['filter_'+f] = '';
 				markerInList['filter_'+f] = '';
+				if ($('.map__list__item[data-id="'+location.id+'"]').length){
+					markerInList.filter_text = $('.map__list__item[data-id='+location.id+']').text()+' '+$(getPopupHTML(location)).text();
+					marker.filter_text = $('.map__list__item[data-id='+location.id+']').text()+' '+$(getPopupHTML(location)).text();
+				}
 				if (location.hasOwnProperty(f)) {
 					switch(f){
 						case 'category': 
@@ -151,7 +155,6 @@ initMap = function() {
 							}else{
 								marker['filter_'+f] = '';
 								markerInList['filter_'+f] = '';
-
 							}
 						break;
 						case 'country':
