@@ -15,7 +15,7 @@ declare(strict_types=1);
 $GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'wem_geodata_filters';
 $GLOBALS['TL_DCA']['tl_module']['palettes']['wem_display_map'] = '
     {title_legend},name,type;
-    {config_legend},wem_geodata_map,wem_geodata_map_list,wem_geodata_filters,wem_geodata_distToMerge;
+    {config_legend},wem_geodata_map,wem_geodata_map_list,wem_geodata_filters;
     {template_legend:hide},customTpl;
     {protected_legend:hide},protected;
     {expert_legend:hide},guests,cssID
@@ -87,13 +87,6 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_search'] = [
     'inputType' => 'checkbox',
     'eval' => ['doNotCopy' => true, 'tl_class' => 'w50 m12'],
     'sql' => "char(1) NOT NULL default ''",
-];
-$GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_distToMerge'] = [
-    'label' => &$GLOBALS['TL_LANG']['tl_module']['wem_geodata_distToMerge'],
-    'exclude' => true,
-    'inputType' => 'text',
-    'eval' => ['tl_class' => 'w50'],
-    'sql' => "int(10) unsigned NOT NULL default '0'",
 ];
 $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_customTplForGeodataItems'] = [
     'exclude' => true,

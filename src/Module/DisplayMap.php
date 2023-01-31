@@ -314,40 +314,8 @@ class DisplayMap extends Core
     protected function buildMarkers(array $arrLocations): array
     {
         $arrMarkers = [];
-        $distToMerge = $this->wem_geodata_distToMerge ?: 0; // in m
 
         foreach ($arrLocations as $l) {
-            if ($distToMerge > 0) {
-                // For each markers we will need to check the proximity with the other markers
-                // If it's too close, we will merge them and place the marker on the middle of them
-                // Nota 1 : Maybe we shall regroup them before moving the markers (because we could have more and more unprecise markers ?)
-                foreach ($arrMarkers as $k => $m) {
-                    // First make sure we stay in the same country
-                    // Either way, we will hide items too close from a same border
-                    if ($m['country']['code'] !== $l['country']['code']) {
-                        continue;
-                    }
-
-                    // Calculate the distance between the current location and the markers stored
-                    $d = Util::vincentyGreatCircleDistance(
-                        $l['lat'],
-                        $l['lng'],
-                        $m['lat'],
-                        $m['lng']
-                    );
-
-                    // If proximity too close :
-                    // add the location to this marker and continue
-                    // adjust marker pos
-                    if ($d < $distToMerge) {
-                        $arrMarkers[$k]['lat'] = ($l['lat'] + $m['lat']) / 2;
-                        $arrMarkers[$k]['lng'] = ($l['lng'] + $m['lng']) / 2;
-                        $arrMarkers[$k]['items'][] = $l;
-                        continue 2;
-                    }
-                }
-            }
-
             $arrMarkers[] = [
                 'lat' => $l['lat'],
                 'lng' => $l['lng'],
