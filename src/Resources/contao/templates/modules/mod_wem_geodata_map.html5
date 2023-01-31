@@ -28,7 +28,7 @@
 	      </form>
 	    <?php endif; ?>
 		<div class="map__wrapper"  style="width: <?= $this->config['map']['width'] ?:'100%' ?>; height:<?= $this->config['map']['height'] ?: '60vh;' ?>">
-			<?php if($this->filters  && "inmap" == $this->filters_position): ?>
+			<?php if($this->filters  && "leftpanel" == $this->filters_position): ?>
 				<div class="map__filters map__panel left active">
 					<span class="map__filters__toggler"><i class="far fa-sort-shapes-down-alt"></i></span>
 	  				<form class="map__filters__wrapper scroll-custom" action="<?= $this->filters_action ?>" method="<?= $this->filters_method ?>">
@@ -70,8 +70,7 @@
 				<?php echo $this->list; ?>
 			<?php endif; ?>
 		</div>
-		<?php if($this->filters && "inlist" == $this->filters_position): ?>  
-			<!-- TODO: change inlist for 'below' -->
+		<?php if($this->filters && "below" == $this->filters_position): ?>  
 	      <form action="<?= $this->filters_action ?>" method="<?= $this->filters_method ?>" class="locations__filters ft-0-8-em">
 	          <?php foreach($this->filters as $f): ?>
 	            <div class="location__filter form-group <?php echo ('text' == $f['type']) ? 'w-100' : '';?>">

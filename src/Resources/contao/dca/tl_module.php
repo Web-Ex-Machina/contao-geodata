@@ -33,8 +33,9 @@ $GLOBALS['TL_DCA']['tl_module']['palettes']['wem_geodata_reader'] = '
     {expert_legend:hide},guests,cssID
 ';
 
-$GLOBALS['TL_DCA']['tl_module']['subpalettes']['wem_geodata_filters_inmap'] = 'wem_geodata_search,wem_geodata_filters_fields';
-$GLOBALS['TL_DCA']['tl_module']['subpalettes']['wem_geodata_filters_inlist'] = 'wem_geodata_search,wem_geodata_filters_fields';
+$GLOBALS['TL_DCA']['tl_module']['subpalettes']['wem_geodata_filters_rightpanel'] = 'wem_geodata_search,wem_geodata_filters_fields';
+$GLOBALS['TL_DCA']['tl_module']['subpalettes']['wem_geodata_filters_above'] = 'wem_geodata_search,wem_geodata_filters_fields';
+$GLOBALS['TL_DCA']['tl_module']['subpalettes']['wem_geodata_filters_below'] = 'wem_geodata_search,wem_geodata_filters_fields';
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_map'] = [
     'label' => &$GLOBALS['TL_LANG']['tl_module']['wem_geodata_map'],
@@ -65,7 +66,7 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_filters'] = [
     'label' => &$GLOBALS['TL_LANG']['tl_module']['wem_geodata_filters'],
     'exclude' => true,
     'inputType' => 'select',
-    'options' => ['nofilters', 'inmap', 'inlist'],
+    'options' => ['nofilters', 'rightpanel', 'above', 'below'],
     'reference' => &$GLOBALS['TL_LANG']['tl_module']['wem_geodata_filters'],
     'eval' => ['submitOnChange' => true, 'chosen' => true, 'mandatory' => true, 'tl_class' => 'w50'],
     'sql' => "varchar(32) NOT NULL default 'nofilters'",

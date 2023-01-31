@@ -33,6 +33,22 @@
         <source>Display a search field.</source>
         <target>Display a search field.</target>
       </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_filters.nofilters">
+        <source>No filters</source>
+        <target>Pas de filtres</target>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_filters.leftpanel">
+        <source>Left panel</source>
+        <target>Panneau à gauche</target>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_filters.above">
+        <source>Above</source>
+        <target>Au dessus</target>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_filters.below">
+        <source>Below</source>
+        <target>En dessous</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

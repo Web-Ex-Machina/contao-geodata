@@ -53,6 +53,13 @@ class DisplayMap extends Core
     protected $filters;
 
     /**
+     * Config.
+     *
+     * @var array [default config]
+     */
+    protected $arrConfig;
+
+    /**
      * Display a wildcard in the back end.
      *
      * @return string

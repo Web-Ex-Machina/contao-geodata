@@ -50,13 +50,17 @@
         <source>No filters</source>
         <target>Pas de filtres</target>
       </trans-unit>
-      <trans-unit id="tl_module.wem_geodata_filters.inmap">
-        <source>In map</source>
-        <target>Dans la carte</target>
+      <trans-unit id="tl_module.wem_geodata_filters.leftpanel">
+        <source>Left panel</source>
+        <target>Panneau à gauche</target>
       </trans-unit>
-      <trans-unit id="tl_module.wem_geodata_filters.inlist">
-        <source>In list</source>
-        <target>Dans la liste</target>
+      <trans-unit id="tl_module.wem_geodata_filters.above">
+        <source>Above</source>
+        <target>Au dessus</target>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_filters.below">
+        <source>Below</source>
+        <target>En dessous</target>
       </trans-unit>
       <trans-unit id="tl_module.wem_geodata_filters_fields.0">
         <source>Filter fields</source>
