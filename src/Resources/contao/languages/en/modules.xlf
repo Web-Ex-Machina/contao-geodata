@@ -26,6 +26,18 @@
 			<source>Display a map on your website</source>
 			<target>Display a map on your website</target>
 		</trans-unit>
+		<trans-unit id="FMD.wem_geodata_list.0">
+			<source>Locations list</source>
+		</trans-unit>
+		<trans-unit id="FMD.wem_geodata_list.1">
+			<source>Display a locations list on your website</source>
+		</trans-unit>
+		<trans-unit id="FMD.wem_geodata_reader.0">
+			<source>Locations reader</source>
+		</trans-unit>
+		<trans-unit id="FMD.wem_geodata_reader.1">
+			<source>Display a locations reader on your website</source>
+		</trans-unit>
     </body>
   </file>
 </xliff>

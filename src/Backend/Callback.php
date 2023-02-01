@@ -147,7 +147,7 @@ class Callback extends Backend
             // HOOK: add custom logic
             if (isset($GLOBALS['TL_HOOKS']['WEMGEODATAIMPORTLOCATIONS']) && \is_array($GLOBALS['TL_HOOKS']['WEMGEODATAIMPORTLOCATIONS'])) {
                 foreach ($GLOBALS['TL_HOOKS']['WEMGEODATAIMPORTLOCATIONS'] as $callback) {
-                    static::importStatic($callback[0])->{$callback[1]}($arrUploaded, $arrExcelPattern, $objMap, $this);
+                    static::importStatic($callback[0])->{$callback[1]}($arrUploaded, $arrExcelPattern, $updateExistingItems, $deleteExistingItems, $objMap, $this);
 
                     System::setCookie('BE_PAGE_OFFSET', 0, 0);
                     $this->reload();

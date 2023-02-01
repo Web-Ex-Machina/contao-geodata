@@ -10,6 +10,7 @@ This file list all available hooks in this package.
 | `WEMGEODATADOWNLOADLOCATIONSSAMPLE` | Called when generating a sample file for later locations import. Either alter the given `\PhpOffice\PhpSpreadsheet\Spreadsheet` object or completely overrides default behaviour.
 | `WEMGEODATADISPLAYLOCATIONSSAMPLE` | Called when generating a sample file format to display. Returns an array with header columns & exmaple rows.
 | `WEMGEODATADOWNLOADLOCATIONSEXPORT` | Called when generating an export file. Either alter the given `\PhpOffice\PhpSpreadsheet\Spreadsheet` object or completely overrides default behaviour.
+| `WEMGEODATAGETLOCATION` | Called when retrieving a location data in a module.
 
 ## Details
 
@@ -25,6 +26,8 @@ Name | Type | Description
 --- | --- | ---
 $arrUploaded | `array` | Array of uploaded files path
 $arrExcelPattern | `array` | Array to make column in file match a field in the `\WEM\GeoDataBundle\Model\Item` object
+$updateExistingItems | `bool` | `true` if checkbox for updating existing items instead of simply creating new entries is checked
+$deleteExistingItems | `bool` | `true` if checkbox for deleting existing items not in import files is checked
 $objMap | `\WEM\GeoDataBundle\Model\Map` | The `\WEM\GeoDataBundle\Model\Map` in which items are to be imported
 $caller | `\WEM\GeoDataBundle\Backend\Callback` | The calling object
 
@@ -33,6 +36,8 @@ $caller | `\WEM\GeoDataBundle\Backend\Callback` | The calling object
 public function importLocations(
 	array $arrUploaded, 
 	array $arrExcelPattern, 
+	bool $updateExistingItems, 
+	bool $deleteExistingItems,
 	\WEM\GeoDataBundle\Model\Map $objMap, 
 	\WEM\GeoDataBundle\Backend\Callback $caller
 ): void
@@ -203,5 +208,33 @@ public function exportLocations(
     header('Cache-Control: max-age=0');
     echo $json;
     exit;
+}
+```
+
+### WEMGEODATAGETLOCATION
+
+This hook is called when retrieving a location data in a module.
+
+**Return value** : `array`
+
+**Arguments**:
+Name | Type | Description
+--- | --- | ---
+$arrItem | `array` | Array of data
+$objMap | `\WEM\GeoDataBundle\Model\Map` | The `\WEM\GeoDataBundle\Model\Map` the map item belongs to
+$objPage | null|`\Contao\PageModel` | The `\Contao\PageModel` corresponding to the `$objMap->jumpTo` if any
+$caller | `\WEM\GeoDataBundle\Module\Core` | The calling object
+
+**Code**:
+```php
+public function getLocation(
+	array $arrItem, 
+	\WEM\GeoDataBundle\Model\Map $objMap, 
+	\Contao\PageModel $objPage,
+	\WEM\GeoDataBundle\Module\Core $caller
+): array
+{
+	$arrItem['my_property'] = 'my_value';
+	return $arrItem;
 }
 ```

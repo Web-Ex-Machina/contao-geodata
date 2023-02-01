@@ -26,6 +26,22 @@
 			<source>Display a map on your website</source>
 			<target>Affiche une carte sur votre site</target>
 		</trans-unit>
+		<trans-unit id="FMD.wem_geodata_list.0">
+			<source>Locations list</source>
+			<target>Emplacements - liste</target>
+		</trans-unit>
+		<trans-unit id="FMD.wem_geodata_list.1">
+			<source>Display a locations list on your website</source>
+			<target>Affiche une liste d'emplacements sur votre site</target>
+		</trans-unit>
+		<trans-unit id="FMD.wem_geodata_reader.0">
+			<source>Locations reader</source>
+			<target>Emplacements - lecteur</target>
+		</trans-unit>
+		<trans-unit id="FMD.wem_geodata_reader.1">
+			<source>Display a locations reader on your website</source>
+			<target>Affiche un lecteur d'emplacements sur votre site</target>
+		</trans-unit>
     </body>
   </file>
 </xliff>

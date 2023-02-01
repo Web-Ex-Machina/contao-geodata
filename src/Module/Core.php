@@ -36,6 +36,146 @@ use WEM\GeoDataBundle\Model\MapItemAttributeValue;
  */
 abstract class Core extends Module
 {
+    public function getCategory($varItem)
+    {
+        try {
+            if (\is_object($varItem)) {
+                $arrItem = $varItem->row();
+            } elseif (\is_array($varItem)) {
+                $arrItem = $varItem;
+            } elseif ($objItem = Category::findByPk($varItem)) {
+                $arrItem = $objItem->row();
+            } else {
+                throw new \Exception(sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noCategoryFound'], $varItem));
+            }
+
+            // Get marker file
+            if ($arrItem['marker'] && $objFile = FilesModel::findByUuid($arrItem['marker'])) {
+                // Get size of the picture
+                $sizes = getimagesize($objFile->path);
+                $arrItem['marker'] = [];
+                $arrItem['marker']['icon']['iconUrl'] = $objFile->path;
+                $arrItem['marker']['icon']['iconSize'] = [$sizes[0], $sizes[1]];
+
+                // Get the entire config
+                // https://leafletjs.com/reference-1.4.0.html#marker
+                // https://leafletjs.com/reference-1.4.0.html#icon
+                $data = unserialize($arrItem['markerConfig']);
+                if (\is_array($data) && !empty($data)) {
+                    foreach ($data as $k => $v) {
+                        // Convert "values" who contains "," char into array values
+                        if (-1 < strpos($v['value'], ',')) {
+                            $v['value'] = explode(',', $v['value']);
+                        }
+
+                        if (-1 < strpos($v['key'], '_')) {
+                            $v['key'] = explode('_', $v['key']);
+                            $arrItem['marker'][$v['key'][0]][$v['key'][1]] = $v['value'];
+                        } else {
+                            $arrItem['marker'][$v['key']] = $v['value'];
+                        }
+                    }
+                }
+            } else {
+                unset($arrItem['marker']);
+            }
+
+            return $arrItem;
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    public function getLocation($varItem, $blnAbsolute = false)
+    {
+        try {
+            if (\is_object($varItem)) {
+                $arrItem = $varItem->row();
+            } elseif (\is_array($varItem)) {
+                $arrItem = $varItem;
+            } elseif ($objItem = MapItem::findByIdOrAlias($varItem)) {
+                $arrItem = $objItem->row();
+            } else {
+                throw new \Exception(sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noLocationFound'], $varItem));
+            }
+
+            // Format Address
+            $arrItem['address'] = $arrItem['street'].' '.$arrItem['postal'].' '.$arrItem['city'];
+
+            // Format website (we assume that every url is an external one)
+            if ($arrItem['website'] && 'http' !== substr($arrItem['website'], 0, 4)) {
+                $arrItem['website'] = 'http://'.$arrItem['website'];
+            }
+
+            // Get category
+            if ($arrItem['category']) {
+                $arrItem['category'] = $this->getCategory($arrItem['category']);
+            }
+
+            // Get location picture
+            if ($objFile = FilesModel::findByUuid($arrItem['picture'])) {
+                $arrItem['picture'] = [
+                    'path' => $objFile->path,
+                    'extension' => $objFile->extension,
+                    'name' => $objFile->name,
+                ];
+            } else {
+                unset($arrItem['picture']);
+            }
+
+            // Get country and continent
+            Util::getCountries();
+            $strCountry = strtoupper($arrItem['country']);
+            $strContinent = Util::getCountryContinent($strCountry);
+            $arrItem['country'] = ['code' => $strCountry, 'name' => $GLOBALS['TL_LANG']['CNT'][$arrItem['country']]];
+            $arrItem['continent'] = ['code' => $strContinent, 'name' => $GLOBALS['TL_LANG']['CONTINENT'][$strContinent]];
+
+            $strContent = '';
+            $objElement = ContentModel::findPublishedByPidAndTable($arrItem['id'], 'tl_wem_map_item');
+            if (null !== $objElement) {
+                while ($objElement->next()) {
+                    $strContent .= $this->getContentElement($objElement->current());
+                }
+            }
+            $arrItem['content'] = $strContent;
+
+            // get attributes
+            $arrItem['attributes'] = [];
+            $attributes = MapItemAttributeValue::findItems(['pid' => $arrItem['id']]);
+            if ($attributes) {
+                while ($attributes->next()) {
+                    $arrItem['attributes'][$attributes->attribute] = [
+                        'attribute' => $attributes->attribute,
+                        'value' => $attributes->value,
+                    ];
+                }
+            }
+
+            // Build the item URL
+            $objMap = Map::findByPk($arrItem['pid']);
+            $objPage = null;
+            if ($objMap && $objMap->jumpTo) {
+                $objPage = PageModel::findByPk($objMap->jumpTo);
+            }
+            if ($objPage instanceof PageModel) {
+                // if ($this->objJumpTo instanceof PageModel) {
+                $params = (Config::get('useAutoItem') ? '/' : '/items/').($arrItem['alias'] ?: $arrItem['id']);
+                $arrItem['url'] = ampersand($blnAbsolute ? $objPage->getAbsoluteUrl($params) : $objPage->getFrontendUrl($params));
+            }
+
+            // HOOK: add custom logic
+            if (isset($GLOBALS['TL_HOOKS']['WEMGEODATAGETLOCATION']) && \is_array($GLOBALS['TL_HOOKS']['WEMGEODATAGETLOCATION'])) {
+                foreach ($GLOBALS['TL_HOOKS']['WEMGEODATAGETLOCATION'] as $callback) {
+                    $arrItem = static::importStatic($callback[0])->{$callback[1]}($arrItem, $objMap, $objPage, $this);
+                }
+            }
+
+            return $arrItem;
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
     /**
      * Build Pagination.
      *
@@ -158,138 +298,6 @@ abstract class Core extends Module
             }
 
             return $arrLocations;
-        } catch (\Exception $e) {
-            throw $e;
-        }
-    }
-
-    protected function getCategory($varItem)
-    {
-        try {
-            if (\is_object($varItem)) {
-                $arrItem = $varItem->row();
-            } elseif (\is_array($varItem)) {
-                $arrItem = $varItem;
-            } elseif ($objItem = Category::findByPk($varItem)) {
-                $arrItem = $objItem->row();
-            } else {
-                throw new \Exception(sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noCategoryFound'], $varItem));
-            }
-
-            // Get marker file
-            if ($arrItem['marker'] && $objFile = FilesModel::findByUuid($arrItem['marker'])) {
-                // Get size of the picture
-                $sizes = getimagesize($objFile->path);
-                $arrItem['marker'] = [];
-                $arrItem['marker']['icon']['iconUrl'] = $objFile->path;
-                $arrItem['marker']['icon']['iconSize'] = [$sizes[0], $sizes[1]];
-
-                // Get the entire config
-                // https://leafletjs.com/reference-1.4.0.html#marker
-                // https://leafletjs.com/reference-1.4.0.html#icon
-                $data = unserialize($arrItem['markerConfig']);
-                if (\is_array($data) && !empty($data)) {
-                    foreach ($data as $k => $v) {
-                        // Convert "values" who contains "," char into array values
-                        if (-1 < strpos($v['value'], ',')) {
-                            $v['value'] = explode(',', $v['value']);
-                        }
-
-                        if (-1 < strpos($v['key'], '_')) {
-                            $v['key'] = explode('_', $v['key']);
-                            $arrItem['marker'][$v['key'][0]][$v['key'][1]] = $v['value'];
-                        } else {
-                            $arrItem['marker'][$v['key']] = $v['value'];
-                        }
-                    }
-                }
-            } else {
-                unset($arrItem['marker']);
-            }
-
-            return $arrItem;
-        } catch (\Exception $e) {
-            throw $e;
-        }
-    }
-
-    protected function getLocation($varItem, $blnAbsolute = false)
-    {
-        try {
-            if (\is_object($varItem)) {
-                $arrItem = $varItem->row();
-            } elseif (\is_array($varItem)) {
-                $arrItem = $varItem;
-            } elseif ($objItem = MapItem::findByIdOrAlias($varItem)) {
-                $arrItem = $objItem->row();
-            } else {
-                throw new \Exception(sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noLocationFound'], $varItem));
-            }
-
-            // Format Address
-            $arrItem['address'] = $arrItem['street'].' '.$arrItem['postal'].' '.$arrItem['city'];
-
-            // Format website (we assume that every url is an external one)
-            if ($arrItem['website'] && 'http' !== substr($arrItem['website'], 0, 4)) {
-                $arrItem['website'] = 'http://'.$arrItem['website'];
-            }
-
-            // Get category
-            if ($arrItem['category']) {
-                $arrItem['category'] = $this->getCategory($arrItem['category']);
-            }
-
-            // Get location picture
-            if ($objFile = FilesModel::findByUuid($arrItem['picture'])) {
-                $arrItem['picture'] = [
-                    'path' => $objFile->path,
-                    'extension' => $objFile->extension,
-                    'name' => $objFile->name,
-                ];
-            } else {
-                unset($arrItem['picture']);
-            }
-
-            // Get country and continent
-            Util::getCountries();
-            $strCountry = strtoupper($arrItem['country']);
-            $strContinent = Util::getCountryContinent($strCountry);
-            $arrItem['country'] = ['code' => $strCountry, 'name' => $GLOBALS['TL_LANG']['CNT'][$arrItem['country']]];
-            $arrItem['continent'] = ['code' => $strContinent, 'name' => $GLOBALS['TL_LANG']['CONTINENT'][$strContinent]];
-
-            $strContent = '';
-            $objElement = ContentModel::findPublishedByPidAndTable($arrItem['id'], 'tl_wem_map_item');
-            if (null !== $objElement) {
-                while ($objElement->next()) {
-                    $strContent .= $this->getContentElement($objElement->current());
-                }
-            }
-            $arrItem['content'] = $strContent;
-
-            // get attributes
-            $arrItem['attributes'] = [];
-            $attributes = MapItemAttributeValue::findItems(['pid' => $arrItem['id']]);
-            if ($attributes) {
-                while ($attributes->next()) {
-                    $arrItem['attributes'][$attributes->attribute] = [
-                        'attribute' => $attributes->attribute,
-                        'value' => $attributes->value,
-                    ];
-                }
-            }
-
-            // Build the item URL
-            $objMap = Map::findByPk($arrItem['pid']);
-            if ($objMap && $objMap->jumpTo) {
-                $objPage = PageModel::findByPk($objMap->jumpTo);
-            }
-            if ($objPage instanceof PageModel) {
-                // if ($this->objJumpTo instanceof PageModel) {
-                $params = (Config::get('useAutoItem') ? '/' : '/items/').($arrItem['alias'] ?: $arrItem['id']);
-                $arrItem['url'] = ampersand($blnAbsolute ? $objPage->getAbsoluteUrl($params) : $objPage->getFrontendUrl($params));
-            }
-
-            return $arrItem;
         } catch (\Exception $e) {
             throw $e;
         }
