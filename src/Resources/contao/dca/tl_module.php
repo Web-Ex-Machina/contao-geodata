@@ -66,7 +66,7 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_filters'] = [
     'label' => &$GLOBALS['TL_LANG']['tl_module']['wem_geodata_filters'],
     'exclude' => true,
     'inputType' => 'select',
-    'options' => ['nofilters', 'rightpanel', 'above', 'below'],
+    'options' => ['nofilters', 'leftpanel', 'above', 'below'],
     'reference' => &$GLOBALS['TL_LANG']['tl_module']['wem_geodata_filters'],
     'eval' => ['submitOnChange' => true, 'chosen' => true, 'mandatory' => true, 'tl_class' => 'w50'],
     'sql' => "varchar(32) NOT NULL default 'nofilters'",
