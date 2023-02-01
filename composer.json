@@ -13,8 +13,8 @@
     ],
     "support":{
         "website":"https://www.webexmachina.fr/",
-        "issues":"https://github.com/webexmachina/contao-geodata/issues",
-        "source":"https://github.com/webexmachina/contao-geodata"
+        "issues":"https://github.com/Web-Ex-Machina/contao-geodata/issues",
+        "source":"https://github.com/Web-Ex-Machina/contao-geodata"
     },
     "require": {
         "php": ">=7.4",
