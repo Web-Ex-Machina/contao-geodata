@@ -251,6 +251,14 @@ class LocationsList extends Core
                         case 'country':
                             $arrFilters[$filterField]['options'][$location[$filterField]]['text'] = $arrCountries[strtoupper($location[$filterField])] ?? $location[$filterField];
                         break;
+                        default:
+                            // HOOK: add custom logic
+                            if (isset($GLOBALS['TL_HOOKS']['WEMGEODATABUILDFILTERSSINGLEFILTEROPTION']) && \is_array($GLOBALS['TL_HOOKS']['WEMGEODATABUILDFILTERSSINGLEFILTEROPTION'])) {
+                                foreach ($GLOBALS['TL_HOOKS']['WEMGEODATABUILDFILTERSSINGLEFILTEROPTION'] as $callback) {
+                                    [$arrFilters, $this->arrConfig] = static::importStatic($callback[0])->{$callback[1]}($arrFilters, $this->arrConfig, $filterField, $location[$filterField], $location, $this);
+                                }
+                            }
+                        break;
                     }
                 }
             }
