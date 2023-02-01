@@ -33,7 +33,7 @@ $GLOBALS['TL_DCA']['tl_module']['palettes']['wem_geodata_reader'] = '
     {expert_legend:hide},guests,cssID
 ';
 
-$GLOBALS['TL_DCA']['tl_module']['subpalettes']['wem_geodata_filters_rightpanel'] = 'wem_geodata_search,wem_geodata_filters_fields';
+$GLOBALS['TL_DCA']['tl_module']['subpalettes']['wem_geodata_filters_leftpanel'] = 'wem_geodata_search,wem_geodata_filters_fields';
 $GLOBALS['TL_DCA']['tl_module']['subpalettes']['wem_geodata_filters_above'] = 'wem_geodata_search,wem_geodata_filters_fields';
 $GLOBALS['TL_DCA']['tl_module']['subpalettes']['wem_geodata_filters_below'] = 'wem_geodata_search,wem_geodata_filters_fields';
 
