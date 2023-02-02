@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace WEM\GeoDataBundle\Model;
 
+use Contao\Controller;
 use DateTime;
 use WEM\UtilsBundle\Model\Model as CoreModel;
 
@@ -68,9 +69,20 @@ class MapItem extends CoreModel
                     );
                 }
             break;
-
             default:
-                $arrColumns = array_merge($arrColumns, parent::formatStatement($strField, $varValue, $strOperator));
+                // HOOK: add custom logic
+                if (isset($GLOBALS['TL_HOOKS']['WEMGEODATAMAPITEMFORMATSTATEMENT']) && \is_array($GLOBALS['TL_HOOKS']['WEMGEODATAMAPITEMFORMATSTATEMENT'])) {
+                    foreach ($GLOBALS['TL_HOOKS']['WEMGEODATAMAPITEMFORMATSTATEMENT'] as $callback) {
+                        $arrColumnsTemp = Controller::importStatic($callback[0])->{$callback[1]}($strField, $varValue, $strOperator, $arrColumns, self::class);
+                        if (null !== $arrColumnsTemp) {
+                            $arrColumns = $arrColumnsTemp;
+                        } else {
+                            $arrColumns = array_merge($arrColumns, parent::formatStatement($strField, $varValue, $strOperator));
+                        }
+                    }
+                } else {
+                    $arrColumns = array_merge($arrColumns, parent::formatStatement($strField, $varValue, $strOperator));
+                }
         }
 
         return $arrColumns;

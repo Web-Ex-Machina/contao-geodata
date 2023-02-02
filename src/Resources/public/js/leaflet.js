@@ -160,9 +160,10 @@ initMap = function() {
 							markerInList['filter_'+f] = normalize(location[f].code);
 						break;
 						default: 
-							if (typeof location[f] === 'string')
+							if (typeof location[f] === 'string'){
 								marker['filter_'+f] = normalize(location[f]);
 								markerInList['filter_'+f] = normalize(location[f]);
+							}
 						break;
 					}
 				}

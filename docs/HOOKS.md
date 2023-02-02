@@ -11,6 +11,8 @@ This file list all available hooks in this package.
 | `WEMGEODATADISPLAYLOCATIONSSAMPLE` | Called when generating a sample file format to display. Returns an array with header columns & exmaple rows.
 | `WEMGEODATADOWNLOADLOCATIONSEXPORT` | Called when generating an export file. Either alter the given `\PhpOffice\PhpSpreadsheet\Spreadsheet` object or completely overrides default behaviour.
 | `WEMGEODATAGETLOCATION` | Called when retrieving a location data in a module.
+| `WEMGEODATABUILDFILTERSSINGLEFILTEROPTION` | Called when building filters in a module.
+| `WEMGEODATAMAPITEMFORMATSTATEMENT` | Called when calling `MapItem::formatStatement` on a non default managed column.
 
 ## Details
 
@@ -236,5 +238,97 @@ public function getLocation(
 {
 	$arrItem['my_property'] = 'my_value';
 	return $arrItem;
+}
+```
+
+## WEMGEODATABUILDFILTERSSINGLEFILTEROPTION
+
+This hook is called when building filters in a module.
+
+**Return value** : `array`
+
+**Arguments**:
+Name | Type | Description
+--- | --- | ---
+$arrFilters | `array` | Array of filters
+$arrConfig | `array` | Array of values selected
+$filterField | `string` | The field used as a filter
+$lastKey | `string` | The last key in the filter
+$location | `array` | Array of location's data
+$caller | `\WEM\GeoDataBundle\Module\Core` | The calling object
+
+**Code**:
+```php
+public function buildFiltersSingleFilterOption(
+	array $arrFilters,
+	array $arrConfig,
+	string $filterField,
+	string $lastKey,
+	array $location, 
+	\WEM\GeoDataBundle\Module\Core $caller
+): array
+{
+	// unset the last set options
+	if('select' === $arrFilters[$filterField]['type']){
+		unset($arrFilters[$filterField]['options'][$lastKey]);
+		switch($filterField){
+			case "my_field":
+				$this->filters[$filterField]['options'][$lastKey] = [
+                    'value' => str_replace([' ', '.'], '_', mb_strtolower($location[$filterField], 'UTF-8')),
+                    'text' => $location[$filterField],
+                    'selected' => (
+                    	\array_key_exists($filterField, $arrConfig) 
+                    	&& $arrConfig[$filterField] === str_replace([' ', '.'], '_', mb_strtolower($location[$filterField], 'UTF-8')) 
+                    	? 'selected' 
+                    	: ''
+                    ),
+                ];
+			break;
+		}
+	}
+	// do something else
+	// ...
+	return [$arrFilters,$arrConfig];
+}
+```
+
+## WEMGEODATAMAPITEMFORMATSTATEMENT
+
+This hook is called when calling `MapItem::formatStatement` on a non default managed column.
+
+**Return value** : `array`
+
+**Arguments**:
+Name | Type | Description
+--- | --- | ---
+$strField | `string` | The field
+$varValue | `mixed` | The value, can be an array
+$strOperator | `string` | The operator
+$arrColums | `array` | The formatted statements
+$callerClass | `string` | The formatted statements
+
+**Code**:
+```php
+public function buildFiltersSingleFilterOption(
+	string $strField, 
+	$varValue, 
+	string $strOperator,
+	array $arrColumns,
+	string $callerClass
+): ?array
+{
+	switch($strField){
+		case "my_field":
+			if(!is_array($varValue)){
+				$varValue = [$varValue];
+			}
+			$arrColumns[] = sprintf('my_table.my_field IN ("%s")',implode('","', $varValue));
+		break;
+		default:
+			return null;
+		break;
+	}
+
+	return $arrColums;
 }
 ```

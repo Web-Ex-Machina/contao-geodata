@@ -95,13 +95,29 @@
 				<source>Enter the location city</source>
 				<target>Enter the location city</target>
 			</trans-unit>
-			<trans-unit id="tl_wem_map_item.region.0">
+			<trans-unit id="tl_wem_map_item.admin_lvl_1.0">
 				<source>Region</source>
 				<target>Region</target>
 			</trans-unit>
-			<trans-unit id="tl_wem_map_item.region.1">
+			<trans-unit id="tl_wem_map_item.admin_lvl_1.1">
 				<source>Enter the location region</source>
 				<target>Enter the location region</target>
+			</trans-unit>
+			<trans-unit id="tl_wem_map_item.admin_lvl_2.0">
+				<source>County</source>
+				<target>County</target>
+			</trans-unit>
+			<trans-unit id="tl_wem_map_item.admin_lvl_2.1">
+				<source>Enter the location county</source>
+				<target>Enter the location county</target>
+			</trans-unit>
+			<trans-unit id="tl_wem_map_item.admin_lvl_3.0">
+				<source>District</source>
+				<target>District</target>
+			</trans-unit>
+			<trans-unit id="tl_wem_map_item.admin_lvl_3.1">
+				<source>Enter the location district</source>
+				<target>Enter the location district</target>
 			</trans-unit>
 			<trans-unit id="tl_wem_map_item.country.0">
 				<source>Country</source>

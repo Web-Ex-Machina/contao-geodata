@@ -277,6 +277,14 @@ class DisplayMap extends Core
                         case 'country':
                             $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $arrCountries[$location[$filterField]] ?? $location[$filterField];
                         break;
+                        default:
+                            // HOOK: add custom logic
+                            if (isset($GLOBALS['TL_HOOKS']['WEMGEODATABUILDFILTERSSINGLEFILTEROPTION']) && \is_array($GLOBALS['TL_HOOKS']['WEMGEODATABUILDFILTERSSINGLEFILTEROPTION'])) {
+                                foreach ($GLOBALS['TL_HOOKS']['WEMGEODATABUILDFILTERSSINGLEFILTEROPTION'] as $callback) {
+                                    [$this->filters,$this->arrConfig] = static::importStatic($callback[0])->{$callback[1]}($this->filters, $this->arrConfig, $filterField, $location[$filterField], $location, $this);
+                                }
+                            }
+                        break;
                     }
                 }
             }
