@@ -96,28 +96,28 @@
 				<target>Enter the location city</target>
 			</trans-unit>
 			<trans-unit id="tl_wem_map_item.admin_lvl_1.0">
-				<source>Administrative Area (Level 1)</source>
-				<target>Administrative Area (Level 1)</target>
+				<source>Region</source>
+				<target>Region</target>
 			</trans-unit>
 			<trans-unit id="tl_wem_map_item.admin_lvl_1.1">
-				<source>Enter the location administrative area (level 1)</source>
-				<target>Enter the location administrative area (level 1)</target>
+				<source>Enter the location region</source>
+				<target>Enter the location region</target>
 			</trans-unit>
 			<trans-unit id="tl_wem_map_item.admin_lvl_2.0">
-				<source>Administrative Area (Level 2)</source>
-				<target>Administrative Area (Level 2)</target>
+				<source>County</source>
+				<target>County</target>
 			</trans-unit>
 			<trans-unit id="tl_wem_map_item.admin_lvl_2.1">
-				<source>Enter the location administrative area (level 2)</source>
-				<target>Enter the location administrative area (level 2)</target>
+				<source>Enter the location county</source>
+				<target>Enter the location county</target>
 			</trans-unit>
 			<trans-unit id="tl_wem_map_item.admin_lvl_3.0">
-				<source>Administrative Area (Level 3)</source>
-				<target>Administrative Area (Level 3)</target>
+				<source>District</source>
+				<target>District</target>
 			</trans-unit>
 			<trans-unit id="tl_wem_map_item.admin_lvl_3.1">
-				<source>Enter the location administrative area (level 3)</source>
-				<target>Enter the location administrative area (level 3)</target>
+				<source>Enter the location district</source>
+				<target>Enter the location district</target>
 			</trans-unit>
 			<trans-unit id="tl_wem_map_item.country.0">
 				<source>Country</source>

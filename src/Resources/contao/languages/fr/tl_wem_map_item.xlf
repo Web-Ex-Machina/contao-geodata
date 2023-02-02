@@ -104,28 +104,28 @@
 			<target>Saisissez la ville de l'emplacement</target>
 		</trans-unit>
 		<trans-unit id="tl_wem_map_item.admin_lvl_1.0">
-			<source>Administrative Area (Level 1)</source>
+			<source>Region</source>
 			<target>Région</target>
 		</trans-unit>
 		<trans-unit id="tl_wem_map_item.admin_lvl_1.1">
-			<source>Enter the location administrative area (level 1)</source>
+			<source>Enter the location region</source>
 			<target>Saisissez la région de l'emplacement</target>
 		</trans-unit>
 		<trans-unit id="tl_wem_map_item.admin_lvl_2.0">
-			<source>Administrative Area (Level 2)</source>
+			<source>County</source>
 			<target>Département</target>
 		</trans-unit>
 		<trans-unit id="tl_wem_map_item.admin_lvl_2.1">
-			<source>Enter the location administrative area (level 2)</source>
+			<source>Enter the location county</source>
 			<target>Saisissez le département de l'emplacement</target>
 		</trans-unit>
 		<trans-unit id="tl_wem_map_item.admin_lvl_3.0">
-			<source>Administrative Area (Level 3)</source>
-			<target>Zone administrative (Niveau 3)</target>
+			<source>District</source>
+			<target>Communauté des communes</target>
 		</trans-unit>
 		<trans-unit id="tl_wem_map_item.admin_lvl_3.1">
-			<source>Enter the location administrative area (level 3)</source>
-			<target>Saisissez la zone administrative (niveau 3) de l'emplacement</target>
+			<source>Enter the location district</source>
+			<target>Saisissez la communauté des communes de l'emplacement</target>
 		</trans-unit>
 		<trans-unit id="tl_wem_map_item.country.0">
 			<source>Country</source>
