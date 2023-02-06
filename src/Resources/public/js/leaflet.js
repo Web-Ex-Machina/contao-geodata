@@ -143,16 +143,22 @@ initMap = function() {
 				marker['filter_'+f] = '';
 				markerInList['filter_'+f] = '';
 				markerInList.filter_search = $('.map__list__item[data-id='+location.id+']').text()+' '+$(getPopupHTML(location)).text();
-				marker.filter_search = $('.map__list__item[data-id='+location.id+']').text()+' '+$(getPopupHTML(location)).text();
+				marker.filter_search       = $('.map__list__item[data-id='+location.id+']').text()+' '+$(getPopupHTML(location)).text();
+				// console.log(location);
 				if (location.hasOwnProperty(f)) {
 					switch(f){
 						case 'category': 
-							if(location[f].id){
+							if (Array.isArray(location[f])) {
+								for (var category of location[f]){
+									// console.log(normalize(category.title));
+									// marker['filter_'+f] += normalize(category.title);
+									// markerInList['filter_'+f] += normalize(category.title);
+								}
+								marker['filter_'+f]       = location[f].map(function(category){return normalize(category.title); }).join(',');
+								markerInList['filter_'+f] = location[f].map(function(category){return normalize(category.title); }).join(',');
+							} else if(location[f].id){
 								marker['filter_'+f] = normalize(location[f].id);
 								markerInList['filter_'+f] = normalize(location[f].id);
-							}else{
-								marker['filter_'+f] = '';
-								markerInList['filter_'+f] = '';
 							}
 						break;
 						case 'country':

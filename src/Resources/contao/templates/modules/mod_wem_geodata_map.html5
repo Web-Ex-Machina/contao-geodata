@@ -39,11 +39,11 @@
 									<input type="text" id="filter_<?= $f['name'] ?>" name="<?= $f['name'] ?>" value="<?= $f['value'] ?>" placeholder="<?= $f['placeholder'] ?>" />
 								<?php elseif('select' == $f['type'] && count($f['options']) > 1): ?>
 									<label for="filter_<?= $f['name'] ?>"><?= $f['label'] ?></label>
-									<select id="filter_<?= $f['name'] ?>" name="<?= $f['name'] ?>" placeholder="<?= $f['placeholder'] ?>" data-container="body" data-classdropdown="ft-0-8-em">
+									<select id="filter_<?= $f['name'] ?>" name="<?= $f['name'] ?>" placeholder="<?= $f['placeholder'] ?>" data-container="body" data-classdropdown="ft-0-8-em" <?= $f['name'] == 'category' ? '':'' ?>>
 										<option value=""> - </option>
 										<?php foreach($f['options'] as $o): ?>
 											<?php 
-												echo '<option value="'.str_replace([' ','.'],'_', mb_strtolower($o['value'], 'UTF-8')).'" '.$o['selected'].'>'.$o['text'].'</option>';
+												echo '<option value="'.str_replace([' ','.','\''],'_', mb_strtolower($o['value'], 'UTF-8')).'" '.$o['selected'].'>'.$o['text'].'</option>';
 											?>
 										<?php endforeach; ?>
 									</select>

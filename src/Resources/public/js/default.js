@@ -81,7 +81,7 @@ window.addEventListener('load', (event) => {
 
 	// manually trigger filters
 	$('.locations__filters, .map__filters').find('[id^=filter_]').first().trigger('change');
-
+	// console.log('objMapFilters',objMapFilters);
 	// console.log('arrMarkersInListAll',arrMarkersInListAll);
 	// console.log('arrMarkersInListCurrent',arrMarkersInListCurrent);
 	// console.log('arrMarkersAll',arrMarkersAll);
@@ -94,11 +94,11 @@ var applyFilters = function(){
 		var match = true;
 		// console.log(item);
 		for(var f in filters){
-			if (f !== "search") {
-				if (filters[f] !== '' && item['filter_'+f] !== filters[f])
+			if (f == "search" || f == "category") {
+				if (filters[f] !== '' && item['filter_'+f].search(new RegExp(filters[f],'i')) == -1)
 					match = false;
 			} else { // input search code
-				if (item.filter_search.search(new RegExp(filters[f],'i')) == -1)
+				if (filters[f] !== '' && item['filter_'+f] !== filters[f])
 					match = false;
 			}
 		}
@@ -109,14 +109,13 @@ var applyFilters = function(){
 	arrMarkersInListCurrent = arrMarkersInListAll.filter( item => {
 		var match = true;
 		for(var f in filters){
-			if (f !== "search") {
-				// console.log(filters[f], item['filter_'+f], filters[f] !== '' && item['filter_'+f] !== filters[f] );
-				if (filters[f] !== '' && item['filter_'+f] !== filters[f]){
+			if (f == "search" || f == "category") {
+				if (filters[f] !== '' && item['filter_'+f].search(new RegExp(filters[f],'i')) == -1){
 					match = false;
 					return false;
 				}
 			} else { // input search code
-				if (item.filter_search.search(new RegExp(filters[f],'i')) == -1){
+				if (filters[f] !== '' && item['filter_'+f] !== filters[f]){
 					match = false;
 					return false;
 				}
@@ -180,7 +179,7 @@ var selectMapItem = function(itemID){
 
 // ------------------------------------------------------------------------------------------------------------------------------
 // UTILITIES
-var normalize = function(str = ''){return str.toLowerCase().replace(/ |\./g,'_'); }
+var normalize = function(str = ''){return str.toLowerCase().replace(/ |\.|\'/g,'_'); }
 
 window.addEventListener("load", function(e) {
 	$.fn.filterByData = function(prop, val) {
