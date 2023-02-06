@@ -253,7 +253,7 @@ Name | Type | Description
 $arrFilters | `array` | Array of filters
 $arrConfig | `array` | Array of values selected
 $filterField | `string` | The field used as a filter
-$lastKey | `string` | The last key in the filter
+$lastKey | `null|string` | The last key in the filter (corresponds to `$location[$filterField]` value)
 $location | `array` | Array of location's data
 $caller | `\WEM\GeoDataBundle\Module\Core` | The calling object
 
@@ -263,16 +263,20 @@ public function buildFiltersSingleFilterOption(
 	array $arrFilters,
 	array $arrConfig,
 	string $filterField,
-	string $lastKey,
+	?string $lastKey,
 	array $location, 
 	\WEM\GeoDataBundle\Module\Core $caller
 ): array
 {
 	// unset the last set options
 	if('select' === $arrFilters[$filterField]['type']){
-		unset($arrFilters[$filterField]['options'][$lastKey]);
 		switch($filterField){
 			case "my_field":
+				if(!$location[$filterField]){
+					break;
+				}
+				unset($arrFilters[$filterField]['options'][$lastKey]);
+				
 				$this->filters[$filterField]['options'][$lastKey] = [
                     'value' => str_replace([' ', '.'], '_', mb_strtolower($location[$filterField], 'UTF-8')),
                     'text' => $location[$filterField],

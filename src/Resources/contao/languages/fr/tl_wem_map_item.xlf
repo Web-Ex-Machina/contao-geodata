@@ -421,8 +421,6 @@
 			<source>Location "%s" has not been imported : %s</source>
 			<target>L'emplacement "%s" n'a pas été importé : %s</target>
 		</trans-unit>
-
-
 		<trans-unit id="tl_wem_map_item.search.0">
 			<source>Search :</source>
 			<target>Recherche :</target>
@@ -431,8 +429,6 @@
 			<source>What are you looking for ?</source>
 			<target>Que recherchez-vous ?</target>
 		</trans-unit>
-
-
     </body>
   </file>
 </xliff>
