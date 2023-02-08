@@ -10,7 +10,6 @@
         data-country        ="<?= $location['country']['code'] ?>" 
         data-continent      ="<?= $location['continent']['code'] ?>"
         data-category       ="<?php echo str_replace([' ','.'],'_', mb_strtolower(implode(',',array_map(function($c){return $c['title'];},$location['category'])), 'UTF-8'));?>" 
-        data-category-title ="<?php echo str_replace([' ','.'],'_', mb_strtolower($this->location['category']['title'], 'UTF-8'));?>" 
         data-city           ="<?php echo str_replace([' ','.'],'_', mb_strtolower($location['city'], 'UTF-8'));?>" 
         data-admin_lvl_1    ="<?php echo str_replace([' ','.'],'_', mb_strtolower($location['admin_lvl_1'], 'UTF-8'));?>" 
         data-admin_lvl_2    ="<?php echo str_replace([' ','.'],'_', mb_strtolower($location['admin_lvl_2'], 'UTF-8'));?>" 
