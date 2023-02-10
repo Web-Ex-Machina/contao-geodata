@@ -120,8 +120,14 @@ initMap = function() {
 			}
 			var options = {};
 			if(location.category && location.category.title){
-				if (objMarkersConfig.hasOwnProperty(normalize(location.category.title)))
-					options.icon = objMarkersConfig[normalize(location.category.title)];
+				if (Array.isArray(location.category)) {
+					var categoryTitle = location.category[0].title;
+				} else {
+					var categoryTitle = location.category.title;
+				}
+				
+				if (objMarkersConfig.hasOwnProperty(normalize(categoryTitle)))
+					options.icon = objMarkersConfig[normalize(categoryTitle)];
 				else
 					options.icon = objMarkersConfig.default;
 			} else {
