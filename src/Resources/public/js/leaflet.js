@@ -59,7 +59,7 @@ initMap = function() {
 		    		}
 		    	}
 		    	category.alias = normalize(category.title);
-		    	if (category.marker) {
+		    	if (category.marker && category.marker.icon) {
 		    		// console.log(category.marker);
 		    		objMarkersConfig[category.alias] = L.icon({
 						iconUrl: 		 (category.marker.icon.iconUrl       !== undefined)                                                       ? category.marker.icon.iconUrl                   : objMarkersConfig.default.options.iconUrl,
