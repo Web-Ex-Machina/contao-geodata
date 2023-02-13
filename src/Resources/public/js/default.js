@@ -47,45 +47,45 @@ window.addEventListener('load', (event) => {
 		applyFilters();
 	});
 
-	initMap();
+	initMap().then((r) => {
+		// set legend after map init
+		if (objMapFilters.category) {
+			for(var c in objMapFilters.category.options) {
+		    	var category = objMapFilters.category.options[c];
+		    	for(var i in categories){
+		    		if(categories[i].id === category.value){
+		    			category = categories[i];
+		    			break;
+		    		}
+		    	}
+		    	if (category.marker) {
+					// add marker to legend
+					$('.map__legend').append(`
+						<div class="map__legend__item">
+							<img src="${objMarkersConfig[category.alias].options.iconUrl}" width="${objMarkersConfig[category.alias].options.iconSize[0]}" height="${objMarkersConfig[category.alias].options.iconSize[1]}" alt="Icon for ${category.title} category"><span>${category.title}</span>
+						</div>
+					`);
+		    	}
+		    }
+		    $toggleLegend.on('click',()=>{
+		    	$legend.addClass('active');
+		    });
+		    $legend.find('.close').on('click',()=>{
+		    	$legend.removeClass('active');
+		    });
+		    if ($legend.find('.map__legend__item').length)
+		    	$toggleLegend.removeClass('hidden');
+		    
+		}
 
-	// set legend after map init
-	if (objMapFilters.category) {
-		for(var c in objMapFilters.category.options) {
-	    	var category = objMapFilters.category.options[c];
-	    	for(var i in categories){
-	    		if(categories[i].id === category.value){
-	    			category = categories[i];
-	    			break;
-	    		}
-	    	}
-	    	if (category.marker) {
-				// add marker to legend
-				$('.map__legend').append(`
-					<div class="map__legend__item">
-						<img src="${objMarkersConfig[category.alias].options.iconUrl}" width="${objMarkersConfig[category.alias].options.iconSize[0]}" height="${objMarkersConfig[category.alias].options.iconSize[1]}" alt="Icon for ${category.title} category"><span>${category.title}</span>
-					</div>
-				`);
-	    	}
-	    }
-	    $toggleLegend.on('click',()=>{
-	    	$legend.addClass('active');
-	    });
-	    $legend.find('.close').on('click',()=>{
-	    	$legend.removeClass('active');
-	    });
-	    if ($legend.find('.map__legend__item').length)
-	    	$toggleLegend.removeClass('hidden');
-	    
-	}
-
-	// manually trigger filters
-	$('.locations__filters, .map__filters').find('[id^=filter_]').first().trigger('change');
-	// console.log('objMapFilters',objMapFilters);
-	// console.log('arrMarkersInListAll',arrMarkersInListAll);
-	// console.log('arrMarkersInListCurrent',arrMarkersInListCurrent);
-	// console.log('arrMarkersAll',arrMarkersAll);
-	// console.log('arrMarkersCurrent',arrMarkersCurrent);
+		// manually trigger filters
+		$('.locations__filters, .map__filters').find('[id^=filter_]').first().trigger('change');
+		// console.log('objMapFilters',objMapFilters);
+		// console.log('arrMarkersInListAll',arrMarkersInListAll);
+		// console.log('arrMarkersInListCurrent',arrMarkersInListCurrent);
+		// console.log('arrMarkersAll',arrMarkersAll);
+		// console.log('arrMarkersCurrent',arrMarkersCurrent);
+	});
 });
 
 var applyFilters = function(){
