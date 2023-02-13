@@ -15,6 +15,7 @@
         data-admin_lvl_2    ="<?php echo str_replace([' ','.'],'_', mb_strtolower($location['admin_lvl_2'], 'UTF-8'));?>" 
        >
         <span class="map__list__item__title "><?= $location['title'] ?></span>
+        <p class="opa-4 ft-l"><?php echo mb_strtoupper(implode(', ',array_map(function($c){return $c['title'];},$location['category'])), 'UTF-8');?></p>
         <div class="map__list__item__text">
           <?php if($location['address']): ?>
             <div class="map__list__item__line" itemprop="location" itemscope itemtype="http://schema.org/Place">

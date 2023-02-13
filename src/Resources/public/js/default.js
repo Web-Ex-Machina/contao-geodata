@@ -147,10 +147,9 @@ var applyFilters = function(){
 var getPopupHTML = function(obj){
 	return `
 		<div class="map__popup ">
-			<div class="map__popup__title map__list__item__title">
-				${obj.category.title ? '<div class="ft-b ft-0-8-em opa-4 ft-upper">'+obj.category.title+'</div>':''} 
-				${obj.title}
-			</div>
+			<div class="map__popup__title map__list__item__title"> ${obj.title} </div>
+        	${obj.category.title ? '<p class="opa-4 ft-l m-top-0">'+obj.category.title.toUpperCase()+'</p>':''}
+        	${Array.isArray(obj.category) ? '<p class="opa-4 ft-l m-top-0">'+(obj.category.map(function(c){return c.title})).join(', ').toUpperCase()+'</p>':''}
 			${obj.picture ? `<div class="map__popup__picture"><img src="${obj.picture.path}" alt="${obj.title}" /></div>` :''}
 			<div class="map__popup__infos map__list__item__text">
 				${obj.address ?'<div class="map__popup__infos__line "><i class="fa fa-map-marker-alt"></i> <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">'+obj.address+'</span></div>':''}
