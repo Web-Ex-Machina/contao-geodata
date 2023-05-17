@@ -73,4 +73,4 @@ $GLOBALS['TL_MODELS'][\WEM\GeoDataBundle\Model\Category::getTable()] = 'WEM\GeoD
 /*
  * Hooks
  */
-$GLOBALS['TL_HOOKS']['replaceInsertTags'][] = ['WEM\GeoDataBundle\Controller\Util', 'replaceInsertTags'];
+$GLOBALS['TL_HOOKS']['replaceInsertTags'][] = ['WEM\GeoDataBundle\Classes\Util', 'replaceInsertTags'];
