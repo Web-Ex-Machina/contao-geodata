@@ -19,7 +19,8 @@ use Contao\File;
 use Contao\Message;
 use Contao\StringUtil;
 use PhpOffice\PhpSpreadsheet\IOFactory;
-use WEM\GeoDataBundle\Model\ItemAttributeValue;
+use WEM\GeoDataBundle\Model\MapItem;
+use WEM\GeoDataBundle\Model\MapItemAttributeValue;
 
 /**
  * Provide utilities function to Locations Extension.
@@ -95,11 +96,11 @@ class ImportLocationsListener
                 $arrNewLocations[] = $objLocation->id;
 
                 // Find attribute (postal code here)
-                $objLocationAttributeValue = ItemAttributeValue::findItems(['pid' => $objLocation->id, 'attribute' => 'postal', 'value' => $arrRow['A']], 1);
+                $objLocationAttributeValue = MapItemAttributeValue::findItems(['pid' => $objLocation->id, 'attribute' => 'postal', 'value' => $arrRow['A']], 1);
 
                 // Create if don't exists
                 if (!$objLocationAttributeValue) {
-                    $objLocationAttributeValue = new ItemAttributeValue();
+                    $objLocationAttributeValue = new MapItemAttributeValue();
                     $objLocationAttributeValue->createdAt = time();
                     $objLocationAttributeValue->pid = $objLocation->id;
                     $objLocationAttributeValue->attribute = 'postal';

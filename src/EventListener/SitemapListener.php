@@ -78,7 +78,7 @@ class SitemapListener
     /**
      * Add a single marker into the sitemap.
      */
-    protected function parseItem(SitemapEvent $event, Map $map, Item $item): void
+    protected function parseItem(SitemapEvent $event, Map $map, MapItem $item): void
     {
         if (!$item->isPublishedForTimestamp($this->currentTimestamp)) {
             return;

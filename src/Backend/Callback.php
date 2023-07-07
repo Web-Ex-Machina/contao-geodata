@@ -42,10 +42,9 @@ class Callback extends Backend
 {
     /**
      * Geocode a given location.
+     * return JSON through AJAX request or Message with redirection.
      *
      * @param \DataContainer $objDc [Datacontainer to geocode]
-     *
-     * @return JSON through AJAX request or Message with redirection
      */
     public function geocode(DataContainer $objDc)
     {
@@ -576,7 +575,7 @@ class Callback extends Backend
         // HOOK: add custom logic
         if (isset($GLOBALS['TL_HOOKS']['WEMGEODATADOWNLOADLOCATIONSEXPORT']) && \is_array($GLOBALS['TL_HOOKS']['WEMGEODATADOWNLOADLOCATIONSEXPORT'])) {
             foreach ($GLOBALS['TL_HOOKS']['WEMGEODATADOWNLOADLOCATIONSEXPORT'] as $callback) {
-                $objSpreadsheetTemp = static::importStatic($callback[0])->{$callback[1]}($objSpreadsheet, $arrExcelPattern, $objLocations->reset(), $arrCountries, $objMap, $exportFormat, $this);
+                $objSpreadsheetTemp = static::importStatic($callback[0])->{$callback[1]}($objSpreadsheet, $arrExcelPattern, $objLocations->reset(), $arrCountries, $objMap, $format, $this);
                 if ($objSpreadsheetTemp) {
                     $objSpreadsheet = $objSpreadsheetTemp;
                 }
