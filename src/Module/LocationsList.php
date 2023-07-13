@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2023-2023 Web ex Machina
+ * Copyright (c) 2015-2022 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -229,7 +229,7 @@ class LocationsList extends Core
                         // HOOK: add custom logic
                         if (isset($GLOBALS['TL_HOOKS']['WEMGEODATABUILDFILTERSSINGLEFILTEROPTION']) && \is_array($GLOBALS['TL_HOOKS']['WEMGEODATABUILDFILTERSSINGLEFILTEROPTION'])) {
                             foreach ($GLOBALS['TL_HOOKS']['WEMGEODATABUILDFILTERSSINGLEFILTEROPTION'] as $callback) {
-                                [$arrFilters, $this->arrConfig] = static::importStatic($callback[0])->{$callback[1]}($arrFilters, $this->arrConfig, $filterField, $location[$filterField], $location, $this);
+                                [$arrFilters, $this->arrConfig] = static::importStatic($callback[0])->{$callback[1]}($arrFilters, $this->arrConfig, $filterField, (string) $location[$filterField], $location, $this);
                             }
                         }
                         continue;
@@ -261,7 +261,7 @@ class LocationsList extends Core
                             // HOOK: add custom logic
                             if (isset($GLOBALS['TL_HOOKS']['WEMGEODATABUILDFILTERSSINGLEFILTEROPTION']) && \is_array($GLOBALS['TL_HOOKS']['WEMGEODATABUILDFILTERSSINGLEFILTEROPTION'])) {
                                 foreach ($GLOBALS['TL_HOOKS']['WEMGEODATABUILDFILTERSSINGLEFILTEROPTION'] as $callback) {
-                                    [$arrFilters, $this->arrConfig] = static::importStatic($callback[0])->{$callback[1]}($arrFilters, $this->arrConfig, $filterField, $location[$filterField], $location, $this);
+                                    [$arrFilters, $this->arrConfig] = static::importStatic($callback[0])->{$callback[1]}($arrFilters, $this->arrConfig, $filterField, (string) $location[$filterField], $location, $this);
                                 }
                             }
                         break;
