@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2023-2023 Web ex Machina
+ * Copyright (c) 2015-2022 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -453,7 +453,7 @@ class Callback extends Backend
         $items = MapItem::findItems(['pid' => $objMap->id]);
         if ($items) {
             while ($items->next()) {
-                $arrCountries[$items->country] = $arrCountriesSystem[strtoupper($items->country)];
+                $arrCountries[$items->country] = $arrCountriesSystem[strtoupper($items->country)] ?? $arrCountriesSystem[strtolower($items->country)];
             }
         }
 
