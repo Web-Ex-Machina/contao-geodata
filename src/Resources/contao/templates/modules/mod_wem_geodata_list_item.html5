@@ -1,10 +1,10 @@
 <div class="block-card location layout_list" data-preset="inline" itemscope itemtype="http://schema.org/Place" 
   data-id="<?php echo $this->location['id']; ?>" 
-  data-category="<?php echo str_replace([' ','.'],'_', mb_strtolower(implode(',',array_map(function($c){return $c['title'];},$this->location['category'])), 'UTF-8'));?>" 
+  data-category="<?php echo str_replace([' ','.'],'_', mb_strtolower($this->location['category']['title'], 'UTF-8'));?>" 
   data-city="<?php echo str_replace([' ','.'],'_', mb_strtolower($this->location['city'], 'UTF-8'));?>" 
   data-admin_lvl_1="<?php echo str_replace([' ','.'],'_', mb_strtolower($this->location['admin_lvl_1'], 'UTF-8'));?>" 
   data-admin_lvl_2="<?php echo str_replace([' ','.'],'_', mb_strtolower($this->location['admin_lvl_2'], 'UTF-8'));?>" 
-  data-country="<?php echo str_replace([' ','.'],'_', mb_strtolower($this->location['country'], 'UTF-8'));?>"
+  data-country="<?php echo str_replace([' ','.'],'_', mb_strtolower($this->location['country']['code'], 'UTF-8'));?>"
 >
   <div class="block-card__wrapper">
     <?php if ($this->location['picture']['path']): ?>

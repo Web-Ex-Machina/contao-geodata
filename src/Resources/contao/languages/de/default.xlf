@@ -48,8 +48,8 @@
 			<target>Land</target>
 		</trans-unit>
 		<trans-unit id="WEM.LOCATIONS.TITLE.PANEL">
-			<source>Contact details for Altrad in</source>
-			<target>Kontaktdetails für Altrad in</target>
+			<source>Contact details</source>
+			<target>Kontaktdetails</target>
 		</trans-unit>
 		<trans-unit id="WEM.LOCATIONS.BUTTON.BACK">
 			<source>Back</source>

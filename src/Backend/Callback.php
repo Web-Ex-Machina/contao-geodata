@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2022 Web ex Machina
+ * Copyright (c) 2023-2023 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -60,10 +60,10 @@ class Callback extends Backend
                 throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['missingConfigForGeocoding']);
             }
             switch ($objMap->geocodingProvider) {
-                case 'gmaps':
+                case Map::GEOCODING_PROVIDER_GMAP:
                     $arrCoords = GoogleMaps::geocoder($objLocation, $objMap);
                 break;
-                case 'nominatim':
+                case Map::GEOCODING_PROVIDER_NOMINATIM:
                     $arrCoords = Nominatim::geocoder($objLocation, $objMap);
                 break;
                 default:

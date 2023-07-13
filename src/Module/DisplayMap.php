@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2022 Web ex Machina
+ * Copyright (c) 2023-2023 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -263,9 +263,9 @@ class DisplayMap extends Core
                         continue;
                     }
                     $this->filters[$filterField]['options'][$location[$filterField]] = [
-                        'value' => str_replace([' ', '.'], '_', mb_strtolower($location[$filterField], 'UTF-8')),
+                        'value' => str_replace([' ', '.'], '_', mb_strtolower((string) $location[$filterField], 'UTF-8')),
                         'text' => $location[$filterField],
-                        'selected' => (\array_key_exists($filterField, $this->arrConfig) && $this->arrConfig[$filterField] === str_replace([' ', '.'], '_', mb_strtolower($location[$filterField], 'UTF-8')) ? 'selected' : ''),
+                        'selected' => (\array_key_exists($filterField, $this->arrConfig) && $this->arrConfig[$filterField] === str_replace([' ', '.'], '_', mb_strtolower((string) $location[$filterField], 'UTF-8')) ? 'selected' : ''),
                     ];
                     switch ($filterField) {
                         case 'city':

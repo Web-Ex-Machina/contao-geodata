@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2022 Web ex Machina
+ * Copyright (c) 2023-2023 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -46,7 +46,7 @@ class GoogleMaps extends Controller
     public static function geocoder($varAddress, Map $objMap, ?int $intResults = 1): array
     {
         // Before everything, check if we can geocode this
-        if ('gmaps' !== $objMap->geocodingProvider || !$objMap->geocodingProviderGmapKey) {
+        if (Map::GEOCODING_PROVIDER_GMAP !== $objMap->geocodingProvider || !$objMap->geocodingProviderGmapKey) {
             throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['missingConfigForGeocoding']);
         }
         // Standardize the address to geocode

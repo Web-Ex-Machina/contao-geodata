@@ -3,13 +3,13 @@
 declare(strict_types=1);
 
 /**
- * Altrad Map Bundle for Contao Open Source CMS
- * Copyright (c) 2017-2022 Web ex Machina
+ * Geodata for Contao Open Source CMS
+ * Copyright (c) 2023-2023 Web ex Machina
  *
  * @category ContaoBundle
- * @package  Web-Ex-Machina/contao-altrad-map-bundle
+ * @package  Web-Ex-Machina/contao-geodata
  * @author   Web ex Machina <contact@webexmachina.fr>
- * @link     https://github.com/Web-Ex-Machina/contao-altrad-map-bundle/
+ * @link     https://github.com/Web-Ex-Machina/contao-geodata/
  */
 
 namespace WEM\GeoDataBundle\Model;
@@ -21,6 +21,10 @@ use Contao\Model;
  */
 class Map extends Model
 {
+    public const GEOCODING_PROVIDER_GMAP = 'gmaps';
+    public const GEOCODING_PROVIDER_NOMINATIM = 'nominatim';
+    public const MAP_PROVIDER_GMAP = 'gmaps';
+    public const MAP_PROVIDER_LEAFLET = 'leaflet';
     /**
      * Table name.
      *
