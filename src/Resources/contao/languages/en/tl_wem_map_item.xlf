@@ -21,6 +21,14 @@
 				<source>Select the location category</source>
 				<target>Select the location category</target>
 			</trans-unit>
+			<trans-unit id="tl_wem_map_item.categories.0">
+				<source>Categories</source>
+				<target>Categories</target>
+			</trans-unit>
+			<trans-unit id="tl_wem_map_item.categories.1">
+				<source>Select the location categories</source>
+				<target>Select the location categories</target>
+			</trans-unit>
 			<trans-unit id="tl_wem_map_item.published.0">
 				<source>Publish</source>
 				<target>Publish</target>

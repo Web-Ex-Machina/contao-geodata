@@ -28,6 +28,7 @@ use WEM\GeoDataBundle\Controller\ClassLoader;
 use WEM\GeoDataBundle\Model\Category;
 use WEM\GeoDataBundle\Model\Map;
 use WEM\GeoDataBundle\Model\MapItem;
+use WEM\GeoDataBundle\Model\MapItemCategory;
 
 /**
  * Front end module "locations list".
@@ -93,7 +94,7 @@ class LocationsList extends Core
 
             // Build the config (do not manage pagination here !)
             $this->arrConfig = ['published' => 1, 'where' => [
-                sprintf('pid in (%s)', implode(',', StringUtil::deserialize($this->wem_geodata_maps))),
+                sprintf('%s.pid in (%s)', MapItem::getTable(), implode(',', StringUtil::deserialize($this->wem_geodata_maps))),
             ]];
 
             // Catch AJAX request
@@ -249,9 +250,19 @@ class LocationsList extends Core
                             $arrFilters[$filterField]['options'][$location[$filterField]]['text'] = $location[$filterField].($location['admin_lvl_2'] ? ' ('.$location['admin_lvl_2'].')' : '');
                         break;
                         case 'category':
-                            $objCategory = Category::findByPk($location[$filterField]);
-                            if ($objCategory) {
-                                $arrFilters[$filterField]['options'][$location[$filterField]]['text'] = $objCategory->title;
+                            // $objCategory = Category::findByPk($location[$filterField]);
+                            // if ($objCategory) {
+                            //     $arrFilters[$filterField]['options'][$location[$filterField]]['text'] = $objCategory->title;
+                            // }
+                            $mapItemCategories = MapItemCategory::findItems(['pid' => $location['id']]);
+                            if ($mapItemCategories) {
+                                while ($mapItemCategories->next()) {
+                                    $objCategory = Category::findByPk($mapItemCategories->category);
+                                    if ($objCategory) {
+                                        $this->filters[$filterField]['options'][$objCategory->id]['text'] = $objCategory->title;
+                                        $this->filters[$filterField]['options'][$objCategory->id]['value'] = $objCategory->title;
+                                    }
+                                }
                             }
                         break;
                         case 'country':

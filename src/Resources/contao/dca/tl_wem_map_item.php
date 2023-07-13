@@ -30,7 +30,7 @@ $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
     'config' => [
         'dataContainer' => 'Table',
         'ptable' => 'tl_wem_map',
-        'ctable' => ['tl_content', 'tl_wem_map_item_attribute_value'],
+        'ctable' => ['tl_content', 'tl_wem_map_item_attribute_value', 'tl_wem_map_item_category'],
         'switchToEdit' => true,
         'enableVersioning' => true,
         'onload_callback' => [
@@ -131,7 +131,7 @@ $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
     // Palettes
     'palettes' => [
         'default' => '
-            {location_legend},title,alias,category,published, publishedAt, publishedUntil;
+            {location_legend},title,alias,category,categories,published, publishedAt, publishedUntil;
             {street_legend},country,admin_lvl_1,admin_lvl_2,admin_lvl_3,city,postal,street;
             {coords_legend},lat,lng;
             {data_legend},picture,teaser;
@@ -189,6 +189,22 @@ $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
             'eval' => ['chosen' => true, 'includeBlankOption' => true, 'tl_class' => 'w50'],
             'sql' => "int(10) unsigned NOT NULL default '0'",
             'relation' => ['type' => 'hasOne', 'load' => 'lazy'],
+        ],
+        'categories' => [
+            'label' => &$GLOBALS['TL_LANG']['tl_wem_map_item']['categories'],
+            'exclude' => true,
+            'filter' => true,
+            'sorting' => true,
+            'flag' => 11,
+            'inputType' => 'select',
+            'foreignKey' => 'tl_wem_map_category.title',
+            'options_callback' => [\WEM\GeoDataBundle\DataContainer\MapItem::class, 'getMapCategories'],
+            'save_callback' => [
+                [\WEM\GeoDataBundle\DataContainer\MapItem::class, 'syncMapItemCategoryPivotTable'],
+            ],
+            'eval' => ['chosen' => true, 'includeBlankOption' => true, 'multiple' => true, 'tl_class' => 'w50'],
+            'sql' => 'blob NULL',
+            'relation' => ['type' => 'belongsTo', 'load' => 'eager'],
         ],
         'published' => [
             'label' => &$GLOBALS['TL_LANG']['tl_wem_map_item']['published'],

@@ -13,6 +13,14 @@
 				<source>Enter the map title</source>
 				<target>Bitte Kartennamen eingeben.</target>
 			</trans-unit>
+			<trans-unit id="tl_wem_map_item.categories.0">
+				<source>Categories</source>
+				<target>Kategorien</target>
+			</trans-unit>
+			<trans-unit id="tl_wem_map_item.categories.1">
+				<source>Select the location categories</source>
+				<target>Wählen Sie die Standortkategorien aus</target>
+			</trans-unit>
 			<trans-unit id="tl_wem_map_item.published.0">
 				<source>Publish</source>
 				<target>Veröffentlichen</target>

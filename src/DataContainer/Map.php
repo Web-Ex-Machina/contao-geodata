@@ -14,20 +14,10 @@ declare(strict_types=1);
 
 namespace WEM\GeoDataBundle\DataContainer;
 
-use Contao\Backend;
 use WEM\GeoDataBundle\Model\Map as ModelMap;
 
-class Map extends Backend
+class Map extends CoreContainer
 {
-    /**
-     * Import the back end user object.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->import('BackendUser', 'User');
-    }
-
     /**
      * Generate the default map config array.
      *

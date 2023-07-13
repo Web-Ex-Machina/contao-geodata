@@ -28,6 +28,7 @@ use WEM\GeoDataBundle\Model\Category;
 use WEM\GeoDataBundle\Model\Map;
 use WEM\GeoDataBundle\Model\MapItem;
 use WEM\GeoDataBundle\Model\MapItemAttributeValue;
+use WEM\GeoDataBundle\Model\MapItemCategory;
 
 /**
  * Parent class for locations modules.
@@ -108,8 +109,16 @@ abstract class Core extends Module
             }
 
             // Get category
-            if ($arrItem['category']) {
-                $arrItem['category'] = $this->getCategory($arrItem['category']);
+            // if ($arrItem['category']) {
+            //     $arrItem['category'] = $this->getCategory($arrItem['category']);
+            // }
+
+            $arrItem['category'] = [];
+            $mapItemCategories = MapItemCategory::findItems(['pid' => $arrItem['id']]);
+            if ($mapItemCategories) {
+                while ($mapItemCategories->next()) {
+                    $arrItem['category'][] = $this->getCategory($mapItemCategories->category);
+                }
             }
 
             // Get location picture

@@ -1,0 +1,22 @@
+<?xml version="1.0" ?><xliff version="1.1">
+  <file datatype="php" original="system/modules/wem-contao-locations/languages/en/tl_wem_map_item_category.php" source-language="en" target-language="fr">
+    <body>
+		<trans-unit id="tl_wem_map_item_category.pid.0">
+			<source>Location</source>
+			<target>Emplacement</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map_item_category.pid.1">
+			<source>Select the location</source>
+			<target>Sélectionnez l'emplacement</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map_item_category.category.0">
+			<source>Category</source>
+			<target>Catégorie</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map_item_category.category.1">
+			<source>Select the location category</source>
+			<target>Sélectionnez la catégorie de l'emplacement</target>
+		</trans-unit>
+    </body>
+  </file>
+</xliff>

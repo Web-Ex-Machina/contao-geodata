@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace WEM\GeoDataBundle\DataContainer;
 
-use Contao\Backend;
 use Contao\DataContainer;
 use Contao\Image;
 use Contao\Input;
@@ -24,7 +23,7 @@ use Contao\System;
 use Contao\Versions;
 use WEM\GeoDataBundle\Model\Map;
 
-class MapItem extends Backend
+class MapItem extends CoreContainer
 {
     /**
      * Import the back end user object.
@@ -285,5 +284,12 @@ class MapItem extends Backend
         $url = str_replace('&amp;id='.$objMap->id, '&amp;id='.$data['id'], $url);
 
         return sprintf('<a href="%s" title="%s" %s>%s</a> ', $url, StringUtil::specialchars($title), $attributes, Image::getHtml($icon, $label));
+    }
+
+    public function syncMapItemCategoryPivotTable($varValue, $dc)
+    {
+        $this->syncData(deserialize($varValue), 'tl_wem_map_item_category', $dc->id, 'pid', 'category');
+
+        return $varValue;
     }
 }

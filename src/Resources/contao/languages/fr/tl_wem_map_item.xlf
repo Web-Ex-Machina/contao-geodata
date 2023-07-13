@@ -29,6 +29,14 @@
 			<source>Select the location category</source>
 			<target>Sélectionnez la catégorie de l'emplacement</target>
 		</trans-unit>
+		<trans-unit id="tl_wem_map_item.categories.0">
+			<source>Categories</source>
+			<target>Catégories</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map_item.categories.1">
+			<source>Select the location categories</source>
+			<target>Sélectionnez les catégories de l'emplacement</target>
+		</trans-unit>
 		<trans-unit id="tl_wem_map_item.published.0">
 			<source>Publish</source>
 			<target>Publier</target>

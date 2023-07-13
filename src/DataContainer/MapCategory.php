@@ -14,19 +14,8 @@ declare(strict_types=1);
 
 namespace WEM\GeoDataBundle\DataContainer;
 
-use Contao\Backend;
-
-class MapCategory extends Backend
+class MapCategory extends CoreContainer
 {
-    /**
-     * Import the back end user object.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->import('BackendUser', 'User');
-    }
-
     /**
      * Design each row of the DCA.
      *

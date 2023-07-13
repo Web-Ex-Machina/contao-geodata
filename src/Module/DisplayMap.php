@@ -25,6 +25,7 @@ use WEM\GeoDataBundle\Controller\ClassLoader;
 use WEM\GeoDataBundle\Model\Category;
 use WEM\GeoDataBundle\Model\Map;
 use WEM\GeoDataBundle\Model\MapItem;
+use WEM\GeoDataBundle\Model\MapItemCategory;
 
 /**
  * Front end module "locations map".
@@ -273,10 +274,20 @@ class DisplayMap extends Core
                             $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $location[$filterField].($location['admin_lvl_2'] ? ' ('.$location['admin_lvl_2'].')' : '');
                         break;
                         case 'category':
-                            $objCategory = Category::findByPk($location[$filterField]);
-                            if ($objCategory) {
-                                $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $objCategory->title;
-                                // $this->filters[$filterField]['options'][$location[$filterField]]['value'] = $objCategory->title;
+                        //     $objCategory = Category::findByPk($location[$filterField]);
+                        //     if ($objCategory) {
+                        //         $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $objCategory->title;
+                        //         // $this->filters[$filterField]['options'][$location[$filterField]]['value'] = $objCategory->title;
+                        //     }
+                            $mapItemCategories = MapItemCategory::findItems(['pid' => $location['id']]);
+                            if ($mapItemCategories) {
+                                while ($mapItemCategories->next()) {
+                                    $objCategory = Category::findByPk($mapItemCategories->category);
+                                    if ($objCategory) {
+                                        $this->filters[$filterField]['options'][$objCategory->id]['text'] = $objCategory->title;
+                                        $this->filters[$filterField]['options'][$objCategory->id]['value'] = $objCategory->title;
+                                    }
+                                }
                             }
                         break;
                         case 'country':
