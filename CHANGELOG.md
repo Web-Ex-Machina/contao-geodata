@@ -1,6 +1,10 @@
 Extension "Geodata" for Contao Open Source CMS
 ========
 
+1.0.0-rc5 - 2023-02-06
+---
+- UPDATED : moving hook WEMGEODATABUILDFILTERSSINGLEFILTEROPTION calls to allow more flexibility
+
 1.0.0-rc4 - 2023-02-02
 ---
 - UPDATED : translations for administrative levels

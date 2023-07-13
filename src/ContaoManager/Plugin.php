@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2017-2022 Web ex Machina
+ * Copyright (c) 2015-2022 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -14,11 +14,11 @@ declare(strict_types=1);
 
 namespace WEM\GeoDataBundle\ContaoManager;
 
-use WEM\GeoDataBundle\WEMGeoDataBundle;
 use Contao\CoreBundle\ContaoCoreBundle;
 use Contao\ManagerPlugin\Bundle\BundlePluginInterface;
 use Contao\ManagerPlugin\Bundle\Config\BundleConfig;
 use Contao\ManagerPlugin\Bundle\Parser\ParserInterface;
+use WEM\GeoDataBundle\WEMGeoDataBundle;
 
 /**
  * Plugin for the Contao Manager.

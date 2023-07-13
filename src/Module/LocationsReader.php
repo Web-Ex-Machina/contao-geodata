@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2023-2023 Web ex Machina
+ * Copyright (c) 2015-2022 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -14,14 +14,13 @@ declare(strict_types=1);
 
 namespace WEM\GeoDataBundle\Module;
 
-use Contao\Combiner;
 use Contao\BackendTemplate;
+use Contao\Combiner;
 use Contao\Config;
 use Contao\Environment;
 use Contao\Input;
 use WEM\GeoDataBundle\Model\Map;
 use WEM\GeoDataBundle\Model\MapItem;
-use WEM\GeoDataBundle\Controller\ClassLoader;
 
 /**
  * Front end module "locations reader".
@@ -88,13 +87,12 @@ class LocationsReader extends Core
                 throw new \Exception(sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['pageNotFound'], Environment::get('uri')));
             }
 
-
             $arrItem = $this->getLocation($objItem);
             $objMap = Map::findByPk($objItem->pid);
             $this->Template->item = $arrItem;
             $this->Template->map = $objMap->row();
             $this->Template->shouldBeIndexed = $objMap->row();
-            
+
             // Load the libraries
             $strVersion = 1;
             $objCssCombiner = new Combiner();
