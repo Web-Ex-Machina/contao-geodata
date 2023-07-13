@@ -277,7 +277,7 @@ public function buildFiltersSingleFilterOption(
 				}
 				unset($arrFilters[$filterField]['options'][$lastKey]);
 				
-				$this->filters[$filterField]['options'][$lastKey] = [
+				$arrFilters[$filterField]['options'][$lastKey] = [
                     'value' => str_replace([' ', '.'], '_', mb_strtolower($location[$filterField], 'UTF-8')),
                     'text' => $location[$filterField],
                     'selected' => (
@@ -313,7 +313,7 @@ $callerClass | `string` | The formatted statements
 
 **Code**:
 ```php
-public function buildFiltersSingleFilterOption(
+public function mapItemFormatStatement(
 	string $strField, 
 	$varValue, 
 	string $strOperator,
@@ -333,6 +333,6 @@ public function buildFiltersSingleFilterOption(
 		break;
 	}
 
-	return $arrColums;
+	return $arrColumns;
 }
 ```

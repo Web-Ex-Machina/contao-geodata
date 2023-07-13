@@ -253,7 +253,7 @@ class DisplayMap extends Core
                     if (!$location[$filterField]) {
                         if (isset($GLOBALS['TL_HOOKS']['WEMGEODATABUILDFILTERSSINGLEFILTEROPTION']) && \is_array($GLOBALS['TL_HOOKS']['WEMGEODATABUILDFILTERSSINGLEFILTEROPTION'])) {
                             foreach ($GLOBALS['TL_HOOKS']['WEMGEODATABUILDFILTERSSINGLEFILTEROPTION'] as $callback) {
-                                [$this->filters,$this->arrConfig] = static::importStatic($callback[0])->{$callback[1]}($this->filters, $this->arrConfig, $filterField, $location[$filterField], $location, $this);
+                                [$this->filters,$this->arrConfig] = static::importStatic($callback[0])->{$callback[1]}($this->filters, $this->arrConfig, $filterField, (string) $location[$filterField], $location, $this);
                             }
                         }
                         continue;
@@ -263,9 +263,9 @@ class DisplayMap extends Core
                         continue;
                     }
                     $this->filters[$filterField]['options'][$location[$filterField]] = [
-                        'value' => str_replace([' ', '.'], '_', mb_strtolower($location[$filterField], 'UTF-8')),
+                        'value' => str_replace([' ', '.'], '_', mb_strtolower((string) $location[$filterField], 'UTF-8')),
                         'text' => $location[$filterField],
-                        'selected' => (\array_key_exists($filterField, $this->arrConfig) && $this->arrConfig[$filterField] === str_replace([' ', '.'], '_', mb_strtolower($location[$filterField], 'UTF-8')) ? 'selected' : ''),
+                        'selected' => (\array_key_exists($filterField, $this->arrConfig) && $this->arrConfig[$filterField] === str_replace([' ', '.'], '_', mb_strtolower((string) $location[$filterField], 'UTF-8')) ? 'selected' : ''),
                     ];
                     switch ($filterField) {
                         case 'city':
@@ -289,7 +289,7 @@ class DisplayMap extends Core
                     // HOOK: add custom logic
                     if (isset($GLOBALS['TL_HOOKS']['WEMGEODATABUILDFILTERSSINGLEFILTEROPTION']) && \is_array($GLOBALS['TL_HOOKS']['WEMGEODATABUILDFILTERSSINGLEFILTEROPTION'])) {
                         foreach ($GLOBALS['TL_HOOKS']['WEMGEODATABUILDFILTERSSINGLEFILTEROPTION'] as $callback) {
-                            [$this->filters,$this->arrConfig] = static::importStatic($callback[0])->{$callback[1]}($this->filters, $this->arrConfig, $filterField, $location[$filterField], $location, $this);
+                            [$this->filters,$this->arrConfig] = static::importStatic($callback[0])->{$callback[1]}($this->filters, $this->arrConfig, $filterField, (string) $location[$filterField], $location, $this);
                         }
                     }
                 }

@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2022 Web ex Machina
+ * Copyright (c) 2023-2023 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
  * @author   Web ex Machina <contact@webexmachina.fr>
  * @link     https://github.com/Web-Ex-Machina/contao-geodata/
  */
+
+use WEM\GeoDataBundle\Model\Map;
 
 /*
  * Table tl_wem_map.
@@ -149,7 +151,7 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'default' => '',
             'exclude' => true,
             'inputType' => 'select',
-            'options' => ['gmaps', 'leaflet'],
+            'options' => [Map::MAP_PROVIDER_GMAP, Map::MAP_PROVIDER_LEAFLET],
             'reference' => &$GLOBALS['TL_LANG']['tl_wem_map']['mapProvider'],
             'eval' => ['helpwizard' => true, 'mandatory' => true, 'submitOnChange' => true, 'chosen' => true, 'includeBlankOption' => true],
             'explanation' => 'wem_geodata_mapProvider',
@@ -175,7 +177,7 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'label' => &$GLOBALS['TL_LANG']['tl_wem_map']['geocodingProvider'],
             'exclude' => true,
             'inputType' => 'select',
-            'options' => ['nominatim', 'gmaps'],
+            'options' => [Map::GEOCODING_PROVIDER_NOMINATIM, Map::GEOCODING_PROVIDER_GMAP],
             'reference' => &$GLOBALS['TL_LANG']['tl_wem_map']['geocodingProvider'],
             'eval' => ['helpwizard' => true, 'includeBlankOption' => true, 'submitOnChange' => true, 'chosen' => true],
             'explanation' => 'wem_geodata_geocodingProvider',

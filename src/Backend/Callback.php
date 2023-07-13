@@ -42,10 +42,9 @@ class Callback extends Backend
 {
     /**
      * Geocode a given location.
+     * return JSON through AJAX request or Message with redirection.
      *
      * @param \DataContainer $objDc [Datacontainer to geocode]
-     *
-     * @return JSON through AJAX request or Message with redirection
      */
     public function geocode(DataContainer $objDc)
     {
@@ -61,10 +60,10 @@ class Callback extends Backend
                 throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['missingConfigForGeocoding']);
             }
             switch ($objMap->geocodingProvider) {
-                case 'gmaps':
+                case Map::GEOCODING_PROVIDER_GMAP:
                     $arrCoords = GoogleMaps::geocoder($objLocation, $objMap);
                 break;
-                case 'nominatim':
+                case Map::GEOCODING_PROVIDER_NOMINATIM:
                     $arrCoords = Nominatim::geocoder($objLocation, $objMap);
                 break;
                 default:
@@ -454,7 +453,7 @@ class Callback extends Backend
         $items = MapItem::findItems(['pid' => $objMap->id]);
         if ($items) {
             while ($items->next()) {
-                $arrCountries[$items->country] = $arrCountriesSystem[strtoupper($items->country)];
+                $arrCountries[$items->country] = $arrCountriesSystem[strtoupper($items->country)] ?? $arrCountriesSystem[strtolower($items->country)];
             }
         }
 
@@ -576,7 +575,7 @@ class Callback extends Backend
         // HOOK: add custom logic
         if (isset($GLOBALS['TL_HOOKS']['WEMGEODATADOWNLOADLOCATIONSEXPORT']) && \is_array($GLOBALS['TL_HOOKS']['WEMGEODATADOWNLOADLOCATIONSEXPORT'])) {
             foreach ($GLOBALS['TL_HOOKS']['WEMGEODATADOWNLOADLOCATIONSEXPORT'] as $callback) {
-                $objSpreadsheetTemp = static::importStatic($callback[0])->{$callback[1]}($objSpreadsheet, $arrExcelPattern, $objLocations->reset(), $arrCountries, $objMap, $exportFormat, $this);
+                $objSpreadsheetTemp = static::importStatic($callback[0])->{$callback[1]}($objSpreadsheet, $arrExcelPattern, $objLocations->reset(), $arrCountries, $objMap, $format, $this);
                 if ($objSpreadsheetTemp) {
                     $objSpreadsheet = $objSpreadsheetTemp;
                 }

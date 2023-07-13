@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2022 Web ex Machina
+ * Copyright (c) 2023-2023 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace WEM\GeoDataBundle\DataContainer;
 
 use Contao\Backend;
+use WEM\GeoDataBundle\Model\Map as ModelMap;
 
 class Map extends Backend
 {
@@ -38,7 +39,7 @@ class Map extends Backend
     {
         if (!$varValue) {
             switch ($objDc->activeRecord->mapProvider) {
-                case 'leaflet':
+                case ModelMap::MAP_PROVIDER_LEAFLET:
                     $arrConfig = \WEM\GeoDataBundle\Controller\Provider\Leaflet::getDefaultConfig();
                     break;
 

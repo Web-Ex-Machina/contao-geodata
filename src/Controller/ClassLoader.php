@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2022 Web ex Machina
+ * Copyright (c) 2023-2023 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -16,6 +16,7 @@ namespace WEM\GeoDataBundle\Controller;
 
 use Contao\Combiner;
 use Contao\Controller;
+use WEM\GeoDataBundle\Model\Map;
 
 /**
  * Provide utilities function to Locations Extension.
@@ -71,7 +72,7 @@ class ClassLoader extends Controller
 
         // Depending on the provider, we will need more stuff
         switch ($objMap->mapProvider) {
-            case 'gmaps':
+            case Map::MAP_PROVIDER_GMAP:
                 if (!$objMap->mapProviderGmapKey) {
                     throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['gmapNeedsAPIKey']);
                 }
@@ -80,7 +81,7 @@ class ClassLoader extends Controller
                 $objJsCombiner->add('bundles/wemgeodata/js/gmaps.js', $strVersion);
                 $GLOBALS['TL_JAVASCRIPT'][] = sprintf('<script src="https://maps.googleapis.com/maps/api/js?key=%s"></script>', $objMap->mapProviderGmapKey);
                 break;
-            case 'leaflet':
+            case Map::MAP_PROVIDER_LEAFLET:
                 $GLOBALS['TL_HEAD'][] = '<link rel="stylesheet" href="https://unpkg.com/leaflet@latest/dist/leaflet.css">';
                 $GLOBALS['TL_HEAD'][] = '<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@latest/dist/MarkerCluster.css">';
                 $GLOBALS['TL_HEAD'][] = '<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@latest/dist/MarkerCluster.Default.css">';

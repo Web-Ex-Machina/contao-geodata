@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2022 Web ex Machina
+ * Copyright (c) 2023-2023 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -19,7 +19,8 @@ use Contao\File;
 use Contao\Message;
 use Contao\StringUtil;
 use PhpOffice\PhpSpreadsheet\IOFactory;
-use WEM\GeoDataBundle\Model\ItemAttributeValue;
+use WEM\GeoDataBundle\Model\MapItem;
+use WEM\GeoDataBundle\Model\MapItemAttributeValue;
 
 /**
  * Provide utilities function to Locations Extension.
@@ -95,11 +96,11 @@ class ImportLocationsListener
                 $arrNewLocations[] = $objLocation->id;
 
                 // Find attribute (postal code here)
-                $objLocationAttributeValue = ItemAttributeValue::findItems(['pid' => $objLocation->id, 'attribute' => 'postal', 'value' => $arrRow['A']], 1);
+                $objLocationAttributeValue = MapItemAttributeValue::findItems(['pid' => $objLocation->id, 'attribute' => 'postal', 'value' => $arrRow['A']], 1);
 
                 // Create if don't exists
                 if (!$objLocationAttributeValue) {
-                    $objLocationAttributeValue = new ItemAttributeValue();
+                    $objLocationAttributeValue = new MapItemAttributeValue();
                     $objLocationAttributeValue->createdAt = time();
                     $objLocationAttributeValue->pid = $objLocation->id;
                     $objLocationAttributeValue->attribute = 'postal';
