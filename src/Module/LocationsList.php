@@ -141,6 +141,11 @@ class LocationsList extends Core
 
             $this->Template->locations = $arrLocations;
 
+            // Get categories
+            $arrCategories = $this->getCategories();
+
+            $this->Template->categories = $arrCategories;
+
             // Add the items
             // if (!empty($arrLocations)) {
             //     $this->Template->locations = $this->parseItems($arrLocations, $this->wem_geodata_customTplForGeodataItems);
