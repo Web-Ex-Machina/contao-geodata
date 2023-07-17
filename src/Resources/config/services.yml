@@ -1,0 +1,6 @@
+services:
+    WEM\GeoDataBundle\Migration\M202307170826_MultiCategories:
+        arguments:
+            $connection: '@database_connection'
+        tags:
+            - { name: contao.migration, priority: 0 }
