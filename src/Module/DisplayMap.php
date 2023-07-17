@@ -281,7 +281,7 @@ class DisplayMap extends Core
                                     if ($objCategory) {
                                         $this->filters[$filterField]['options'][$objCategory->id]['text'] = $objCategory->title;
                                         $this->filters[$filterField]['options'][$objCategory->id]['value'] = $objCategory->title;
-                                        $this->filters[$filterField]['options'][$objCategory->id]['selected'] =  (\array_key_exists($filterField, $this->arrConfig) && $this->arrConfig[$filterField] === Util::formatStringValueForFilters((string) $location[$filterField]) ? 'selected' : '');
+                                        $this->filters[$filterField]['options'][$objCategory->id]['selected'] =  (\array_key_exists($filterField, $this->arrConfig) && $this->arrConfig[$filterField] === Util::formatStringValueForFilters((string) $objCategory->title) ? 'selected' : '');
                                     }
                                 }
                             }
