@@ -266,7 +266,7 @@ class DisplayMap extends Core
                     $this->filters[$filterField]['options'][$location[$filterField]] = [
                         'value' => str_replace([' ', '.'], '_', mb_strtolower((string) $location[$filterField], 'UTF-8')),
                         'text' => $location[$filterField],
-                        'selected' => (\array_key_exists($filterField, $this->arrConfig) && $this->arrConfig[$filterField] === str_replace([' ', '.'], '_', mb_strtolower((string) $location[$filterField], 'UTF-8')) ? 'selected' : ''),
+                        'selected' => (\array_key_exists($filterField, $this->arrConfig) && $this->arrConfig[$filterField] === Util::formatStringValueForFilters((string) $location[$filterField]) ? 'selected' : ''),
                     ];
                     switch ($filterField) {
                         case 'city':
@@ -274,11 +274,6 @@ class DisplayMap extends Core
                             $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $location[$filterField].($location['admin_lvl_2'] ? ' ('.$location['admin_lvl_2'].')' : '');
                         break;
                         case 'category':
-                        //     $objCategory = Category::findByPk($location[$filterField]);
-                        //     if ($objCategory) {
-                        //         $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $objCategory->title;
-                        //         // $this->filters[$filterField]['options'][$location[$filterField]]['value'] = $objCategory->title;
-                        //     }
                             $mapItemCategories = MapItemCategory::findItems(['pid' => $location['id']]);
                             if ($mapItemCategories) {
                                 while ($mapItemCategories->next()) {
@@ -286,6 +281,7 @@ class DisplayMap extends Core
                                     if ($objCategory) {
                                         $this->filters[$filterField]['options'][$objCategory->id]['text'] = $objCategory->title;
                                         $this->filters[$filterField]['options'][$objCategory->id]['value'] = $objCategory->title;
+                                        $this->filters[$filterField]['options'][$objCategory->id]['selected'] =  (\array_key_exists($filterField, $this->arrConfig) && $this->arrConfig[$filterField] === Util::formatStringValueForFilters((string) $location[$filterField]) ? 'selected' : '');
                                     }
                                 }
                             }

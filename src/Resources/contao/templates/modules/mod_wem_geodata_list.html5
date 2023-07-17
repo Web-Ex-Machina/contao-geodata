@@ -11,7 +11,7 @@
               <?php if('text' == $f['type']) : ?>
                 <label for="filter_<?= $f['name'] ?>"><?= $f['label'] ?></label>
                 <input type="text" id="filter_<?= $f['name'] ?>" name="<?= $f['name'] ?>" value="<?= $f['value'] ?>" placeholder="<?= $f['placeholder'] ?>" />
-              <?php else: ?>
+              <?php elseif('select' == $f['type'] && count($f['options']) > 1): ?>
                 <label for="filter_<?= $f['name'] ?>"><?= $f['label'] ?></label>
                 <select id="filter_<?= $f['name'] ?>" name="<?= $f['name'] ?>" placeholder="<?= $f['placeholder'] ?>">
                   <option value=""> - </option>
@@ -70,7 +70,7 @@
                 <?php if('text' == $f['type']) : ?>
                   <label for="filter_<?= $f['name'] ?>"><?= $f['label'] ?></label>
                   <input type="text" id="filter_<?= $f['name'] ?>" name="<?= $f['name'] ?>" value="<?= $f['value'] ?>" placeholder="<?= $f['placeholder'] ?>" />
-                <?php else: ?>
+                <?php elseif('select' == $f['type'] && count($f['options']) > 1): ?>
                   <label for="filter_<?= $f['name'] ?>"><?= $f['label'] ?></label>
                   <select id="filter_<?= $f['name'] ?>" name="<?= $f['name'] ?>" placeholder="<?= $f['placeholder'] ?>">
                     <option value=""> - </option>

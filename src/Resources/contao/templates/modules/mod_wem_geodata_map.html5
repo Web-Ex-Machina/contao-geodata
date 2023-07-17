@@ -8,18 +8,18 @@
 	      <form action="<?= $this->filters_action ?>" method="<?= $this->filters_method ?>" class="locations__filters ft-0-8-em">
 	          <?php foreach($this->filters as $f): ?>
 	            <div class="location__filter form-group <?php echo ('text' == $f['type']) ? 'w-100' : '';?>">
-	              <?php if('text' == $f['type']) : ?>
-	                <label for="filter_<?= $f['name'] ?>"><?= $f['label'] ?></label>
-	                <input type="text" id="filter_<?= $f['name'] ?>" name="<?= $f['name'] ?>" value="<?= $f['value'] ?>" placeholder="<?= $f['placeholder'] ?>" />
-	              <?php else: ?>
-	                <label for="filter_<?= $f['name'] ?>"><?= $f['label'] ?></label>
-	                <select id="filter_<?= $f['name'] ?>" name="<?= $f['name'] ?>" placeholder="<?= $f['placeholder'] ?>">
-	                  <option value=""> - </option>
-	                  <?php foreach($f['options'] as $o): ?>
-	                  <option value="<?= $o['value'] ?>" <?= $o['selected'] ?>><?= $o['text'] ?></option>
-	                  <?php endforeach; ?>
-	                </select>
-	              <?php endif; ?>
+	              	<?php if('text' == $f['type']) : ?>
+		                <label for="filter_<?= $f['name'] ?>"><?= $f['label'] ?></label>
+		                <input type="text" id="filter_<?= $f['name'] ?>" name="<?= $f['name'] ?>" value="<?= $f['value'] ?>" placeholder="<?= $f['placeholder'] ?>" />
+					<?php elseif('select' == $f['type'] && count($f['options']) > 1): ?>
+		                <label for="filter_<?= $f['name'] ?>"><?= $f['label'] ?></label>
+		                <select id="filter_<?= $f['name'] ?>" name="<?= $f['name'] ?>" placeholder="<?= $f['placeholder'] ?>">
+		                  <option value=""> - </option>
+		                  <?php foreach($f['options'] as $o): ?>
+		                  <option value="<?= $o['value'] ?>" <?= $o['selected'] ?>><?= $o['text'] ?></option>
+		                  <?php endforeach; ?>
+		                </select>
+	              	<?php endif; ?>
 	            </div>
 	          <?php endforeach; ?>
 	          <div class="location__filter flex-alignitems--flexend">
@@ -77,7 +77,7 @@
 	              <?php if('text' == $f['type']) : ?>
 	                <label for="filter_<?= $f['name'] ?>"><?= $f['label'] ?></label>
 	                <input type="text" id="filter_<?= $f['name'] ?>" name="<?= $f['name'] ?>" value="<?= $f['value'] ?>" placeholder="<?= $f['placeholder'] ?>" />
-	              <?php else: ?>
+				  <?php elseif('select' == $f['type'] && count($f['options']) > 1): ?>
 	                <label for="filter_<?= $f['name'] ?>"><?= $f['label'] ?></label>
 	                <select id="filter_<?= $f['name'] ?>" name="<?= $f['name'] ?>" placeholder="<?= $f['placeholder'] ?>">
 	                  <option value=""> - </option>

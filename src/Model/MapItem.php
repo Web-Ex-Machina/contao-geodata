@@ -76,6 +76,25 @@ class MapItem extends CoreModel
                 $arrColumns[] = sprintf("$t.id IN (
                     SELECT mic.pid
                     FROM %s mic
+                    INNER JOIN %s mc ON mc.id = mic.category
+                    WHERE mc.id IN ('%s') 
+                    OR mc.title IN ('%s')
+                    OR LOWER(REPLACE(REPLACE(mc.title,' ','_'),'.','_')) IN ('%s')
+                )",
+                MapItemCategory::getTable(),
+                Category::getTable(),
+                implode("','",$varValue),
+                implode("','",$varValue),
+                implode("','",$varValue),
+                );
+            break;
+            case 'categories':
+                if(!is_array($varValue)){
+                    $varValue = [$varValue];
+                }
+                $arrColumns[] = sprintf("$t.id IN (
+                    SELECT mic.pid
+                    FROM %s mic
                     WHERE mic.category IN ('%s')
                 )",
                 MapItemCategory::getTable(),

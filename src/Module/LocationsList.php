@@ -247,7 +247,7 @@ class LocationsList extends Core
                     $arrFilters[$filterField]['options'][$location[$filterField]] = [
                         'value' => $location[$filterField],
                         'text' => $location[$filterField],
-                        'selected' => (Input::get($filterField) && Input::get($filterField) === $location[$filterField] ? 'selected' : ''),
+                        'selected' => (Input::get($filterField) && (Input::get($filterField) === $location[$filterField] || Input::get($filterField) === Util::formatStringValueForFilters((string) $location[$filterField])) ? 'selected' : ''),
                     ];
                     switch ($filterField) {
                         case 'city':
@@ -255,23 +255,20 @@ class LocationsList extends Core
                             $arrFilters[$filterField]['options'][$location[$filterField]]['text'] = $location[$filterField].($location['admin_lvl_2'] ? ' ('.$location['admin_lvl_2'].')' : '');
                         break;
                         case 'category':
-                            // $objCategory = Category::findByPk($location[$filterField]);
-                            // if ($objCategory) {
-                            //     $arrFilters[$filterField]['options'][$location[$filterField]]['text'] = $objCategory->title;
-                            // }
                             $mapItemCategories = MapItemCategory::findItems(['pid' => $location['id']]);
                             if ($mapItemCategories) {
                                 while ($mapItemCategories->next()) {
                                     $objCategory = Category::findByPk($mapItemCategories->category);
                                     if ($objCategory) {
-                                        $this->filters[$filterField]['options'][$objCategory->id]['text'] = $objCategory->title;
-                                        $this->filters[$filterField]['options'][$objCategory->id]['value'] = $objCategory->title;
+                                        $arrFilters[$filterField]['options'][$objCategory->id]['text'] = $objCategory->title;
+                                        $arrFilters[$filterField]['options'][$objCategory->id]['value'] = str_replace([' ', '.'], '_', mb_strtolower((string) $objCategory->title, 'UTF-8'));
+                                        $arrFilters[$filterField]['options'][$objCategory->id]['selected'] =  (\array_key_exists($filterField, $this->arrConfig) && $this->arrConfig[$filterField] === Util::formatStringValueForFilters((string) $objCategory->title) ? 'selected' : '');
                                     }
                                 }
                             }
                         break;
                         case 'country':
-                            $arrFilters[$filterField]['options'][$location[$filterField]]['text'] = $arrCountries[strtoupper($location[$filterField])] ?? $location[$filterField];
+                            $arrFilters[$filterField]['options'][$location[$filterField]]['text'] = $arrCountries[strtolower($location[$filterField])] ?? $location[$filterField];
                         break;
                         default:
                             // HOOK: add custom logic

@@ -26,6 +26,15 @@ use WEM\GeoDataBundle\Model\MapItem;
 class Util
 {
     /**
+     * Format string value for use in filters (for better readability in URL)
+     * @param  string $value The raw value
+     * @return string the formatted value
+     */
+    public static function formatStringValueForFilters(string $value): string
+    {
+        return str_replace([' ', '.'], '_', mb_strtolower($value, 'UTF-8'));
+    }
+    /**
      * Calculates the great-circle distance between two points, with
      * the Vincenty formula.
      *
