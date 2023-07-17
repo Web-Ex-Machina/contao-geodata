@@ -69,6 +69,19 @@ class MapItem extends CoreModel
                     );
                 }
             break;
+            case 'category':
+                if(!is_array($varValue)){
+                    $varValue = [$varValue];
+                }
+                $arrColumns[] = sprintf("$t.id IN (
+                    SELECT mic.pid
+                    FROM %s mic
+                    WHERE mic.category IN ('%s')
+                )",
+                MapItemCategory::getTable(),
+                implode("','",$varValue),
+                );
+            break;
             default:
                 // HOOK: add custom logic
                 if (isset($GLOBALS['TL_HOOKS']['WEMGEODATAMAPITEMFORMATSTATEMENT']) && \is_array($GLOBALS['TL_HOOKS']['WEMGEODATAMAPITEMFORMATSTATEMENT'])) {
