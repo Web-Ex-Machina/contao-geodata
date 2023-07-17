@@ -49,9 +49,9 @@ window.addEventListener('load', (event) => {
 
 	initMap().then((r) => {
 		// set legend after map init
-		if (objMapFilters.category) {
-			for(var c in objMapFilters.category.options) {
-		    	var category = objMapFilters.category.options[c];
+		if (categories) {
+			for(var c in categories) {
+		    	var category = categories[c];
 		    	for(var i in categories){
 		    		if(categories[i].id === category.value){
 		    			category = categories[i];
