@@ -59,6 +59,9 @@ class DisplayMap extends Core
      * @var array [default config]
      */
     protected $arrConfig;
+    
+    /** @var array */
+    protected $arrConfigDefault;
 
     /**
      * Display a wildcard in the back end.
@@ -127,6 +130,7 @@ class DisplayMap extends Core
             // $arrConfig = $arrConfigBase;
 
             $this->arrConfig = ['pid' => $this->objMap->id, 'published' => 1, 'onlyWithCoords' => 1];
+            $this->arrConfigDefault = $this->arrConfig; // keep this one clean, so we load all items disregarding filters values
 
             // Catch AJAX request
             if (Input::post('TL_AJAX')) {
@@ -309,6 +313,11 @@ class DisplayMap extends Core
         return $this->arrConfig;
     }
 
+    protected function getDefaultListConfig()
+    {
+        return $this->arrConfigDefault;
+    }
+
     /**
      * Count the total matching items.
      *
@@ -316,7 +325,7 @@ class DisplayMap extends Core
      */
     protected function countItems(array $c = [])
     {
-        $c = !empty($c) ? $c : $this->getListConfig();
+        $c = !empty($c) ? $c : $this->getDefaultListConfig(); // we don't want filters to interfere here
 
         return $this->countLocations($c);
     }
@@ -331,7 +340,7 @@ class DisplayMap extends Core
      */
     protected function fetchItems(?array $c = [], $limit = 0, $offset = 0, $options = []): ?array
     {
-        $c = !empty($c) ? $c : $this->getListConfig();
+        $c = !empty($c) ? $c : $this->getDefaultListConfig(); // we don't want filters to interfere here
 
         $c['limit'] = $limit;
         $c['offset'] = $offset;
