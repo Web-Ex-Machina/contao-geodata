@@ -1,4 +1,4 @@
-<div class="locations__list <?= $this->class ?> ">
+<div class="locations__list <?= $this->class ?><?php echo count($this->categories)<2?' hide-categories':'' ?>">
   <?php if($this->error): ?>
     <div class="error">
       <?= $this->msg ?>

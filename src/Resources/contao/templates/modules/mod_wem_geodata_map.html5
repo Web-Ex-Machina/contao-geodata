@@ -1,4 +1,4 @@
-<div class="<?= $this->class ?> block">
+<div class="<?= $this->class ?> block<?php echo count($this->categories)<2?' hide-categories':'' ?>">
 	<?php if($this->error): ?>
 		<div class="error">
 			<?= $this->msg ?>
