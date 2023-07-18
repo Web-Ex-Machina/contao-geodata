@@ -131,7 +131,7 @@ $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
     // Palettes
     'palettes' => [
         'default' => '
-            {location_legend},title,alias,category,categories,published, publishedAt, publishedUntil;
+            {location_legend},title,alias,categories,published, publishedAt, publishedUntil;
             {street_legend},country,admin_lvl_1,admin_lvl_2,admin_lvl_3,city,postal,street;
             {coords_legend},lat,lng;
             {data_legend},picture,teaser;
@@ -202,7 +202,7 @@ $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
             'save_callback' => [
                 [\WEM\GeoDataBundle\DataContainer\MapItem::class, 'syncMapItemCategoryPivotTable'],
             ],
-            'eval' => ['chosen' => true, 'includeBlankOption' => true, 'multiple' => true, 'tl_class' => 'w50'],
+            'eval' => ['chosen' => true, 'includeBlankOption' => true, 'multiple' => true, 'mandatory' => true, 'tl_class' => 'w50'],
             'sql' => 'blob NULL',
             'relation' => ['type' => 'belongsTo', 'load' => 'eager'],
         ],
