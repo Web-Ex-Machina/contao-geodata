@@ -28,7 +28,7 @@ class Map extends CoreContainer
         }
         // check if another category is the default one for the map
         // if not, show an error
-        $defaultCategory = Category::findItems(['pid' => $dc->activeRecord->id, 'is_default' => '1'], 1);
+        $defaultCategory = Category::findItems(['pid' => $dc->id, 'is_default' => '1'], 1);
         if (!$defaultCategory) {
             Message::addError('No default category on this map. Add one !');
         }
@@ -42,14 +42,16 @@ class Map extends CoreContainer
 
         // check if another category is the default one for the map
         // if not, make this one the default's one, sorry not sorry
-        $defaultCategory = Category::findItems(['pid' => $dc->activeRecord->pid, 'is_default' => '1'], 1);
+        $defaultCategory = Category::findItems(['pid' => $dc->id, 'is_default' => '1'], 1);
         if (!$defaultCategory) {
-            $newDefaultCategory = Category::findItems(['pid' => $dc->activeRecord->pid], 1);
+            $newDefaultCategory = Category::findItems(['pid' => $dc->id], 1);
             if (!$newDefaultCategory) {
                 $newDefaultCategory = new Category();
                 $newDefaultCategory->createdAt = time();
                 $newDefaultCategory->tstamp = time();
                 $newDefaultCategory->title = 'Default';
+                $newDefaultCategory->markerConfig = serialize([]);
+                $newDefaultCategory->pid = $dc->id;
             }
             $newDefaultCategory->is_default = 1;
             $newDefaultCategory->save();

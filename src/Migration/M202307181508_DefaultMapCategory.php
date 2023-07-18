@@ -65,6 +65,7 @@ class M202307181508_DefaultMapCategory extends AbstractMigration
                 $objMapCategory->pid = $maps->id;
                 $objMapCategory->is_default = '1';
                 $objMapCategory->title = 'Default';
+                $objMapCategory->markerConfig = serialize([]);
                 $objMapCategory->save();
 
                 $arrIds[] = $maps->id;
@@ -91,6 +92,7 @@ class M202307181508_DefaultMapCategory extends AbstractMigration
                 $objMapCategory->pid = $maps->id;
                 $objMapCategory->is_default = '1';
                 $objMapCategory->title = 'Default';
+                $objMapCategory->markerConfig = serialize([]);
                 $objMapCategory->save();
 
                 $arrIds[] = $maps->id;
