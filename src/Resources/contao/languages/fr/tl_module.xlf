@@ -62,6 +62,14 @@
         <source>Below</source>
         <target>En dessous</target>
       </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_filters_present.0">
+        <source>Filters</source>
+        <target>Filtres</target>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_filters_present.1">
+        <source>Add filters to the module.</source>
+        <target>Ajouter des filtres au module.</target>
+      </trans-unit>
       <trans-unit id="tl_module.wem_geodata_filters_fields.0">
         <source>Filter fields</source>
         <target>Champs filtrables</target>

@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace WEM\GeoDataBundle\Module;
 
 use Contao\BackendTemplate;
+use Contao\Combiner;
 use Contao\Environment;
 use Contao\FrontendTemplate;
 use Contao\Input;
@@ -23,14 +24,12 @@ use Contao\Pagination;
 use Contao\RequestToken;
 use Contao\StringUtil;
 use Contao\System;
-use Contao\Combiner;
 use WEM\GeoDataBundle\Classes\Util;
 use WEM\GeoDataBundle\Controller\ClassLoader;
 use WEM\GeoDataBundle\Model\Category;
 use WEM\GeoDataBundle\Model\Map;
 use WEM\GeoDataBundle\Model\MapItem;
 use WEM\GeoDataBundle\Model\MapItemCategory;
-
 
 /**
  * Front end module "locations list".
@@ -195,7 +194,7 @@ class LocationsList extends Core
     protected function buildFilters(): array
     {
         $arrFilters = [];
-        if ('nofilters' !== $this->wem_geodata_filters) {
+        if ($this->wem_geodata_filters_present) {
             $locations = MapItem::findItems($this->arrConfig);
             System::loadLanguageFile('tl_wem_map_item');
 
@@ -266,8 +265,8 @@ class LocationsList extends Core
                                     $objCategory = Category::findByPk($mapItemCategories->category);
                                     if ($objCategory) {
                                         $arrFilters[$filterField]['options'][$objCategory->id]['text'] = $objCategory->title;
-                                        $arrFilters[$filterField]['options'][$objCategory->id]['value'] = str_replace([' ', '.'], '_', mb_strtolower((string) $objCategory->title, 'UTF-8'));
-                                        $arrFilters[$filterField]['options'][$objCategory->id]['selected'] =  (\array_key_exists($filterField, $this->arrConfig) && $this->arrConfig[$filterField] === Util::formatStringValueForFilters((string) $objCategory->title) ? 'selected' : '');
+                                        $arrFilters[$filterField]['options'][$objCategory->id]['value'] = Util::formatStringValueForFilters((string) $objCategory->title);
+                                        $arrFilters[$filterField]['options'][$objCategory->id]['selected'] = (\array_key_exists($filterField, $this->arrConfig) && $this->arrConfig[$filterField] === Util::formatStringValueForFilters((string) $objCategory->title) ? 'selected' : '');
                                     }
                                 }
                             }

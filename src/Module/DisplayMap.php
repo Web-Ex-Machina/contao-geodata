@@ -59,7 +59,7 @@ class DisplayMap extends Core
      * @var array [default config]
      */
     protected $arrConfig;
-    
+
     /** @var array */
     protected $arrConfigDefault;
 
@@ -268,7 +268,7 @@ class DisplayMap extends Core
                         continue;
                     }
                     $this->filters[$filterField]['options'][$location[$filterField]] = [
-                        'value' => str_replace([' ', '.'], '_', mb_strtolower((string) $location[$filterField], 'UTF-8')),
+                        'value' => Util::formatStringValueForFilters((string) $location[$filterField]),
                         'text' => $location[$filterField],
                         'selected' => (\array_key_exists($filterField, $this->arrConfig) && $this->arrConfig[$filterField] === Util::formatStringValueForFilters((string) $location[$filterField]) ? 'selected' : ''),
                     ];
@@ -284,8 +284,8 @@ class DisplayMap extends Core
                                     $objCategory = Category::findByPk($mapItemCategories->category);
                                     if ($objCategory) {
                                         $this->filters[$filterField]['options'][$objCategory->id]['text'] = $objCategory->title;
-                                        $this->filters[$filterField]['options'][$objCategory->id]['value'] = $objCategory->title;
-                                        $this->filters[$filterField]['options'][$objCategory->id]['selected'] =  (\array_key_exists($filterField, $this->arrConfig) && $this->arrConfig[$filterField] === Util::formatStringValueForFilters((string) $objCategory->title) ? 'selected' : '');
+                                        $this->filters[$filterField]['options'][$objCategory->id]['value'] = Util::formatStringValueForFilters((string) $objCategory->title);
+                                        $this->filters[$filterField]['options'][$objCategory->id]['selected'] = (\array_key_exists($filterField, $this->arrConfig) && $this->arrConfig[$filterField] === Util::formatStringValueForFilters((string) $objCategory->title) ? 'selected' : '');
                                     }
                                 }
                             }
