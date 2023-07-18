@@ -17,6 +17,7 @@ namespace WEM\GeoDataBundle\Migration;
 use Contao\CoreBundle\Migration\AbstractMigration;
 use Contao\CoreBundle\Migration\MigrationResult;
 use Doctrine\DBAL\Connection;
+use Exception;
 use WEM\GeoDataBundle\Model\MapItem;
 use WEM\GeoDataBundle\Model\MapItemCategory;
 
@@ -78,11 +79,15 @@ class M202307170826_MultiCategories extends AbstractMigration
 
     private function getItems()
     {
-        return MapItem::findItems([
-            'where' => [
-                sprintf('LENGTH(%s.category) > 0 AND %s.id NOT IN (SELECT DISTINCT %s.pid FROM %s)', MapItem::getTable(), MapItem::getTable(), MapItemCategory::getTable(), MapItemCategory::getTable()),
-            ],
-        ]);
+        try {
+            return MapItem::findItems([
+                'where' => [
+                    sprintf('LENGTH(%s.category) > 0 AND %s.category != 0 AND %s.id NOT IN (SELECT DISTINCT %s.pid FROM %s)', MapItem::getTable(), MapItem::getTable(), MapItem::getTable(), MapItemCategory::getTable(), MapItemCategory::getTable()),
+                ],
+            ]);
+        } catch (Exception $e) {
+            return null;
+        }
     }
 
     private function countItems()

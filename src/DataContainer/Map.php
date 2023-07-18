@@ -14,10 +14,48 @@ declare(strict_types=1);
 
 namespace WEM\GeoDataBundle\DataContainer;
 
+use Contao\DataContainer;
+use Contao\Message;
+use WEM\GeoDataBundle\Model\Category;
 use WEM\GeoDataBundle\Model\Map as ModelMap;
 
 class Map extends CoreContainer
 {
+    public function onloadCallback(DataContainer $dc): void
+    {
+        if (!$dc->id) {
+            return;
+        }
+        // check if another category is the default one for the map
+        // if not, show an error
+        $defaultCategory = Category::findItems(['pid' => $dc->activeRecord->id, 'is_default' => '1'], 1);
+        if (!$defaultCategory) {
+            Message::addError('No default category on this map. Add one !');
+        }
+    }
+
+    public function onsubmitCallback(DataContainer $dc): void
+    {
+        if (!$dc->id) {
+            return;
+        }
+
+        // check if another category is the default one for the map
+        // if not, make this one the default's one, sorry not sorry
+        $defaultCategory = Category::findItems(['pid' => $dc->activeRecord->pid, 'is_default' => '1'], 1);
+        if (!$defaultCategory) {
+            $newDefaultCategory = Category::findItems(['pid' => $dc->activeRecord->pid], 1);
+            if (!$newDefaultCategory) {
+                $newDefaultCategory = new Category();
+                $newDefaultCategory->createdAt = time();
+                $newDefaultCategory->tstamp = time();
+                $newDefaultCategory->title = 'Default';
+            }
+            $newDefaultCategory->is_default = 1;
+            $newDefaultCategory->save();
+        }
+    }
+
     /**
      * Generate the default map config array.
      *
