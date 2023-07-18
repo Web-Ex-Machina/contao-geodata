@@ -23,12 +23,14 @@ use Contao\Pagination;
 use Contao\RequestToken;
 use Contao\StringUtil;
 use Contao\System;
+use Contao\Combiner;
 use WEM\GeoDataBundle\Classes\Util;
 use WEM\GeoDataBundle\Controller\ClassLoader;
 use WEM\GeoDataBundle\Model\Category;
 use WEM\GeoDataBundle\Model\Map;
 use WEM\GeoDataBundle\Model\MapItem;
 use WEM\GeoDataBundle\Model\MapItemCategory;
+
 
 /**
  * Front end module "locations list".
@@ -112,7 +114,10 @@ class LocationsList extends Core
             }
 
             // Load the libraries
-            // ClassLoader::loadLibraries($this->objMap, 1);
+            // ClassLoader::loadLibraries($this->objMap, 2);
+            $objCssCombiner = new Combiner();
+            $objCssCombiner->add('bundles/wemgeodata/css/default.css', 2);
+            $GLOBALS['TL_HEAD'][] = sprintf('<link rel="stylesheet" href="%s">', $objCssCombiner->getCombinedFile());
             Util::getCountries();
 
             // Get the jumpTo page
