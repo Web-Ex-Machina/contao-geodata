@@ -16,9 +16,9 @@
        >
         <span class="map__list__item__title "><?= $location['title'] ?></span>
         <?php if ($location['category']['title']): ?>
-          <p class="opa-4 ft-l m-top-0"><?php echo mb_strtoupper($location['category']['title']); ?></p>
+          <p class="map__list__item__categoryTitle"><?php echo mb_strtoupper($location['category']['title']); ?></p>
         <?php elseif (is_array($location['category'])): ?>
-          <p class="opa-4 ft-l m-top-0"><?php echo mb_strtoupper(implode(', ',array_map(function($c){return $c['title'];},$location['category'])), 'UTF-8');?></p>
+          <p class="map__list__item__categoryTitle"><?php echo mb_strtoupper(implode(', ',array_map(function($c){return $c['title'];},$location['category'])), 'UTF-8');?></p>
         <?php endif ?>
         <div class="map__list__item__text">
           <?php if($location['address']): ?>

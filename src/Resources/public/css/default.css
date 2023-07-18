@@ -99,6 +99,8 @@
 .map__list__item__link a:before{transform: translateX(-50%) rotate(90deg);}
 .map__list__item__link a:hover{opacity: 0.6; color: inherit;}
 
+.map__list__item__categoryTitle{margin-top: 0; font-weight: 300;opacity: .4;}
+.hide-categories .map__list__item__categoryTitle{display: none;}
 
 .map__popup{}
 .map__popup__picture{margin-top: 0.5em;}
