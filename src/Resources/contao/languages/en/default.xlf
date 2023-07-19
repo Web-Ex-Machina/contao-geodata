@@ -65,6 +65,10 @@
 			<source>Unknown AJAX action : "%s"</source>
 			<target>Unknown AJAX action : "%s"</target>
 		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.noMapFound">
+			<source>No map found !</source>
+			<target>No map found !</target>
+		</trans-unit>
 		<trans-unit id="WEM.LOCATIONS.ERROR.noLocationsFound">
 			<source>No locations found for this map !</source>
 			<target>No locations found for this map !</target>
