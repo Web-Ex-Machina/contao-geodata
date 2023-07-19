@@ -252,11 +252,13 @@ class LocationsList extends Core
                     if (\array_key_exists($location[$filterField], $arrFilters[$filterField]['options'])) {
                         continue;
                     }
-                    $arrFilters[$filterField]['options'][$location[$filterField]] = [
-                        'value' => $location[$filterField],
-                        'text' => $location[$filterField],
-                        'selected' => (Input::get($filterField) && (Input::get($filterField) === $location[$filterField] || Input::get($filterField) === Util::formatStringValueForFilters((string) $location[$filterField])) ? 'selected' : ''),
-                    ];
+                    if('category' !== $filterField){
+                        $arrFilters[$filterField]['options'][$location[$filterField]] = [
+                            'value' => $location[$filterField],
+                            'text' => $location[$filterField],
+                            'selected' => (Input::get($filterField) && (Input::get($filterField) === $location[$filterField] || Input::get($filterField) === Util::formatStringValueForFilters((string) $location[$filterField])) ? 'selected' : ''),
+                        ];
+                    }
                     switch ($filterField) {
                         case 'city':
                             $arrFilters[$filterField]['options'][$location[$filterField]]['value'] = $location[$filterField];

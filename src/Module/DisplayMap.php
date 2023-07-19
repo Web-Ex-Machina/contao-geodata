@@ -268,11 +268,15 @@ class DisplayMap extends Core
                     if (\array_key_exists($location[$filterField], $this->filters[$filterField]['options'])) {
                         continue;
                     }
-                    $this->filters[$filterField]['options'][$location[$filterField]] = [
-                        'value' => Util::formatStringValueForFilters((string) $location[$filterField]),
-                        'text' => $location[$filterField],
-                        'selected' => (\array_key_exists($filterField, $this->arrConfig) && $this->arrConfig[$filterField] === Util::formatStringValueForFilters((string) $location[$filterField]) ? 'selected' : ''),
-                    ];
+
+                    if('category' !== $filterField){
+                        $this->filters[$filterField]['options'][$location[$filterField]] = [
+                            'value' => Util::formatStringValueForFilters((string) $location[$filterField]),
+                            'text' => $location[$filterField],
+                            'selected' => (\array_key_exists($filterField, $this->arrConfig) && $this->arrConfig[$filterField] === Util::formatStringValueForFilters((string) $location[$filterField]) ? 'selected' : ''),
+                        ];
+                    }
+                    
                     switch ($filterField) {
                         case 'city':
                             // $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $location[$filterField].' ('.$location['admin_lvl_2'].')';
