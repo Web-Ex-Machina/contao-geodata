@@ -36,9 +36,6 @@ $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
         'onload_callback' => [
             [\WEM\GeoDataBundle\DataContainer\MapItem::class, 'checkIfGeocodeExists'],
         ],
-        'onsubmit_callback' => [
-            //array(\WEM\GeoDataBundle\DataContainer\MapItem::class, 'fetchCoordinates'),
-        ],
         'sql' => [
             'keys' => [
                 'id' => 'primary',
@@ -180,7 +177,7 @@ $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
         'category' => [
             'label' => &$GLOBALS['TL_LANG']['tl_wem_map_item']['category'],
             'exclude' => true,
-            'filter' => true,
+            // 'filter' => true,
             'sorting' => true,
             'flag' => 11,
             'inputType' => 'select',
@@ -199,6 +196,7 @@ $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
             'inputType' => 'select',
             'foreignKey' => 'tl_wem_map_category.title',
             'options_callback' => [\WEM\GeoDataBundle\DataContainer\MapItem::class, 'getMapCategories'],
+            'load_callback' => [[\WEM\GeoDataBundle\DataContainer\MapItem::class, 'assignDefaultCategoryIfNew']],
             'save_callback' => [
                 [\WEM\GeoDataBundle\DataContainer\MapItem::class, 'syncMapItemCategoryPivotTable'],
             ],

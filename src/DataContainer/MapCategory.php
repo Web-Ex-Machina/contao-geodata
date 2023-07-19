@@ -36,18 +36,13 @@ class MapCategory extends CoreContainer
         }
 
         // remove default tag on other categories of the same map
-        if ((bool) $dc->activeRecord->default) {
-            $db = \Contao\Database::getInstance();
-            $db->query('
-                UPDATE %s
-                SET `default` = "0"
-                WHERE `pid` = %s
-                AND `id` != %s
-                ',
-            Category::getTable(),
-            $dc->activeRecord->pid,
-            $dc->activeRecord->id
-            );
+        if ((bool) $dc->activeRecord->is_default) {
+            $this->Database
+            ->prepare('UPDATE '.Category::getTable().'
+                SET `is_default` = "0"
+                WHERE `pid` = ?
+                AND `id` != ?')
+            ->execute($dc->activeRecord->pid,$dc->activeRecord->id);
         } else {
             // check if another category is the default one for the map
             // if not, make this one the default's one, sorry not sorry
@@ -57,6 +52,18 @@ class MapCategory extends CoreContainer
                 $objCategory->is_default = 1;
                 $objCategory->save();
             }
+        }
+    }
+
+    public function ondeleteCallback(DataContainer $dc): void
+    {
+        if (!$dc->id) {
+            return;
+        }
+
+        // if this category is the default one, you can't delete it
+        if ((bool) $dc->activeRecord->is_default) {
+            throw new \Exception('You cannot delete the default category');
         }
     }
 }

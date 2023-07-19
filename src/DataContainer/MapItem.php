@@ -21,7 +21,9 @@ use Contao\PageModel;
 use Contao\StringUtil;
 use Contao\System;
 use Contao\Versions;
+use WEM\GeoDataBundle\Model\Category;
 use WEM\GeoDataBundle\Model\Map;
+use WEM\GeoDataBundle\Model\MapItem as MapItemModel;
 
 class MapItem extends CoreContainer
 {
@@ -115,6 +117,18 @@ class MapItem extends CoreContainer
         if ('' === $objMap->geocodingProvider) {
             unset($GLOBALS['TL_DCA']['tl_wem_map_item']['list']['global_operations']['geocodeAll'], $GLOBALS['TL_DCA']['tl_wem_map_item']['list']['operations']['geocode']);
         }
+    }
+
+    public function assignDefaultCategoryIfNew($value, DataContainer $dc)
+    {
+        if (!$dc->id || !$dc->activeRecord->categories) {
+            $objDefaultCategory = Category::findItems(['pid' => $dc->activeRecord->pid, 'is_default' => '1']);
+            if ($objDefaultCategory) {
+                return serialize([$objDefaultCategory->id]);
+            }
+        }
+
+        return $value;
     }
 
     /**

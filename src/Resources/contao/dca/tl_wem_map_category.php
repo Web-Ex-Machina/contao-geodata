@@ -33,6 +33,9 @@ $GLOBALS['TL_DCA']['tl_wem_map_category'] = [
         'onsubmit_callback' => [
             [\WEM\GeoDataBundle\DataContainer\MapCategory::class, 'onsubmitCallback'],
         ],
+        'ondelete_callback' => [
+            [\WEM\GeoDataBundle\DataContainer\MapCategory::class, 'ondeleteCallback'],
+        ],
     ],
 
     // List
