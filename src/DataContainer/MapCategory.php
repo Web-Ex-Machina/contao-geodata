@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace WEM\GeoDataBundle\DataContainer;
 
 use Contao\DataContainer;
+use WEM\GeoDataBundle\Classes\Util;
 use WEM\GeoDataBundle\Model\Category;
 
 class MapCategory extends CoreContainer
@@ -64,6 +65,10 @@ class MapCategory extends CoreContainer
         // if this category is the default one, you can't delete it
         if ((bool) $dc->activeRecord->is_default) {
             throw new \Exception('You cannot delete the default category');
+        }
+        $objCategory = Category::findByPk($dc->id);
+        if($objCategory){
+            Util::deleteMapItemCategoryForCategory($objCategory);
         }
     }
 }

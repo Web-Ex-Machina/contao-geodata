@@ -18,7 +18,9 @@ use Contao\Database;
 use Contao\Input;
 use Contao\StringUtil;
 use Contao\System;
+use WEM\GeoDataBundle\Model\Category;
 use WEM\GeoDataBundle\Model\MapItem;
+use WEM\GeoDataBundle\Model\MapItemCategory;
 
 /**
  * Provide utilities function to Locations Extension.
@@ -408,5 +410,47 @@ class Util
         ];
 
         return $COUNTRY_CONTINENTS[strtoupper($strCountry)];
+    }
+
+    /**
+     * Delete MapItemCategory rows for a Category
+     * @param  Category $objItem The Category
+     */
+    public static function deleteMapItemCategoryForCategory(Category $objItem): void
+    {
+        // remove links item <-> category
+        $mapItemCategories = MapItemCategory::findItems(['category'=>$objItem->id]);
+        if($mapItemCategories){
+            while($mapItemCategories->next()){
+                $mapItemCategories->current()->delete();                
+            }
+        }
+    }
+    
+    /**
+     * Refreshes "categories" field for a MapItem
+     * @param  MapItem $objItem The MapItem
+     * @param  null|array $arrCategoriesIdsToExclude Ids of Category to avoid
+     * @return MapItem          The updated MapItem
+     */
+    public static function refreshMapItemCategoriesField(MapItem $objItem, ?array $arrCategoriesIdsToExclude): MapItem
+    {
+        $params = ['pid'=>$objItem->id];
+
+        if(is_array($arrCategoriesIdsToExclude)){
+            $params['where'][] = sprintf('%s.category NOT IN (%s)', MapItemCategory::getTable(), implode(',',$arrCategoriesIdsToExclude));
+        }
+
+        $mapItemCategories = MapItemCategory::findItems($params);
+        $arrCategoriesIds = [];
+        if($mapItemCategories){
+            while($mapItemCategories->next()){
+                $arrCategoriesIds[] = $mapItemCategories->category;
+            }
+        }
+        $objItem->categories = serialize($arrCategoriesIds);
+        $objItem->save();
+
+        return $objItem;
     }
 }

@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace WEM\GeoDataBundle\Model;
 
+use WEM\GeoDataBundle\Classes\Util;
 use WEM\UtilsBundle\Model\Model as CoreModel;
 
 /**
@@ -34,4 +35,16 @@ class MapItemCategory extends CoreModel
      * @var string
      */
     protected static $strOrderColumn = 'created_at ASC';
+
+    public function delete(){
+        // remove links item <-> category
+        $mapItem = MapItem::findByPk($this->pid);
+
+        
+        if($mapItem){
+            Util::refreshMapItemCategoriesField($mapItem,[$this->category]);
+        }
+
+        return parent::delete();
+    }
 }

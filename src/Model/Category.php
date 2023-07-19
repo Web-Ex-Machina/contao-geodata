@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace WEM\GeoDataBundle\Model;
 
+use WEM\GeoDataBundle\Classes\Util;
 use WEM\UtilsBundle\Model\Model as CoreModel;
 
 /**
@@ -55,5 +56,12 @@ class Category extends CoreModel
         }
 
         return $arrColumns;
+    }
+
+    public function delete(){
+        // remove links item <-> category
+        Util::deleteMapItemCategoryForCategory($this);
+
+        return parent::delete();
     }
 }

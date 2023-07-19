@@ -26,6 +26,9 @@ $GLOBALS['TL_DCA']['tl_wem_map_item_category'] = [
                 'pid' => 'index',
             ],
         ],
+        'ondelete_callback' => [
+            [\WEM\GeoDataBundle\DataContainer\MapItemCategory::class, 'ondeleteCallback'],
+        ],
     ],
 
     // Fields
