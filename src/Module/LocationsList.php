@@ -80,6 +80,10 @@ class LocationsList extends Core
     protected function compile(): void
     {
         try {
+
+            if (!$this->wem_geodata_maps) {
+                throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noMapConfigured']);
+            }
             // Load the map
             $this->maps = Map::findItems([
                 'where' => [
@@ -88,7 +92,7 @@ class LocationsList extends Core
             ]);
 
             if (!$this->maps) {
-                throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noMapsFound']);
+                throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noMapFound']);
             }
 
             $this->objMap = $this->maps->first();

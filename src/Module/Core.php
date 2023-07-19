@@ -231,10 +231,20 @@ abstract class Core extends Module
     protected function getCategories()
     {
         try {
-            $objCategories = Category::findItems(['published' => 1, 'pid' => $this->wem_geodata_map]);
+            $params = [];
+            if($this->wem_geodata_map){
+                $params['pid'] = $this->wem_geodata_map;
+            }elseif(null !== $this->wem_geodata_maps){
+                $arrCategoriesIds = unserialize($this->wem_geodata_maps ?? '');
+                if(!$arrCategoriesIds || empty($arrCategoriesIds)){
+                    throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noCategoryConfigured']);
+                }
+                $params['pid'] = $arrCategoriesIds;
+            }
+            $objCategories = Category::findItems($params);
 
             if (!$objCategories) {
-                throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noCategoriesFound']);
+                throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['categoriesNotFound']);
             }
 
             $arrCategories = [];

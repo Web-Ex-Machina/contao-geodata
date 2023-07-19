@@ -162,6 +162,7 @@ class DisplayMap extends Core
             $this->Template->markers = $arrMarkers;
             $this->Template->locations = $arrLocations;
             $this->Template->categories = $arrCategories;
+
             $this->Template->config = $arrMapConfig;
 
             // If the config says so, we will generate a template with a list of the locations

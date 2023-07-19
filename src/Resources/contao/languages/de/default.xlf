@@ -73,6 +73,14 @@
 			<source>No locations found for this map !</source>
 			<target>Keine Standorte für diese Karte gefunden</target>
 		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.noMapConfigured">
+			<source>No map configured for this module !</source>
+			<target>Für dieses Modul ist keine Karte konfiguriert!</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.noCategoryConfigured">
+			<source>No category configured for this map !</source>
+			<target>Für diese Karte ist keine Kategorie konfiguriert!</target>
+		</trans-unit>
 		<trans-unit id="WEM.LOCATIONS.ERROR.countryNotFound">
 			<source>The country %s doesn't match a known ISO Code. Maybe there is a typo ?</source>
 			<target>Das Land %s entspricht keinem bekannten ISO Code. Vielleicht falsch geschrieben?</target>

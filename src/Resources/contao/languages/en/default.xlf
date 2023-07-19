@@ -69,6 +69,14 @@
 			<source>No map found !</source>
 			<target>No map found !</target>
 		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.noMapConfigured">
+			<source>No map configured for this module !</source>
+			<target>No map configured for this module !</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.noCategoryConfigured">
+			<source>No category configured for this map !</source>
+			<target>No category configured for this map !</target>
+		</trans-unit>
 		<trans-unit id="WEM.LOCATIONS.ERROR.noLocationsFound">
 			<source>No locations found for this map !</source>
 			<target>No locations found for this map !</target>
