@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2022 Web ex Machina
+ * Copyright (c) 2015-2023 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace WEM\GeoDataBundle\Module;
 
 use Contao\BackendTemplate;
+use Contao\Combiner;
 use Contao\Environment;
 use Contao\FrontendTemplate;
 use Contao\Input;
@@ -28,6 +29,7 @@ use WEM\GeoDataBundle\Controller\ClassLoader;
 use WEM\GeoDataBundle\Model\Category;
 use WEM\GeoDataBundle\Model\Map;
 use WEM\GeoDataBundle\Model\MapItem;
+use WEM\GeoDataBundle\Model\MapItemCategory;
 
 /**
  * Front end module "locations list".
@@ -78,6 +80,10 @@ class LocationsList extends Core
     protected function compile(): void
     {
         try {
+
+            if (!$this->wem_geodata_maps) {
+                throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noMapConfigured']);
+            }
             // Load the map
             $this->maps = Map::findItems([
                 'where' => [
@@ -86,14 +92,14 @@ class LocationsList extends Core
             ]);
 
             if (!$this->maps) {
-                throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noMapsFound']);
+                throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noMapFound']);
             }
 
             $this->objMap = $this->maps->first();
 
             // Build the config (do not manage pagination here !)
             $this->arrConfig = ['published' => 1, 'where' => [
-                sprintf('pid in (%s)', implode(',', StringUtil::deserialize($this->wem_geodata_maps))),
+                sprintf('%s.pid in (%s)', MapItem::getTable(), implode(',', StringUtil::deserialize($this->wem_geodata_maps))),
             ]];
 
             // Catch AJAX request
@@ -111,7 +117,10 @@ class LocationsList extends Core
             }
 
             // Load the libraries
-            ClassLoader::loadLibraries($this->objMap, 1);
+            // ClassLoader::loadLibraries($this->objMap, 2);
+            $objCssCombiner = new Combiner();
+            $objCssCombiner->add('bundles/wemgeodata/css/default.css', 2);
+            $GLOBALS['TL_HEAD'][] = sprintf('<link rel="stylesheet" href="%s">', $objCssCombiner->getCombinedFile());
             Util::getCountries();
 
             // Get the jumpTo page
@@ -139,6 +148,11 @@ class LocationsList extends Core
             $arrLocations = $this->fetchItems(null, ($limit ?: 0), $offset);
 
             $this->Template->locations = $arrLocations;
+
+            // Get categories
+            $arrCategories = $this->getCategories();
+
+            $this->Template->categories = $arrCategories;
 
             // Add the items
             // if (!empty($arrLocations)) {
@@ -184,7 +198,7 @@ class LocationsList extends Core
     protected function buildFilters(): array
     {
         $arrFilters = [];
-        if ('nofilters' !== $this->wem_geodata_filters) {
+        if ($this->wem_geodata_filters_present) {
             $locations = MapItem::findItems($this->arrConfig);
             System::loadLanguageFile('tl_wem_map_item');
 
@@ -238,24 +252,33 @@ class LocationsList extends Core
                     if (\array_key_exists($location[$filterField], $arrFilters[$filterField]['options'])) {
                         continue;
                     }
-                    $arrFilters[$filterField]['options'][$location[$filterField]] = [
-                        'value' => $location[$filterField],
-                        'text' => $location[$filterField],
-                        'selected' => (Input::get($filterField) && Input::get($filterField) === $location[$filterField] ? 'selected' : ''),
-                    ];
+                    if('category' !== $filterField){
+                        $arrFilters[$filterField]['options'][$location[$filterField]] = [
+                            'value' => $location[$filterField],
+                            'text' => $location[$filterField],
+                            'selected' => (Input::get($filterField) && (Input::get($filterField) === $location[$filterField] || Input::get($filterField) === Util::formatStringValueForFilters((string) $location[$filterField])) ? 'selected' : ''),
+                        ];
+                    }
                     switch ($filterField) {
                         case 'city':
                             $arrFilters[$filterField]['options'][$location[$filterField]]['value'] = $location[$filterField];
                             $arrFilters[$filterField]['options'][$location[$filterField]]['text'] = $location[$filterField].($location['admin_lvl_2'] ? ' ('.$location['admin_lvl_2'].')' : '');
                         break;
                         case 'category':
-                            $objCategory = Category::findByPk($location[$filterField]);
-                            if ($objCategory) {
-                                $arrFilters[$filterField]['options'][$location[$filterField]]['text'] = $objCategory->title;
+                            $mapItemCategories = MapItemCategory::findItems(['pid' => $location['id']]);
+                            if ($mapItemCategories) {
+                                while ($mapItemCategories->next()) {
+                                    $objCategory = Category::findByPk($mapItemCategories->category);
+                                    if ($objCategory) {
+                                        $arrFilters[$filterField]['options'][$objCategory->id]['text'] = $objCategory->title;
+                                        $arrFilters[$filterField]['options'][$objCategory->id]['value'] = Util::formatStringValueForFilters((string) $objCategory->title);
+                                        $arrFilters[$filterField]['options'][$objCategory->id]['selected'] = (\array_key_exists($filterField, $this->arrConfig) && $this->arrConfig[$filterField] === Util::formatStringValueForFilters((string) $objCategory->title) ? 'selected' : '');
+                                    }
+                                }
                             }
                         break;
                         case 'country':
-                            $arrFilters[$filterField]['options'][$location[$filterField]]['text'] = $arrCountries[strtoupper($location[$filterField])] ?? $location[$filterField];
+                            $arrFilters[$filterField]['options'][$location[$filterField]]['text'] = $arrCountries[strtolower($location[$filterField])] ?? $location[$filterField];
                         break;
                         default:
                             // HOOK: add custom logic

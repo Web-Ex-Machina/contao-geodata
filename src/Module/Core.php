@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2023-2023 Web ex Machina
+ * Copyright (c) 2015-2023 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -28,6 +28,7 @@ use WEM\GeoDataBundle\Model\Category;
 use WEM\GeoDataBundle\Model\Map;
 use WEM\GeoDataBundle\Model\MapItem;
 use WEM\GeoDataBundle\Model\MapItemAttributeValue;
+use WEM\GeoDataBundle\Model\MapItemCategory;
 
 /**
  * Parent class for locations modules.
@@ -108,8 +109,16 @@ abstract class Core extends Module
             }
 
             // Get category
-            if ($arrItem['category']) {
-                $arrItem['category'] = $this->getCategory($arrItem['category']);
+            // if ($arrItem['category']) {
+            //     $arrItem['category'] = $this->getCategory($arrItem['category']);
+            // }
+
+            $arrItem['category'] = [];
+            $mapItemCategories = MapItemCategory::findItems(['pid' => $arrItem['id']]);
+            if ($mapItemCategories) {
+                while ($mapItemCategories->next()) {
+                    $arrItem['category'][] = $this->getCategory($mapItemCategories->category);
+                }
             }
 
             // Get location picture
@@ -222,10 +231,20 @@ abstract class Core extends Module
     protected function getCategories()
     {
         try {
-            $objCategories = Category::findItems(['published' => 1, 'pid' => $this->wem_geodata_map]);
+            $params = [];
+            if($this->wem_geodata_map){
+                $params['pid'] = $this->wem_geodata_map;
+            }elseif(null !== $this->wem_geodata_maps){
+                $arrCategoriesIds = unserialize($this->wem_geodata_maps ?? '');
+                if(!$arrCategoriesIds || empty($arrCategoriesIds)){
+                    throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noCategoryConfigured']);
+                }
+                $params['pid'] = $arrCategoriesIds;
+            }
+            $objCategories = Category::findItems($params);
 
             if (!$objCategories) {
-                throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noCategoriesFound']);
+                throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['categoriesNotFound']);
             }
 
             $arrCategories = [];

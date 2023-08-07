@@ -49,23 +49,21 @@ window.addEventListener('load', (event) => {
 
 	initMap().then((r) => {
 		// set legend after map init
-		if (objMapFilters.category) {
-			for(var c in objMapFilters.category.options) {
-		    	var category = objMapFilters.category.options[c];
+		if (categories) {
+			for(var c in categories) {
+		    	var category = categories[c];
 		    	for(var i in categories){
 		    		if(categories[i].id === category.value){
 		    			category = categories[i];
 		    			break;
 		    		}
 		    	}
-		    	if (category.marker) {
-					// add marker to legend
-					$('.map__legend').append(`
-						<div class="map__legend__item">
-							<img src="${objMarkersConfig[category.alias].options.iconUrl}" width="${objMarkersConfig[category.alias].options.iconSize[0]}" height="${objMarkersConfig[category.alias].options.iconSize[1]}" alt="Icon for ${category.title} category"><span>${category.title}</span>
-						</div>
-					`);
-		    	}
+				// add marker to legend
+				$('.map__legend').append(`
+					<div class="map__legend__item">
+						<img src="${objMarkersConfig[category.marker?category.alias:'default'].options.iconUrl}" width="${objMarkersConfig[category.marker?category.alias:'default'].options.iconSize[0]}" height="${objMarkersConfig[category.marker?category.alias:'default'].options.iconSize[1]}" alt="Icon for ${category.title} category"><span>${category.title}</span>
+					</div>
+				`);
 		    }
 		    $toggleLegend.on('click',()=>{
 		    	$legend.addClass('active');
@@ -73,7 +71,7 @@ window.addEventListener('load', (event) => {
 		    $legend.find('.close').on('click',()=>{
 		    	$legend.removeClass('active');
 		    });
-		    if ($legend.find('.map__legend__item').length)
+		    if ($legend.find('.map__legend__item').length && categories.length>1)
 		    	$toggleLegend.removeClass('hidden');
 		    
 		}
@@ -148,8 +146,8 @@ var getPopupHTML = function(obj){
 	return `
 		<div class="map__popup ">
 			<div class="map__popup__title map__list__item__title"> ${obj.title} </div>
-        	${obj.category.title ? '<p class="opa-4 ft-l m-top-0">'+obj.category.title.toUpperCase()+'</p>':''}
-        	${Array.isArray(obj.category) ? '<p class="opa-4 ft-l m-top-0">'+(obj.category.map(function(c){return c.title})).join(', ').toUpperCase()+'</p>':''}
+        	${obj.category.title && categories.length>1 ? '<p class="opa-4 ft-l m-top-0">'+obj.category.title.toUpperCase()+'</p>':''}
+        	${Array.isArray(obj.category) && categories.length>1 ? '<p class="opa-4 ft-l m-top-0">'+(obj.category.map(function(c){return c.title})).join(', ').toUpperCase()+'</p>':''}
 			${obj.picture ? `<div class="map__popup__picture"><img src="${obj.picture.path}" alt="${obj.title}" /></div>` :''}
 			<div class="map__popup__infos map__list__item__text">
 				${obj.address ?'<div class="map__popup__infos__line "><i class="fa fa-map-marker-alt"></i> <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">'+obj.address+'</span></div>':''}

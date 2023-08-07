@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2023-2023 Web ex Machina
+ * Copyright (c) 2015-2023 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -68,6 +68,38 @@ class MapItem extends CoreModel
                         OR ($t.published = 1 AND $t.publishedUntil <= %s)", $timestamp, $timestamp
                     );
                 }
+            break;
+            case 'category':
+                if(!is_array($varValue)){
+                    $varValue = [$varValue];
+                }
+                $arrColumns[] = sprintf("$t.id IN (
+                    SELECT mic.pid
+                    FROM %s mic
+                    INNER JOIN %s mc ON mc.id = mic.category
+                    WHERE mc.id IN ('%s') 
+                    OR mc.title IN ('%s')
+                    OR LOWER(REPLACE(REPLACE(mc.title,' ','_'),'.','_')) IN ('%s')
+                )",
+                MapItemCategory::getTable(),
+                Category::getTable(),
+                implode("','",$varValue),
+                implode("','",$varValue),
+                implode("','",$varValue),
+                );
+            break;
+            case 'categories':
+                if(!is_array($varValue)){
+                    $varValue = [$varValue];
+                }
+                $arrColumns[] = sprintf("$t.id IN (
+                    SELECT mic.pid
+                    FROM %s mic
+                    WHERE mic.category IN ('%s')
+                )",
+                MapItemCategory::getTable(),
+                implode("','",$varValue),
+                );
             break;
             default:
                 // HOOK: add custom logic

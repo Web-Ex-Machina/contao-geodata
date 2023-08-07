@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2023-2023 Web ex Machina
+ * Copyright (c) 2015-2023 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -29,6 +29,12 @@ $GLOBALS['TL_DCA']['tl_wem_map_category'] = [
                 'id' => 'primary',
                 'pid' => 'index',
             ],
+        ],
+        'onsubmit_callback' => [
+            [\WEM\GeoDataBundle\DataContainer\MapCategory::class, 'onsubmitCallback'],
+        ],
+        'ondelete_callback' => [
+            [\WEM\GeoDataBundle\DataContainer\MapCategory::class, 'ondeleteCallback'],
         ],
     ],
 
@@ -73,7 +79,7 @@ $GLOBALS['TL_DCA']['tl_wem_map_category'] = [
     // Palettes
     'palettes' => [
         'default' => '
-            {general_legend},title;
+            {general_legend},title,is_default;
             {marker_legend},marker,markerConfig
         ',
     ],
@@ -103,6 +109,15 @@ $GLOBALS['TL_DCA']['tl_wem_map_category'] = [
             'inputType' => 'text',
             'eval' => ['mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50'],
             'sql' => "varchar(255) NOT NULL default ''",
+        ],
+        'is_default' => [
+            'label' => &$GLOBALS['TL_LANG']['tl_wem_map_category']['is_default'],
+            'exclude' => true,
+            'filter' => true,
+            'flag' => 1,
+            'inputType' => 'checkbox',
+            'eval' => ['doNotCopy' => true, 'tl_class' => 'w50 m12'],
+            'sql' => "char(1) NOT NULL default ''",
         ],
 
         // {marker_legend},marker,markerConfig

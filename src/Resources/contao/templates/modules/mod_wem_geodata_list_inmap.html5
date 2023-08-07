@@ -9,16 +9,16 @@
       <div class="map__list__item" data-id="<?= $location['id'] ?>" data-marker="<?= $location['country']['code'].'-'.str_replace(' ', '_', strtolower($location['title'])) ?>"
         data-country        ="<?= $location['country']['code'] ?>" 
         data-continent      ="<?= $location['continent']['code'] ?>"
-        data-category       ="<?php echo str_replace([' ','.'],'_', mb_strtolower($location['category']['title'], 'UTF-8'));?>" 
+        data-category       ="<?php echo str_replace([' ','.'],'_', mb_strtolower(implode(',',array_map(function($c){return $c['title'];},$location['category'])), 'UTF-8'));?>"
         data-city           ="<?php echo str_replace([' ','.'],'_', mb_strtolower($location['city'], 'UTF-8'));?>" 
         data-admin_lvl_1    ="<?php echo str_replace([' ','.'],'_', mb_strtolower($location['admin_lvl_1'], 'UTF-8'));?>" 
         data-admin_lvl_2    ="<?php echo str_replace([' ','.'],'_', mb_strtolower($location['admin_lvl_2'], 'UTF-8'));?>" 
        >
         <span class="map__list__item__title "><?= $location['title'] ?></span>
         <?php if ($location['category']['title']): ?>
-          <p class="opa-4 ft-l m-top-0"><?php echo mb_strtoupper($location['category']['title']); ?></p>
+          <p class="map__list__item__categoryTitle"><?php echo mb_strtoupper($location['category']['title']); ?></p>
         <?php elseif (is_array($location['category'])): ?>
-          <p class="opa-4 ft-l m-top-0"><?php echo mb_strtoupper(implode(', ',array_map(function($c){return $c['title'];},$location['category'])), 'UTF-8');?></p>
+          <p class="map__list__item__categoryTitle"><?php echo mb_strtoupper(implode(', ',array_map(function($c){return $c['title'];},$location['category'])), 'UTF-8');?></p>
         <?php endif ?>
         <div class="map__list__item__text">
           <?php if($location['address']): ?>

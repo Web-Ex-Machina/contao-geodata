@@ -13,7 +13,18 @@
 			<source>Enter the category title</source>
 			<target>Saisissez le titre de la catégorie</target>
 		</trans-unit>
-
+		<trans-unit id="tl_wem_map_category.is_default.0">
+			<source>Default category</source>
+			<target>Catégorie par défaut</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map_category.is_default.1">
+			<source>Check if this category is the map's default one</source>
+			<target>Cochez si cette catégorie est celle par défaut</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map_category.is_default.label">
+			<source>Default category</source>
+			<target>Catégorie par défaut</target>
+		</trans-unit>
 		<trans-unit id="tl_wem_map_category.marker_legend">
 			<source>Marker settings</source>
 			<target>Paramètres du marqueur</target>

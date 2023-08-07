@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2017-2022 Web ex Machina
+ * Copyright (c) 2015-2023 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -14,12 +14,13 @@ declare(strict_types=1);
 
 namespace WEM\GeoDataBundle\Model;
 
-use Contao\Model;
+use WEM\GeoDataBundle\Classes\Util;
+use WEM\UtilsBundle\Model\Model as CoreModel;
 
 /**
  * Reads and writes items.
  */
-class Category extends Model
+class Category extends CoreModel
 {
     /**
      * Table name.
@@ -27,81 +28,40 @@ class Category extends Model
      * @var string
      */
     protected static $strTable = 'tl_wem_map_category';
-
     /**
-     * Find items, depends on the arguments.
+     * Generic statements format.
      *
-     * @param array
-     * @param int
-     * @param int
-     * @param array
+     * @param string $strField    [Column to format]
+     * @param mixed  $varValue    [Value to use]
+     * @param string $strOperator [Operator to use, default "="]
      *
-     * @return Collection
+     * @return array
      */
-    public static function findItems($arrConfig = [], $intLimit = 0, $intOffset = 0, $arrOptions = [])
+    public static function formatStatement($strField, $varValue, $strOperator = '=')
     {
-        $t = static::$strTable;
-        $arrColumns = static::formatColumns($arrConfig);
-
-        if ($intLimit > 0) {
-            $arrOptions['limit'] = $intLimit;
-        }
-
-        if ($intOffset > 0) {
-            $arrOptions['offset'] = $intOffset;
-        }
-
-        if (!isset($arrOptions['order'])) {
-            $arrOptions['order'] = "$t.title ASC";
-        }
-
-        if (empty($arrColumns)) {
-            return static::findAll($arrOptions);
-        }
-
-        return static::findBy($arrColumns, null, $arrOptions);
-    }
-
-    /**
-     * Count items, depends on the arguments.
-     *
-     * @param array
-     * @param array
-     *
-     * @return int
-     */
-    public static function countItems($arrConfig = [], $arrOptions = [])
-    {
-        $t = static::$strTable;
-        $arrColumns = static::formatColumns($arrConfig);
-
-        if (empty($arrColumns)) {
-            return static::countAll($arrOptions);
-        }
-
-        return static::countBy($arrColumns, null, $arrOptions);
-    }
-
-    /**
-     * Format ItemModel columns.
-     *
-     * @param [Array] $arrConfig [Configuration to format]
-     *
-     * @return [Array] [The Model columns]
-     */
-    public static function formatColumns($arrConfig)
-    {
-        $t = static::$strTable;
         $arrColumns = [];
+        $t = static::$strTable;
 
-        if ($arrConfig['pid']) {
-            $arrColumns[] = "$t.pid = ".$arrConfig['pid'];
-        }
-
-        if ($arrConfig['not']) {
-            $arrColumns[] = $arrConfig['not'];
+        switch ($strField) {
+            case 'pid':
+                if(!is_array($varValue)){
+                    $varValue = [$varValue];
+                }
+                $arrColumns[] = sprintf("$t.pid IN ('%s')",
+                implode("','",$varValue),
+                );
+            break;
+            default:
+                    $arrColumns = array_merge($arrColumns, parent::formatStatement($strField, $varValue, $strOperator));
         }
 
         return $arrColumns;
+    }
+
+    public function delete(){
+        // remove links item <-> category
+        Util::deleteMapItemCategoryForCategory($this);
+
+        return parent::delete();
     }
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2023-2023 Web ex Machina
+ * Copyright (c) 2015-2023 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -22,7 +22,7 @@ array_insert(
     [
         'wem-geodata' => [
             'wem-maps' => [
-                'tables' => ['tl_wem_map', 'tl_wem_map_category', 'tl_wem_map_item', 'tl_content', 'tl_wem_map_item_attribute_value'],
+                'tables' => ['tl_wem_map', 'tl_wem_map_category', 'tl_wem_map_item', 'tl_wem_map_item_category', 'tl_content', 'tl_wem_map_item_attribute_value'],
                 'import' => ['WEM\GeoDataBundle\Backend\Callback', 'importLocations'],
                 'download_import_sample' => ['WEM\GeoDataBundle\Backend\Callback', 'downloadImportSample'],
                 'export_form' => ['WEM\GeoDataBundle\Backend\Callback', 'exportLocationsForm'],
@@ -67,6 +67,7 @@ array_insert(
  */
 $GLOBALS['TL_MODELS'][\WEM\GeoDataBundle\Model\Map::getTable()] = 'WEM\GeoDataBundle\Model\Map';
 $GLOBALS['TL_MODELS'][\WEM\GeoDataBundle\Model\MapItem::getTable()] = 'WEM\GeoDataBundle\Model\MapItem';
+$GLOBALS['TL_MODELS'][\WEM\GeoDataBundle\Model\MapItemCategory::getTable()] = 'WEM\GeoDataBundle\Model\MapItemCategory';
 $GLOBALS['TL_MODELS'][\WEM\GeoDataBundle\Model\MapItemAttributeValue::getTable()] = 'WEM\GeoDataBundle\Model\MapItemAttributeValue';
 $GLOBALS['TL_MODELS'][\WEM\GeoDataBundle\Model\Category::getTable()] = 'WEM\GeoDataBundle\Model\Category';
 
@@ -74,3 +75,4 @@ $GLOBALS['TL_MODELS'][\WEM\GeoDataBundle\Model\Category::getTable()] = 'WEM\GeoD
  * Hooks
  */
 $GLOBALS['TL_HOOKS']['replaceInsertTags'][] = ['WEM\GeoDataBundle\Classes\Util', 'replaceInsertTags'];
+$GLOBALS['TL_HOOKS']['generateBreadcrumb'][] = ['wem.geodata.listener.generate_breadcrumb_listener', '__invoke'];

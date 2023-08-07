@@ -48,9 +48,9 @@ initMap = function() {
 			})
 		}
 
-		if (objMapFilters.category) {
-		    for(var c in objMapFilters.category.options) {
-		    	var category = objMapFilters.category.options[c];
+		if (categories) {
+		    for(var c in categories) {
+		    	var category = categories[c];
 		    	// find selected category in categories list
 		    	for(var i in categories){
 		    		if(categories[i].id === category.value){

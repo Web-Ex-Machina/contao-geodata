@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2023-2023 Web ex Machina
+ * Copyright (c) 2015-2023 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -28,6 +28,12 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'keys' => [
                 'id' => 'primary',
             ],
+        ],
+        'onload_callback' => [
+            [\WEM\GeoDataBundle\DataContainer\Map::class, 'onloadCallback'],
+        ],
+        'onsubmit_callback' => [
+            [\WEM\GeoDataBundle\DataContainer\Map::class, 'onsubmitCallback'],
         ],
     ],
 
@@ -198,10 +204,11 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'foreignTable' => 'tl_wem_map_category',
             'foreignField' => 'pid',
             'eval' => [
-                'fields' => ['createdAt', 'title'],
+                'fields' => ['createdAt', 'title', 'is_default'],
                 'headerFields' => [
                     &$GLOBALS['TL_LANG']['tl_wem_map_category']['createdAt'][0],
                     &$GLOBALS['TL_LANG']['tl_wem_map_category']['title'][0],
+                    &$GLOBALS['TL_LANG']['tl_wem_map_category']['is_default'][0],
                 ],
                 'orderField' => 'createdAt DESC',
                 'hideButton' => false,

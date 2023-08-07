@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2022 Web ex Machina
+ * Copyright (c) 2015-2023 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -25,6 +25,7 @@ use WEM\GeoDataBundle\Controller\ClassLoader;
 use WEM\GeoDataBundle\Model\Category;
 use WEM\GeoDataBundle\Model\Map;
 use WEM\GeoDataBundle\Model\MapItem;
+use WEM\GeoDataBundle\Model\MapItemCategory;
 
 /**
  * Front end module "locations map".
@@ -58,6 +59,9 @@ class DisplayMap extends Core
      * @var array [default config]
      */
     protected $arrConfig;
+
+    /** @var array */
+    protected $arrConfigDefault;
 
     /**
      * Display a wildcard in the back end.
@@ -95,7 +99,7 @@ class DisplayMap extends Core
             }
 
             // Load the libraries
-            ClassLoader::loadLibraries($this->objMap, 1);
+            ClassLoader::loadLibraries($this->objMap, 2);
             Util::getCountries();
 
             // Build the config
@@ -126,6 +130,7 @@ class DisplayMap extends Core
             // $arrConfig = $arrConfigBase;
 
             $this->arrConfig = ['pid' => $this->objMap->id, 'published' => 1, 'onlyWithCoords' => 1];
+            $this->arrConfigDefault = $this->arrConfig; // keep this one clean, so we load all items disregarding filters values
 
             // Catch AJAX request
             if (Input::post('TL_AJAX')) {
@@ -157,6 +162,7 @@ class DisplayMap extends Core
             $this->Template->markers = $arrMarkers;
             $this->Template->locations = $arrLocations;
             $this->Template->categories = $arrCategories;
+
             $this->Template->config = $arrMapConfig;
 
             // If the config says so, we will generate a template with a list of the locations
@@ -262,21 +268,31 @@ class DisplayMap extends Core
                     if (\array_key_exists($location[$filterField], $this->filters[$filterField]['options'])) {
                         continue;
                     }
-                    $this->filters[$filterField]['options'][$location[$filterField]] = [
-                        'value' => str_replace([' ', '.'], '_', mb_strtolower((string) $location[$filterField], 'UTF-8')),
-                        'text' => $location[$filterField],
-                        'selected' => (\array_key_exists($filterField, $this->arrConfig) && $this->arrConfig[$filterField] === str_replace([' ', '.'], '_', mb_strtolower((string) $location[$filterField], 'UTF-8')) ? 'selected' : ''),
-                    ];
+
+                    if('category' !== $filterField){
+                        $this->filters[$filterField]['options'][$location[$filterField]] = [
+                            'value' => Util::formatStringValueForFilters((string) $location[$filterField]),
+                            'text' => $location[$filterField],
+                            'selected' => (\array_key_exists($filterField, $this->arrConfig) && $this->arrConfig[$filterField] === Util::formatStringValueForFilters((string) $location[$filterField]) ? 'selected' : ''),
+                        ];
+                    }
+                    
                     switch ($filterField) {
                         case 'city':
                             // $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $location[$filterField].' ('.$location['admin_lvl_2'].')';
                             $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $location[$filterField].($location['admin_lvl_2'] ? ' ('.$location['admin_lvl_2'].')' : '');
                         break;
                         case 'category':
-                            $objCategory = Category::findByPk($location[$filterField]);
-                            if ($objCategory) {
-                                $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $objCategory->title;
-                                // $this->filters[$filterField]['options'][$location[$filterField]]['value'] = $objCategory->title;
+                            $mapItemCategories = MapItemCategory::findItems(['pid' => $location['id']]);
+                            if ($mapItemCategories) {
+                                while ($mapItemCategories->next()) {
+                                    $objCategory = Category::findByPk($mapItemCategories->category);
+                                    if ($objCategory) {
+                                        $this->filters[$filterField]['options'][$objCategory->id]['text'] = $objCategory->title;
+                                        $this->filters[$filterField]['options'][$objCategory->id]['value'] = Util::formatStringValueForFilters((string) $objCategory->title);
+                                        $this->filters[$filterField]['options'][$objCategory->id]['selected'] = (\array_key_exists($filterField, $this->arrConfig) && $this->arrConfig[$filterField] === Util::formatStringValueForFilters((string) $objCategory->title) ? 'selected' : '');
+                                    }
+                                }
                             }
                         break;
                         case 'country':
@@ -302,6 +318,11 @@ class DisplayMap extends Core
         return $this->arrConfig;
     }
 
+    protected function getDefaultListConfig()
+    {
+        return $this->arrConfigDefault;
+    }
+
     /**
      * Count the total matching items.
      *
@@ -309,7 +330,7 @@ class DisplayMap extends Core
      */
     protected function countItems(array $c = [])
     {
-        $c = !empty($c) ? $c : $this->getListConfig();
+        $c = !empty($c) ? $c : $this->getDefaultListConfig(); // we don't want filters to interfere here
 
         return $this->countLocations($c);
     }
@@ -324,7 +345,7 @@ class DisplayMap extends Core
      */
     protected function fetchItems(?array $c = [], $limit = 0, $offset = 0, $options = []): ?array
     {
-        $c = !empty($c) ? $c : $this->getListConfig();
+        $c = !empty($c) ? $c : $this->getDefaultListConfig(); // we don't want filters to interfere here
 
         $c['limit'] = $limit;
         $c['offset'] = $offset;
