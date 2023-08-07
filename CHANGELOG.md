@@ -1,6 +1,10 @@
 Extension "Geodata" for Contao Open Source CMS
 ========
 
+1.0.0 - 2023-08-07
+---
+First release
+
 1.0.0-rc6 - 2023-07-17
 ---
 - UPDATED : map items can now have multiple categories
