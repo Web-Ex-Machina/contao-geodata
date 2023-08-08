@@ -133,6 +133,14 @@
 			<source>No map found.</source>
 			<target>Keine Karte gefunden.</target>
 		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.FILE_USAGE.tableNameMapItem">
+			<source>Map Item</source>
+			<target>Standort</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.FILE_USAGE.tableNameMapCategory">
+			<source>Map Item Category</source>
+			<target>Standortkategorie</target>
+		</trans-unit>
     </body>
   </file>
 </xliff>

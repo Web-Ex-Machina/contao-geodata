@@ -76,3 +76,18 @@ $GLOBALS['TL_MODELS'][\WEM\GeoDataBundle\Model\Category::getTable()] = 'WEM\GeoD
  */
 $GLOBALS['TL_HOOKS']['replaceInsertTags'][] = ['WEM\GeoDataBundle\Classes\Util', 'replaceInsertTags'];
 $GLOBALS['TL_HOOKS']['generateBreadcrumb'][] = ['wem.geodata.listener.generate_breadcrumb_listener', '__invoke'];
+
+// File Usage bundle
+$GLOBALS['FILE_USAGE']['tl_wem_map_item'] = [
+    'labelColumn' => ['title'],
+    'parent' => false,
+    'href' => '/contao?do=wem-maps&table=tl_wem_map_item&act=edit&id=%id%',
+];
+$GLOBALS['TL_LANG']['FILE_USAGE']['tl_wem_map_item'] = &$GLOBALS['TL_LANG']['WEM']['LOCATIONS']['FILE_USAGE']['tableNameMapItem'];
+
+$GLOBALS['FILE_USAGE']['tl_wem_map_category'] = [
+    'labelColumn' => ['title'],
+    'parent' => false,
+    'href' => '/contao?do=wem-maps&table=tl_wem_map_category&act=edit&id=%id%',
+];
+$GLOBALS['TL_LANG']['FILE_USAGE']['tl_wem_map_category'] = &$GLOBALS['TL_LANG']['WEM']['LOCATIONS']['FILE_USAGE']['tableNameMapCategory'];
