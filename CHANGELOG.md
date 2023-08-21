@@ -1,6 +1,10 @@
 Extension "Geodata" for Contao Open Source CMS
 ========
 
+1.0.3 - 2023-08-22
+---
+- UPDATED : assets combiner now use this package's version as version
+
 1.0.2 - 2023-08-16
 ---
 - UPDATED : bundle now requires [webexmachina/contao-utils](https://github.com/Web-Ex-Machina/contao-utils) ^1.0

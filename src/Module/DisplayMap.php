@@ -99,7 +99,7 @@ class DisplayMap extends Core
             }
 
             // Load the libraries
-            ClassLoader::loadLibraries($this->objMap, 2);
+            ClassLoader::loadLibraries($this->objMap, WEM_GEODATA_COMBINER_VERSION);
             Util::getCountries();
 
             // Build the config
@@ -269,14 +269,14 @@ class DisplayMap extends Core
                         continue;
                     }
 
-                    if('category' !== $filterField){
+                    if ('category' !== $filterField) {
                         $this->filters[$filterField]['options'][$location[$filterField]] = [
                             'value' => Util::formatStringValueForFilters((string) $location[$filterField]),
                             'text' => $location[$filterField],
                             'selected' => (\array_key_exists($filterField, $this->arrConfig) && $this->arrConfig[$filterField] === Util::formatStringValueForFilters((string) $location[$filterField]) ? 'selected' : ''),
                         ];
                     }
-                    
+
                     switch ($filterField) {
                         case 'city':
                             // $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $location[$filterField].' ('.$location['admin_lvl_2'].')';
