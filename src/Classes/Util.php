@@ -28,14 +28,17 @@ use WEM\GeoDataBundle\Model\MapItemCategory;
 class Util
 {
     /**
-     * Format string value for use in filters (for better readability in URL)
-     * @param  string $value The raw value
+     * Format string value for use in filters (for better readability in URL).
+     *
+     * @param string $value The raw value
+     *
      * @return string the formatted value
      */
     public static function formatStringValueForFilters(string $value): string
     {
         return str_replace([' ', '.'], '_', mb_strtolower($value, 'UTF-8'));
     }
+
     /**
      * Calculates the great-circle distance between two points, with
      * the Vincenty formula.
@@ -413,38 +416,41 @@ class Util
     }
 
     /**
-     * Delete MapItemCategory rows for a Category
-     * @param  Category $objItem The Category
+     * Delete MapItemCategory rows for a Category.
+     *
+     * @param Category $objItem The Category
      */
     public static function deleteMapItemCategoryForCategory(Category $objItem): void
     {
         // remove links item <-> category
-        $mapItemCategories = MapItemCategory::findItems(['category'=>$objItem->id]);
-        if($mapItemCategories){
-            while($mapItemCategories->next()){
-                $mapItemCategories->current()->delete();                
+        $mapItemCategories = MapItemCategory::findItems(['category' => $objItem->id]);
+        if ($mapItemCategories) {
+            while ($mapItemCategories->next()) {
+                $mapItemCategories->current()->delete();
             }
         }
     }
-    
+
     /**
-     * Refreshes "categories" field for a MapItem
-     * @param  MapItem $objItem The MapItem
-     * @param  null|array $arrCategoriesIdsToExclude Ids of Category to avoid
-     * @return MapItem          The updated MapItem
+     * Refreshes "categories" field for a MapItem.
+     *
+     * @param MapItem    $objItem                   The MapItem
+     * @param array|null $arrCategoriesIdsToExclude Ids of Category to avoid
+     *
+     * @return MapItem The updated MapItem
      */
     public static function refreshMapItemCategoriesField(MapItem $objItem, ?array $arrCategoriesIdsToExclude): MapItem
     {
-        $params = ['pid'=>$objItem->id];
+        $params = ['pid' => $objItem->id];
 
-        if(is_array($arrCategoriesIdsToExclude)){
-            $params['where'][] = sprintf('%s.category NOT IN (%s)', MapItemCategory::getTable(), implode(',',$arrCategoriesIdsToExclude));
+        if (\is_array($arrCategoriesIdsToExclude)) {
+            $params['where'][] = sprintf('%s.category NOT IN (%s)', MapItemCategory::getTable(), implode(',', $arrCategoriesIdsToExclude));
         }
 
         $mapItemCategories = MapItemCategory::findItems($params);
         $arrCategoriesIds = [];
-        if($mapItemCategories){
-            while($mapItemCategories->next()){
+        if ($mapItemCategories) {
+            while ($mapItemCategories->next()) {
                 $arrCategoriesIds[] = $mapItemCategories->category;
             }
         }
@@ -452,5 +458,26 @@ class Util
         $objItem->save();
 
         return $objItem;
+    }
+
+    /**
+     * Get a package's version.
+     *
+     * @param string $package The package name
+     *
+     * @return string|null The package version if found, null otherwise
+     */
+    public static function getCustomPackageVersion(string $package): ?string
+    {
+        $packages = json_decode(file_get_contents(TL_ROOT.'/vendor/composer/installed.json'));
+
+        foreach ($packages->packages as $p) {
+            $p = (array) $p;
+            if ($package === $p['name']) {
+                return $p['version'];
+            }
+        }
+
+        return null;
     }
 }

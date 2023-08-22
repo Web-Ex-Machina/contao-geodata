@@ -12,6 +12,10 @@ declare(strict_types=1);
  * @link     https://github.com/Web-Ex-Machina/contao-geodata/
  */
 
+if (!\defined('WEM_GEODATA_COMBINER_VERSION')) {
+    \define('WEM_GEODATA_COMBINER_VERSION', \WEM\GeoDataBundle\Classes\Util::getCustomPackageVersion('webexmachina/contao-geodata'));
+}
+
 /*
  * Backend modules.
  */

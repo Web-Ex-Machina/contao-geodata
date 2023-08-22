@@ -80,7 +80,6 @@ class LocationsList extends Core
     protected function compile(): void
     {
         try {
-
             if (!$this->wem_geodata_maps) {
                 throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noMapConfigured']);
             }
@@ -119,7 +118,7 @@ class LocationsList extends Core
             // Load the libraries
             // ClassLoader::loadLibraries($this->objMap, 2);
             $objCssCombiner = new Combiner();
-            $objCssCombiner->add('bundles/wemgeodata/css/default.css', 2);
+            $objCssCombiner->add('bundles/wemgeodata/css/default.css', WEM_GEODATA_COMBINER_VERSION);
             $GLOBALS['TL_HEAD'][] = sprintf('<link rel="stylesheet" href="%s">', $objCssCombiner->getCombinedFile());
             Util::getCountries();
 
@@ -252,7 +251,7 @@ class LocationsList extends Core
                     if (\array_key_exists($location[$filterField], $arrFilters[$filterField]['options'])) {
                         continue;
                     }
-                    if('category' !== $filterField){
+                    if ('category' !== $filterField) {
                         $arrFilters[$filterField]['options'][$location[$filterField]] = [
                             'value' => $location[$filterField],
                             'text' => $location[$filterField],
