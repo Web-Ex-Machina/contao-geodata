@@ -38,7 +38,7 @@
     </div>
     <?php echo $this->pagination; ?>
     <script type="text/javascript">
-      objMapData        = <?= json_encode($this->locations) ?>;
+      objMapData        = <?= json_encode($this->locations, JSON_INVALID_UTF8_IGNORE | JSON_INVALID_UTF8_SUBSTITUTE) ?>;
       objMapConfig      = <?= json_encode($this->config) ?>;
       categories        = <?= $this->categories ? json_encode($this->categories):'{}' ?>;
       objMapFilters     = <?= $this->filters ? json_encode($this->filters):'{}' ?>;
