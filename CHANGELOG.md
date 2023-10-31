@@ -1,6 +1,10 @@
 Extension "Geodata" for Contao Open Source CMS
 ========
 
+1.0.4 - 2023-10-31
+---
+- UPDATED : JSON encoding of locations when transmitting them to templates' JS
+
 1.0.3 - 2023-08-22
 ---
 - UPDATED : assets combiner now use this package's version as version
