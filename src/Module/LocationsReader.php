@@ -107,21 +107,43 @@ class LocationsReader extends Core
             $GLOBALS['TL_HEAD'][] = sprintf('<link rel="stylesheet" href="%s">', $objCssCombiner->getCombinedFile());
 
             // Override page details
-            $responseContext = System::getContainer()->get('contao.routing.response_context_accessor')->getResponseContext();
+            $htmlDecoder = null;
+            try {
+                $htmlDecoder = System::getContainer()->get('contao.string.html_decoder');
+            } catch (\Exception $e) {
+                // service does not exists
+            }
+
+            $responseContextAccessor = null;
+            try {
+                $responseContextAccessor = System::getContainer()->get('contao.routing.response_context_accessor'); // throws Exception if not found
+            } catch (\Exception $e) {
+                // service does not exists
+            }
+
+            $responseContext = $responseContextAccessor ? $responseContextAccessor->getResponseContext() : null;
             if ($responseContext && $responseContext->has(\Contao\CoreBundle\Routing\ResponseContext\HtmlHeadBag\HtmlHeadBag::class)) {
                 /** @var HtmlHeadBag $htmlHeadBag */
                 $htmlHeadBag = $responseContext->get(\Contao\CoreBundle\Routing\ResponseContext\HtmlHeadBag\HtmlHeadBag::class);
                 $htmlHeadBag->setTitle($arrItem['title']);
-
-                $htmlDecoder = System::getContainer()->get('contao.string.html_decoder');
-                $htmlHeadBag->setMetaDescription($htmlDecoder->htmlToPlainText($arrItem['content']));
-            }else{
-                $htmlDecoder = System::getContainer()->get('contao.string.html_decoder');
+                if ($htmlDecoder) { // exists in Contao 4.13 and is Contao 5.0 ready
+                    $htmlHeadBag->setMetaDescription($htmlDecoder->htmlToPlainText($arrItem['content']));
+                } elseif (method_exists(\Contao\StringUtil::class, 'htmlToPlainText')) { // exists in Contao 4.13 but is deprecated
+                    $htmlHeadBag->setMetaDescription(\Contao\StringUtil::htmlToPlainText($arrItem['content']));
+                } else { // pre Contao 4.13 behaviour
+                    $htmlHeadBag->setMetaDescription($arrItem['content']);
+                }
+            } else {
                 $objPage->ogTitle = $arrItem['title'];
                 $objPage->pageTitle = $arrItem['title'];
-                $objPage->description = $htmlDecoder->htmlToPlainText($arrItem['content']);
+                if ($htmlDecoder) { // exists in Contao 4.13 and is Contao 5.0 ready
+                    $objPage->description = $htmlDecoder->htmlToPlainText($arrItem['content']);
+                } elseif (method_exists(\Contao\StringUtil::class, 'htmlToPlainText')) { // exists in Contao 4.13 but is deprecated
+                    $objPage->description = \Contao\StringUtil::htmlToPlainText($arrItem['content']);
+                } else { // pre Contao 4.13 behaviour
+                    $objPage->description = $arrItem['content'];
+                }
             }
-
         } catch (\Exception $e) {
             $this->Template->error = true;
             $this->Template->msg = $e->getMessage();

@@ -1,6 +1,10 @@
 Extension "Geodata" for Contao Open Source CMS
 ========
 
+1.0.5 - 2024-02-01
+---
+- FIXED : Location Reader using the right class to set map item's description as page's description
+
 1.0.4 - 2023-10-31
 ---
 - UPDATED : JSON encoding of locations when transmitting them to templates' JS
