@@ -86,7 +86,7 @@ class LocationsList extends Core
             // Load the map
             $this->maps = Map::findItems([
                 'where' => [
-                    sprintf('id in (%s)', implode(',', StringUtil::deserialize($this->wem_geodata_maps))),
+                    sprintf('tl_wem_map.id in (%s)', implode(',', StringUtil::deserialize($this->wem_geodata_maps))),
                 ],
             ]);
 
@@ -140,7 +140,7 @@ class LocationsList extends Core
 
             // Get locations
             // $this->arrConfig['limit'] = $this->perPage;
-            $limit = $this->perPage;
+            $limit = $this->perPage ?: $limit;
             // $this->arrConfig['offset'] = $this->perPage * ((Input::get('page_n'.$this->id) ? (int) Input::get('page_n'.$this->id) : 1) - 1);
             $offset = $this->perPage * ((Input::get('page_n'.$this->id) ? (int) Input::get('page_n'.$this->id) : 1) - 1);
             // $arrLocations = $this->getLocations($this->arrConfig);

@@ -1,6 +1,10 @@
 Extension "Geodata" for Contao Open Source CMS
 ========
 
+1.0.6 - 2024-02-02
+---
+- FIXED : Location List now correctly uses the configured number of items
+
 1.0.5 - 2024-02-01
 ---
 - FIXED : Location Reader using the right class to set map item's description as page's description
