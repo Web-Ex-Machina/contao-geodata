@@ -192,9 +192,15 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
         'geocodingProviderGmapKey' => [
             'label' => &$GLOBALS['TL_LANG']['tl_wem_map']['geocodingProviderGmapKey'],
             'exclude' => true,
-            'inputType' => 'textStore',
-            'eval' => ['mandatory' => true, 'maxlength' => 255, 'encrypt' => true],
+            'inputType' => 'text',
+            'eval' => ['mandatory' => true, 'maxlength' => 255],
             'sql' => "varchar(255) NOT NULL default ''",
+            'load_callback' => [
+                ['plenta.encryption', 'decrypt']
+            ],
+            'save_callback' => [
+                ['plenta.encryption', 'encrypt']
+            ],
         ],
 
         // {categories_legend},categories
