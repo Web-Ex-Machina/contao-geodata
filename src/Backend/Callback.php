@@ -56,7 +56,7 @@ class Callback extends Backend
      *
      * @param \DataContainer $objDc [Datacontainer to geocode]
      */
-    public function geocode(DataContainer $objDc)
+    public function geocode(DataContainer $objDc): ?string
     {
         if ('geocode' !== Input::get('key')) {
             return '';
@@ -114,8 +114,9 @@ class Callback extends Backend
      * Return a form to choose a CSV file and import it.
      *
      * @return string
+     * @throws Exception
      */
-    public function importLocations()
+    public function importLocations(): string
     {
         if ('import' !== Input::get('key')) {
             return '';
@@ -387,6 +388,9 @@ class Callback extends Backend
         return $objTemplate->parse();
     }
 
+    /**
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     */
     public function downloadImportSample()
     {
         if ('download_import_sample' !== Input::get('key')) {
@@ -445,8 +449,9 @@ class Callback extends Backend
 
     /**
      * Export the Locations of the current map, according to the pattern set.
+     * @throws Exception
      */
-    public function exportLocationsForm()
+    public function exportLocationsForm(): string
     {
         if ('export_form' !== Input::get('key')) {
             return '';
@@ -501,6 +506,8 @@ class Callback extends Backend
 
     /**
      * Export the Locations of the current map, according to the pattern set.
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     * @throws Exception
      */
     public function exportLocations()
     {
@@ -616,6 +623,9 @@ class Callback extends Backend
         exit;
     }
 
+    /**
+     * @throws Exception
+     */
     public function copyMapItem(DataContainer $dc): void
     {
         if (!$dc->id) {
