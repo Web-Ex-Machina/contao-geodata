@@ -19,6 +19,7 @@ use Contao\File;
 use Contao\Message;
 use Contao\StringUtil;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use WEM\GeoDataBundle\Model\Map;
 use WEM\GeoDataBundle\Model\MapItem;
 use WEM\GeoDataBundle\Model\MapItemAttributeValue;
 
@@ -27,13 +28,21 @@ use WEM\GeoDataBundle\Model\MapItemAttributeValue;
  */
 class ImportLocationsListener
 {
-    public function importPostalCodes($arrUploaded, $arrExcelPattern, $objMap, $objModule): void
+    /**
+     * Imports postal codes from uploaded files and updates the map items accordingly.
+     *
+     * @param array $arrUploaded An array of file paths to be imported.
+     * @param Map $objMap The map object to update.
+     *
+     * @return void
+     * @throws \Exception
+     */
+    public function importPostalCodes(array $arrUploaded, Map $objMap): void
     {
         foreach ($arrUploaded as $strFile) {
             $objFile = new File($strFile, true);
             $spreadsheet = IOFactory::load(TL_ROOT.'/'.$objFile->path);
             $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
-            $arrLocations = [];
 
             $intCreated = 0;
             $intUpdated = 0;
@@ -42,7 +51,7 @@ class ImportLocationsListener
             $arrNewLocationAttributes = [];
             $arrDepCache = [];
 
-            foreach ($sheetData as $r => $arrRow) {
+            foreach ($sheetData as $arrRow) {
                 // Skip first row
                 if ('XCP_0' === $arrRow['A']) {
                     continue;
