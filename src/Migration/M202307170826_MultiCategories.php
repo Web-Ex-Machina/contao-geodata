@@ -35,7 +35,7 @@ class M202307170826_MultiCategories extends AbstractMigration
 
     public function shouldRun(): bool
     {
-        $schemaManager = $this->connection->getSchemaManager();
+        $schemaManager = $this->connection->createSchemaManager();
 
         // If the database table itself does not exist we should do nothing
         if (!$schemaManager->tablesExist(['tl_wem_map_item', 'tl_wem_map_item_category'])) {
