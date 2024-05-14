@@ -31,18 +31,17 @@ class GoogleMaps extends Controller
      *
      * @var string
      */
-    protected static $strGeocodingUrl = 'https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=%s';
+    protected static string $strGeocodingUrl = 'https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=%s';
 
     /**
      * Return the coords lat/lng for a given address.
      *
      * @param string|MapItem $varAddress Address to geocode
-     * @param Map            $objMap     Map Model
-     * @param int            $intResults Number of API results wanted
-     *
-     * @throws Exception
+     * @param Map $objMap Map Model
+     * @param int|null $intResults Number of API results wanted
      *
      * @return array [Address Components]
+     * @throws Exception
      */
     public static function geocoder($varAddress, Map $objMap, ?int $intResults = 1): array
     {
@@ -87,6 +86,7 @@ class GoogleMaps extends Controller
 
         // Then, cURL it baby.
         $ch = curl_init();
+        // TODO : fix deprecated Encryption::decrypt before usage in contao 5 +
         curl_setopt($ch, CURLOPT_URL, sprintf(static::$strGeocodingUrl, $strAddress, Encryption::decrypt($objMap->geocodingProviderGmapKey)));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_TIMEOUT, 5);
