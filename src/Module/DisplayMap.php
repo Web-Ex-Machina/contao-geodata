@@ -19,6 +19,7 @@ use Contao\FrontendTemplate;
 use Contao\Input;
 use Contao\PageModel;
 use Contao\RequestToken;
+use Contao\StringUtil;
 use Contao\System;
 use WEM\GeoDataBundle\Classes\Util;
 use WEM\GeoDataBundle\Controller\ClassLoader;
@@ -105,7 +106,7 @@ class DisplayMap extends Core
             // Build the config
             $arrMapConfig = [];
             if ($this->objMap->mapConfig) {
-                foreach (deserialize($this->objMap->mapConfig) as $arrRow) {
+                foreach (StringUtil::deserialize($this->objMap->mapConfig) as $arrRow) {
                     if ('true' === $arrRow['value']) {
                         $varValue = true;
                     } elseif ('false' === $arrRow['value']) {

@@ -272,7 +272,7 @@ class MapItem extends CoreContainer
 
     public function syncMapItemCategoryPivotTable($varValue, $dc)
     {
-        $this->syncData(deserialize($varValue), 'tl_wem_map_item_category', $dc->id, 'pid', 'category');
+        $this->syncData(StringUtil::deserialize($varValue), 'tl_wem_map_item_category', $dc->id, 'pid', 'category');
 
         return $varValue;
     }
