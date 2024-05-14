@@ -16,6 +16,7 @@ namespace WEM\GeoDataBundle\Controller;
 
 use Contao\Combiner;
 use Contao\Controller;
+use Exception;
 use WEM\GeoDataBundle\Model\Map;
 
 /**
@@ -33,22 +34,14 @@ class ClassLoader extends Controller
      */
     public static function loadProviderClass($strProvider)
     {
-        try {
-            // Parse the classname
-            $strClass = sprintf("WEM\GeoDataBundle\Controller\Provider\%s", ucfirst($strProvider));
-
-            // Throw error if class doesn't exists
-            if (!class_exists($strClass)) {
-                throw new \Exception(sprintf('Unknown class %s', $strClass));
-            }
-
-            // Create the object
-            return new $strClass();
-
-            // And return
-        } catch (\Exception $e) {
-            throw $e;
+        $strClass = sprintf("WEM\GeoDataBundle\Controller\Provider\%s", ucfirst($strProvider));
+        // Throw error if class doesn't exists
+        if (!class_exists($strClass)) {
+            throw new Exception(sprintf('Unknown class %s', $strClass));
         }
+        // Create the object
+        return new $strClass();
+        // And return
     }
 
     /**
@@ -74,7 +67,7 @@ class ClassLoader extends Controller
         switch ($objMap->mapProvider) {
             case Map::MAP_PROVIDER_GMAP:
                 if (!$objMap->mapProviderGmapKey) {
-                    throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['gmapNeedsAPIKey']);
+                    throw new Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['gmapNeedsAPIKey']);
                 }
 
                 $objCssCombiner->add('bundles/wemgeodata/css/gmaps.css', $strVersion);
@@ -98,7 +91,7 @@ class ClassLoader extends Controller
                 ], $strVersion);
                 break;
             default:
-                throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['unknownProvider']);
+                throw new Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['unknownProvider']);
         }
 
         // And add them to pages
