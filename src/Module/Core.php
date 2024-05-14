@@ -155,7 +155,7 @@ abstract class Core extends Module
         if ($objPage instanceof PageModel) {
             // if ($this->objJumpTo instanceof PageModel) {
             $params = (Config::get('useAutoItem') ? '/' : '/items/').($arrItem['alias'] ?: $arrItem['id']);
-            $arrItem['url'] = ampersand($blnAbsolute ? $objPage->getAbsoluteUrl($params) : $objPage->getFrontendUrl($params));
+            $arrItem['url'] = StringUtil::ampersand($blnAbsolute ? $objPage->getAbsoluteUrl($params) : $objPage->getFrontendUrl($params));
         }
         // HOOK: add custom logic
         if (isset($GLOBALS['TL_HOOKS']['WEMGEODATAGETLOCATION']) && \is_array($GLOBALS['TL_HOOKS']['WEMGEODATAGETLOCATION'])) {
