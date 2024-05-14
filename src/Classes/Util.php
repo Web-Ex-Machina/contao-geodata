@@ -114,14 +114,14 @@ class Util
     }
 
     /**
-     * Copy of System::getCountries (because it is deprecated but handful).
+     * Get a list of countries with their corresponding two-letter country codes.
+     *
+     * @return array An associative array where the keys are the two-letter country codes and the values are the country names.
      */
     public static function getCountries(): array
     {
-        return System::getCountries();
-        // $arrCountries = System::getContainer()->get('contao.intl.countries')->getCountries();
-
-        // return array_combine(array_map('strtolower', array_keys($arrCountries)), $arrCountries);
+        $arrCountries = System::getContainer()->get('contao.intl.countries')->getCountries();
+        return array_combine(array_map('strtolower', array_keys($arrCountries)), $arrCountries);
     }
 
     /**
