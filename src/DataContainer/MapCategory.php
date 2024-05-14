@@ -23,9 +23,10 @@ class MapCategory extends CoreContainer
     /**
      * Design each row of the DCA.
      *
+     * @param array $row
      * @return string
      */
-    public function listItems($row)
+    public function listItems(array $row): string
     {
         return $row['title'].($row['is_default'] ? ' ('.$GLOBALS['TL_LANG'][Category::getTable()]['is_default']['label'].')' : '');
     }
@@ -56,6 +57,9 @@ class MapCategory extends CoreContainer
         }
     }
 
+    /**
+     * @throws \Exception
+     */
     public function ondeleteCallback(DataContainer $dc): void
     {
         if (!$dc->id) {
@@ -66,6 +70,7 @@ class MapCategory extends CoreContainer
         if ((bool) $dc->activeRecord->is_default) {
             throw new \Exception('You cannot delete the default category');
         }
+
         $objCategory = Category::findByPk($dc->id);
         if($objCategory){
             Util::deleteMapItemCategoryForCategory($objCategory);

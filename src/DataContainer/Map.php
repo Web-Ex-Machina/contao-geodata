@@ -26,6 +26,7 @@ class Map extends CoreContainer
         if (!$dc->id) {
             return;
         }
+
         // check if another category is the default one for the map
         // if not, show an error
         $defaultCategory = Category::findItems(['pid' => $dc->id, 'is_default' => '1'], 1);
@@ -53,6 +54,7 @@ class Map extends CoreContainer
                 $newDefaultCategory->markerConfig = serialize([]);
                 $newDefaultCategory->pid = $dc->id;
             }
+
             $newDefaultCategory->is_default = 1;
             $newDefaultCategory->save();
         }
@@ -61,11 +63,11 @@ class Map extends CoreContainer
     /**
      * Generate the default map config array.
      *
-     * @param [Array] $varValue
-     *
-     * @return [Array]
+     * @param array $varValue
+     * @param $objDc
+     * @return array
      */
-    public function getDefaultMapConfig($varValue, $objDc)
+    public function getDefaultMapConfig(array $varValue, $objDc): array
     {
         if (!$varValue) {
             switch ($objDc->activeRecord->mapProvider) {
@@ -88,11 +90,10 @@ class Map extends CoreContainer
     /**
      * Generate the default Excel pattern.
      *
-     * @param [Array] $varValue
-     *
-     * @return [Array]
+     * @param array $varValue
+     * @return array
      */
-    public function generateExcelPattern($varValue)
+    public function generateExcelPattern(array $varValue): array
     {
         if (!$varValue) {
             $varValue = [
