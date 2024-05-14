@@ -22,7 +22,8 @@
         "webexmachina/contao-utils": "^1.0 || dev-php-8-2-preparation",
         "phpoffice/phpspreadsheet": "^1.21",
         "terminal42/dcawizard":"^2.5",
-        "ext-json": "*"
+        "ext-json": "*",
+        "ext-curl": "*"
     },
     "require-dev":
     {
