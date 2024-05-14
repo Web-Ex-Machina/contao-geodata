@@ -58,6 +58,10 @@ class Callback extends Backend
      */
     public function geocode(DataContainer $objDc): ?string
     {
+        $arrResponse = null;
+        $objLocation = null;
+        $objMap =null;
+        
         if ('geocode' !== Input::get('key')) {
             return '';
         }
@@ -93,11 +97,11 @@ class Callback extends Backend
             } else {
                 Message::addConfirmation(sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['CONFIRM']['locationSaved'], $objLocation->title));
             }
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             if ('ajax' === Input::get('src')) {
-                $arrResponse = ['status' => 'error', 'response' => $e->getMessage()];
+                $arrResponse = ['status' => 'error', 'response' => $exception->getMessage()];
             } else {
-                Message::addError($e->getMessage());
+                Message::addError($exception->getMessage());
             }
         }
 
@@ -166,10 +170,6 @@ class Callback extends Backend
                 }
             }
 
-            $time = time();
-            $intTotal = 0;
-            $intInvalid = 0;
-
             foreach ($arrUploaded as $strFile) {
                 $objFile = new File($strFile, true);
                 $spreadsheet = IOFactory::load(TL_ROOT.'/'.$objFile->path);
@@ -177,7 +177,7 @@ class Callback extends Backend
                 $arrLocations = [];
                 $nbRow = 0;
                 foreach ($sheetData as $arrRow) {
-                    if (empty(array_filter($arrRow))) {
+                    if (array_filter($arrRow) === []) {
                         continue;
                     }
 
@@ -208,7 +208,7 @@ class Callback extends Backend
 
                                 break;
                                 case 'country':
-                                    if (null === $strValue || empty($strValue)) {
+                                    if (empty($strValue)) {
                                         throw new Exception(sprintf('Empty value for columns %s (%s)', $strColumn, $arrExcelPattern[$strColumn]));
                                     }
 
@@ -304,10 +304,10 @@ class Callback extends Backend
                 }
             }
 
-            Message::addConfirmation(sprintf($GLOBALS['TL_LANG']['tl_wem_map_item']['createdConfirmation'], $intCreated));
-            Message::addInfo(sprintf($GLOBALS['TL_LANG']['tl_wem_map_item']['updatedConfirmation'], $intUpdated));
-            Message::addInfo(sprintf($GLOBALS['TL_LANG']['tl_wem_map_item']['deletedConfirmation'], $intDeleted));
-            Message::addError(sprintf($GLOBALS['TL_LANG']['tl_wem_map_item']['errorsConfirmation'], $intErrors));
+            if (isset($intCreated)){Message::addConfirmation(sprintf($GLOBALS['TL_LANG']['tl_wem_map_item']['createdConfirmation'], $intCreated));}
+            if (isset($intUpdated)){Message::addInfo(sprintf($GLOBALS['TL_LANG']['tl_wem_map_item']['updatedConfirmation'], $intUpdated));}
+            if (isset($intDeleted)){Message::addInfo(sprintf($GLOBALS['TL_LANG']['tl_wem_map_item']['deletedConfirmation'], $intDeleted));}
+            if (isset($intErrors)){Message::addError(sprintf($GLOBALS['TL_LANG']['tl_wem_map_item']['errorsConfirmation'], $intErrors));}
 
             System::setCookie('BE_PAGE_OFFSET', 0, 0);
             $this->reload();
@@ -556,6 +556,7 @@ class Callback extends Backend
         // Format for the Excel
         $arrRows = [];
         while ($objLocations->next()) {
+            $arrRow = null;
             foreach ($arrExcelPattern as $strDbColumn => $strExcelColumn) {
                 switch ($strDbColumn) {
                     case 'country':
@@ -568,7 +569,7 @@ class Callback extends Backend
                         $arrRow[$strExcelColumn] = $objLocations->$strDbColumn;
                 }
             }
-            $arrRows[] = $arrRow;
+            if($arrRow !== null){$arrRows[] = $arrRow;}
         }
 
         // Generate the spreadsheet
