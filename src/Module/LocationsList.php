@@ -19,13 +19,10 @@ use Contao\Combiner;
 use Contao\Environment;
 use Contao\FrontendTemplate;
 use Contao\Input;
-use Contao\PageModel;
-use Contao\Pagination;
 use Contao\RequestToken;
 use Contao\StringUtil;
 use Contao\System;
 use WEM\GeoDataBundle\Classes\Util;
-use WEM\GeoDataBundle\Controller\ClassLoader;
 use WEM\GeoDataBundle\Model\Category;
 use WEM\GeoDataBundle\Model\Map;
 use WEM\GeoDataBundle\Model\MapItem;
@@ -49,6 +46,7 @@ class LocationsList extends Core
      * @var array [Available filters]
      */
     protected $filters;
+
     /** @var array */
     protected $arrConfig;
 
@@ -83,6 +81,7 @@ class LocationsList extends Core
             if (!$this->wem_geodata_maps) {
                 throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noMapConfigured']);
             }
+
             // Load the map
             $this->maps = Map::findItems([
                 'where' => [
@@ -107,6 +106,7 @@ class LocationsList extends Core
                     $this->handleAjaxRequests(Input::post('action'));
                 }
             }
+
             $limit = null;
             $offset = (int) $this->skipFirst;
 
@@ -136,6 +136,7 @@ class LocationsList extends Core
             if (0 === $this->numberOfItems) {
                 throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noLocationsFound']);
             }
+
             $this->buildPagination($this->numberOfItems);
 
             // Get locations
@@ -160,11 +161,11 @@ class LocationsList extends Core
 
             // Send the data to Map template
             $this->Template->config = $this->arrConfig;
-            $this->Template->customTplForGeodataItems = !empty($this->wem_geodata_customTplForGeodataItems) ? $this->wem_geodata_customTplForGeodataItems : 'mod_wem_geodata_list_item';
-        } catch (\Exception $e) {
+            $this->Template->customTplForGeodataItems = empty($this->wem_geodata_customTplForGeodataItems) ? 'mod_wem_geodata_list_item' : $this->wem_geodata_customTplForGeodataItems;
+        } catch (\Exception $exception) {
             $this->Template->error = true;
-            $this->Template->msg = $e->getMessage();
-            $this->Template->trace = $e->getTraceAsString();
+            $this->Template->msg = $exception->getMessage();
+            $this->Template->trace = $exception->getTraceAsString();
         }
     }
 
@@ -184,8 +185,8 @@ class LocationsList extends Core
                 default:
                     throw new \Exception(sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['unknownAjaxRequest'], Input::post('action')));
             }
-        } catch (\Exception $e) {
-            $arrResponse = ['status' => 'error', 'msg' => $e->getMessage(), 'trace' => $e->getTrace()];
+        } catch (\Exception $exception) {
+            $arrResponse = ['status' => 'error', 'msg' => $exception->getMessage(), 'trace' => $exception->getTrace()];
         }
 
         // Add Request Token to JSON answer and return
@@ -229,6 +230,7 @@ class LocationsList extends Core
                 if (Input::get($filterField)) {
                     $this->arrConfig[$filterField] = Input::get($filterField);
                 }
+
                 $arrFilters[$filterField] = [
                     'label' => sprintf('%s :', $GLOBALS['TL_LANG']['tl_wem_map_item'][$filterField][0]),
                     'placeholder' => $GLOBALS['TL_LANG']['tl_wem_map_item'][$filterField][1],
@@ -245,12 +247,14 @@ class LocationsList extends Core
                                 [$arrFilters, $this->arrConfig] = static::importStatic($callback[0])->{$callback[1]}($arrFilters, $this->arrConfig, $filterField, (string) $location[$filterField], $location, $this);
                             }
                         }
+
                         continue;
                     }
 
                     if (\array_key_exists($location[$filterField], $arrFilters[$filterField]['options'])) {
                         continue;
                     }
+
                     if ('category' !== $filterField) {
                         $arrFilters[$filterField]['options'][$location[$filterField]] = [
                             'value' => $location[$filterField],
@@ -258,6 +262,7 @@ class LocationsList extends Core
                             'selected' => (Input::get($filterField) && (Input::get($filterField) === $location[$filterField] || Input::get($filterField) === Util::formatStringValueForFilters((string) $location[$filterField])) ? 'selected' : ''),
                         ];
                     }
+
                     switch ($filterField) {
                         case 'city':
                             $arrFilters[$filterField]['options'][$location[$filterField]]['value'] = $location[$filterField];
@@ -275,6 +280,7 @@ class LocationsList extends Core
                                     }
                                 }
                             }
+
                         break;
                         case 'country':
                             $arrFilters[$filterField]['options'][$location[$filterField]]['text'] = $arrCountries[strtolower($location[$filterField])] ?? $location[$filterField];
@@ -286,6 +292,7 @@ class LocationsList extends Core
                                     [$arrFilters, $this->arrConfig] = static::importStatic($callback[0])->{$callback[1]}($arrFilters, $this->arrConfig, $filterField, (string) $location[$filterField], $location, $this);
                                 }
                             }
+
                         break;
                     }
                 }

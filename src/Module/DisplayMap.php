@@ -177,12 +177,13 @@ class DisplayMap extends Core
                     $objTemplate->filters = $this->filters;
                     $objTemplate->filters_position = $this->wem_geodata_filters;
                 }
+
                 $this->Template->list = $objTemplate->parse();
             }
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             $this->Template->error = true;
-            $this->Template->msg = $e->getMessage();
-            $this->Template->trace = $e->getTraceAsString();
+            $this->Template->msg = $exception->getMessage();
+            $this->Template->trace = $exception->getTraceAsString();
         }
     }
 
@@ -204,8 +205,8 @@ class DisplayMap extends Core
                 default:
                     throw new \Exception(sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['unknownAjaxRequest'], Input::post('action')));
             }
-        } catch (\Exception $e) {
-            $arrResponse = ['status' => 'error', 'msg' => $e->getMessage(), 'trace' => $e->getTrace()];
+        } catch (\Exception $exception) {
+            $arrResponse = ['status' => 'error', 'msg' => $exception->getMessage(), 'trace' => $exception->getTrace()];
         }
 
         // Add Request Token to JSON answer and return
@@ -248,6 +249,7 @@ class DisplayMap extends Core
                 if (Input::get($filterField)) {
                     $this->arrConfig[$filterField] = Input::get($filterField);
                 }
+
                 $this->filters[$filterField] = [
                     'label' => sprintf('%s :', $GLOBALS['TL_LANG']['tl_wem_map_item'][$filterField][0]),
                     'placeholder' => $GLOBALS['TL_LANG']['tl_wem_map_item'][$filterField][1],
@@ -263,6 +265,7 @@ class DisplayMap extends Core
                                 [$this->filters,$this->arrConfig] = static::importStatic($callback[0])->{$callback[1]}($this->filters, $this->arrConfig, $filterField, (string) $location[$filterField], $location, $this);
                             }
                         }
+
                         continue;
                     }
 
@@ -295,6 +298,7 @@ class DisplayMap extends Core
                                     }
                                 }
                             }
+
                         break;
                         case 'country':
                             $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $arrCountries[$location[$filterField]] ?? $location[$filterField];

@@ -144,9 +144,9 @@ class LocationsReader extends Core
                     $objPage->description = $arrItem['content'];
                 }
             }
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             $this->Template->error = true;
-            $this->Template->msg = $e->getMessage();
+            $this->Template->msg = $exception->getMessage();
         }
     }
 }
