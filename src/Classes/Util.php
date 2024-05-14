@@ -52,11 +52,11 @@ class Util
      * @return float Distance between points in [m] (same as earthRadius)
      */
     public static function vincentyGreatCircleDistance(
-        $latitudeFrom,
-        $longitudeFrom,
-        $latitudeTo,
-        $longitudeTo,
-        $earthRadius = 6371000
+        float $latitudeFrom,
+        float $longitudeFrom,
+        float $latitudeTo,
+        float $longitudeTo,
+        float $earthRadius = 6371000
     ) {
         // convert from degrees to radians
         $latFrom = deg2rad($latitudeFrom);
@@ -75,11 +75,13 @@ class Util
     }
 
     /**
-     * Find and replace Location tags.
+     * Replaces insert tags related to geodata.
      *
-     * @return [type] [description]
+     * @param string $tag The insert tag to replace.
+     *
+     * @return mixed The value of the requested field for the given location or false if the tag is not related to geodata or if the location or field is not found.
      */
-    public static function replaceInsertTags($tag, $blnCache, $strTagCache, $flags, $tags, $arrCache, $_rit, $_cnt)
+    public static function replaceInsertTags(string $tag)
     {
         $arrTag = explode('::', $tag);
 
@@ -124,6 +126,7 @@ class Util
 
     /**
      * Try to find an ISO Code from the Country fullname.
+     * @throws Exception
      */
     public static function getCountryISOCodeFromFullname($strFullname)
     {
@@ -143,7 +146,7 @@ class Util
     /**
      * Map a two-letter continent code onto the name of the continent.
      */
-    public static function getContinents(): void
+    public static function getContinents(): void // TODO : ?? return nothing and do nothing
     {
         $CONTINENTS = [
             'AS' => 'Asia',
@@ -159,11 +162,11 @@ class Util
     /**
      * Return the Continent ISOCode of a Country.
      *
-     * @param [String] $strCountry [Country ISOCode]
+     * @param string $strCountry [Country ISOCode]
      *
-     * @return [String] [Continent ISOCode]
+     * @return string [Continent ISOCode]
      */
-    public static function getCountryContinent($strCountry)
+    public static function getCountryContinent(string $strCountry): string
     {
         $COUNTRY_CONTINENTS = [
             'AF' => 'AS',
@@ -419,6 +422,7 @@ class Util
      * Delete MapItemCategory rows for a Category.
      *
      * @param Category $objItem The Category
+     * @throws Exception
      */
     public static function deleteMapItemCategoryForCategory(Category $objItem): void
     {
@@ -434,10 +438,11 @@ class Util
     /**
      * Refreshes "categories" field for a MapItem.
      *
-     * @param MapItem    $objItem                   The MapItem
+     * @param MapItem $objItem The MapItem
      * @param array|null $arrCategoriesIdsToExclude Ids of Category to avoid
      *
      * @return MapItem The updated MapItem
+     * @throws Exception
      */
     public static function refreshMapItemCategoriesField(MapItem $objItem, ?array $arrCategoriesIdsToExclude): MapItem
     {
@@ -454,6 +459,7 @@ class Util
                 $arrCategoriesIds[] = $mapItemCategories->category;
             }
         }
+
         $objItem->categories = serialize($arrCategoriesIds);
         $objItem->save();
 
