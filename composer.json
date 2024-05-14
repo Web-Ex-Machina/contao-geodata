@@ -21,7 +21,8 @@
         "contao/core-bundle": "~4.9 || ^5.3.1",
         "webexmachina/contao-utils": "^1.0 || dev-php-8-2-preparation",
         "phpoffice/phpspreadsheet": "^1.21",
-        "terminal42/dcawizard":"^2.5"
+        "terminal42/dcawizard":"^2.5",
+        "ext-json": "*"
     },
     "require-dev":
     {
