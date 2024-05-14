@@ -18,9 +18,12 @@ use Contao\Database;
 use Contao\Input;
 use Contao\StringUtil;
 use Contao\System;
+use Exception;
 use WEM\GeoDataBundle\Model\Category;
 use WEM\GeoDataBundle\Model\MapItem;
 use WEM\GeoDataBundle\Model\MapItemCategory;
+use function count;
+use function is_array;
 
 /**
  * Provide utilities function to Locations Extension.
@@ -91,7 +94,7 @@ class Util
         }
 
         // Check if we asked for a precise location or the current one
-        if (3 === \count($arrTag)) {
+        if (3 === count($arrTag)) {
             $varLocation = $arrTag[1];
             $strField = $arrTag[2];
         } else {
@@ -140,7 +143,7 @@ class Util
         }
 
         // If nothing, send an exception, because the name is wrong
-        throw new \Exception(sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['countryNotFound'], $strFullname));
+        throw new Exception(sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['countryNotFound'], $strFullname));
     }
 
     /**
@@ -448,7 +451,7 @@ class Util
     {
         $params = ['pid' => $objItem->id];
 
-        if (\is_array($arrCategoriesIdsToExclude)) {
+        if (is_array($arrCategoriesIdsToExclude)) {
             $params['where'][] = sprintf('%s.category NOT IN (%s)', MapItemCategory::getTable(), implode(',', $arrCategoriesIdsToExclude));
         }
 
