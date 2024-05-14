@@ -18,12 +18,9 @@ use Contao\Database;
 use Contao\Input;
 use Contao\StringUtil;
 use Contao\System;
-use Exception;
 use WEM\GeoDataBundle\Model\Category;
 use WEM\GeoDataBundle\Model\MapItem;
 use WEM\GeoDataBundle\Model\MapItemCategory;
-use function count;
-use function is_array;
 
 /**
  * Provide utilities function to Locations Extension.
@@ -129,7 +126,7 @@ class Util
 
     /**
      * Try to find an ISO Code from the Country fullname.
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getCountryISOCodeFromFullname($strFullname)
     {
@@ -143,7 +140,7 @@ class Util
         }
 
         // If nothing, send an exception, because the name is wrong
-        throw new Exception(sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['countryNotFound'], $strFullname));
+        throw new \Exception(sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['countryNotFound'], $strFullname));
     }
 
     /**
@@ -425,7 +422,7 @@ class Util
      * Delete MapItemCategory rows for a Category.
      *
      * @param Category $objItem The Category
-     * @throws Exception
+     * @throws \Exception
      */
     public static function deleteMapItemCategoryForCategory(Category $objItem): void
     {
@@ -445,7 +442,7 @@ class Util
      * @param array|null $arrCategoriesIdsToExclude Ids of Category to avoid
      *
      * @return MapItem The updated MapItem
-     * @throws Exception
+     * @throws \Exception
      */
     public static function refreshMapItemCategoriesField(MapItem $objItem, ?array $arrCategoriesIdsToExclude): MapItem
     {
