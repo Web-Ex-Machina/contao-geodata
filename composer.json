@@ -17,9 +17,9 @@
         "source":"https://github.com/Web-Ex-Machina/contao-geodata"
     },
     "require": {
-        "php": ">=7.4",
-        "contao/core-bundle": "~4.9",
-        "webexmachina/contao-utils": "^1.0",
+        "php": ">=7.4 || >=8.2",
+        "contao/core-bundle": "~4.9 || ^5.3.1",
+        "webexmachina/contao-utils": "^1.0 || dev-php-8-2-preparation",
         "phpoffice/phpspreadsheet": "^1.21",
         "terminal42/dcawizard":"^2.5"
     },
@@ -28,7 +28,8 @@
         "phpunit/phpunit": "^9.0",
         "codeception/codeception": "^4",
         "codeception/module-asserts": "^1.0.0",
-        "contao/test-case":"~4"
+        "contao/test-case":"~4",
+        "rector/rector": "^1.0"
     },
     "autoload":{
         "psr-4": {
@@ -52,7 +53,8 @@
             "contao-components/installer": true,
             "contao/manager-plugin": true,
             "composer/package-versions-deprecated": true,
-            "contao-community-alliance/composer-plugin": true
+            "contao-community-alliance/composer-plugin": true,
+            "php-http/discovery": true
         }
     }
 }
