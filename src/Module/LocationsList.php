@@ -337,37 +337,26 @@ class LocationsList extends Core
      */
     protected function parseItems(array $objItems, ?string $strTemplate = 'mod_wem_geodata_list_item'): array
     {
-        try {
-            $limit = \count($objItems);
-            if ($limit < 1) {
-                return [];
-            }
-
-            $count = 0;
-            $arrItems = [];
-            foreach ($objItems as $location) {
-                $arrItems[] = $this->parseItem($location, $strTemplate, ((1 === ++$count) ? ' first' : '').(($count === $limit) ? ' last' : '').((0 === ($count % 2)) ? ' odd' : ' even'), $count);
-            }
-
-            return $arrItems;
-        } catch (\Exception $e) {
-            throw $e;
+        $limit = \count($objItems);
+        if ($limit < 1) {
+            return [];
         }
+        $count = 0;
+        $arrItems = [];
+        foreach ($objItems as $location) {
+            $arrItems[] = $this->parseItem($location, $strTemplate, ((1 === ++$count) ? ' first' : '').(($count === $limit) ? ' last' : '').((0 === ($count % 2)) ? ' odd' : ' even'), $count);
+        }
+        return $arrItems;
     }
 
     protected function parseItem(array $objItem, $strTemplate = 'mod_wem_geodata_list_item', $strClass = '', $intCount = 0)
     {
-        try {
-            /** @var FrontendTemplate $objTemplate */
-            $objTemplate = new FrontendTemplate($strTemplate);
-            $objTemplate->setData($objItem);
-            $objTemplate->class = $strClass;
-            $objTemplate->count = $intCount;
+        $objTemplate = new FrontendTemplate($strTemplate);
+        $objTemplate->setData($objItem);
 
-            return $objTemplate->parse();
-        } catch (\Exception $e) {
-            throw $e;
-        }
+        $objTemplate->class = $strClass;
+        $objTemplate->count = $intCount;
+        return $objTemplate->parse();
     }
 
     protected function getLocationsAjax(): array
