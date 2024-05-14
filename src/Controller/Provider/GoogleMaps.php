@@ -16,6 +16,7 @@ namespace WEM\GeoDataBundle\Controller\Provider;
 
 use Contao\Controller;
 use Contao\Encryption;
+use Exception;
 use WEM\GeoDataBundle\Classes\Util;
 use WEM\GeoDataBundle\Model\Map;
 use WEM\GeoDataBundle\Model\MapItem;
@@ -47,8 +48,9 @@ class GoogleMaps extends Controller
     {
         // Before everything, check if we can geocode this
         if (Map::GEOCODING_PROVIDER_GMAP !== $objMap->geocodingProvider || !$objMap->geocodingProviderGmapKey) {
-            throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['missingConfigForGeocoding']);
+            throw new Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['missingConfigForGeocoding']);
         }
+
         // Standardize the address to geocode
         $strAddress = '';
         $arrCountries = Util::getCountries();
@@ -56,18 +58,23 @@ class GoogleMaps extends Controller
             if ($varAddress->street) {
                 $strAddress .= trim(preg_replace('/\s+/', ' ', strip_tags($varAddress->street)));
             }
+
             if ($varAddress->postal) {
                 $strAddress .= ','.$varAddress->postal;
             }
+
             if ($varAddress->city) {
                 $strAddress .= ','.$varAddress->city;
             }
+
             if ($varAddress->region) {
                 $strAddress .= ','.$varAddress->region;
             }
+
             if ($varAddress->admin_lvl_1) {
                 $args[] = 'state='.$varAddress->admin_lvl_1;
             }
+
             if ($varAddress->country) {
                 $strAddress .= '&amp;region='.$arrCountries[$varAddress->country];
             }
@@ -87,8 +94,9 @@ class GoogleMaps extends Controller
 
         // Catch Error
         if ('OK' !== $geoloc['status']) {
-            throw new \Exception($geoloc['error_message']);
+            throw new Exception($geoloc['error_message']);
         }
+
         // And return them
         if (1 === $intResults) {
             return ['lat' => $geoloc['results'][0]['geometry']['location']['lat'], 'lng' => $geoloc['results'][0]['geometry']['location']['lng']];

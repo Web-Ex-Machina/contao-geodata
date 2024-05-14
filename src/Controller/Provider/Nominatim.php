@@ -16,6 +16,7 @@ namespace WEM\GeoDataBundle\Controller\Provider;
 
 use Contao\Config;
 use Contao\Controller;
+use Exception;
 use WEM\GeoDataBundle\Model\Map;
 use WEM\GeoDataBundle\Model\MapItem;
 
@@ -46,26 +47,32 @@ class Nominatim extends Controller
     {
         // Before everything, check if we can geocode this
         if ('nominatim' !== $objMap->geocodingProvider) {
-            throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['missingConfigForGeocoding']);
+            throw new Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['missingConfigForGeocoding']);
         }
+
         // Standardize the address to geocode
         $args = [];
         if (is_a($varAddress, MapItem::class)) {
             if ($varAddress->street) {
                 $args[] = 'street='.trim(preg_replace('/\s+/', ' ', strip_tags($varAddress->street)));
             }
+
             if ($varAddress->postal) {
                 $args[] = 'postalcode='.$varAddress->postal;
             }
+
             if ($varAddress->city) {
                 $args[] = 'city='.$varAddress->city;
             }
+
             if ($varAddress->region) {
                 $args[] = 'state='.$varAddress->region;
             }
+
             if ($varAddress->admin_lvl_1) {
                 $args[] = 'state='.$varAddress->admin_lvl_1;
             }
+
             if ($varAddress->country) {
                 $args[] = 'countrycodes='.$varAddress->country;
             }
@@ -88,8 +95,9 @@ class Nominatim extends Controller
 
         // Catch Error
         if (!$geoloc) {
-            throw new \Exception(sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['invalidRequest'], $strUrl));
+            throw new Exception(sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['invalidRequest'], $strUrl));
         }
+
         // And return them
         if (1 === $intResults) {
             return ['lat' => $geoloc[0]['lat'], 'lng' => $geoloc[0]['lon']];
