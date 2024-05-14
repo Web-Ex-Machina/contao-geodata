@@ -28,6 +28,7 @@ class Category extends CoreModel
      * @var string
      */
     protected static $strTable = 'tl_wem_map_category';
+
     /**
      * Generic statements format.
      *
@@ -37,7 +38,7 @@ class Category extends CoreModel
      *
      * @return array
      */
-    public static function formatStatement($strField, $varValue, $strOperator = '=')
+    public static function formatStatement($strField, $varValue, $strOperator = '='): array
     {
         $arrColumns = [];
         $t = static::$strTable;
@@ -47,9 +48,7 @@ class Category extends CoreModel
                 if(!is_array($varValue)){
                     $varValue = [$varValue];
                 }
-                $arrColumns[] = sprintf("$t.pid IN ('%s')",
-                implode("','",$varValue),
-                );
+                $arrColumns[] = sprintf($t . "pid IN ('%s')", implode("','",$varValue));
             break;
             default:
                     $arrColumns = array_merge($arrColumns, parent::formatStatement($strField, $varValue, $strOperator));
@@ -58,7 +57,11 @@ class Category extends CoreModel
         return $arrColumns;
     }
 
-    public function delete(){
+    /**
+     * @throws \Exception
+     */
+    public function delete(): int
+    {
         // remove links item <-> category
         Util::deleteMapItemCategoryForCategory($this);
 

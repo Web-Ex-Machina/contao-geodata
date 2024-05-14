@@ -35,7 +35,7 @@ class MapItem extends CoreModel
      *
      * @var array
      */
-    protected static $arrSearchFields = ['title', 'teaser', 'attr_value_postal'];
+    protected static array $arrSearchFields = ['title', 'teaser', 'attr_value_postal'];
 
     /**
      * Generic statements format.
@@ -46,14 +46,14 @@ class MapItem extends CoreModel
      *
      * @return array
      */
-    public static function formatStatement($strField, $varValue, $strOperator = '=')
+    public static function formatStatement($strField, $varValue, $strOperator = '='): array
     {
         $arrColumns = [];
         $t = static::$strTable;
 
         switch ($strField) {
             case 'onlyWithCoords':
-                $arrColumns[] = "$t.lat != '' AND $t.lng != ''";
+                $arrColumns[] = $t . "lat != '' AND" . $t . "lng != ''";
             break;
             case 'published':
                 $timestamp = (new DateTime())->getTimestamp();
@@ -68,12 +68,14 @@ class MapItem extends CoreModel
                         OR ($t.published = 1 AND $t.publishedUntil <= %s)", $timestamp, $timestamp
                     );
                 }
+
             break;
             case 'category':
                 if(!is_array($varValue)){
                     $varValue = [$varValue];
                 }
-                $arrColumns[] = sprintf("$t.id IN (
+
+                $arrColumns[] = sprintf("{$t}.id IN (
                     SELECT mic.pid
                     FROM %s mic
                     INNER JOIN %s mc ON mc.id = mic.category
@@ -123,23 +125,22 @@ class MapItem extends CoreModel
     /**
      * Format Search statement.
      *
+     * @param string $strField
      * @param string $varValue [Value to use]
      *
      * @return string
      */
-    public static function formatSearchStatement($strField, $varValue)
+    public static function formatSearchStatement($strField, $varValue): string
     {
         $t = static::$strTable;
 
         switch ($strField) {
             case 'attr_value_postal':
-                return "$t.id IN(
+                return $t . "id IN(
                     SELECT tl_wem_map_item_attribute_value.pid
                     FROM tl_wem_map_item_attribute_value
                     WHERE tl_wem_map_item_attribute_value.attribute = 'postal'
-                    AND tl_wem_map_item_attribute_value.value REGEXP '$varValue'
-                )";
-                break;
+                    AND tl_wem_map_item_attribute_value.value REGEXP '". $varValue ."')";
             default:
                 return parent::formatSearchStatement($strField, $varValue);
         }
