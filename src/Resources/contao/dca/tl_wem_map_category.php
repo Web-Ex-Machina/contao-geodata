@@ -12,6 +12,9 @@ declare(strict_types=1);
  * @link     https://github.com/Web-Ex-Machina/contao-geodata/
  */
 
+use WEM\GeoDataBundle\DataContainer\Map;
+use WEM\GeoDataBundle\DataContainer\MapCategory;
+
 $this->loadDataContainer('tl_wem_map');
 
 /*
@@ -31,10 +34,14 @@ $GLOBALS['TL_DCA']['tl_wem_map_category'] = [
             ],
         ],
         'onsubmit_callback' => [
-            [\WEM\GeoDataBundle\DataContainer\MapCategory::class, 'onsubmitCallback'],
+            static function (\Contao\DataContainer $dc) : void {
+                (new MapCategory())->onsubmitCallback($dc);
+            },
         ],
         'ondelete_callback' => [
-            [\WEM\GeoDataBundle\DataContainer\MapCategory::class, 'ondeleteCallback'],
+            static function (\Contao\DataContainer $dc) : void {
+                (new MapCategory())->ondeleteCallback($dc);
+            },
         ],
     ],
 
@@ -45,7 +52,7 @@ $GLOBALS['TL_DCA']['tl_wem_map_category'] = [
             'fields' => ['createdAt DESC'],
             'headerFields' => ['title'],
             'panelLayout' => 'filter;sort,search,limit',
-            'child_record_callback' => [\WEM\GeoDataBundle\DataContainer\MapCategory::class, 'listItems'],
+            'child_record_callback' => static fn(array $row): string => (new MapCategory())->listItems($row),
             'child_record_class' => 'no_padding',
         ],
         'global_operations' => [
@@ -133,7 +140,7 @@ $GLOBALS['TL_DCA']['tl_wem_map_category'] = [
             'exclude' => true,
             'inputType' => 'keyValueWizard',
             'load_callback' => [
-                [\WEM\GeoDataBundle\DataContainer\Map::class, 'getDefaultMapConfig'],
+                static fn(array $varValue, $objDc): array => (new Map())->getDefaultMapConfig($varValue, $objDc),
             ],
             'sql' => 'blob NULL',
         ],

@@ -25,6 +25,10 @@ declare(strict_types=1);
 /*
  * Table tl_wem_map_item.
  */
+
+use WEM\GeoDataBundle\Classes\Util;
+use WEM\GeoDataBundle\DataContainer\MapItem;
+
 $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
     // Config
     'config' => [
@@ -34,7 +38,9 @@ $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
         'switchToEdit' => true,
         'enableVersioning' => true,
         'onload_callback' => [
-            [\WEM\GeoDataBundle\DataContainer\MapItem::class, 'checkIfGeocodeExists'],
+            static function () : void {
+                (new MapItem())->checkIfGeocodeExists();
+            },
         ],
         'sql' => [
             'keys' => [
@@ -51,7 +57,7 @@ $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
             'fields' => ['country DESC'],
             'headerFields' => ['title'],
             'panelLayout' => 'filter;sort,search,limit',
-            'child_record_callback' => [\WEM\GeoDataBundle\DataContainer\MapItem::class, 'listItems'],
+            'child_record_callback' => static fn(array $arrRow): string => (new MapItem())->listItems($arrRow),
             'child_record_class' => 'no_padding',
         ],
         'global_operations' => [
@@ -60,21 +66,21 @@ $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
                 'href' => 'key=geocodeAll',
                 'class' => 'header_geocodeAll',
                 'attributes' => 'onclick="Backend.getScrollOffset()" data-confirm="'.$GLOBALS['TL_LANG']['tl_wem_map_item']['geocodeAllConfirm'].'"',
-                'button_callback' => [\WEM\GeoDataBundle\DataContainer\MapItem::class, 'geocodeAllButtonGlobalOperations'],
+                'button_callback' => static fn(?string $href, string $label, string $title, string $class, string $attributes, string $table, ?array $rootIds): string => (new MapItem())->geocodeAllButtonGlobalOperations($href, $label, $title, $class, $attributes, $table, $rootIds),
             ],
             'import' => [
                 'label' => &$GLOBALS['TL_LANG']['tl_wem_map_item']['import'],
                 'href' => 'key=import',
                 'class' => 'header_css_import',
                 'attributes' => 'onclick="Backend.getScrollOffset()"',
-                'button_callback' => [\WEM\GeoDataBundle\DataContainer\MapItem::class, 'importButtonGlobalOperations'],
+                'button_callback' => static fn(?string $href, string $label, string $title, string $class, string $attributes, string $table, ?array $rootIds): string => (new MapItem())->importButtonGlobalOperations($href, $label, $title, $class, $attributes, $table, $rootIds),
             ],
             'export' => [
                 'label' => &$GLOBALS['TL_LANG']['tl_wem_map_item']['export'],
                 'href' => 'key=export_form',
                 'class' => 'header_css_import',
                 'attributes' => 'onclick="Backend.getScrollOffset()"',
-                'button_callback' => [\WEM\GeoDataBundle\DataContainer\MapItem::class, 'exportButtonGlobalOperations'],
+                'button_callback' => static fn(?string $href, string $label, string $title, string $class, string $attributes, string $table, ?array $rootIds): string => (new MapItem())->exportButtonGlobalOperations($href, $label, $title, $class, $attributes, $table, $rootIds),
             ],
             'all' => [
                 'label' => &$GLOBALS['TL_LANG']['MSC']['all'],
@@ -114,13 +120,13 @@ $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
                 'label' => &$GLOBALS['TL_LANG']['tl_wem_map_item']['toggle'],
                 'icon' => 'visible.gif',
                 'attributes' => 'onclick="Backend.getScrollOffset();return AjaxRequest.toggleVisibility(this,%s)"',
-                'button_callback' => [\WEM\GeoDataBundle\DataContainer\MapItem::class, 'toggleIcon'],
+                'button_callback' => static fn(array $row, string $href, string $label, string $title, string $icon, string $attributes): string => (new MapItem())->toggleIcon($row, $href, $label, $title, $icon, $attributes),
             ],
             'geocode' => [
                 'label' => &$GLOBALS['TL_LANG']['tl_wem_map_item']['geocode'],
                 'href' => 'key=geocode',
                 'icon' => 'bundles/wemgeodata/backend/icon_geocode_16.png',
-                'button_callback' => [\WEM\GeoDataBundle\DataContainer\MapItem::class, 'geocodeButtonOperations'],
+                'button_callback' => static fn(array $data, ?string $href, string $label, string $title, ?string $icon, string $attributes): string => (new MapItem())->geocodeButtonOperations($data, $href, $label, $title, $icon, $attributes),
             ],
         ],
     ],
@@ -170,7 +176,7 @@ $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
             'inputType' => 'text',
             'eval' => ['rgxp' => 'alias', 'doNotCopy' => true, 'unique' => true, 'maxlength' => 128, 'tl_class' => 'w50'],
             'save_callback' => [
-                [\WEM\GeoDataBundle\DataContainer\MapItem::class, 'generateAlias'],
+                static fn($varValue, \Contao\DataContainer $dc): string => (new MapItem())->generateAlias($varValue, $dc),
             ],
             'sql' => "varchar(128) BINARY NOT NULL default ''",
         ],
@@ -182,7 +188,7 @@ $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
             'flag' => 11,
             'inputType' => 'select',
             'foreignKey' => 'tl_wem_map_category.title',
-            'options_callback' => [\WEM\GeoDataBundle\DataContainer\MapItem::class, 'getMapCategories'],
+            'options_callback' => static fn(\Contao\DataContainer $dc): array => (new MapItem())->getMapCategories($dc),
             'eval' => ['chosen' => true, 'includeBlankOption' => true, 'tl_class' => 'w50'],
             'sql' => "int(10) unsigned NOT NULL default '0'",
             'relation' => ['type' => 'hasOne', 'load' => 'lazy'],
@@ -195,10 +201,10 @@ $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
             'flag' => 11,
             'inputType' => 'select',
             'foreignKey' => 'tl_wem_map_category.title',
-            'options_callback' => [\WEM\GeoDataBundle\DataContainer\MapItem::class, 'getMapCategories'],
-            'load_callback' => [[\WEM\GeoDataBundle\DataContainer\MapItem::class, 'assignDefaultCategoryIfNew']],
+            'options_callback' => static fn(\Contao\DataContainer $dc): array => (new MapItem())->getMapCategories($dc),
+            'load_callback' => [static fn($value, \Contao\DataContainer $dc): string => (new MapItem())->assignDefaultCategoryIfNew($value, $dc)],
             'save_callback' => [
-                [\WEM\GeoDataBundle\DataContainer\MapItem::class, 'syncMapItemCategoryPivotTable'],
+                static fn($varValue, $dc) => (new MapItem())->syncMapItemCategoryPivotTable($varValue, $dc),
             ],
             'eval' => ['chosen' => true, 'includeBlankOption' => true, 'multiple' => true, 'mandatory' => true, 'tl_class' => 'w50'],
             'sql' => 'blob NULL',
@@ -298,7 +304,7 @@ $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
             'filter' => true,
             'sorting' => true,
             'inputType' => 'select',
-            'options' => \WEM\GeoDataBundle\Classes\Util::getCountries(),
+            'options' => Util::getCountries(),
             'eval' => ['includeBlankOption' => true, 'chosen' => true, 'tl_class' => 'w50'],
             'sql' => "varchar(2) NOT NULL default ''",
         ],
