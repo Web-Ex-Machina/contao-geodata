@@ -178,9 +178,9 @@ abstract class Core extends Module
         $total = $intTotal - $this->offset;
 
         // Split the results
-        if ($this->perPage > 0 && (!isset($this->limit) || $this->numberOfItems > $this->perPage)) {
+        if ($this->perPage > 0 && (!property_exists($this, 'limit') || $this->limit === null || $this->numberOfItems > $this->perPage)) {
             // Adjust the overall limit
-            if (isset($this->limit)) {
+            if (property_exists($this, 'limit') && $this->limit !== null) {
                 $total = min($this->limit, $total);
             }
 
