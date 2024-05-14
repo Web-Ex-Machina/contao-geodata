@@ -28,8 +28,6 @@ class GoogleMaps extends Controller
 {
     /**
      * Google Map Geocoding URL to request (sprintf pattern).
-     *
-     * @var string
      */
     protected static string $strGeocodingUrl = 'https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=%s';
 

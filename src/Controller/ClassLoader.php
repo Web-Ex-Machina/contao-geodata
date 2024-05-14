@@ -28,17 +28,19 @@ class ClassLoader extends Controller
      * Correctly load a generic Provider
      * Not used for now, but keep it for later !
      *
-     * @param [String] $strProvider [Provider classname]
+     * @param string $strProvider
      *
-     * @return [Object] [Provider class]
+     * @return string
+     * @throws Exception
      */
-    public static function loadProviderClass($strProvider)
+    public static function loadProviderClass(string $strProvider): string
     {
         $strClass = sprintf("WEM\GeoDataBundle\Controller\Provider\%s", ucfirst($strProvider));
         // Throw error if class doesn't exists
         if (!class_exists($strClass)) {
             throw new Exception(sprintf('Unknown class %s', $strClass));
         }
+
         // Create the object
         return new $strClass();
         // And return
@@ -47,10 +49,11 @@ class ClassLoader extends Controller
     /**
      * Load the Map Provider Libraries.
      *
-     * @param [Object]  $objMap     [Map model]
-     * @param [Integer] $strVersion [File Versions]
+     * @param Map $objMap
+     * @param int $strVersion
+     * @throws Exception
      */
-    public static function loadLibraries($objMap, $strVersion = 1): void
+    public static function loadLibraries(Map $objMap, int $strVersion = 1): void
     {
         // Generate the combiners
         $objCssCombiner = new Combiner();
