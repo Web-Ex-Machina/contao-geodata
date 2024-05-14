@@ -25,7 +25,7 @@ use Contao\Message;
 use Contao\StringUtil;
 use Contao\System;
 use Exception;
-use Haste\Http\Response\JsonResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use WEM\GeoDataBundle\Classes\Util;
@@ -34,12 +34,22 @@ use WEM\GeoDataBundle\Controller\Provider\Nominatim;
 use WEM\GeoDataBundle\Model\Category;
 use WEM\GeoDataBundle\Model\Map;
 use WEM\GeoDataBundle\Model\MapItem;
+use Contao\CoreBundle\Intl\Locales;
 
 /**
  * Provide backend functions to Locations Extension.
  */
 class Callback extends Backend
 {
+
+    private Locales $locales;
+
+    protected function __construct(Locales $locales)
+    {
+        Parent::__construct();
+        $this->locales =  $locales;
+    }
+
     /**
      * Geocode a given location.
      * return JSON through AJAX request or Message with redirection.
@@ -59,6 +69,7 @@ class Callback extends Backend
             if (!$objMap->geocodingProvider) {
                 throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['missingConfigForGeocoding']);
             }
+
             switch ($objMap->geocodingProvider) {
                 case Map::GEOCODING_PROVIDER_GMAP:
                     $arrCoords = GoogleMaps::geocoder($objLocation, $objMap);
@@ -76,6 +87,7 @@ class Callback extends Backend
             if (!$objLocation->save()) {
                 throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['errorWhenSavingTheLocation']);
             }
+
             if ('ajax' === Input::get('src')) {
                 $arrResponse = ['status' => 'success', 'response' => sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['CONFIRM']['locationSaved'], $objLocation->title), 'data' => $arrCoords];
             } else {
@@ -95,7 +107,7 @@ class Callback extends Backend
         }
 
         $strRedirect = str_replace(['&key=geocode', 'id='.$objLocation->id, '&src=ajax'], ['', 'id='.$objMap->id, ''], Environment::get('request'));
-        $this->redirect(ampersand($strRedirect));
+        $this->redirect(StringUtil::ampersand($strRedirect));
     }
 
     /**
@@ -128,7 +140,7 @@ class Callback extends Backend
 
         $arrExcelPattern = [];
         // Preformat Excel Pattern (key = Excel column, value = DB Column)
-        foreach (deserialize($objMap->excelPattern) as $arrColumn) {
+        foreach (StringUtil::deserialize($objMap->excelPattern) as $arrColumn) {
             $arrExcelPattern[$arrColumn['value']] = $arrColumn['key'];
         }
 
@@ -167,6 +179,7 @@ class Callback extends Backend
                     if (empty(array_filter($arrRow))) {
                         continue;
                     }
+
                     ++$nbRow;
                     try {
                         $arrLocation = [];
@@ -191,16 +204,19 @@ class Callback extends Backend
                                     if (null !== $strValue) {
                                         $arrLocation['admin_lvl_1'] = $strValue;
                                     }
+
                                 break;
                                 case 'country':
                                     if (null === $strValue || empty($strValue)) {
                                         throw new Exception(sprintf('Empty value for columns %s (%s)', $strColumn, $arrExcelPattern[$strColumn]));
                                     }
+
                                     if (2 === \strlen($strValue)) {
                                         $arrLocation['country'] = $strValue;
                                     } else {
                                         $arrLocation['country'] = Util::getCountryISOCodeFromFullname($strValue);
                                     }
+
                                 break;
                                 default:
                                     if (null === $strValue) {
@@ -220,6 +236,7 @@ class Callback extends Backend
                         }
                     }
                 }
+
                 $intCreated = 0;
                 $intUpdated = 0;
                 $intDeleted = 0;
@@ -270,6 +287,7 @@ class Callback extends Backend
                         } elseif ($blnUpdated) {
                             --$intUpdated;
                         }
+
                         Message::addError(sprintf($GLOBALS['TL_LANG']['tl_wem_map_item']['errorOnItemImport'], $objLocation->title, $e->getMessage()));
                     }
                 }
@@ -333,20 +351,20 @@ class Callback extends Backend
             $strCountries .= '</tr>';
         }
 
-        $arrLanguages = System::getLanguages();
+        $arrLanguages = $this->locales->getLanguages();
 
         /** @todo : provide an example file to download */
         $objTemplate = new BackendTemplate('be_wem_geodata_import_form');
 
-        $objTemplate->backButtonHref = ampersand(str_replace('&key=import', '', Environment::get('request')));
-        $objTemplate->backButtonTitle = specialchars($GLOBALS['TL_LANG']['MSC']['backBTTitle']);
+        $objTemplate->backButtonHref = StringUtil::ampersand(str_replace('&key=import', '', Environment::get('request')));
+        $objTemplate->backButtonTitle = StringUtil::specialchars($GLOBALS['TL_LANG']['MSC']['backBTTitle']);
         $objTemplate->backButtonLabel = $GLOBALS['TL_LANG']['MSC']['backBT'];
 
-        $objTemplate->downloadSampleButtonHref = ampersand(str_replace('&key=import', '&key=download_import_sample', Environment::get('request')));
-        $objTemplate->downloadSampleButtonTitle = specialchars($GLOBALS['TL_LANG']['tl_wem_map_item']['downloadSampleBTTitle']);
+        $objTemplate->downloadSampleButtonHref = StringUtil::ampersand(str_replace('&key=import', '&key=download_import_sample', Environment::get('request')));
+        $objTemplate->downloadSampleButtonTitle = StringUtil::specialchars($GLOBALS['TL_LANG']['tl_wem_map_item']['downloadSampleBTTitle']);
         $objTemplate->downloadSampleButtonLabel = $GLOBALS['TL_LANG']['tl_wem_map_item']['downloadSampleBT'];
 
-        $objTemplate->formAction = ampersand(Environment::get('request'), true);
+        $objTemplate->formAction = StringUtil::ampersand(Environment::get('request'), true);
         $objTemplate->widgetUploadTitle = $GLOBALS['TL_LANG']['tl_wem_map_item']['source'][0];
         $objTemplate->widgetUploadContent = $objUploader->generateMarkup();
         $objTemplate->widgetUploadHelp = $GLOBALS['TL_LANG']['tl_wem_map_item']['source'][1] ?? '';
@@ -355,7 +373,7 @@ class Callback extends Backend
         $objTemplate->widgetSettingsUpdateChecked = (bool) $objMap->updateExistingItems;
         $objTemplate->widgetSettingsDeleteLabel = $GLOBALS['TL_LANG']['tl_wem_map_item']['importSettingsDeleteLabel'];
         $objTemplate->widgetSettingsDeleteChecked = (bool) $objMap->deleteExistingItemsNotInImportFile;
-        $objTemplate->formSubmitValue = specialchars($GLOBALS['TL_LANG']['tl_wem_map_item']['import'][0]);
+        $objTemplate->formSubmitValue = StringUtil::specialchars($GLOBALS['TL_LANG']['tl_wem_map_item']['import'][0]);
         $objTemplate->importExampleTitle = $GLOBALS['TL_LANG']['tl_wem_map_item']['importExampleTitle'];
         $objTemplate->importExampleTh = implode('', $arrTh);
         $objTemplate->importExampleTd = $arrTd;
@@ -391,7 +409,7 @@ class Callback extends Backend
 
         $arrExcelPattern = [];
         // Preformat Excel Pattern (key = Excel column, value = DB Column)
-        foreach (deserialize($objMap->excelPattern) as $arrColumn) {
+        foreach (StringUtil::deserialize($objMap->excelPattern) as $arrColumn) {
             $arrExcelPattern[$arrColumn['value']] = $arrColumn['key'];
         }
 
@@ -459,10 +477,10 @@ class Callback extends Backend
 
         $objTemplate = new BackendTemplate('be_wem_geodata_export_form');
 
-        $objTemplate->backButtonHref = ampersand(str_replace('&key=export_form', '', Environment::get('request')));
-        $objTemplate->backButtonTitle = specialchars($GLOBALS['TL_LANG']['MSC']['backBTTitle']);
+        $objTemplate->backButtonHref = StringUtil::ampersand(str_replace('&key=export_form', '', Environment::get('request')));
+        $objTemplate->backButtonTitle = StringUtil::specialchars($GLOBALS['TL_LANG']['MSC']['backBTTitle']);
         $objTemplate->backButtonLabel = $GLOBALS['TL_LANG']['MSC']['backBT'];
-        $objTemplate->formAction = ampersand(str_replace('key=export_form', 'key=export', Environment::get('request')), true);
+        $objTemplate->formAction = StringUtil::ampersand(str_replace('key=export_form', 'key=export', Environment::get('request')), true);
 
         $objTemplate->widgetSettingsTitle = $GLOBALS['TL_LANG']['tl_wem_map_item']['exportSettingsTitle'];
         $objTemplate->widgetSettingsFormatLabel = $GLOBALS['TL_LANG']['tl_wem_map_item']['exportSettingsFormatLabel'];
@@ -471,7 +489,7 @@ class Callback extends Backend
         $objTemplate->widgetSettingsLimitToCategoriesSelectLabel = $GLOBALS['TL_LANG']['tl_wem_map_item']['exportSettingsLimitToCategoriesSelectLabel'];
         $objTemplate->widgetSettingsLimitToCountriesCheckboxLabel = $GLOBALS['TL_LANG']['tl_wem_map_item']['exportSettingsLimitToCountriesCheckboxLabel'];
         $objTemplate->widgetSettingsLimitToCountriesSelectLabel = $GLOBALS['TL_LANG']['tl_wem_map_item']['exportSettingsLimitToCountriesSelectLabel'];
-        $objTemplate->formSubmitValue = specialchars($GLOBALS['TL_LANG']['tl_wem_map_item']['export_form'][0]);
+        $objTemplate->formSubmitValue = StringUtil::specialchars($GLOBALS['TL_LANG']['tl_wem_map_item']['export_form'][0]);
 
         $objTemplate->categories = $arrCategories;
         $objTemplate->countries = $arrCountries;
@@ -504,13 +522,14 @@ class Callback extends Backend
         if (Input::post('chk_limit_to_categories')) {
             $params['where'][] = sprintf('category IN (%s)', implode(',', Input::post('limit_to_categories')));
         }
+
         if (Input::post('chk_limit_to_countries')) {
             $params['where'][] = sprintf('country IN ("%s")', implode('","', Input::post('limit_to_countries')));
         }
 
         $arrExcelPattern = [];
         // Preformat Excel Pattern (key = DB Column, value = Excel column)
-        foreach (deserialize($objMap->excelPattern) as $arrColumn) {
+        foreach (StringUtil::deserialize($objMap->excelPattern) as $arrColumn) {
             $arrExcelPattern[$arrColumn['key']] = $arrColumn['value'];
         }
 
@@ -569,7 +588,6 @@ class Callback extends Backend
             break;
             default:
                 throw new Exception(sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['unknownExportFormat'], implode('","', ['csv', 'xlsx'])));
-            break;
         }
 
         // HOOK: add custom logic
