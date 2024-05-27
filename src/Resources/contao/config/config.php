@@ -12,32 +12,27 @@ declare(strict_types=1);
  * @link     https://github.com/Web-Ex-Machina/contao-geodata/
  */
 
-use WEM\GeoDataBundle\Classes\Util;
-use WEM\GeoDataBundle\Module;
-use WEM\GeoDataBundle\Model;
-use \WEM\GeoDataBundle\Backend;
-
 if (!\defined('WEM_GEODATA_COMBINER_VERSION')) {
-    \define('WEM_GEODATA_COMBINER_VERSION', Util::getCustomPackageVersion('webexmachina/contao-geodata'));
+    \define('WEM_GEODATA_COMBINER_VERSION', \WEM\GeoDataBundle\Classes\Util::getCustomPackageVersion('webexmachina/contao-geodata'));
 }
 
 /*
  * Backend modules.
  */
-
-Contao\ArrayUtil::arrayInsert(
+// \Contao\ArrayUtil::arrayInsert(
+array_insert(
     $GLOBALS['BE_MOD'],
     array_search('content', array_keys($GLOBALS['BE_MOD']), true) + 1,
     [
         'wem-geodata' => [
             'wem-maps' => [
                 'tables' => ['tl_wem_map', 'tl_wem_map_category', 'tl_wem_map_item', 'tl_wem_map_item_category', 'tl_content', 'tl_wem_map_item_attribute_value'],
-                'import' => [Backend\Callback::class, 'importLocations'],
-                'download_import_sample' => [Backend\Callback::class, 'downloadImportSample'],
-                'export_form' => [Backend\Callback::class, 'exportLocationsForm'],
-                'export' => [Backend\Callback::class, 'exportLocations'],
-                'geocode' => [Backend\Callback::class, 'geocode'],
-                'copy_map_item' => [Backend\Callback::class, 'copyMapItem'],
+                'import' => ['WEM\GeoDataBundle\Backend\Callback', 'importLocations'],
+                'download_import_sample' => ['WEM\GeoDataBundle\Backend\Callback', 'downloadImportSample'],
+                'export_form' => ['WEM\GeoDataBundle\Backend\Callback', 'exportLocationsForm'],
+                'export' => ['WEM\GeoDataBundle\Backend\Callback', 'exportLocations'],
+                'geocode' => ['WEM\GeoDataBundle\Backend\Callback', 'geocode'],
+                'copy_map_item' => ['WEM\GeoDataBundle\Backend\Callback', 'copyMapItem'],
                 'icon' => 'system/bundles/wemgeodata/backend/icon_map_16_c3.png',
             ],
         ],
@@ -58,14 +53,15 @@ Contao\ArrayUtil::arrayInsert(
 /*
  * Frontend modules
  */
-Contao\ArrayUtil::arrayInsert(
+// \Contao\ArrayUtil::arrayInsert(
+array_insert(
     $GLOBALS['FE_MOD'],
     2,
     [
         'wem_geodata' => [
-            'wem_display_map' => Module\DisplayMap::class,
-            'wem_geodata_list' => Module\LocationsList::class,
-            'wem_geodata_reader' => Module\LocationsReader::class,
+            'wem_display_map' => 'WEM\GeoDataBundle\Module\DisplayMap',
+            'wem_geodata_list' => 'WEM\GeoDataBundle\Module\LocationsList',
+            'wem_geodata_reader' => 'WEM\GeoDataBundle\Module\LocationsReader',
         ],
     ]
 );
@@ -73,16 +69,16 @@ Contao\ArrayUtil::arrayInsert(
 /*
  * Models
  */
-$GLOBALS['TL_MODELS'][Model\Map::getTable()] = Model\Map::class;
-$GLOBALS['TL_MODELS'][Model\MapItem::getTable()] = Model\MapItem::class;
-$GLOBALS['TL_MODELS'][Model\MapItemCategory::getTable()] = Model\MapItemCategory::class;
-$GLOBALS['TL_MODELS'][Model\MapItemAttributeValue::getTable()] = Model\MapItemAttributeValue::class;
-$GLOBALS['TL_MODELS'][Model\Category::getTable()] = Model\Category::class;
+$GLOBALS['TL_MODELS'][\WEM\GeoDataBundle\Model\Map::getTable()] = 'WEM\GeoDataBundle\Model\Map';
+$GLOBALS['TL_MODELS'][\WEM\GeoDataBundle\Model\MapItem::getTable()] = 'WEM\GeoDataBundle\Model\MapItem';
+$GLOBALS['TL_MODELS'][\WEM\GeoDataBundle\Model\MapItemCategory::getTable()] = 'WEM\GeoDataBundle\Model\MapItemCategory';
+$GLOBALS['TL_MODELS'][\WEM\GeoDataBundle\Model\MapItemAttributeValue::getTable()] = 'WEM\GeoDataBundle\Model\MapItemAttributeValue';
+$GLOBALS['TL_MODELS'][\WEM\GeoDataBundle\Model\Category::getTable()] = 'WEM\GeoDataBundle\Model\Category';
 
 /*
  * Hooks
  */
-$GLOBALS['TL_HOOKS']['replaceInsertTags'][] = static fn(string $tag) => Util::replaceInsertTags($tag);
+$GLOBALS['TL_HOOKS']['replaceInsertTags'][] = ['WEM\GeoDataBundle\Classes\Util', 'replaceInsertTags'];
 $GLOBALS['TL_HOOKS']['generateBreadcrumb'][] = ['wem.geodata.listener.generate_breadcrumb_listener', '__invoke'];
 
 // File Usage bundle

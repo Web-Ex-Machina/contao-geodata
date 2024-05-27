@@ -15,9 +15,6 @@ declare(strict_types=1);
 /*
  * Table tl_wem_map_item_attribute_value.
  */
-
-use WEM\GeoDataBundle\DataContainer\MapItemAttributeValue;
-
 $GLOBALS['TL_DCA']['tl_wem_map_item_attribute_value'] = [
     // Config
     'config' => [
@@ -41,7 +38,7 @@ $GLOBALS['TL_DCA']['tl_wem_map_item_attribute_value'] = [
             'fields' => ['attribute ASC'],
             'headerFields' => ['title'],
             'panelLayout' => 'filter;sort,search,limit',
-            'child_record_callback' => static fn(array $arrRow): string => (new MapItemAttributeValue())->listItems($arrRow),
+            'child_record_callback' => [\WEM\GeoDataBundle\DataContainer\MapItemAttributeValue::class, 'listItems'],
             'child_record_class' => 'no_padding',
         ],
         'global_operations' => [

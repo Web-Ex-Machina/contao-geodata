@@ -112,7 +112,9 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_search'] = [
 $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_customTplForGeodataItems'] = [
     'exclude' => true,
     'inputType' => 'select',
-    'options_callback' => static fn() => \Contao\Controller::getTemplateGroup('mod_wem_geodata_list_item', [], 'mod_wem_geodata_list_item'),
+    'options_callback' => static function () {
+        return \Contao\Controller::getTemplateGroup('mod_wem_geodata_list_item', [], 'mod_wem_geodata_list_item');
+    },
     'eval' => ['chosen' => true, 'tl_class' => 'w50'],
     'sql' => "varchar(64) NOT NULL default ''",
 ];

@@ -12,8 +12,6 @@ declare(strict_types=1);
  * @link     https://github.com/Web-Ex-Machina/contao-geodata/
  */
 
-use WEM\GeoDataBundle\DataContainer\MapItemCategory;
-
 $GLOBALS['TL_DCA']['tl_wem_map_item_category'] = [
     // Config
     'config' => [
@@ -29,9 +27,7 @@ $GLOBALS['TL_DCA']['tl_wem_map_item_category'] = [
             ],
         ],
         'ondelete_callback' => [
-            static function (\Contao\DataContainer $dc) : void {
-                (new MapItemCategory())->ondeleteCallback($dc);
-            },
+            [\WEM\GeoDataBundle\DataContainer\MapItemCategory::class, 'ondeleteCallback'],
         ],
     ],
 

@@ -13,7 +13,7 @@ declare(strict_types=1);
  */
 
 use WEM\GeoDataBundle\Model\Map;
-use WEM\GeoDataBundle\DataContainer\Map as DataMap;
+
 /*
  * Table tl_wem_map.
  */
@@ -30,14 +30,10 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             ],
         ],
         'onload_callback' => [
-            static function (\Contao\DataContainer $dc) : void {
-                (new DataMap())->onloadCallback($dc);
-            },
+            [\WEM\GeoDataBundle\DataContainer\Map::class, 'onloadCallback'],
         ],
         'onsubmit_callback' => [
-            static function (\Contao\DataContainer $dc) : void {
-                (new DataMap())->onsubmitCallback($dc);
-            },
+            [\WEM\GeoDataBundle\DataContainer\Map::class, 'onsubmitCallback'],
         ],
     ],
 
@@ -152,7 +148,7 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'exclude' => true,
             'inputType' => 'keyValueWizard',
             'load_callback' => [
-                static fn(array $varValue): array => (new DataMap())->generateExcelPattern($varValue),
+                [\WEM\GeoDataBundle\DataContainer\Map::class, 'generateExcelPattern'],
             ],
             'sql' => 'blob NULL',
         ],
@@ -172,7 +168,7 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'exclude' => true,
             'inputType' => 'keyValueWizard',
             'load_callback' => [
-                static fn(array $varValue, $objDc): array => (new DataMap())->getDefaultMapConfig($varValue, $objDc),
+                [\WEM\GeoDataBundle\DataContainer\Map::class, 'getDefaultMapConfig'],
             ],
             'sql' => 'blob NULL',
         ],
