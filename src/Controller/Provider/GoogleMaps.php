@@ -15,17 +15,26 @@ declare(strict_types=1);
 namespace WEM\GeoDataBundle\Controller\Provider;
 
 use Contao\Controller;
-use Contao\Encryption;
+use WEM\UtilsBundle\Classes\Encryption;
 use Exception;
 use WEM\GeoDataBundle\Classes\Util;
 use WEM\GeoDataBundle\Model\Map;
 use WEM\GeoDataBundle\Model\MapItem;
 
 /**
- * Provide Google Maps utilities functions to Locations Extension.
+ * Class GoogleMaps
  */
 class GoogleMaps extends Controller
 {
+
+    private Encryption $encryption;
+
+    protected function __construct(Encryption $encryption)
+    {
+        Parent::__construct();
+        $this->encryption = $encryption;
+    }
+
     /**
      * Google Map Geocoding URL to request (sprintf pattern).
      */
@@ -38,11 +47,13 @@ class GoogleMaps extends Controller
      * @param Map $objMap Map Model
      * @param int|null $intResults Number of API results wanted
      *
-     * @return array [Address Components]
+     * @return array|null [Address Components]
      * @throws Exception
      */
-    public static function geocoder($varAddress, Map $objMap, ?int $intResults = 1): array
+    public function geocoder($varAddress, Map $objMap, ?int $intResults = 1): ?array //removed static because using service is not possible with
     {
+        $arrResults = null;
+
         // Before everything, check if we can geocode this
         if (Map::GEOCODING_PROVIDER_GMAP !== $objMap->geocodingProvider || !$objMap->geocodingProviderGmapKey) {
             throw new Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['missingConfigForGeocoding']);
@@ -84,8 +95,7 @@ class GoogleMaps extends Controller
 
         // Then, cURL it baby.
         $ch = curl_init();
-        // TODO : fix deprecated Encryption::decrypt before usage in contao 5 +
-        curl_setopt($ch, CURLOPT_URL, sprintf(static::$strGeocodingUrl, $strAddress, Encryption::decrypt($objMap->geocodingProviderGmapKey)));
+        curl_setopt($ch, CURLOPT_URL, sprintf(static::$strGeocodingUrl, $strAddress, $this->encryption->encrypt_b64($objMap->geocodingProviderGmapKey)));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_TIMEOUT, 5);
         $geoloc = json_decode(curl_exec($ch), true);
