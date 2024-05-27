@@ -12,15 +12,18 @@ declare(strict_types=1);
  * @link     https://github.com/Web-Ex-Machina/contao-geodata/
  */
 
+use Contao\ArrayUtil;
+use WEM\GeoDataBundle\Classes\Util;
+use WEM\GeoDataBundle\Model;
+
 if (!\defined('WEM_GEODATA_COMBINER_VERSION')) {
-    \define('WEM_GEODATA_COMBINER_VERSION', \WEM\GeoDataBundle\Classes\Util::getCustomPackageVersion('webexmachina/contao-geodata'));
+    \define('WEM_GEODATA_COMBINER_VERSION', Util::getCustomPackageVersion('webexmachina/contao-geodata'));
 }
 
 /*
  * Backend modules.
  */
-// \Contao\ArrayUtil::arrayInsert(
-array_insert(
+ArrayUtil::arrayInsert(
     $GLOBALS['BE_MOD'],
     array_search('content', array_keys($GLOBALS['BE_MOD']), true) + 1,
     [
@@ -53,8 +56,7 @@ array_insert(
 /*
  * Frontend modules
  */
-// \Contao\ArrayUtil::arrayInsert(
-array_insert(
+ArrayUtil::arrayInsert(
     $GLOBALS['FE_MOD'],
     2,
     [
@@ -69,11 +71,11 @@ array_insert(
 /*
  * Models
  */
-$GLOBALS['TL_MODELS'][\WEM\GeoDataBundle\Model\Map::getTable()] = 'WEM\GeoDataBundle\Model\Map';
-$GLOBALS['TL_MODELS'][\WEM\GeoDataBundle\Model\MapItem::getTable()] = 'WEM\GeoDataBundle\Model\MapItem';
-$GLOBALS['TL_MODELS'][\WEM\GeoDataBundle\Model\MapItemCategory::getTable()] = 'WEM\GeoDataBundle\Model\MapItemCategory';
-$GLOBALS['TL_MODELS'][\WEM\GeoDataBundle\Model\MapItemAttributeValue::getTable()] = 'WEM\GeoDataBundle\Model\MapItemAttributeValue';
-$GLOBALS['TL_MODELS'][\WEM\GeoDataBundle\Model\Category::getTable()] = 'WEM\GeoDataBundle\Model\Category';
+$GLOBALS['TL_MODELS'][Model\Map::getTable()] = 'WEM\GeoDataBundle\Model\Map';
+$GLOBALS['TL_MODELS'][Model\MapItem::getTable()] = 'WEM\GeoDataBundle\Model\MapItem';
+$GLOBALS['TL_MODELS'][Model\MapItemCategory::getTable()] = 'WEM\GeoDataBundle\Model\MapItemCategory';
+$GLOBALS['TL_MODELS'][Model\MapItemAttributeValue::getTable()] = 'WEM\GeoDataBundle\Model\MapItemAttributeValue';
+$GLOBALS['TL_MODELS'][Model\Category::getTable()] = 'WEM\GeoDataBundle\Model\Category';
 
 /*
  * Hooks
