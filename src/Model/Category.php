@@ -28,37 +28,37 @@ class Category extends CoreModel
      * @var string
      */
     protected static $strTable = 'tl_wem_map_category';
+
     /**
      * Generic statements format.
      *
      * @param string $strField    [Column to format]
      * @param mixed  $varValue    [Value to use]
      * @param string $strOperator [Operator to use, default "="]
-     *
-     * @return array
      */
-    public static function formatStatement($strField, $varValue, $strOperator = '=')
+    public static function formatStatement(string $strField, $varValue, string $strOperator = '='): array
     {
         $arrColumns = [];
         $t = static::$strTable;
 
         switch ($strField) {
             case 'pid':
-                if(!is_array($varValue)){
+                if (!\is_array($varValue)) {
                     $varValue = [$varValue];
                 }
                 $arrColumns[] = sprintf("$t.pid IN ('%s')",
-                implode("','",$varValue),
+                    implode("','", $varValue),
                 );
-            break;
+                break;
             default:
-                    $arrColumns = array_merge($arrColumns, parent::formatStatement($strField, $varValue, $strOperator));
+                $arrColumns = array_merge($arrColumns, parent::formatStatement($strField, $varValue, $strOperator));
         }
 
         return $arrColumns;
     }
 
-    public function delete(){
+    public function delete()
+    {
         // remove links item <-> category
         Util::deleteMapItemCategoryForCategory($this);
 

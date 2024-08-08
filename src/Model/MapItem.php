@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace WEM\GeoDataBundle\Model;
 
 use Contao\Controller;
-use DateTime;
 use WEM\UtilsBundle\Model\Model as CoreModel;
 
 /**
@@ -43,10 +42,8 @@ class MapItem extends CoreModel
      * @param string $strField    [Column to format]
      * @param mixed  $varValue    [Value to use]
      * @param string $strOperator [Operator to use, default "="]
-     *
-     * @return array
      */
-    public static function formatStatement($strField, $varValue, $strOperator = '=')
+    public static function formatStatement(string $strField, $varValue, string $strOperator = '='): array
     {
         $arrColumns = [];
         $t = static::$strTable;
@@ -54,9 +51,9 @@ class MapItem extends CoreModel
         switch ($strField) {
             case 'onlyWithCoords':
                 $arrColumns[] = "$t.lat != '' AND $t.lng != ''";
-            break;
+                break;
             case 'published':
-                $timestamp = (new DateTime())->getTimestamp();
+                $timestamp = (new \DateTime())->getTimestamp();
                 if (1 === (int) $varValue) {
                     $arrColumns[] = sprintf("$t.published = 1
                         AND ($t.publishedAt = '' OR $t.publishedAt <= %s)
@@ -68,28 +65,28 @@ class MapItem extends CoreModel
                         OR ($t.published = 1 AND $t.publishedUntil <= %s)", $timestamp, $timestamp
                     );
                 }
-            break;
+                break;
             case 'category':
-                if(!is_array($varValue)){
+                if (!\is_array($varValue)) {
                     $varValue = [$varValue];
                 }
                 $arrColumns[] = sprintf("$t.id IN (
                     SELECT mic.pid
                     FROM %s mic
                     INNER JOIN %s mc ON mc.id = mic.category
-                    WHERE mc.id IN ('%s') 
+                    WHERE mc.id IN ('%s')
                     OR mc.title IN ('%s')
                     OR LOWER(REPLACE(REPLACE(mc.title,' ','_'),'.','_')) IN ('%s')
                 )",
-                MapItemCategory::getTable(),
-                Category::getTable(),
-                implode("','",$varValue),
-                implode("','",$varValue),
-                implode("','",$varValue),
+                    MapItemCategory::getTable(),
+                    Category::getTable(),
+                    implode("','", $varValue),
+                    implode("','", $varValue),
+                    implode("','", $varValue),
                 );
-            break;
+                break;
             case 'categories':
-                if(!is_array($varValue)){
+                if (!\is_array($varValue)) {
                     $varValue = [$varValue];
                 }
                 $arrColumns[] = sprintf("$t.id IN (
@@ -97,10 +94,10 @@ class MapItem extends CoreModel
                     FROM %s mic
                     WHERE mic.category IN ('%s')
                 )",
-                MapItemCategory::getTable(),
-                implode("','",$varValue),
+                    MapItemCategory::getTable(),
+                    implode("','", $varValue),
                 );
-            break;
+                break;
             default:
                 // HOOK: add custom logic
                 if (isset($GLOBALS['TL_HOOKS']['WEMGEODATAMAPITEMFORMATSTATEMENT']) && \is_array($GLOBALS['TL_HOOKS']['WEMGEODATAMAPITEMFORMATSTATEMENT'])) {
@@ -124,10 +121,8 @@ class MapItem extends CoreModel
      * Format Search statement.
      *
      * @param string $varValue [Value to use]
-     *
-     * @return string
      */
-    public static function formatSearchStatement($strField, $varValue)
+    public static function formatSearchStatement(string $strField, string $varValue): string
     {
         $t = static::$strTable;
 
@@ -151,7 +146,6 @@ class MapItem extends CoreModel
 
         return $this->published
             && (empty($this->publishedAt) || (!empty($this->publishedAt) && (int) $this->publishedAt < $timestamp))
-            && (empty($this->publishedUntil) || (!empty($this->publishedUntil) && (int) $this->publishedUntil > $timestamp))
-        ;
+            && (empty($this->publishedUntil) || (!empty($this->publishedUntil) && (int) $this->publishedUntil > $timestamp));
     }
 }

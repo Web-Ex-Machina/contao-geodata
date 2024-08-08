@@ -35,11 +35,11 @@ class MapItemAttributeValue extends Model
      * @param int
      * @param int
      * @param array
-     *
-     * @return Collection
      */
-    public static function findItems($arrConfig = [], $intLimit = 0, $intOffset = 0, $arrOptions = [])
-    {
+    public static function findItems(
+        array $arrConfig = [], int $intLimit = 0,
+        int $intOffset = 0, array $arrOptions = []
+    ): ?Collection {
         $t = static::$strTable;
         $arrColumns = static::formatColumns($arrConfig);
 
@@ -67,10 +67,8 @@ class MapItemAttributeValue extends Model
      *
      * @param array
      * @param array
-     *
-     * @return int
      */
-    public static function countItems($arrConfig = [], $arrOptions = [])
+    public static function countItems(array $arrConfig = [], array $arrOptions = []): int
     {
         $t = static::$strTable;
         $arrColumns = static::formatColumns($arrConfig);
@@ -89,7 +87,7 @@ class MapItemAttributeValue extends Model
      *
      * @return [Array] [The Model columns]
      */
-    public static function formatColumns($arrConfig)
+    public static function formatColumns(array $arrConfig): array
     {
         $t = static::$strTable;
         $arrColumns = [];

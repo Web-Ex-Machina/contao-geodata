@@ -1,6 +1,10 @@
 Extension "Geodata" for Contao Open Source CMS
 ========
 
+1.0.8 - 2024-08-08
+---
+- FIXED : various bugs in `1.0.7`
+
 1.0.7 - 2024-08-08
 ---
 - UPDATED : now requires `webexmachina/contao-utils` versions `^1.0||^2.0`
