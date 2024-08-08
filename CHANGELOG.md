@@ -1,6 +1,10 @@
 Extension "Geodata" for Contao Open Source CMS
 ========
 
+1.0.7 - 2024-08-08
+---
+- UPDATED : now requires `webexmachina/contao-utils` versions `^1.0||^2.0`
+
 1.0.6 - 2024-02-02
 ---
 - FIXED : Location List now correctly uses the configured number of items
