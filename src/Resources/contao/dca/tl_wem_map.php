@@ -103,7 +103,6 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
     'subpalettes' => [
         'mapProvider_leaflet' => 'mapConfig',
         'mapProvider_gmaps' => 'mapProviderGmapKey,mapConfig',
-        'geocodingProvider_gmaps' => 'geocodingProviderGmapKey',
     ],
 
     // Fields
@@ -164,21 +163,21 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'exclude' => true,
             'inputType' => 'text',
             'eval' => ['mandatory' => true, 'maxlength' => 255],
+            'load_callback' => [
+                ['wem.encryption_util', 'decrypt'],
+            ],
+            'save_callback' => [
+                ['wem.encryption_util', 'encrypt'],
+            ],
             'sql' => "varchar(255) NOT NULL default ''",
         ],
         'geocodingProvider' => [
             'exclude' => true,
             'inputType' => 'select',
-            'options' => [Map::GEOCODING_PROVIDER_NOMINATIM, Map::GEOCODING_PROVIDER_GMAP],
+            'options' => [Map::GEOCODING_PROVIDER_NOMINATIM],
             'reference' => &$GLOBALS['TL_LANG']['tl_wem_map']['geocodingProvider'],
             'eval' => ['helpwizard' => true, 'includeBlankOption' => true, 'submitOnChange' => true, 'chosen' => true],
             'explanation' => 'wem_geodata_geocodingProvider',
-            'sql' => "varchar(255) NOT NULL default ''",
-        ],
-        'geocodingProviderGmapKey' => [
-            'exclude' => true,
-            'inputType' => 'textStore',
-            'eval' => ['mandatory' => true, 'maxlength' => 255, 'encrypt' => true],
             'sql' => "varchar(255) NOT NULL default ''",
         ],
 
