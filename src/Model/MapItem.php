@@ -32,7 +32,7 @@ class MapItem extends CoreModel
     /**
      * Search fields.
      */
-    protected static array $arrSearchFields = ['title', 'teaser', 'attr_value_postal'];
+    protected static $arrSearchFields = ['title', 'teaser', 'attr_value_postal'];
 
     /**
      * Generic statements format.
