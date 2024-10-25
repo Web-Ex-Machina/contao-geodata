@@ -35,28 +35,26 @@ class Category extends CoreModel
      * @param string $strField    [Column to format]
      * @param mixed  $varValue    [Value to use]
      * @param string $strOperator [Operator to use, default "="]
-     *
-     * @return array
      */
-    public static function formatStatement($strField, $varValue, $strOperator = '='): array
+    public static function formatStatement(string $strField, $varValue, string $strOperator = '='): array
     {
         $arrColumns = [];
         $t = static::$strTable;
 
         switch ($strField) {
             case 'pid':
-                if(!is_array($varValue)){
+                if (!\is_array($varValue)) {
                     $varValue = [$varValue];
                 }
                 $arrColumns[] = sprintf($t . "pid IN ('%s')", implode("','",$varValue));
             break;
             default:
-                    $arrColumns = array_merge($arrColumns, parent::formatStatement($strField, $varValue, $strOperator));
+                $arrColumns = array_merge($arrColumns, parent::formatStatement($strField, $varValue, $strOperator));
         }
 
         return $arrColumns;
     }
-
+  
     /**
      * @throws \Exception
      */

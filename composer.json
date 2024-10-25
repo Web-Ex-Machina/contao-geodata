@@ -17,9 +17,9 @@
         "source":"https://github.com/Web-Ex-Machina/contao-geodata"
     },
     "require": {
-        "php": ">=7.4 || >=8.2",
-        "contao/core-bundle": "~4.9 || ^5.3.1",
-        "webexmachina/contao-utils": "^1.0 || 2.*",
+        "php": "^7.4 || ^8.1",
+        "contao/core-bundle": "^4.9 || ^5.3.1",
+        "webexmachina/contao-utils": "^1.0 || ^2.0",
         "phpoffice/phpspreadsheet": "^1.21",
         "terminal42/dcawizard":"^2.5",
         "ext-json": "*",

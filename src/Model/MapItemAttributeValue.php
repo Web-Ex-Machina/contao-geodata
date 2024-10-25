@@ -31,10 +31,15 @@ class MapItemAttributeValue extends Model
     /**
      * Find items, depends on the arguments.
      *
-     * @return Model|Model[]|Model\Collection
+     * @param array
+     * @param int
+     * @param int
+     * @param array
      */
-    public static function findItems(array $arrConfig = [],int $intLimit = 0,int $intOffset = 0,array $arrOptions = [])
-    {
+    public static function findItems(
+        array $arrConfig = [], int $intLimit = 0,
+        int $intOffset = 0, array $arrOptions = []
+    ): ?Collection {
         $t = static::$strTable;
         $arrColumns = static::formatColumns($arrConfig);
 
