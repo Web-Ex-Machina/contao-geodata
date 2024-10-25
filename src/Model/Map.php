@@ -21,8 +21,6 @@ use WEM\UtilsBundle\Model\Model as CoreModel;
  */
 class Map extends CoreModel
 {
-    public const GEOCODING_PROVIDER_GMAP = 'gmaps';
-
     public const GEOCODING_PROVIDER_NOMINATIM = 'nominatim';
 
     public const MAP_PROVIDER_GMAP = 'gmaps';
