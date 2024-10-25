@@ -1,6 +1,11 @@
 Extension "Geodata" for Contao Open Source CMS
 ========
 
+1.1.0 - 2024-10-25
+---
+- UPDATED : Clean code for PHP 8 compatibility
+- FIXED : CSS issue
+
 1.0.8 - 2024-08-08
 ---
 - FIXED : various bugs in `1.0.7`
