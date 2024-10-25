@@ -76,7 +76,7 @@ class Callback extends Backend
 
             switch ($objMap->geocodingProvider) {
                 case Map::GEOCODING_PROVIDER_GMAP:
-                    $arrCoords = GoogleMaps::geocoder($objLocation, $objMap);
+                    throw new \Exception(sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['featureDeletedIn'], 'Geocoding by Google', '2.0'));
                 break;
                 case Map::GEOCODING_PROVIDER_NOMINATIM:
                     $arrCoords = Nominatim::geocoder($objLocation, $objMap);

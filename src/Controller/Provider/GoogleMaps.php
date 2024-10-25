@@ -52,6 +52,9 @@ class GoogleMaps extends Controller
      */
     public function geocoder($varAddress, Map $objMap, ?int $intResults = 1): ?array //removed static because using service is not possible with
     {
+        // Feature removed in 2.0
+        throw new \Exception(sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['featureDeletedIn'], 'Geocoding by Google', '2.0'));
+
         $arrResults = null;
 
         // Before everything, check if we can geocode this

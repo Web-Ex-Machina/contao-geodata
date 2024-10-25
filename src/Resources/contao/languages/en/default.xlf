@@ -89,6 +89,10 @@
 			<source>Config is missing for geocoding !</source>
 			<target>Config is missing for geocoding !</target>
 		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.featureDeletedIn">
+			<source>The feature %s was deleted in %s version.</source>
+			<target>The feature %s was deleted in %s version.</target>
+		</trans-unit>
 		<trans-unit id="WEM.LOCATIONS.ERROR.errorWhenSavingTheLocation">
 			<source>An error happened when saving the location. Please try again.</source>
 			<target>An error happened when saving the location. Please try again.</target>

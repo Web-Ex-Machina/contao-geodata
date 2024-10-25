@@ -93,6 +93,10 @@
 			<source>Config is missing for geocoding !</source>
 			<target>Absence de configuration pour le geocoding !</target>
 		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.featureDeletedIn">
+			<source>The feature %s was deleted in %s version.</source>
+			<target>La fonctionnalité %s a été supprimée en version %s.</target>
+		</trans-unit>
 		<trans-unit id="WEM.LOCATIONS.ERROR.errorWhenSavingTheLocation">
 			<source>An error happened when saving the location. Please try again.</source>
 			<target>Une erreur est survenue lors de la sauvegarde de l'emplacement. Veuillez réessayer.</target>
