@@ -1,9 +1,11 @@
 Extension "Geodata" for Contao Open Source CMS
 ========
 
-1.1.0 - 2024-10-25
+2.0.0 - 2024-10-25
 ---
+- UPDATED : Encrypt Google Maps key in database using `webexmachina/contao-utils`
 - UPDATED : Clean code for PHP 8 compatibility
+- UPDATED : Bump dependencies
 - FIXED : CSS issue
 
 1.0.8 - 2024-08-08
