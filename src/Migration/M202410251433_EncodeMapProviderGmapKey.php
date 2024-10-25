@@ -49,7 +49,22 @@ class M202410251433_EncodeMapProviderGmapKey extends AbstractMigration
             return false;
         }
 
-        return $this->countItems() > 0;
+        $maps = $this->getItems();
+        $i = 0;
+        if ($maps) {
+            while ($maps->next()) {
+                /** @var Map */
+                $objMap = $maps->current();
+                // if decrypt throws error, it means it wasn't encrypted
+                if ($this->isValueEncrypted($objMap->mapProviderGmapKey)) {
+                    continue;
+                }
+
+                ++$i;
+            }
+        }
+
+        return $i > 0;
     }
 
     public function run(): MigrationResult
@@ -61,13 +76,11 @@ class M202410251433_EncodeMapProviderGmapKey extends AbstractMigration
                 /** @var Map */
                 $objMap = $maps->current();
                 // if decrypt throws error, it means it wasn't encrypted
-                try {
-                    $decodedMapProviderGmapKey = $this->encryption->decrypt($objMap->mapProviderGmapKey);
+                if ($this->isValueEncrypted($objMap->mapProviderGmapKey)) {
                     continue;
-                } catch (\LengthException $e) {
-                    $objMap->mapProviderGmapKey = $this->encryption->encrypt_b64($objMap->mapProviderGmapKey);
-                    $objMap->save();
                 }
+                $objMap->mapProviderGmapKey = $this->encryption->encrypt_b64($objMap->mapProviderGmapKey);
+                $objMap->save();
 
                 ++$i;
             }
@@ -77,6 +90,17 @@ class M202410251433_EncodeMapProviderGmapKey extends AbstractMigration
             true,
             $i.' map(s) updated.'
         );
+    }
+
+    protected function isValueEncrypted($val): bool
+    {
+        try {
+            $this->encryption->decrypt_b64($val);
+
+            return true;
+        } catch (\LengthException $e) {
+            return false;
+        }
     }
 
     private function getItems()
