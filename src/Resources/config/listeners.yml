@@ -8,3 +8,8 @@ services:
   wem.geodata.listener.generate_breadcrumb_listener:
     class: WEM\GeoDataBundle\EventListener\GenerateBreadcrumbListener
     public: true
+  wem.geodata.listener.replace_insert_tags_listener:
+    class: WEM\GeoDataBundle\EventListener\ReplaceInsertTagsListener
+    public: true
+
+

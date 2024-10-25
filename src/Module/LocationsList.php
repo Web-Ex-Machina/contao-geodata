@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2023 Web ex Machina
+ * Copyright (c) 2015-2024 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -85,7 +85,7 @@ class LocationsList extends Core
             // Load the map
             $this->maps = Map::findItems([
                 'where' => [
-                    sprintf('tl_wem_map.id in (%s)', implode(',', StringUtil::deserialize($this->wem_geodata_maps))),
+                    \sprintf('tl_wem_map.id in (%s)', implode(',', StringUtil::deserialize($this->wem_geodata_maps))),
                 ],
             ]);
 
@@ -97,7 +97,7 @@ class LocationsList extends Core
 
             // Build the config (do not manage pagination here !)
             $this->arrConfig = ['published' => 1, 'where' => [
-                sprintf('%s.pid in (%s)', MapItem::getTable(), implode(',', StringUtil::deserialize($this->wem_geodata_maps))),
+                \sprintf('%s.pid in (%s)', MapItem::getTable(), implode(',', StringUtil::deserialize($this->wem_geodata_maps))),
             ]];
 
             // Catch AJAX request
@@ -119,7 +119,7 @@ class LocationsList extends Core
             // ClassLoader::loadLibraries($this->objMap, 2);
             $objCssCombiner = new Combiner();
             $objCssCombiner->add('bundles/wemgeodata/css/default.css', WEM_GEODATA_COMBINER_VERSION);
-            $GLOBALS['TL_HEAD'][] = sprintf('<link rel="stylesheet" href="%s">', $objCssCombiner->getCombinedFile());
+            $GLOBALS['TL_HEAD'][] = \sprintf('<link rel="stylesheet" href="%s">', $objCssCombiner->getCombinedFile());
             Util::getCountries();
 
             // Get the jumpTo page
@@ -145,7 +145,7 @@ class LocationsList extends Core
             // $this->arrConfig['offset'] = $this->perPage * ((Input::get('page_n'.$this->id) ? (int) Input::get('page_n'.$this->id) : 1) - 1);
             $offset = $this->perPage * ((Input::get('page_n'.$this->id) ? (int) Input::get('page_n'.$this->id) : 1) - 1);
             // $arrLocations = $this->getLocations($this->arrConfig);
-            $arrLocations = $this->fetchItems(null, ($limit ?: 0), $offset);
+            $arrLocations = $this->fetchItems(null, $limit ?: 0, $offset);
 
             $this->Template->locations = $arrLocations;
 
@@ -181,9 +181,9 @@ class LocationsList extends Core
                         'status' => 'success',
                         'locations' => $this->getLocationsAjax(),
                     ];
-                break;
+                    break;
                 default:
-                    throw new \Exception(sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['unknownAjaxRequest'], Input::post('action')));
+                    throw new \Exception(\sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['unknownAjaxRequest'], Input::post('action')));
             }
         } catch (\Exception $exception) {
             $arrResponse = ['status' => 'error', 'msg' => $exception->getMessage(), 'trace' => $exception->getTrace()];
@@ -232,7 +232,7 @@ class LocationsList extends Core
                 }
 
                 $arrFilters[$filterField] = [
-                    'label' => sprintf('%s :', $GLOBALS['TL_LANG']['tl_wem_map_item'][$filterField][0]),
+                    'label' => \sprintf('%s :', $GLOBALS['TL_LANG']['tl_wem_map_item'][$filterField][0]),
                     'placeholder' => $GLOBALS['TL_LANG']['tl_wem_map_item'][$filterField][1],
                     'name' => $filterField,
                     'type' => 'select',
@@ -267,7 +267,7 @@ class LocationsList extends Core
                         case 'city':
                             $arrFilters[$filterField]['options'][$location[$filterField]]['value'] = $location[$filterField];
                             $arrFilters[$filterField]['options'][$location[$filterField]]['text'] = $location[$filterField].($location['admin_lvl_2'] ? ' ('.$location['admin_lvl_2'].')' : '');
-                        break;
+                            break;
                         case 'category':
                             $mapItemCategories = MapItemCategory::findItems(['pid' => $location['id']]);
                             if ($mapItemCategories) {
@@ -281,10 +281,10 @@ class LocationsList extends Core
                                 }
                             }
 
-                        break;
+                            break;
                         case 'country':
                             $arrFilters[$filterField]['options'][$location[$filterField]]['text'] = $arrCountries[strtolower($location[$filterField])] ?? $location[$filterField];
-                        break;
+                            break;
                         default:
                             // HOOK: add custom logic
                             if (isset($GLOBALS['TL_HOOKS']['WEMGEODATABUILDFILTERSSINGLEFILTEROPTION']) && \is_array($GLOBALS['TL_HOOKS']['WEMGEODATABUILDFILTERSSINGLEFILTEROPTION'])) {
@@ -293,7 +293,7 @@ class LocationsList extends Core
                                 }
                             }
 
-                        break;
+                            break;
                     }
                 }
             }
@@ -339,8 +339,6 @@ class LocationsList extends Core
 
     /**
      * Parse multiple items.
-     *
-     * @param string $strTemplate
      */
     protected function parseItems(array $objItems, ?string $strTemplate = 'mod_wem_geodata_list_item'): array
     {
@@ -353,6 +351,7 @@ class LocationsList extends Core
         foreach ($objItems as $location) {
             $arrItems[] = $this->parseItem($location, $strTemplate, ((1 === ++$count) ? ' first' : '').(($count === $limit) ? ' last' : '').((0 === ($count % 2)) ? ' odd' : ' even'), $count);
         }
+
         return $arrItems;
     }
 
@@ -363,6 +362,7 @@ class LocationsList extends Core
 
         $objTemplate->class = $strClass;
         $objTemplate->count = $intCount;
+
         return $objTemplate->parse();
     }
 

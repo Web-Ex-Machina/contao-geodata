@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2023 Web ex Machina
+ * Copyright (c) 2015-2024 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -62,10 +62,6 @@ class Map extends CoreContainer
 
     /**
      * Generate the default map config array.
-     *
-     * @param array $varValue
-     * @param $objDc
-     * @return array
      */
     public function getDefaultMapConfig(array $varValue, $objDc): array
     {
@@ -89,9 +85,6 @@ class Map extends CoreContainer
 
     /**
      * Generate the default Excel pattern.
-     *
-     * @param array $varValue
-     * @return array
      */
     public function generateExcelPattern(array $varValue): array
     {

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2023 Web ex Machina
+ * Copyright (c) 2015-2024 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -46,7 +46,7 @@ abstract class Core extends Module
         } elseif ($objItem = Category::findByPk($varItem)) {
             $arrItem = $objItem->row();
         } else {
-            throw new \Exception(sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noCategoryFound'], $varItem));
+            throw new \Exception(\sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noCategoryFound'], $varItem));
         }
         // Get marker file
         if ($arrItem['marker'] && $objFile = FilesModel::findByUuid($arrItem['marker'])) {
@@ -60,7 +60,7 @@ abstract class Core extends Module
             // https://leafletjs.com/reference-1.4.0.html#marker
             // https://leafletjs.com/reference-1.4.0.html#icon
             $data = unserialize($arrItem['markerConfig']);
-            if (\is_array($data) && $data !== []) {
+            if (\is_array($data) && [] !== $data) {
                 foreach ($data as $v) {
                     // Convert "values" who contains "," char into array values
                     if (-1 < strpos($v['value'], ',')) {
@@ -78,6 +78,7 @@ abstract class Core extends Module
         } else {
             unset($arrItem['marker']);
         }
+
         return $arrItem;
     }
 
@@ -90,7 +91,7 @@ abstract class Core extends Module
         } elseif ($objItem = MapItem::findByIdOrAlias($varItem)) {
             $arrItem = $objItem->row();
         } else {
-            throw new \Exception(sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noLocationFound'], $varItem));
+            throw new \Exception(\sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noLocationFound'], $varItem));
         }
         // Format Address
         $arrItem['address'] = $arrItem['street'].' '.$arrItem['postal'].' '.$arrItem['city'];
@@ -132,7 +133,7 @@ abstract class Core extends Module
                 $strContent .= $this->getContentElement($objElement->current());
             }
         }
-        
+
         $arrItem['content'] = $strContent;
         // get attributes
         $arrItem['attributes'] = [];
@@ -151,7 +152,7 @@ abstract class Core extends Module
         if ($objMap && $objMap->jumpTo) {
             $objPage = PageModel::findByPk($objMap->jumpTo);
         }
-        
+
         if ($objPage instanceof PageModel) {
             // if ($this->objJumpTo instanceof PageModel) {
             $params = (Config::get('useAutoItem') ? '/' : '/items/').($arrItem['alias'] ?: $arrItem['id']);
@@ -163,6 +164,7 @@ abstract class Core extends Module
                 $arrItem = static::importStatic($callback[0])->{$callback[1]}($arrItem, $objMap, $objPage, $this);
             }
         }
+
         return $arrItem;
     }
 
@@ -178,9 +180,9 @@ abstract class Core extends Module
         $total = $intTotal - $this->offset;
 
         // Split the results
-        if ($this->perPage > 0 && (!property_exists($this, 'limit') || $this->limit === null || $this->numberOfItems > $this->perPage)) {
+        if ($this->perPage > 0 && (!property_exists($this, 'limit') || null === $this->limit || $this->numberOfItems > $this->perPage)) {
             // Adjust the overall limit
-            if (property_exists($this, 'limit') && $this->limit !== null) {
+            if (property_exists($this, 'limit') && null !== $this->limit) {
                 $total = min($this->limit, $total);
             }
 
@@ -190,7 +192,7 @@ abstract class Core extends Module
 
             // Do not index or cache the page if the page number is outside the range
             if ($page < 1 || $page > max(ceil($total / $this->perPage), 1)) {
-                throw new \Exception(sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['pageNotFound'], Environment::get('uri')));
+                throw new \Exception(\sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['pageNotFound'], Environment::get('uri')));
             }
 
             // Set limit and offset
@@ -212,17 +214,17 @@ abstract class Core extends Module
     protected function getCategories()
     {
         $params = [];
-        if($this->wem_geodata_map){
+        if ($this->wem_geodata_map) {
             $params['pid'] = $this->wem_geodata_map;
-        }elseif(null !== $this->wem_geodata_maps){
+        } elseif (null !== $this->wem_geodata_maps) {
             $arrCategoriesIds = unserialize($this->wem_geodata_maps ?? '');
-            if(!$arrCategoriesIds || empty($arrCategoriesIds)){
+            if (!$arrCategoriesIds || empty($arrCategoriesIds)) {
                 throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noCategoryConfigured']);
             }
 
             $params['pid'] = $arrCategoriesIds;
         }
-        
+
         $objCategories = Category::findItems($params);
         if (!$objCategories) {
             throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['categoriesNotFound']);
@@ -231,6 +233,7 @@ abstract class Core extends Module
         while ($objCategories->next()) {
             $arrCategories[] = $this->getCategory($objCategories->row());
         }
+
         return $arrCategories;
     }
 
@@ -243,10 +246,11 @@ abstract class Core extends Module
             } elseif (!empty($this->wem_geodata_maps)) {
                 $pids = StringUtil::deserialize($this->wem_geodata_maps);
                 if (!empty($pids)) {
-                    $c['where'][] = sprintf('pid IN (%s)', implode('', $pids));
+                    $c['where'][] = \sprintf('pid IN (%s)', implode('', $pids));
                 }
             }
         }
+
         return MapItem::countItems($c);
     }
 
@@ -259,7 +263,7 @@ abstract class Core extends Module
             } elseif (!empty($this->wem_geodata_maps)) {
                 $pids = StringUtil::deserialize($this->wem_geodata_maps);
                 if (!empty($pids)) {
-                    $c['where'][] = sprintf('pid IN (%s)', implode('', $pids));
+                    $c['where'][] = \sprintf('pid IN (%s)', implode('', $pids));
                 }
             }
         }
@@ -268,7 +272,7 @@ abstract class Core extends Module
             $limit = $c['limit'];
             unset($c['limit']);
         }
-        
+
         $offset = 0;
         if (\array_key_exists('offset', $c)) {
             $offset = $c['offset'];
@@ -282,6 +286,7 @@ abstract class Core extends Module
         while ($objLocations->next()) {
             $arrLocations[] = $this->getLocation($objLocations->row());
         }
+
         return $arrLocations;
     }
 }

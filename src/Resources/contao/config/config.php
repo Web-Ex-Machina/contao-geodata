@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2023 Web ex Machina
+ * Copyright (c) 2015-2024 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -49,7 +49,7 @@ ArrayUtil::arrayInsert(
 //     if (version_compare(VERSION, '4.4', '<')) {
 //         $GLOBALS['TL_CSS'][] = 'bundles/wemgeodata/backend/backend.css';
 //     } else {
-        $GLOBALS['TL_CSS'][] = 'bundles/wemgeodata/backend/backend_svg.css';
+$GLOBALS['TL_CSS'][] = 'bundles/wemgeodata/backend/backend_svg.css';
 //     }
 // }
 
@@ -80,7 +80,7 @@ $GLOBALS['TL_MODELS'][Model\Category::getTable()] = 'WEM\GeoDataBundle\Model\Cat
 /*
  * Hooks
  */
-$GLOBALS['TL_HOOKS']['replaceInsertTags'][] = ['WEM\GeoDataBundle\Classes\Util', 'replaceInsertTags'];
+$GLOBALS['TL_HOOKS']['replaceInsertTags'][] = ['wem.geodata.listener.replace_insert_tags_listener', '__invoke'];
 $GLOBALS['TL_HOOKS']['generateBreadcrumb'][] = ['wem.geodata.listener.generate_breadcrumb_listener', '__invoke'];
 
 // File Usage bundle

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2023 Web ex Machina
+ * Copyright (c) 2015-2024 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -31,10 +31,9 @@ class ImportLocationsListener
     /**
      * Imports postal codes from uploaded files and updates the map items accordingly.
      *
-     * @param array $arrUploaded An array of file paths to be imported.
-     * @param Map $objMap The map object to update.
+     * @param array $arrUploaded an array of file paths to be imported
+     * @param Map   $objMap      the map object to update
      *
-     * @return void
      * @throws \Exception
      */
     public function importPostalCodes(array $arrUploaded, Map $objMap): void
@@ -129,12 +128,12 @@ class ImportLocationsListener
                 }
             }
 
-            $strSql = sprintf('DELETE FROM tl_wem_map_item_attribute_value WHERE pid IN (%s) AND attribute = "postal" AND id NOT IN(%s)', implode(',', $arrNewLocations), implode(',', $arrNewLocationAttributes));
+            $strSql = \sprintf('DELETE FROM tl_wem_map_item_attribute_value WHERE pid IN (%s) AND attribute = "postal" AND id NOT IN(%s)', implode(',', $arrNewLocations), implode(',', $arrNewLocationAttributes));
             Database::getInstance()->prepare($strSql)->execute();
 
-            Message::addConfirmation(sprintf($GLOBALS['TL_LANG']['tl_wem_map_item']['createdConfirmation'], $intCreated));
-            Message::addInfo(sprintf($GLOBALS['TL_LANG']['tl_wem_map_item']['updatedConfirmation'], $intUpdated));
-            Message::addInfo(sprintf($GLOBALS['TL_LANG']['tl_wem_map_item']['deletedConfirmation'], $intDeleted));
+            Message::addConfirmation(\sprintf($GLOBALS['TL_LANG']['tl_wem_map_item']['createdConfirmation'], $intCreated));
+            Message::addInfo(\sprintf($GLOBALS['TL_LANG']['tl_wem_map_item']['updatedConfirmation'], $intUpdated));
+            Message::addInfo(\sprintf($GLOBALS['TL_LANG']['tl_wem_map_item']['deletedConfirmation'], $intDeleted));
         }
     }
 }

@@ -10,3 +10,10 @@ services:
             $connection: '@database_connection'
         tags:
             - { name: contao.migration, priority: 0 }
+
+    WEM\GeoDataBundle\Migration\M202410251433_EncodeMapProviderGmapKey:
+        arguments:
+            $connection: '@database_connection'
+            $encryption: '@wem.encryption_util'
+        tags:
+            - { name: contao.migration, priority: 0 }

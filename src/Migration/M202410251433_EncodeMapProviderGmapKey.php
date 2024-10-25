@@ -17,19 +17,21 @@ namespace WEM\GeoDataBundle\Migration;
 use Contao\CoreBundle\Migration\AbstractMigration;
 use Contao\CoreBundle\Migration\MigrationResult;
 use Doctrine\DBAL\Connection;
-use WEM\GeoDataBundle\Model\MapItem;
-use WEM\GeoDataBundle\Model\MapItemCategory;
+use WEM\GeoDataBundle\Model\Map;
+use WEM\UtilsBundle\Classes\Encryption;
 
-class M202307170826_MultiCategories extends AbstractMigration
+class M202410251433_EncodeMapProviderGmapKey extends AbstractMigration
 {
     /**
      * @var Connection
      */
     private $connection;
+    private Encryption $encryption;
 
-    public function __construct(Connection $connection)
+    public function __construct(Connection $connection, Encryption $encryption)
     {
         $this->connection = $connection;
+        $this->encryption = $encryption;
     }
 
     public function shouldRun(): bool
@@ -37,13 +39,13 @@ class M202307170826_MultiCategories extends AbstractMigration
         $schemaManager = $this->connection->createSchemaManager();
 
         // If the database table itself does not exist we should do nothing
-        if (!$schemaManager->tablesExist(['tl_wem_map_item', 'tl_wem_map_item_category'])) {
+        if (!$schemaManager->tablesExist(['tl_wem_map'])) {
             return false;
         }
 
-        $columns = $schemaManager->listTableColumns('tl_wem_map_item');
+        $columns = $schemaManager->listTableColumns('tl_wem_map');
 
-        if (!isset($columns['categories'])) {
+        if (!isset($columns['mapProviderGmapKey'])) {
             return false;
         }
 
@@ -52,36 +54,37 @@ class M202307170826_MultiCategories extends AbstractMigration
 
     public function run(): MigrationResult
     {
-        $mapItems = $this->getItems();
+        $maps = $this->getItems();
         $i = 0;
-        if ($mapItems) {
-            while ($mapItems->next()) {
-                $objMapItem = $mapItems->current();
-                $objMapItem->categories = serialize([$objMapItem->category]);
-                $objMapItem->save();
+        if ($maps) {
+            while ($maps->next()) {
+                /** @var Map */
+                $objMap = $maps->current();
+                // if decrypt throws error, it means it wasn't encrypted
+                try {
+                    $decodedMapProviderGmapKey = $this->encryption->decrypt($objMap->mapProviderGmapKey);
+                    continue;
+                } catch (\LengthException $e) {
+                    $objMap->mapProviderGmapKey = $this->encryption->encrypt($objMap->mapProviderGmapKey);
+                    $objMap->save();
+                }
 
-                $objMapItemCategory = new MapItemCategory();
-                $objMapItemCategory->tstamp = time();
-                $objMapItemCategory->created_at = time();
-                $objMapItemCategory->pid = $objMapItem->id;
-                $objMapItemCategory->category = $objMapItem->category;
-                $objMapItemCategory->save();
                 ++$i;
             }
         }
 
         return $this->createResult(
             true,
-            $i.' location(s) updated.'
+            $i.' map(s) updated.'
         );
     }
 
     private function getItems()
     {
         try {
-            return MapItem::findItems([
+            return Map::findItems([
                 'where' => [
-                    \sprintf('LENGTH(%s.category) > 0 AND %s.category != 0 AND %s.id NOT IN (SELECT DISTINCT %s.pid FROM %s)', MapItem::getTable(), MapItem::getTable(), MapItem::getTable(), MapItemCategory::getTable(), MapItemCategory::getTable()),
+                    \sprintf('LENGTH(%s.mapProviderGmapKey) > 0', Map::getTable()),
                 ],
             ]);
         } catch (\Exception $e) {

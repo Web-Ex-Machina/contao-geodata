@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2023 Web ex Machina
+ * Copyright (c) 2015-2024 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -30,10 +30,10 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             ],
         ],
         'onload_callback' => [
-            [\WEM\GeoDataBundle\DataContainer\Map::class, 'onloadCallback'],
+            [WEM\GeoDataBundle\DataContainer\Map::class, 'onloadCallback'],
         ],
         'onsubmit_callback' => [
-            [\WEM\GeoDataBundle\DataContainer\Map::class, 'onsubmitCallback'],
+            [WEM\GeoDataBundle\DataContainer\Map::class, 'onsubmitCallback'],
         ],
     ],
 
@@ -137,7 +137,7 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'exclude' => true,
             'inputType' => 'keyValueWizard',
             'load_callback' => [
-                [\WEM\GeoDataBundle\DataContainer\Map::class, 'generateExcelPattern'],
+                [WEM\GeoDataBundle\DataContainer\Map::class, 'generateExcelPattern'],
             ],
             'sql' => 'blob NULL',
         ],
@@ -155,7 +155,7 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'exclude' => true,
             'inputType' => 'keyValueWizard',
             'load_callback' => [
-                [\WEM\GeoDataBundle\DataContainer\Map::class, 'getDefaultMapConfig'],
+                [WEM\GeoDataBundle\DataContainer\Map::class, 'getDefaultMapConfig'],
             ],
             'sql' => 'blob NULL',
         ],

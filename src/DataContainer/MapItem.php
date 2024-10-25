@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2023 Web ex Machina
+ * Copyright (c) 2015-2024 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -38,7 +38,6 @@ class MapItem extends CoreContainer
     /**
      * Get and return all the parent map categories.
      *
-     * @param DataContainer $dc
      * @return array Categories
      */
     public function getMapCategories(DataContainer $dc): array
@@ -63,9 +62,6 @@ class MapItem extends CoreContainer
     /**
      * Auto-generate the news alias if it has not been set yet.
      *
-     * @param $varValue
-     * @param DataContainer $dc
-     * @return string
      * @throws \Exception
      */
     public function generateAlias($varValue, DataContainer $dc): string
@@ -97,7 +93,7 @@ class MapItem extends CoreContainer
         // Check whether the news alias exists
         if ($objAlias->numRows) {
             if (!$autoAlias) {
-                throw new \Exception(sprintf($GLOBALS['TL_LANG']['ERR']['aliasExists'], $varValue));
+                throw new \Exception(\sprintf($GLOBALS['TL_LANG']['ERR']['aliasExists'], $varValue));
             }
 
             $varValue .= '-'.$dc->id;
@@ -132,37 +128,24 @@ class MapItem extends CoreContainer
 
     /**
      * Design each row of the DCA.
-     *
-     * @param array $arrRow
-     *
-     * @return string
      */
     public function listItems(array $arrRow): string
     {
         $strColor = !$arrRow['lat'] || !$arrRow['lng'] ? '#ff0000' : '#333';
 
-        $strRow = sprintf('<span style="color:%s">%s</span> <span style="color:#888">[%s - %s]</span>', $strColor, $arrRow['title'], $arrRow['city'], $GLOBALS['TL_LANG']['CNT'][$arrRow['country']]);
+        $strRow = \sprintf('<span style="color:%s">%s</span> <span style="color:#888">[%s - %s]</span>', $strColor, $arrRow['title'], $arrRow['city'], $GLOBALS['TL_LANG']['CNT'][$arrRow['country']]);
 
-        return $strRow . '<div class="ajax-results"></div>';
+        return $strRow.'<div class="ajax-results"></div>';
     }
 
     /**
      * Return the "toggle visibility" button.
-     *
-     * @param array $row
-     * @param string $href
-     * @param string $label
-     * @param string $title
-     * @param string $icon
-     * @param string $attributes
-     *
-     * @return string
      */
     public function toggleIcon(array $row, string $href, string $label, string $title, string $icon, string $attributes): string
     {
         // if (\strlen(Input::get('tid') ?? '')) {
         if (Input::get('tid')) {
-            $this->toggleVisibility(Input::get('tid'), ('1' === Input::get('state')), (@func_get_arg(12) ?: null));
+            $this->toggleVisibility(Input::get('tid'), '1' === Input::get('state'), @func_get_arg(12) ?: null);
             $this->redirect($this->getReferer());
         }
 
@@ -182,12 +165,8 @@ class MapItem extends CoreContainer
 
     /**
      * Disable/enable a agence.
-     *
-     * @param int $intId
-     * @param bool $blnVisible
-     * @param DataContainer|null $dc
      */
-    public function toggleVisibility(int $intId, bool $blnVisible, DataContainer $dc = null): void
+    public function toggleVisibility(int $intId, bool $blnVisible, ?DataContainer $dc = null): void
     {
         // Check permissions to edit
         Input::setGet('id', $intId);
@@ -207,9 +186,9 @@ class MapItem extends CoreContainer
             foreach ($GLOBALS['TL_DCA']['tl_wem_map_item']['fields']['published']['save_callback'] as $callback) {
                 if (\is_array($callback)) {
                     $this->import($callback[0]);
-                    $blnVisible = $this->$callback[0]->$callback[1]($blnVisible, ($dc ?: $this));
+                    $blnVisible = $this->$callback[0]->$callback[1]($blnVisible, $dc ?: $this);
                 } elseif (\is_callable($callback)) {
-                    $blnVisible = $callback($blnVisible, ($dc ?: $this));
+                    $blnVisible = $callback($blnVisible, $dc ?: $this);
                 }
             }
         }
@@ -226,48 +205,50 @@ class MapItem extends CoreContainer
     public function importButtonGlobalOperations(?string $href, string $label, string $title, string $class, string $attributes, string $table, ?array $rootIds): string
     {
         $objMap = Map::findByPk(Input::get('id'));
-        if (!$objMap || null === $objMap->excelPattern || empty(StringUtil::deserialize($objMap->excelPattern)))
-        {
+        if (!$objMap || null === $objMap->excelPattern || empty(StringUtil::deserialize($objMap->excelPattern))) {
             return '';
         }
 
         $url = $this->addToUrl($href);
 
-        return sprintf('<a href="%s" title="%s" class="%s" %s>%s</a>', $url, StringUtil::specialchars($title), $class, $attributes, $label);
+        return \sprintf('<a href="%s" title="%s" class="%s" %s>%s</a>', $url, StringUtil::specialchars($title), $class, $attributes, $label);
     }
 
     public function exportButtonGlobalOperations(?string $href, string $label, string $title, string $class, string $attributes, string $table, ?array $rootIds): string
     {
         $objMap = Map::findByPk(Input::get('id'));
-        if (!$objMap || null === $objMap->excelPattern || empty(StringUtil::deserialize($objMap->excelPattern)))
-        {
+        if (!$objMap || null === $objMap->excelPattern || empty(StringUtil::deserialize($objMap->excelPattern))) {
             return '';
         }
 
         $url = $this->addToUrl($href);
 
-        return sprintf('<a href="%s" title="%s" class="%s" %s>%s</a>', $url, StringUtil::specialchars($title), $class, $attributes, $label);
+        return \sprintf('<a href="%s" title="%s" class="%s" %s>%s</a>', $url, StringUtil::specialchars($title), $class, $attributes, $label);
     }
 
     public function geocodeAllButtonGlobalOperations(?string $href, string $label, string $title, string $class, string $attributes, string $table, ?array $rootIds): string
     {
         $objMap = Map::findByPk(Input::get('id'));
-        if (!$objMap || null === $objMap->geocodingProvider) { return '';}
+        if (!$objMap || null === $objMap->geocodingProvider) {
+            return '';
+        }
 
         $url = $this->addToUrl($href);
 
-        return sprintf('<a href="%s" title="%s" class="%s" %s>%s</a>', $url, StringUtil::specialchars($title), $class, $attributes, $label);
+        return \sprintf('<a href="%s" title="%s" class="%s" %s>%s</a>', $url, StringUtil::specialchars($title), $class, $attributes, $label);
     }
 
     public function geocodeButtonOperations(array $data, ?string $href, string $label, string $title, ?string $icon, string $attributes): string
     {
         $objMap = Map::findByPk(Input::get('id'));
-        if (!$objMap || null === $objMap->geocodingProvider) {return '';}
+        if (!$objMap || null === $objMap->geocodingProvider) {
+            return '';
+        }
 
         $url = $this->addToUrl($href);
         $url = str_replace('&amp;id='.$objMap->id, '&amp;id='.$data['id'], $url);
 
-        return sprintf('<a href="%s" title="%s" %s>%s</a> ', $url, StringUtil::specialchars($title), $attributes, Image::getHtml($icon, $label));
+        return \sprintf('<a href="%s" title="%s" %s>%s</a> ', $url, StringUtil::specialchars($title), $attributes, Image::getHtml($icon, $label));
     }
 
     public function syncMapItemCategoryPivotTable($varValue, $dc)

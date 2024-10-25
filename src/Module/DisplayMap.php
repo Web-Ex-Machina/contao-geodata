@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2023 Web ex Machina
+ * Copyright (c) 2015-2024 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -117,7 +117,7 @@ class DisplayMap extends Core
                         $varValue = $arrRow['value'];
                     }
 
-                    if (false !== strpos($arrRow['key'], '_')) {
+                    if (str_contains($arrRow['key'], '_')) {
                         $arrOption = explode('_', $arrRow['key']);
                         $arrMapConfig[$arrOption[0]][$arrOption[1]] = $varValue;
                     } else {
@@ -201,9 +201,9 @@ class DisplayMap extends Core
                         'locations' => $arrLocations,
                         'markers' => !empty($arrLocations) ? $this->buildMarkers($arrLocations) : [],
                     ];
-                break;
+                    break;
                 default:
-                    throw new \Exception(sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['unknownAjaxRequest'], Input::post('action')));
+                    throw new \Exception(\sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['unknownAjaxRequest'], Input::post('action')));
             }
         } catch (\Exception $exception) {
             $arrResponse = ['status' => 'error', 'msg' => $exception->getMessage(), 'trace' => $exception->getTrace()];
@@ -251,7 +251,7 @@ class DisplayMap extends Core
                 }
 
                 $this->filters[$filterField] = [
-                    'label' => sprintf('%s :', $GLOBALS['TL_LANG']['tl_wem_map_item'][$filterField][0]),
+                    'label' => \sprintf('%s :', $GLOBALS['TL_LANG']['tl_wem_map_item'][$filterField][0]),
                     'placeholder' => $GLOBALS['TL_LANG']['tl_wem_map_item'][$filterField][1],
                     'name' => $filterField,
                     'type' => 'select',
@@ -285,7 +285,7 @@ class DisplayMap extends Core
                         case 'city':
                             // $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $location[$filterField].' ('.$location['admin_lvl_2'].')';
                             $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $location[$filterField].($location['admin_lvl_2'] ? ' ('.$location['admin_lvl_2'].')' : '');
-                        break;
+                            break;
                         case 'category':
                             $mapItemCategories = MapItemCategory::findItems(['pid' => $location['id']]);
                             if ($mapItemCategories) {
@@ -299,12 +299,12 @@ class DisplayMap extends Core
                                 }
                             }
 
-                        break;
+                            break;
                         case 'country':
                             $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $arrCountries[$location[$filterField]] ?? $location[$filterField];
-                        break;
+                            break;
                         default:
-                        break;
+                            break;
                     }
 
                     // HOOK: add custom logic

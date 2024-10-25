@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2023 Web ex Machina
+ * Copyright (c) 2015-2024 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -16,7 +16,6 @@ namespace WEM\GeoDataBundle\Controller\Provider;
 
 use Contao\Config;
 use Contao\Controller;
-use Exception;
 use WEM\GeoDataBundle\Model\Map;
 use WEM\GeoDataBundle\Model\MapItem;
 
@@ -39,7 +38,7 @@ class Nominatim extends Controller
      * @param Map            $objMap     Map Model
      * @param int            $intResults Number of API results wanted
      *
-     * @throws Exception
+     * @throws \Exception
      *
      * @return array [Address Components]
      */
@@ -47,7 +46,7 @@ class Nominatim extends Controller
     {
         // Before everything, check if we can geocode this
         if ('nominatim' !== $objMap->geocodingProvider) {
-            throw new Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['missingConfigForGeocoding']);
+            throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['missingConfigForGeocoding']);
         }
 
         // Standardize the address to geocode
@@ -87,7 +86,7 @@ class Nominatim extends Controller
 
         // Then, cURL it baby.
         $ch = curl_init();
-        $strUrl = sprintf(static::$strGeocodingUrl, $strAddress, Config::get('adminEmail'));
+        $strUrl = \sprintf(static::$strGeocodingUrl, $strAddress, Config::get('adminEmail'));
         curl_setopt($ch, CURLOPT_URL, $strUrl);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_TIMEOUT, 5);
@@ -95,7 +94,7 @@ class Nominatim extends Controller
 
         // Catch Error
         if (!$geoloc) {
-            throw new Exception(sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['invalidRequest'], $strUrl));
+            throw new \Exception(\sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['invalidRequest'], $strUrl));
         }
 
         // And return them

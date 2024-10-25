@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2023 Web ex Machina
+ * Copyright (c) 2015-2024 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -105,7 +105,7 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_customTplForGeodataItems'
     'exclude' => true,
     'inputType' => 'select',
     'options_callback' => static function () {
-        return \Contao\Controller::getTemplateGroup('mod_wem_geodata_list_item', [], 'mod_wem_geodata_list_item');
+        return Contao\Controller::getTemplateGroup('mod_wem_geodata_list_item', [], 'mod_wem_geodata_list_item');
     },
     'eval' => ['chosen' => true, 'tl_class' => 'w50'],
     'sql' => "varchar(64) NOT NULL default ''",

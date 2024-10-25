@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2023 Web ex Machina
+ * Copyright (c) 2015-2024 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -24,7 +24,7 @@ $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
         'switchToEdit' => true,
         'enableVersioning' => true,
         'onload_callback' => [
-            [\WEM\GeoDataBundle\DataContainer\MapItem::class, 'checkIfGeocodeExists'],
+            [WEM\GeoDataBundle\DataContainer\MapItem::class, 'checkIfGeocodeExists'],
         ],
         'sql' => [
             'keys' => [
@@ -41,7 +41,7 @@ $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
             'fields' => ['country DESC'],
             'headerFields' => ['title'],
             'panelLayout' => 'filter;sort,search,limit',
-            'child_record_callback' => [\WEM\GeoDataBundle\DataContainer\MapItem::class, 'listItems'],
+            'child_record_callback' => [WEM\GeoDataBundle\DataContainer\MapItem::class, 'listItems'],
             'child_record_class' => 'no_padding',
         ],
         'global_operations' => [
@@ -49,19 +49,19 @@ $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
                 'href' => 'key=geocodeAll',
                 'class' => 'header_geocodeAll',
                 'attributes' => 'onclick="Backend.getScrollOffset()" data-confirm="'.$GLOBALS['TL_LANG']['tl_wem_map_item']['geocodeAllConfirm'].'"',
-                'button_callback' => [\WEM\GeoDataBundle\DataContainer\MapItem::class, 'geocodeAllButtonGlobalOperations'],
+                'button_callback' => [WEM\GeoDataBundle\DataContainer\MapItem::class, 'geocodeAllButtonGlobalOperations'],
             ],
             'import' => [
                 'href' => 'key=import',
                 'class' => 'header_css_import',
                 'attributes' => 'onclick="Backend.getScrollOffset()"',
-                'button_callback' => [\WEM\GeoDataBundle\DataContainer\MapItem::class, 'importButtonGlobalOperations'],
+                'button_callback' => [WEM\GeoDataBundle\DataContainer\MapItem::class, 'importButtonGlobalOperations'],
             ],
             'export' => [
                 'href' => 'key=export_form',
                 'class' => 'header_css_import',
                 'attributes' => 'onclick="Backend.getScrollOffset()"',
-                'button_callback' => [\WEM\GeoDataBundle\DataContainer\MapItem::class, 'exportButtonGlobalOperations'],
+                'button_callback' => [WEM\GeoDataBundle\DataContainer\MapItem::class, 'exportButtonGlobalOperations'],
             ],
             'all' => [
                 'href' => 'act=select',
@@ -94,12 +94,12 @@ $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
             'toggle' => [
                 'icon' => 'visible.gif',
                 'attributes' => 'onclick="Backend.getScrollOffset();return AjaxRequest.toggleVisibility(this,%s)"',
-                'button_callback' => [\WEM\GeoDataBundle\DataContainer\MapItem::class, 'toggleIcon'],
+                'button_callback' => [WEM\GeoDataBundle\DataContainer\MapItem::class, 'toggleIcon'],
             ],
             'geocode' => [
                 'href' => 'key=geocode',
                 'icon' => 'bundles/wemgeodata/backend/icon_geocode_16.png',
-                'button_callback' => [\WEM\GeoDataBundle\DataContainer\MapItem::class, 'geocodeButtonOperations'],
+                'button_callback' => [WEM\GeoDataBundle\DataContainer\MapItem::class, 'geocodeButtonOperations'],
             ],
         ],
     ],
@@ -147,7 +147,7 @@ $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
             'inputType' => 'text',
             'eval' => ['rgxp' => 'alias', 'doNotCopy' => true, 'unique' => true, 'maxlength' => 128, 'tl_class' => 'w50'],
             'save_callback' => [
-                [\WEM\GeoDataBundle\DataContainer\MapItem::class, 'generateAlias'],
+                [WEM\GeoDataBundle\DataContainer\MapItem::class, 'generateAlias'],
             ],
             'sql' => "varchar(128) BINARY NOT NULL default ''",
         ],
@@ -158,7 +158,7 @@ $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
             'flag' => 11,
             'inputType' => 'select',
             'foreignKey' => 'tl_wem_map_category.title',
-            'options_callback' => [\WEM\GeoDataBundle\DataContainer\MapItem::class, 'getMapCategories'],
+            'options_callback' => [WEM\GeoDataBundle\DataContainer\MapItem::class, 'getMapCategories'],
             'eval' => ['chosen' => true, 'includeBlankOption' => true, 'tl_class' => 'w50'],
             'sql' => "int(10) unsigned NOT NULL default '0'",
             'relation' => ['type' => 'hasOne', 'load' => 'lazy'],
@@ -170,10 +170,10 @@ $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
             'flag' => 11,
             'inputType' => 'select',
             'foreignKey' => 'tl_wem_map_category.title',
-            'options_callback' => [\WEM\GeoDataBundle\DataContainer\MapItem::class, 'getMapCategories'],
-            'load_callback' => [[\WEM\GeoDataBundle\DataContainer\MapItem::class, 'assignDefaultCategoryIfNew']],
+            'options_callback' => [WEM\GeoDataBundle\DataContainer\MapItem::class, 'getMapCategories'],
+            'load_callback' => [[WEM\GeoDataBundle\DataContainer\MapItem::class, 'assignDefaultCategoryIfNew']],
             'save_callback' => [
-                [\WEM\GeoDataBundle\DataContainer\MapItem::class, 'syncMapItemCategoryPivotTable'],
+                [WEM\GeoDataBundle\DataContainer\MapItem::class, 'syncMapItemCategoryPivotTable'],
             ],
             'eval' => ['chosen' => true, 'includeBlankOption' => true, 'multiple' => true, 'mandatory' => true, 'tl_class' => 'w50'],
             'sql' => 'blob NULL',
@@ -261,7 +261,7 @@ $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
             'filter' => true,
             'sorting' => true,
             'inputType' => 'select',
-            'options' => \WEM\GeoDataBundle\Classes\Util::getCountries(),
+            'options' => WEM\GeoDataBundle\Classes\Util::getCountries(),
             'eval' => ['includeBlankOption' => true, 'chosen' => true, 'tl_class' => 'w50'],
             'sql' => "varchar(2) NOT NULL default ''",
         ],

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2023 Web ex Machina
+ * Copyright (c) 2015-2024 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -14,8 +14,6 @@ declare(strict_types=1);
 
 namespace WEM\GeoDataBundle\Classes;
 
-use Contao\Database;
-use Contao\Input;
 use Contao\StringUtil;
 use Contao\System;
 use WEM\GeoDataBundle\Model\Category;
@@ -77,55 +75,32 @@ class Util
     /**
      * Replaces insert tags related to geodata.
      *
-     * @param string $tag The insert tag to replace.
+     * @param string $tag the insert tag to replace
      *
-     * @return mixed The value of the requested field for the given location or false if the tag is not related to geodata or if the location or field is not found.
+     * @return mixed the value of the requested field for the given location or false if the tag is not related to geodata or if the location or field is not found
+     *
+     * @deprecated
      */
     public static function replaceInsertTags(string $tag)
     {
-        $arrTag = explode('::', $tag);
-
-        // Exist if the tested tag doesn't concern locations
-        if ('wem_geodata' !== $arrTag[0]) {
-            return false;
-        }
-
-        // Check if we asked for a precise location or the current one
-        if (3 === count($arrTag)) {
-            $varLocation = $arrTag[1];
-            $strField = $arrTag[2];
-        } else {
-            $varLocation = Input::get('auto_item');
-            $strField = $arrTag[1];
-        }
-
-        // Before trying to find a specific location, make sure the field we want exists
-        if (!Database::getInstance()->fieldExists($strField, MapItem::getTable())) {
-            return false;
-        }
-
-        // Try to find the location, with the item given (return false if not found)
-        if (!$objLocation = MapItem::findByIdOrAlias($varLocation)) {
-            return false;
-        }
-
-        // Now we know everything is fine, return the field wanted
-        return $objLocation->$strField;
+        return System::getContainer()->get('wem.geodata.listener.replace_insert_tags_listener')->__invoke($tag);
     }
 
     /**
      * Get a list of countries with their corresponding two-letter country codes.
      *
-     * @return array An associative array where the keys are the two-letter country codes and the values are the country names.
+     * @return array an associative array where the keys are the two-letter country codes and the values are the country names
      */
     public static function getCountries(): array
     {
         $arrCountries = System::getContainer()->get('contao.intl.countries')->getCountries();
+
         return array_combine(array_map('strtolower', array_keys($arrCountries)), $arrCountries);
     }
 
     /**
      * Try to find an ISO Code from the Country fullname.
+     *
      * @throws \Exception
      */
     public static function getCountryISOCodeFromFullname($strFullname)
@@ -140,23 +115,7 @@ class Util
         }
 
         // If nothing, send an exception, because the name is wrong
-        throw new \Exception(sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['countryNotFound'], $strFullname));
-    }
-
-    /**
-     * Map a two-letter continent code onto the name of the continent.
-     */
-    public static function getContinents(): void // TODO : ?? return nothing and do nothing
-    {
-        $CONTINENTS = [
-            'AS' => 'Asia',
-            'AN' => 'Antarctica',
-            'AF' => 'Africa',
-            'SA' => 'South America',
-            'EU' => 'Europe',
-            'OC' => 'Oceania',
-            'NA' => 'North America',
-        ];
+        throw new \Exception(\sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['countryNotFound'], $strFullname));
     }
 
     /**
@@ -422,6 +381,7 @@ class Util
      * Delete MapItemCategory rows for a Category.
      *
      * @param Category $objItem The Category
+     *
      * @throws \Exception
      */
     public static function deleteMapItemCategoryForCategory(Category $objItem): void
@@ -438,18 +398,19 @@ class Util
     /**
      * Refreshes "categories" field for a MapItem.
      *
-     * @param MapItem $objItem The MapItem
+     * @param MapItem    $objItem                   The MapItem
      * @param array|null $arrCategoriesIdsToExclude Ids of Category to avoid
      *
-     * @return MapItem The updated MapItem
      * @throws \Exception
+     *
+     * @return MapItem The updated MapItem
      */
     public static function refreshMapItemCategoriesField(MapItem $objItem, ?array $arrCategoriesIdsToExclude): MapItem
     {
         $params = ['pid' => $objItem->id];
 
-        if (is_array($arrCategoriesIdsToExclude)) {
-            $params['where'][] = sprintf('%s.category NOT IN (%s)', MapItemCategory::getTable(), implode(',', $arrCategoriesIdsToExclude));
+        if (\is_array($arrCategoriesIdsToExclude)) {
+            $params['where'][] = \sprintf('%s.category NOT IN (%s)', MapItemCategory::getTable(), implode(',', $arrCategoriesIdsToExclude));
         }
 
         $mapItemCategories = MapItemCategory::findItems($params);

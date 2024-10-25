@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2023 Web ex Machina
+ * Copyright (c) 2015-2024 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -18,12 +18,8 @@ class MapItemAttributeValue extends CoreContainer
 {
     /**
      * Design each row of the DCA.
-     *
-     * @param array $arrRow
-     *
-     * @return string
      */
-    public function listItems($arrRow)
+    public function listItems(array $arrRow): string
     {
         return $arrRow['attribute'].' '.$arrRow['value'];
     }

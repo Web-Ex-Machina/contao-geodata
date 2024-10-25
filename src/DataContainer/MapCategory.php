@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2023 Web ex Machina
+ * Copyright (c) 2015-2024 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -22,9 +22,6 @@ class MapCategory extends CoreContainer
 {
     /**
      * Design each row of the DCA.
-     *
-     * @param array $row
-     * @return string
      */
     public function listItems(array $row): string
     {
@@ -44,7 +41,8 @@ class MapCategory extends CoreContainer
                 SET `is_default` = "0"
                 WHERE `pid` = ?
                 AND `id` != ?')
-            ->execute($dc->activeRecord->pid,$dc->activeRecord->id);
+            ->execute($dc->activeRecord->pid, $dc->activeRecord->id)
+            ;
         } else {
             // check if another category is the default one for the map
             // if not, make this one the default's one, sorry not sorry
@@ -72,7 +70,7 @@ class MapCategory extends CoreContainer
         }
 
         $objCategory = Category::findByPk($dc->id);
-        if($objCategory){
+        if ($objCategory) {
             Util::deleteMapItemCategoryForCategory($objCategory);
         }
     }

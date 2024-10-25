@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2023 Web ex Machina
+ * Copyright (c) 2015-2024 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -38,7 +38,7 @@ $GLOBALS['TL_DCA']['tl_wem_map_item_attribute_value'] = [
             'fields' => ['attribute ASC'],
             'headerFields' => ['title'],
             'panelLayout' => 'filter;sort,search,limit',
-            'child_record_callback' => [\WEM\GeoDataBundle\DataContainer\MapItemAttributeValue::class, 'listItems'],
+            'child_record_callback' => [WEM\GeoDataBundle\DataContainer\MapItemAttributeValue::class, 'listItems'],
             'child_record_class' => 'no_padding',
         ],
         'global_operations' => [
