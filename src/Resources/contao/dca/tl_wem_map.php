@@ -20,7 +20,7 @@ use WEM\GeoDataBundle\Model\Map;
 $GLOBALS['TL_DCA']['tl_wem_map'] = [
     // Config
     'config' => [
-        'dataContainer' => 'Table',
+        'dataContainer' => Contao\DC_Table::class,
         'ctable' => ['tl_wem_map_category', 'tl_wem_map_item'],
         'switchToEdit' => true,
         'enableVersioning' => true,
@@ -51,7 +51,6 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
         ],
         'global_operations' => [
             'all' => [
-                'label' => &$GLOBALS['TL_LANG']['MSC']['all'],
                 'href' => 'act=select',
                 'class' => 'header_edit_all',
                 'attributes' => 'onclick="Backend.getScrollOffset()" accesskey="e"',
@@ -59,33 +58,27 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
         ],
         'operations' => [
             'edit' => [
-                'label' => &$GLOBALS['TL_LANG']['tl_wem_map']['edit'],
                 'href' => 'table=tl_wem_map_item',
                 'icon' => 'edit.gif',
             ],
             'editheader' => [
-                'label' => &$GLOBALS['TL_LANG']['tl_wem_map']['editheader'],
                 'href' => 'act=edit',
                 'icon' => 'header.gif',
             ],
             'copy' => [
-                'label' => &$GLOBALS['TL_LANG']['tl_wem_map']['copy'],
                 'href' => 'act=copy',
                 'icon' => 'copychilds.gif',
             ],
             'copy_map_item' => [
-                'label' => &$GLOBALS['TL_LANG']['tl_wem_map']['copy_map_item'],
                 'href' => 'key=copy_map_item',
                 'icon' => 'copy.gif',
             ],
             'delete' => [
-                'label' => &$GLOBALS['TL_LANG']['tl_wem_map']['delete'],
                 'href' => 'act=delete',
                 'icon' => 'delete.gif',
                 'attributes' => 'onclick="if(!confirm(\''.$GLOBALS['TL_LANG']['MSC']['deleteConfirm'].'\'))return false;Backend.getScrollOffset()"',
             ],
             'show' => [
-                'label' => &$GLOBALS['TL_LANG']['tl_wem_map']['show'],
                 'href' => 'act=show',
                 'icon' => 'show.gif',
             ],
@@ -127,7 +120,6 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
         ],
 
         'title' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_map']['title'],
             'exclude' => true,
             'search' => true,
             'inputType' => 'text',
@@ -135,7 +127,6 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'sql' => "varchar(255) NOT NULL default ''",
         ],
         'jumpTo' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_map']['jumpTo'],
             'exclude' => true,
             'inputType' => 'pageTree',
             'foreignKey' => 'tl_page.title',
@@ -144,7 +135,6 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'relation' => ['type' => 'hasOne', 'load' => 'lazy'],
         ],
         'excelPattern' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_map']['excelPattern'],
             'exclude' => true,
             'inputType' => 'keyValueWizard',
             'load_callback' => [
@@ -153,7 +143,6 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'sql' => 'blob NULL',
         ],
         'mapProvider' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_map']['mapProvider'],
             'default' => '',
             'exclude' => true,
             'inputType' => 'select',
@@ -164,7 +153,6 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'sql' => "varchar(255) NOT NULL default ''",
         ],
         'mapConfig' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_map']['mapConfig'],
             'exclude' => true,
             'inputType' => 'keyValueWizard',
             'load_callback' => [
@@ -173,14 +161,12 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'sql' => 'blob NULL',
         ],
         'mapProviderGmapKey' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_map']['mapProviderGmapKey'],
             'exclude' => true,
             'inputType' => 'text',
             'eval' => ['mandatory' => true, 'maxlength' => 255],
             'sql' => "varchar(255) NOT NULL default ''",
         ],
         'geocodingProvider' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_map']['geocodingProvider'],
             'exclude' => true,
             'inputType' => 'select',
             'options' => [Map::GEOCODING_PROVIDER_NOMINATIM, Map::GEOCODING_PROVIDER_GMAP],
@@ -190,7 +176,6 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'sql' => "varchar(255) NOT NULL default ''",
         ],
         'geocodingProviderGmapKey' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_map']['geocodingProviderGmapKey'],
             'exclude' => true,
             'inputType' => 'textStore',
             'eval' => ['mandatory' => true, 'maxlength' => 255, 'encrypt' => true],
@@ -199,7 +184,6 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
 
         // {categories_legend},categories
         'categories' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_map']['categories'],
             'inputType' => 'dcaWizard',
             'foreignTable' => 'tl_wem_map_category',
             'foreignField' => 'pid',
@@ -217,7 +201,6 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             ],
         ],
         'doNotAddItemsToContaoSitemap' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_map']['doNotAddItemsToContaoSitemap'],
             'exclude' => true,
             'filter' => true,
             'flag' => 1,
@@ -226,7 +209,6 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'sql' => "char(1) NOT NULL default ''",
         ],
         'doNotAddItemsToContaoSearch' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_map']['doNotAddItemsToContaoSearch'],
             'exclude' => true,
             'filter' => true,
             'flag' => 1,
@@ -235,7 +217,6 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'sql' => "char(1) NOT NULL default ''",
         ],
         'updateExistingItems' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_map']['updateExistingItems'],
             'exclude' => true,
             'filter' => true,
             'flag' => 1,
@@ -244,7 +225,6 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'sql' => "char(1) NOT NULL default ''",
         ],
         'deleteExistingItemsNotInImportFile' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_map']['deleteExistingItemsNotInImportFile'],
             'exclude' => true,
             'filter' => true,
             'flag' => 1,

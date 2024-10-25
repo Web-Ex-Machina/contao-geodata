@@ -40,7 +40,6 @@ $GLOBALS['TL_DCA']['tl_module']['subpalettes']['wem_geodata_filters_below'] = 'w
 $GLOBALS['TL_DCA']['tl_module']['subpalettes']['wem_geodata_filters_present'] = 'wem_geodata_search,wem_geodata_filters_fields';
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_map'] = [
-    'label' => &$GLOBALS['TL_LANG']['tl_module']['wem_geodata_map'],
     'exclude' => true,
     'inputType' => 'select',
     'foreignKey' => 'tl_wem_map.title',
@@ -48,7 +47,6 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_map'] = [
     'sql' => "int(10) unsigned NOT NULL default '0'",
 ];
 $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_maps'] = [
-    'label' => &$GLOBALS['TL_LANG']['tl_module']['wem_geodata_maps'],
     'exclude' => true,
     'inputType' => 'select',
     'foreignKey' => 'tl_wem_map.title',
@@ -56,7 +54,6 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_maps'] = [
     'sql' => 'blob NULL',
 ];
 $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_map_list'] = [
-    'label' => &$GLOBALS['TL_LANG']['tl_module']['wem_geodata_map_list'],
     'exclude' => true,
     'inputType' => 'select',
     'options' => ['nolist', 'rightpanel', 'below'],
@@ -65,7 +62,6 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_map_list'] = [
     'sql' => "varchar(32) NOT NULL default 'nolist'",
 ];
 $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_filters'] = [
-    'label' => &$GLOBALS['TL_LANG']['tl_module']['wem_geodata_filters'],
     'exclude' => true,
     'inputType' => 'select',
     'options' => ['nofilters', 'leftpanel', 'above', 'below'],
@@ -75,7 +71,6 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_filters'] = [
 ];
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_filters_present'] = [
-    'label' => &$GLOBALS['TL_LANG']['tl_module']['wem_geodata_filters_present'],
     'exclude' => true,
     'filter' => true,
     'flag' => 1,
@@ -85,10 +80,8 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_filters_present'] = [
 ];
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_filters_fields'] = [
-    'label' => &$GLOBALS['TL_LANG']['tl_module']['wem_geodata_filters_fields'],
     'exclude' => true,
     'inputType' => 'select',
-    // 'options' => ['category', 'country', 'admin_lvl_1', 'admin_lvl_2', 'city'],
     'options' => [
         'category' => 'category',
         'country' => 'country',
@@ -101,7 +94,6 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_filters_fields'] = [
     'sql' => "blob NULL'",
 ];
 $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_search'] = [
-    'label' => &$GLOBALS['TL_LANG']['tl_module']['wem_geodata_search'],
     'exclude' => true,
     'filter' => true,
     'flag' => 1,

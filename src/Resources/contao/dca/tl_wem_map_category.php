@@ -20,7 +20,7 @@ $this->loadDataContainer('tl_wem_map');
 $GLOBALS['TL_DCA']['tl_wem_map_category'] = [
     // Config
     'config' => [
-        'dataContainer' => 'Table',
+        'dataContainer' => Contao\DC_Table::class,
         'ptable' => 'tl_wem_map',
         'switchToEdit' => true,
         'enableVersioning' => true,
@@ -50,7 +50,6 @@ $GLOBALS['TL_DCA']['tl_wem_map_category'] = [
         ],
         'global_operations' => [
             'all' => [
-                'label' => &$GLOBALS['TL_LANG']['MSC']['all'],
                 'href' => 'act=select',
                 'class' => 'header_edit_all',
                 'attributes' => 'onclick="Backend.getScrollOffset()" accesskey="e"',
@@ -58,18 +57,15 @@ $GLOBALS['TL_DCA']['tl_wem_map_category'] = [
         ],
         'operations' => [
             'edit' => [
-                'label' => &$GLOBALS['TL_LANG']['tl_wem_map_category']['edit'],
                 'href' => 'act=edit',
                 'icon' => 'edit.svg',
             ],
             'delete' => [
-                'label' => &$GLOBALS['TL_LANG']['tl_wem_map_category']['delete'],
                 'href' => 'act=delete',
                 'icon' => 'delete.gif',
                 'attributes' => 'onclick="if(!confirm(\''.$GLOBALS['TL_LANG']['MSC']['deleteConfirm'].'\'))return false;Backend.getScrollOffset()"',
             ],
             'show' => [
-                'label' => &$GLOBALS['TL_LANG']['tl_wem_map_category']['show'],
                 'href' => 'act=show',
                 'icon' => 'show.gif',
             ],
@@ -103,7 +99,6 @@ $GLOBALS['TL_DCA']['tl_wem_map_category'] = [
 
         // {general_legend},title
         'title' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_map_category']['title'],
             'exclude' => true,
             'search' => true,
             'inputType' => 'text',
@@ -111,7 +106,6 @@ $GLOBALS['TL_DCA']['tl_wem_map_category'] = [
             'sql' => "varchar(255) NOT NULL default ''",
         ],
         'is_default' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_map_category']['is_default'],
             'exclude' => true,
             'filter' => true,
             'flag' => 1,
@@ -122,14 +116,12 @@ $GLOBALS['TL_DCA']['tl_wem_map_category'] = [
 
         // {marker_legend},marker,markerConfig
         'marker' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_map_category']['marker'],
             'exclude' => true,
             'inputType' => 'fileTree',
             'eval' => ['filesOnly' => true, 'fieldType' => 'radio', 'tl_class' => 'clr'],
             'sql' => 'binary(16) NULL',
         ],
         'markerConfig' => [
-            'label' => &$GLOBALS['TL_LANG']['tl_wem_map_category']['markerConfig'],
             'exclude' => true,
             'inputType' => 'keyValueWizard',
             'load_callback' => [
