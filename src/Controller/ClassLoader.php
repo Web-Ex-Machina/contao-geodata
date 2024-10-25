@@ -16,6 +16,7 @@ namespace WEM\GeoDataBundle\Controller;
 
 use Contao\Combiner;
 use Contao\Controller;
+use Contao\System;
 use Exception;
 use WEM\GeoDataBundle\Model\Map;
 
@@ -69,13 +70,16 @@ class ClassLoader extends Controller
         // Depending on the provider, we will need more stuff
         switch ($objMap->mapProvider) {
             case Map::MAP_PROVIDER_GMAP:
+                // Load encryption service
+                $objService = System::getContainer()->get('wem.encryption_util');
+
                 if (!$objMap->mapProviderGmapKey) {
                     throw new Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['gmapNeedsAPIKey']);
                 }
 
                 $objCssCombiner->add('bundles/wemgeodata/css/gmaps.css', $strVersion);
                 $objJsCombiner->add('bundles/wemgeodata/js/gmaps.js', $strVersion);
-                $GLOBALS['TL_JAVASCRIPT'][] = sprintf('<script src="https://maps.googleapis.com/maps/api/js?key=%s"></script>', $objMap->mapProviderGmapKey);
+                $GLOBALS['TL_JAVASCRIPT'][] = sprintf('<script src="https://maps.googleapis.com/maps/api/js?key=%s"></script>', $objService->decrypt($objMap->mapProviderGmapKey));
                 break;
             case Map::MAP_PROVIDER_LEAFLET:
                 $GLOBALS['TL_HEAD'][] = '<link rel="stylesheet" href="https://unpkg.com/leaflet@latest/dist/leaflet.css">';
