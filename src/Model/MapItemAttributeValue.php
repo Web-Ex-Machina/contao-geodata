@@ -90,15 +90,15 @@ class MapItemAttributeValue extends Model
         $arrColumns = [];
 
         if ($arrConfig['pid']) {
-            $arrColumns[] = $t.'pid = '.$arrConfig['pid'];
+            $arrColumns[] = $t.'.pid = '.$arrConfig['pid'];
         }
 
         if ($arrConfig['attribute']) {
-            $arrColumns[] = $t."attribute = '".$arrConfig['attribute']."'";
+            $arrColumns[] = $t.".attribute = '".$arrConfig['attribute']."'";
         }
 
         if ($arrConfig['value']) {
-            $arrColumns[] = $t."value = '".$arrConfig['value']."'";
+            $arrColumns[] = $t.".value = '".$arrConfig['value']."'";
         }
 
         if ($arrConfig['not']) {

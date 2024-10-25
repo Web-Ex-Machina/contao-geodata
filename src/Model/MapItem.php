@@ -130,7 +130,7 @@ class MapItem extends CoreModel
 
         switch ($strField) {
             case 'attr_value_postal':
-                return $t."id IN(
+                return $t.".id IN(
                     SELECT tl_wem_map_item_attribute_value.pid
                     FROM tl_wem_map_item_attribute_value
                     WHERE tl_wem_map_item_attribute_value.attribute = 'postal'

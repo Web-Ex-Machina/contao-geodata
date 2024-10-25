@@ -63,7 +63,7 @@ class Map extends CoreContainer
     /**
      * Generate the default map config array.
      */
-    public function getDefaultMapConfig(array $varValue, $objDc): array
+    public function getDefaultMapConfig($varValue, DataContainer $objDc)
     {
         if (!$varValue) {
             switch ($objDc->activeRecord->mapProvider) {
@@ -86,7 +86,7 @@ class Map extends CoreContainer
     /**
      * Generate the default Excel pattern.
      */
-    public function generateExcelPattern(array $varValue): array
+    public function generateExcelPattern($varValue)
     {
         if (!$varValue) {
             $varValue = [

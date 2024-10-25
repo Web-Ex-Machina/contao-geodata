@@ -48,7 +48,7 @@ class ClassLoader extends Controller
      *
      * @throws \Exception
      */
-    public static function loadLibraries(Map $objMap, int $strVersion = 1): void
+    public static function loadLibraries(Map $objMap, string $strVersion = '1'): void
     {
         // Generate the combiners
         $objCssCombiner = new Combiner();

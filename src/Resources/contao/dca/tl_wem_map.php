@@ -164,10 +164,10 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'inputType' => 'text',
             'eval' => ['mandatory' => true, 'maxlength' => 255],
             'load_callback' => [
-                ['wem.encryption_util', 'decrypt'],
+                ['wem.encryption_util', 'decrypt_b64'],
             ],
             'save_callback' => [
-                ['wem.encryption_util', 'encrypt'],
+                ['wem.encryption_util', 'encrypt_b64'],
             ],
             'sql' => "varchar(255) NOT NULL default ''",
         ],

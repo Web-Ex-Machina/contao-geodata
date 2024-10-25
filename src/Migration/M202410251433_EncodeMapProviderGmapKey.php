@@ -45,7 +45,7 @@ class M202410251433_EncodeMapProviderGmapKey extends AbstractMigration
 
         $columns = $schemaManager->listTableColumns('tl_wem_map');
 
-        if (!isset($columns['mapProviderGmapKey'])) {
+        if (!isset($columns[strtolower('mapProviderGmapKey')])) {
             return false;
         }
 
@@ -65,7 +65,7 @@ class M202410251433_EncodeMapProviderGmapKey extends AbstractMigration
                     $decodedMapProviderGmapKey = $this->encryption->decrypt($objMap->mapProviderGmapKey);
                     continue;
                 } catch (\LengthException $e) {
-                    $objMap->mapProviderGmapKey = $this->encryption->encrypt($objMap->mapProviderGmapKey);
+                    $objMap->mapProviderGmapKey = $this->encryption->encrypt_b64($objMap->mapProviderGmapKey);
                     $objMap->save();
                 }
 

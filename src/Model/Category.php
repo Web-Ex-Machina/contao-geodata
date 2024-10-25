@@ -46,7 +46,7 @@ class Category extends CoreModel
                 if (!\is_array($varValue)) {
                     $varValue = [$varValue];
                 }
-                $arrColumns[] = \sprintf($t."pid IN ('%s')", implode("','", $varValue));
+                $arrColumns[] = \sprintf($t.".pid IN ('%s')", implode("','", $varValue));
                 break;
             default:
                 $arrColumns = array_merge($arrColumns, parent::formatStatement($strField, $varValue, $strOperator));

@@ -141,7 +141,7 @@ class MapItem extends CoreContainer
     /**
      * Return the "toggle visibility" button.
      */
-    public function toggleIcon(array $row, string $href, string $label, string $title, string $icon, string $attributes): string
+    public function toggleIcon(array $row, ?string $href, string $label, string $title, string $icon, string $attributes): string
     {
         // if (\strlen(Input::get('tid') ?? '')) {
         if (Input::get('tid')) {
