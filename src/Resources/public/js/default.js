@@ -14,7 +14,11 @@ var filters = {};
 
 // providers functions, needs to be overriden in the proper dedicated file (eg. leaflet.js)
 var applyFilters_callback = function(){};
-var initMap = function(){};
+var initMap = function(){
+	return new Promise(function(resolve,reject){
+	    resolve()
+	});
+}
 
 // ONLAD
 window.addEventListener('load', (event) => {
@@ -59,7 +63,7 @@ window.addEventListener('load', (event) => {
 		    		}
 		    	}
 				// add marker to legend
-				$('.map__legend').append(`
+				$legend.append(`
 					<div class="map__legend__item">
 						<img src="${objMarkersConfig[category.marker?category.alias:'default'].options.iconUrl}" width="${objMarkersConfig[category.marker?category.alias:'default'].options.iconSize[0]}" height="${objMarkersConfig[category.marker?category.alias:'default'].options.iconSize[1]}" alt="Icon for ${category.title} category"><span>${category.title}</span>
 					</div>
