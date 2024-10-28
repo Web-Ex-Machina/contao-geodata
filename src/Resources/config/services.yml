@@ -2,6 +2,7 @@ services:
     WEM\GeoDataBundle\Backend\Callback:
         arguments:
             $locales: '@contao.intl.locales'
+        public: true
             
     WEM\GeoDataBundle\Migration\M202307170826_MultiCategories:
         arguments:

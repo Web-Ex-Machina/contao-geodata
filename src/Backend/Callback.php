@@ -41,9 +41,10 @@ class Callback extends Backend
 {
     private Locales $locales;
 
-    protected function __construct(Locales $locales)
+    public function __construct(Locales $locales)
     {
         parent::__construct();
+        // $this->locales = System::getContainer()->get('contao.intl.locales');
         $this->locales = $locales;
     }
 
