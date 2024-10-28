@@ -125,7 +125,7 @@ class Util
      *
      * @return string [Continent ISOCode]
      */
-    public static function getCountryContinent(string $strCountry): string
+    public static function getCountryContinent(string $strCountry): ?string
     {
         $COUNTRY_CONTINENTS = [
             'AF' => 'AS',

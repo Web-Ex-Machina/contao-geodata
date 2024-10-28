@@ -1,4 +1,8 @@
 services:
+    WEM\GeoDataBundle\Backend\Callback:
+        arguments:
+            $locales: '@contao.intl.locales'
+            
     WEM\GeoDataBundle\Migration\M202307170826_MultiCategories:
         arguments:
             $connection: '@database_connection'

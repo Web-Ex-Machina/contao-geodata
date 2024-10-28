@@ -48,6 +48,9 @@ class Nominatim extends Controller
         if ('nominatim' !== $objMap->geocodingProvider) {
             throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['missingConfigForGeocoding']);
         }
+        if (empty($objMap->geocodingProviderNominatimReferer)) {
+            throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['missingConfigForGeocoding']);
+        }
 
         // Standardize the address to geocode
         $args = [];
@@ -90,6 +93,9 @@ class Nominatim extends Controller
         curl_setopt($ch, CURLOPT_URL, $strUrl);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Referer: '.$objMap->geocodingProviderNominatimReferer,
+        ]);
         $geoloc = json_decode(curl_exec($ch), true);
 
         // Catch Error

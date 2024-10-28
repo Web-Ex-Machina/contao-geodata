@@ -103,6 +103,7 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
     'subpalettes' => [
         'mapProvider_leaflet' => 'mapConfig',
         'mapProvider_gmaps' => 'mapProviderGmapKey,mapConfig',
+        'geocodingProvider_nominatim' => 'geocodingProviderNominatimReferer',
     ],
 
     // Fields
@@ -178,6 +179,18 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'reference' => &$GLOBALS['TL_LANG']['tl_wem_map']['geocodingProvider'],
             'eval' => ['helpwizard' => true, 'includeBlankOption' => true, 'submitOnChange' => true, 'chosen' => true],
             'explanation' => 'wem_geodata_geocodingProvider',
+            'sql' => "varchar(255) NOT NULL default ''",
+        ],
+        'geocodingProviderNominatimReferer' => [
+            'exclude' => true,
+            'inputType' => 'text',
+            'eval' => ['mandatory' => true, 'maxlength' => 255],
+            'load_callback' => [
+                ['wem.encryption_util', 'decrypt_b64'],
+            ],
+            'save_callback' => [
+                ['wem.encryption_util', 'encrypt_b64'],
+            ],
             'sql' => "varchar(255) NOT NULL default ''",
         ],
 

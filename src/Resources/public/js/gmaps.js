@@ -1,4 +1,4 @@
-function initMap() {
+initMap = function() {
 	objMapData.forEach(function(location,index){
 		objMarkers[location.id].latLng = new google.maps.LatLng(parseFloat(location.lat), parseFloat(location.lng));
 	});
@@ -60,4 +60,8 @@ function initMap() {
 
 	objMap.setCenter(objMapBounds.getCenter());
 	objMap.fitBounds(objMapBounds);
+
+	return new Promise(function(resolve,reject){
+		resolve();
+	});
 }

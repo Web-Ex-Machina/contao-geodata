@@ -125,7 +125,7 @@ abstract class Core extends Module
         $strCountry = strtoupper($arrItem['country']);
         $strContinent = Util::getCountryContinent($strCountry);
         $arrItem['country'] = ['code' => $strCountry, 'name' => $GLOBALS['TL_LANG']['CNT'][$arrItem['country']]];
-        $arrItem['continent'] = ['code' => $strContinent, 'name' => $GLOBALS['TL_LANG']['CONTINENT'][$strContinent]];
+        $arrItem['continent'] = ['code' => $strContinent, 'name' => null !== $strContinent ? $GLOBALS['TL_LANG']['CONTINENT'][$strContinent] : ''];
         $strContent = '';
         $objElement = ContentModel::findPublishedByPidAndTable($arrItem['id'], 'tl_wem_map_item');
         if (null !== $objElement) {

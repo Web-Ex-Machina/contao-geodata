@@ -81,6 +81,15 @@
 			<target>Nominatim</target>
 		</trans-unit>
 
+		<trans-unit id="tl_wem_map.geocodingProviderNominatimReferer.0">
+			<source>Nominatim referer</source>
+			<target>Nominatim referer</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.geocodingProviderNominatimReferer.1">
+			<source>Enter a value</source>
+			<target>Enter a value</target>
+		</trans-unit>
+
 		<trans-unit id="tl_wem_map.markers_legend">
 			<source>Markers settings</source>
 			<source>Markers settings</source>

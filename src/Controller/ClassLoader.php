@@ -73,7 +73,7 @@ class ClassLoader extends Controller
 
                 $objCssCombiner->add('bundles/wemgeodata/css/gmaps.css', $strVersion);
                 $objJsCombiner->add('bundles/wemgeodata/js/gmaps.js', $strVersion);
-                $GLOBALS['TL_JAVASCRIPT'][] = \sprintf('<script src="https://maps.googleapis.com/maps/api/js?key=%s"></script>', $objService->decrypt($objMap->mapProviderGmapKey));
+                $GLOBALS['TL_JAVASCRIPT'][] = \sprintf('https://maps.googleapis.com/maps/api/js?key=%s', $objService->decrypt_b64($objMap->mapProviderGmapKey));
                 break;
             case Map::MAP_PROVIDER_LEAFLET:
                 $GLOBALS['TL_HEAD'][] = '<link rel="stylesheet" href="https://unpkg.com/leaflet@latest/dist/leaflet.css">';
