@@ -133,15 +133,17 @@ initMap =  function() {
 			}
 			// construct marker
 			let marker = new AdvancedMarkerElement(options);
+			marker.htmlContent = getPopupHTML(location);
+			marker.locationID = location.id;
 
 			// marker.bindPopup(getPopupHTML(location));
 			marker.addListener('click',function({ domEvent, latLng }){
 				const { target } = domEvent;
 
 			    infoWindow.close();
-			    infoWindow.setContent(getPopupHTML(location));
+			    infoWindow.setContent(marker.htmlContent);
 			    infoWindow.open(marker.map, marker);
-				selectMapItem(this.locationID);
+				selectMapItem(marker.locationID);
 			});
 
 			// setup for filters
