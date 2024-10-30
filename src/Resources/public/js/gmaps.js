@@ -108,7 +108,7 @@ initMap =  function() {
 
 			let icon = {};
 			if(Array.isArray(location.category)){
-				if (location.category[0].title && objMarkersConfig.hasOwnProperty(normalize(location.category[0].title)))
+				if (location.category.length > 0 && location.category[0].title && objMarkersConfig.hasOwnProperty(normalize(location.category[0].title)))
 					icon = objMarkersConfig[normalize(location.category[0].title)].options;
 				else
 					icon = objMarkersConfig.default.options;

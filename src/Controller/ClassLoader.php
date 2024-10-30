@@ -16,6 +16,7 @@ namespace WEM\GeoDataBundle\Controller;
 
 use Contao\Combiner;
 use Contao\Controller;
+use Contao\Input;
 use Contao\System;
 use WEM\GeoDataBundle\Model\Map;
 
@@ -50,6 +51,7 @@ class ClassLoader extends Controller
      */
     public static function loadLibraries(Map $objMap, string $strVersion = '1'): void
     {
+        $strVersion = Input::get('debug') ? time() : $strVersion;
         // Generate the combiners
         $objCssCombiner = new Combiner();
         $objJsCombiner = new Combiner();

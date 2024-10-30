@@ -120,7 +120,7 @@ initMap = function() {
 			}
 			var options = {};
 			if(Array.isArray(location.category)){
-				if (location.category[0].title && objMarkersConfig.hasOwnProperty(normalize(location.category[0].title)))
+				if (location.category.length > 0 && location.category[0].title && objMarkersConfig.hasOwnProperty(normalize(location.category[0].title)))
 					options.icon = objMarkersConfig[normalize(location.category[0].title)];
 				else
 					options.icon = objMarkersConfig.default;

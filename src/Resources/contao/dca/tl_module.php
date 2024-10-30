@@ -16,7 +16,7 @@ $GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'wem_geodata_fil
 $GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'wem_geodata_filters_present';
 $GLOBALS['TL_DCA']['tl_module']['palettes']['wem_display_map'] = '
     {title_legend},name,type;
-    {config_legend},wem_geodata_map,wem_geodata_map_list,wem_geodata_filters;
+    {config_legend},wem_geodata_map,wem_geodata_map_nbItemsToForceAjaxLoading,wem_geodata_map_list,wem_geodata_filters;
     {template_legend:hide},customTpl;
     {protected_legend:hide},protected;
     {expert_legend:hide},guests,cssID
@@ -60,6 +60,12 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_map_list'] = [
     'reference' => &$GLOBALS['TL_LANG']['tl_module']['wem_geodata_map_list'],
     'eval' => ['chosen' => true, 'mandatory' => true, 'tl_class' => 'w50'],
     'sql' => "varchar(32) NOT NULL default 'nolist'",
+];
+$GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_map_nbItemsToForceAjaxLoading'] = [
+    'exclude' => true,
+    'inputType' => 'text',
+    'eval' => ['mandatory' => true, 'tl_class' => 'w50'],
+    'sql' => "INT(10) NOT NULL default '0'",
 ];
 $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_filters'] = [
     'exclude' => true,

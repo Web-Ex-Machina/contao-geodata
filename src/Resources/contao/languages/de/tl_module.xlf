@@ -49,6 +49,14 @@
         <source>Below</source>
         <target>Unter</target>
       </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_map_nbItemsToForceAjaxLoading.0">
+        <source>Maximum locations allowed before asynchronous load</source>
+        <target>Maximal zulässige Standorte vor asynchroner Belastung</target>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_map_nbItemsToForceAjaxLoading.1">
+        <source>If there are more locations than this, the map will load asynchronously (0 to disable)</source>
+        <target>Wenn es mehr Standorte als diese Zahl gibt, wird die Karte asynchron geladen (0 zur Deaktivierung)</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

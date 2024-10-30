@@ -118,6 +118,14 @@
         <source>Display a search field.</source>
         <target>Afficher un champ de recherche.</target>
       </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_map_nbItemsToForceAjaxLoading.0">
+        <source>Maximum locations allowed before asynchronous load</source>
+        <target>Nombre maximum d'emplacements avant chargement asynchrone</target>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_map_nbItemsToForceAjaxLoading.1">
+        <source>If there are more locations than this, the map will load asynchronously (0 to disable)</source>
+        <target>S'il y a plus d'emplacements que ce nombre, la carte se chargera en asynchrone (0 pour désactiver)</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

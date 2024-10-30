@@ -269,13 +269,13 @@ abstract class Core extends Module
         }
         $limit = 0;
         if (\array_key_exists('limit', $c)) {
-            $limit = $c['limit'];
+            $limit = (int) $c['limit'];
             unset($c['limit']);
         }
 
         $offset = 0;
         if (\array_key_exists('offset', $c)) {
-            $offset = $c['offset'];
+            $offset = (int) $c['offset'];
             unset($c['offset']);
         }
         $objLocations = MapItem::findItems($c, $limit, $offset);
