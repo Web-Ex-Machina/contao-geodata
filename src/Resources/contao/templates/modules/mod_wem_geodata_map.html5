@@ -37,7 +37,7 @@
 			blnLoadInAjax   = <?= $this->blnLoadInAjax ? 1 : 0; ?>;
 			objMapData        = <?= $this->blnLoadInAjax ? '[]' : json_encode($this->locations, JSON_INVALID_UTF8_IGNORE | JSON_INVALID_UTF8_SUBSTITUTE) ?>;
 			objMapConfig      = <?= json_encode($this->config) ?>;
-		    categories        = <?= !$this->blnLoadInAjax && $this->categories ? json_encode($this->categories) : '{}' ?>;
+		    categories        = <?= $this->categories ? json_encode($this->categories) : '{}' ?>;
 			objMapFilters     = <?= !$this->blnLoadInAjax && $this->filters ? json_encode($this->filters ?? []) : '{}' ?>;
 		</script>
 	<?php endif; ?>

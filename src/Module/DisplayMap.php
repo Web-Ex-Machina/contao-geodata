@@ -435,7 +435,7 @@ class DisplayMap extends Core
         $objTemplate = new FrontendTemplate('rightpanel' === $this->wem_geodata_map_list ? 'mod_wem_geodata_list_inmap' : 'mod_wem_geodata_list');
         $objTemplate->locations = $arrLocations;
         $objTemplate->list_position = $this->wem_geodata_map_list;
-        $objTemplate->customTplForGeodataItems = 'mod_wem_geodata_list_item';
+        $objTemplate->customTplForGeodataItems = 'rightpanel' === $this->wem_geodata_map_list ? 'mod_wem_geodata_list_inmap_item' : 'mod_wem_geodata_list_item';
 
         if ($this->filters) {
             $objTemplate->filters = $this->filters;
@@ -446,7 +446,7 @@ class DisplayMap extends Core
 
     protected function parseItem(array $location): string
     {
-        $objTemplate = new FrontendTemplate('mod_wem_geodata_list_item');
+        $objTemplate = new FrontendTemplate('rightpanel' === $this->wem_geodata_map_list ? 'mod_wem_geodata_list_inmap_item' : 'mod_wem_geodata_list_item');
         $objTemplate->location = $location;
         return $objTemplate->parse();
     }
