@@ -234,7 +234,9 @@ var loopGetLocationsItemsPagined = function(nbElementsToManage, offset, limit){
 
 				// append results in list
 				if(r.html.length > 0){
-					$('.map__list__wrapper').html($('.map__list__wrapper').html() + r.html);
+					for(var item of r.html){
+						$('.map__list__wrapper').append(item);
+					}
 				}
 				// append results in JS list
 				objMapData = objMapData.concat(JSON.parse(r.json));
