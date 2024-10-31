@@ -60,6 +60,11 @@
 			<source>Location %s saved !</source>
 			<target>Standort %s gespeichert!</target>
 		</trans-unit>
+		
+		<trans-unit id="WEM.LOCATIONS.LABEL.mapLoading">
+			<source>Loading ...</source>
+			<target>Laden ...</target>
+		</trans-unit>
 
 		<trans-unit id="WEM.LOCATIONS.ERROR.unknownAjaxRequest">
 			<source>Unknown AJAX action : "%s"</source>

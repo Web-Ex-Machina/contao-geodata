@@ -143,8 +143,8 @@ class DisplayMap extends Core
 
             // Gather filters
             $this->buildFilters();
+            $this->Template->filters = $this->filters;
             $this->Template->filters_position = $this->wem_geodata_filters;
-            $this->Template->filters = 'nofilters' !== $this->wem_geodata_filters;
 
             $nbItems = $this->countItems();
             $blnLoadInAjax = (int) $this->wem_geodata_map_nbItemsToForceAjaxLoading === 0 

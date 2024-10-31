@@ -27,6 +27,10 @@ var initMap = function(){
 // ONLAD
 window.addEventListener('load', (event) => {
 	if(blnLoadInAjax){
+		var loadingOverlay = $('.map__loading__overlay');
+		if(loadingOverlay){
+			loadingOverlay.toggleClass('hidden');
+		}
 		countLocationsAjax().then(r => {
 			var nbElementsToManage = r.count; // total number of elements to manage
 			if(nbElementsToManage > 0){
@@ -39,6 +43,9 @@ window.addEventListener('load', (event) => {
 						}
 						objMapFilters = JSON.parse(r.json);
 						initMapGlobal();
+						if(loadingOverlay){
+							loadingOverlay.toggleClass('hidden');
+						}
 					});
 				})
 				.catch(function(msg){
@@ -134,7 +141,7 @@ var applyFilters = function(){
 					match = false;
 			} else { // input search code
 				if (filters[f] !== '' && item['filter_'+f] !== filters[f]){
-					if(-1 != item['filter_'+f].indexOf(',')){
+					if("undefined" !== typeof item['filter_'+f] && -1 != item['filter_'+f].indexOf(',')){
 						var values = item['filter_'+f].split(',');
 						match = values.includes(filters[f]);
 					}else{
@@ -157,7 +164,7 @@ var applyFilters = function(){
 				}
 			} else { // input search code
 				if (filters[f] !== '' && item['filter_'+f] !== filters[f]){
-					if(-1 != item['filter_'+f].indexOf(',')){
+					if("undefined" !== typeof item['filter_'+f] && -1 != item['filter_'+f].indexOf(',')){
 						var values = item['filter_'+f].split(',');
 						match = values.includes(filters[f]);
 						return match;
