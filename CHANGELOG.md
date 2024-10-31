@@ -7,6 +7,9 @@ Extension "Geodata" for Contao Open Source CMS
 - UPDATED : Clean code for PHP 8 compatibility
 - UPDATED : Bump dependencies
 - FIXED : CSS issue
+- UPDATED : Maps can be loaded asynchronously if there are more than a certain amount of locations to display (`tl_module.wem_geodata_map_nbItemsToForceAjaxLoading`). Setting this to "0" disables this behaviour. "0" is the default value.
+- UPDATED : new template `mod_wem_geodata_list_inmap_item` to display items in "in map" list
+- UPDATED : new JS variables `rt`,`mapModuleId`,`blnLoadInAjax` in template `mod_wem_geodata_map` :warning: They are mandatory
 
 1.0.8 - 2024-08-08
 ---
