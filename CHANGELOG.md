@@ -1,6 +1,10 @@
 Extension "Geodata" for Contao Open Source CMS
 ========
 
+2.0.2 - 2024-11-04
+---
+- FIXED : `generateBreadcrumb` hook trying to do stuff when it shouldn't
+
 2.0.1 - 2024-11-04
 ---
 - FIXED : `DisplayMap` module trying to display filters if no filters to display for the current map

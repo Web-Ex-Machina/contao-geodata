@@ -28,6 +28,9 @@ class GenerateBreadcrumbListener
     {
         // Modify $items …
         $lastItem = $items[\count($items) - 1];
+        if(!($lastItem['data']['id'] ?? false)){
+            return $items;
+        }
 
         $query = \sprintf('
             SELECT m.id
