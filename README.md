@@ -1,6 +1,9 @@
 Extension "Geodata" for Contao Open Source CMS
 ========
 
+This bundle allows you to display maps (`Google Maps` & `Leaflet`) & assign locations to them (geocoding by `Nominatim`).
+
+
 NB : administrative area levels are limited to 3 and based on the ones defined on the following Wikipedia article : [List of administrative divisions by country][4]
 
 
