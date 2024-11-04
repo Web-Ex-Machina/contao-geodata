@@ -462,6 +462,9 @@ class DisplayMap extends Core
 
     protected function parseFilters(array $filters, string $position): string
     {
+        if ('nofilters' === $position) {
+            return '';
+        }
         $objTemplate = new FrontendTemplate('mod_wem_geodata_map_filters_'.$position);
 
         $objTemplate->filters_action = '';
