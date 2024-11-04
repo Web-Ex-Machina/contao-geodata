@@ -53,7 +53,7 @@ class DisplayMap extends Core
      *
      * @var array [Available filters]
      */
-    protected $filters;
+    protected $filters = [];
 
     /**
      * Config.
@@ -147,17 +147,16 @@ class DisplayMap extends Core
             $this->Template->filters_position = $this->wem_geodata_filters;
 
             $nbItems = $this->countItems();
-            $blnLoadInAjax = (int) $this->wem_geodata_map_nbItemsToForceAjaxLoading === 0 
+            $blnLoadInAjax = 0 === (int) $this->wem_geodata_map_nbItemsToForceAjaxLoading
                 ? false
-                : $nbItems > (int) $this->wem_geodata_map_nbItemsToForceAjaxLoading
-                ;
+                : $nbItems > (int) $this->wem_geodata_map_nbItemsToForceAjaxLoading;
 
             // Get the jumpTo page
             $this->objJumpTo = PageModel::findByPk($this->objMap->jumpTo);
 
             $arrLocations = [];
             $arrMarkers = [];
-            if(!$blnLoadInAjax){
+            if (!$blnLoadInAjax) {
                 // Get locations
                 $arrLocations = $this->fetchItems();
                 // Now we retrieved all the locations, we will regroup the close ones into one
@@ -173,7 +172,7 @@ class DisplayMap extends Core
             $this->Template->markers = $arrMarkers;
             $this->Template->locations = $arrLocations;
             $this->Template->categories = $arrCategories;
-            $this->Template->filters_html = $blnLoadInAjax ? '' : $this->parseFilters($this->filters,$this->wem_geodata_filters);
+            $this->Template->filters_html = $blnLoadInAjax ? '' : $this->parseFilters($this->filters, $this->wem_geodata_filters);
 
             $this->Template->config = $arrMapConfig;
 
@@ -213,18 +212,18 @@ class DisplayMap extends Core
                     $arrResponse = [
                         'status' => 'success',
                         'html' => 'nolist' !== $this->wem_geodata_map_list ? $this->parseLocationsList($arrLocations) : '',
-                        'json' => json_encode($arrLocations, JSON_INVALID_UTF8_IGNORE | JSON_INVALID_UTF8_SUBSTITUTE)
+                        'json' => json_encode($arrLocations, \JSON_INVALID_UTF8_IGNORE | \JSON_INVALID_UTF8_SUBSTITUTE),
                     ];
-                break;
+                    break;
                 case 'getLocationsItemsPagined':
                     $this->buildFilters();
-                    $arrLocations = $this->fetchItems(null,Input::post('limit') ? (int) Input::post('limit') : 50,Input::post('offset') ? (int) Input::post('offset') : 0);
+                    $arrLocations = $this->fetchItems(null, Input::post('limit') ? (int) Input::post('limit') : 50, Input::post('offset') ? (int) Input::post('offset') : 0);
                     $arrResponse = [
                         'status' => 'success',
                         'html' => $this->parseItems($arrLocations),
-                        'json' => json_encode($arrLocations, JSON_INVALID_UTF8_IGNORE | JSON_INVALID_UTF8_SUBSTITUTE)
+                        'json' => json_encode($arrLocations, \JSON_INVALID_UTF8_IGNORE | \JSON_INVALID_UTF8_SUBSTITUTE),
                     ];
-                break;
+                    break;
                 case 'countLocations':
                     $this->buildFilters();
                     $arrLocations = $this->countItems();
@@ -232,16 +231,16 @@ class DisplayMap extends Core
                         'status' => 'success',
                         'count' => $this->countItems(),
                     ];
-                break;
+                    break;
                 case 'getFilters':
                     $this->buildFilters();
                     $arrLocations = $this->fetchItems();
                     $arrResponse = [
                         'status' => 'success',
-                        'html' => $this->parseFilters($this->filters,$this->wem_geodata_filters),
-                        'json'=> json_encode($this->filters)
+                        'html' => $this->parseFilters($this->filters, $this->wem_geodata_filters),
+                        'json' => json_encode($this->filters),
                     ];
-                break;
+                    break;
                 default:
                     throw new \Exception(\sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['unknownAjaxRequest'], Input::post('action')));
             }
@@ -384,8 +383,6 @@ class DisplayMap extends Core
      * Fetch the matching items.
      *
      * @param array|null $c       configuration. If none provided, the default one will be used
-     * @param int|null   $limit
-     * @param int|null   $offset
      * @param array|null $options
      */
     protected function fetchItems(?array $c = [], ?int $limit = 0, ?int $offset = 0, $options = []): ?array
@@ -441,6 +438,7 @@ class DisplayMap extends Core
             $objTemplate->filters = $this->filters;
             $objTemplate->filters_position = $this->wem_geodata_filters;
         }
+
         return $objTemplate->parse();
     }
 
@@ -448,19 +446,19 @@ class DisplayMap extends Core
     {
         $objTemplate = new FrontendTemplate('rightpanel' === $this->wem_geodata_map_list ? 'mod_wem_geodata_list_inmap_item' : 'mod_wem_geodata_list_item');
         $objTemplate->location = $location;
+
         return $objTemplate->parse();
     }
 
     protected function parseItems(array $locations): array
     {
         $arrItems = [];
-        foreach($locations as $location){
+        foreach ($locations as $location) {
             $arrItems[] = $this->parseItem($location);
         }
 
         return $arrItems;
     }
-
 
     protected function parseFilters(array $filters, string $position): string
     {
