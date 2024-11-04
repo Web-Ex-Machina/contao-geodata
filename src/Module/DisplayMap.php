@@ -438,7 +438,7 @@ class DisplayMap extends Core
             $objTemplate->filters = $this->filters;
             $objTemplate->filters_position = $this->wem_geodata_filters;
         }
-
+      
         return $objTemplate->parse();
     }
 
@@ -446,7 +446,7 @@ class DisplayMap extends Core
     {
         $objTemplate = new FrontendTemplate('rightpanel' === $this->wem_geodata_map_list ? 'mod_wem_geodata_list_inmap_item' : 'mod_wem_geodata_list_item');
         $objTemplate->location = $location;
-
+      
         return $objTemplate->parse();
     }
 
