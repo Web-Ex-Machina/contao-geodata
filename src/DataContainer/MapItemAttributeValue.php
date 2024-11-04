@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2022 Web ex Machina
+ * Copyright (c) 2015-2024 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -14,27 +14,12 @@ declare(strict_types=1);
 
 namespace WEM\GeoDataBundle\DataContainer;
 
-use Contao\Backend;
-
-class MapItemAttributeValue extends Backend
+class MapItemAttributeValue extends CoreContainer
 {
     /**
-     * Import the back end user object.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->import('BackendUser', 'User');
-    }
-
-    /**
      * Design each row of the DCA.
-     *
-     * @param array $arrRow
-     *
-     * @return string
      */
-    public function listItems($arrRow)
+    public function listItems(array $arrRow): string
     {
         return $arrRow['attribute'].' '.$arrRow['value'];
     }

@@ -99,6 +99,8 @@
 .map__list__item__link a:before{transform: translateX(-50%) rotate(90deg);}
 .map__list__item__link a:hover{opacity: 0.6; color: inherit;}
 
+.map__list__item__categoryTitle{margin-top: 0; font-weight: 300;opacity: .4;}
+.hide-categories .map__list__item__categoryTitle{display: none;}
 
 .map__popup{}
 .map__popup__picture{margin-top: 0.5em;}
@@ -114,6 +116,7 @@
 #wrapper .map__legend__toggler{position: absolute; bottom: 1rem; right: 1rem; z-index: 99;}
 .map__panel .map__legend,
 #wrapper .map__panel .map__legend__toggler{position: absolute; bottom: 1rem;  right: 100%; margin-right: 1rem; z-index: 99; pointer-events: all;}
+.map__panel .map__legend{max-height: calc(100% - 2rem); overflow: auto; scrollbar-width: thin; }
 .map__legend{ background: white; margin: 0; padding: .75em 1rem; min-width: 250px; max-width: 100%; width: clamp(250px,20vw,100%); transition: bottom 0.6s,opacity 0.6s; opacity: 1;pointer-events: all;}
 .map__legend:not(.active){opacity: 0; bottom: -20%;  pointer-events: none;}
 .map__legend .close{position: absolute; right: 0; top: 0; font-size: 1.5em; line-height: 40px; width: 40px; text-align: center; cursor: pointer; opacity: 0.3; transition: opacity 0.4s; }
@@ -126,3 +129,26 @@
 
 .map__wrapper+*{margin-top: 1em;}
 .locations__filters+*{margin-top: 1em;}
+
+.map__loading__overlay{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 20000;
+  cursor: pointer;
+}
+
+.map__loading__overlay__text{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 50px;
+  color: white;
+  transform: translate(-50%,-50%);
+  -ms-transform: translate(-50%,-50%);
+}

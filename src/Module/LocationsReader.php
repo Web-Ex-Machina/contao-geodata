@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2022 Web ex Machina
+ * Copyright (c) 2015-2024 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -14,14 +14,14 @@ declare(strict_types=1);
 
 namespace WEM\GeoDataBundle\Module;
 
-use Contao\Combiner;
 use Contao\BackendTemplate;
+use Contao\Combiner;
 use Contao\Config;
 use Contao\Environment;
 use Contao\Input;
+use Contao\System;
 use WEM\GeoDataBundle\Model\Map;
 use WEM\GeoDataBundle\Model\MapItem;
-use WEM\GeoDataBundle\Controller\ClassLoader;
 
 /**
  * Front end module "locations reader".
@@ -85,16 +85,15 @@ class LocationsReader extends Core
 
             // The location item does not exist or has an external target (see #33)
             if (null === $objItem || !$objItem->isPublishedForTimestamp()) {
-                throw new \Exception(sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['pageNotFound'], Environment::get('uri')));
+                throw new \Exception(\sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['pageNotFound'], Environment::get('uri')));
             }
-
 
             $arrItem = $this->getLocation($objItem);
             $objMap = Map::findByPk($objItem->pid);
             $this->Template->item = $arrItem;
             $this->Template->map = $objMap->row();
             $this->Template->shouldBeIndexed = $objMap->row();
-            
+
             // Load the libraries
             $strVersion = 1;
             $objCssCombiner = new Combiner();
@@ -105,10 +104,49 @@ class LocationsReader extends Core
             $GLOBALS['TL_HEAD'][] = '<link rel="stylesheet" href="https://unpkg.com/leaflet-gesture-handling@latest/dist/leaflet-gesture-handling.min.css">';
             $GLOBALS['TL_JAVASCRIPT'][] = 'https://unpkg.com/leaflet-gesture-handling@latest/dist/leaflet-gesture-handling.min.js';
             // And add them to pages
-            $GLOBALS['TL_HEAD'][] = sprintf('<link rel="stylesheet" href="%s">', $objCssCombiner->getCombinedFile());
-        } catch (\Exception $e) {
+            $GLOBALS['TL_HEAD'][] = \sprintf('<link rel="stylesheet" href="%s">', $objCssCombiner->getCombinedFile());
+
+            // Override page details
+            $htmlDecoder = null;
+            try {
+                $htmlDecoder = System::getContainer()->get('contao.string.html_decoder');
+            } catch (\Exception $e) {
+                // service does not exists
+            }
+
+            $responseContextAccessor = null;
+            try {
+                $responseContextAccessor = System::getContainer()->get('contao.routing.response_context_accessor'); // throws Exception if not found
+            } catch (\Exception $e) {
+                // service does not exists
+            }
+
+            $responseContext = $responseContextAccessor ? $responseContextAccessor->getResponseContext() : null;
+            if ($responseContext && $responseContext->has(\Contao\CoreBundle\Routing\ResponseContext\HtmlHeadBag\HtmlHeadBag::class)) {
+                /** @var HtmlHeadBag $htmlHeadBag */
+                $htmlHeadBag = $responseContext->get(\Contao\CoreBundle\Routing\ResponseContext\HtmlHeadBag\HtmlHeadBag::class);
+                $htmlHeadBag->setTitle($arrItem['title']);
+                if ($htmlDecoder) { // exists in Contao 4.13 and is Contao 5.0 ready
+                    $htmlHeadBag->setMetaDescription($htmlDecoder->htmlToPlainText($arrItem['content']));
+                } elseif (method_exists(\Contao\StringUtil::class, 'htmlToPlainText')) { // exists in Contao 4.13 but is deprecated
+                    $htmlHeadBag->setMetaDescription(\Contao\StringUtil::htmlToPlainText($arrItem['content']));
+                } else { // pre Contao 4.13 behaviour
+                    $htmlHeadBag->setMetaDescription($arrItem['content']);
+                }
+            } else {
+                $objPage->ogTitle = $arrItem['title'];
+                $objPage->pageTitle = $arrItem['title'];
+                if ($htmlDecoder) { // exists in Contao 4.13 and is Contao 5.0 ready
+                    $objPage->description = $htmlDecoder->htmlToPlainText($arrItem['content']);
+                } elseif (method_exists(\Contao\StringUtil::class, 'htmlToPlainText')) { // exists in Contao 4.13 but is deprecated
+                    $objPage->description = \Contao\StringUtil::htmlToPlainText($arrItem['content']);
+                } else { // pre Contao 4.13 behaviour
+                    $objPage->description = $arrItem['content'];
+                }
+            }
+        } catch (\Exception $exception) {
             $this->Template->error = true;
-            $this->Template->msg = $e->getMessage();
+            $this->Template->msg = $exception->getMessage();
         }
     }
 }

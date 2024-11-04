@@ -11,13 +11,57 @@ var arrMarkersInListCurrent = [];
 var arrMarkersAll= [];
 var arrMarkersCurrent = [];
 var filters = {};
+var mapModuleId;
+var rt;
+var limit = 100;
+var blnLoadInAjax = false;
 
 // providers functions, needs to be overriden in the proper dedicated file (eg. leaflet.js)
 var applyFilters_callback = function(){};
-var initMap = function(){};
+var initMap = function(){
+	return new Promise(function(resolve,reject){
+	    resolve()
+	});
+}
 
 // ONLAD
 window.addEventListener('load', (event) => {
+	if(blnLoadInAjax){
+		var loadingOverlay = $('.map__loading__overlay');
+		if(loadingOverlay){
+			loadingOverlay.toggleClass('hidden');
+		}
+		countLocationsAjax().then(r => {
+			var nbElementsToManage = r.count; // total number of elements to manage
+			if(nbElementsToManage > 0){
+				loopGetLocationsItemsPagined(nbElementsToManage, 0, limit)
+				.then(function(r){
+
+					getFiltersAjax().then(r => {
+						if(r.html.length > 0){
+							$('.map__filters__container').html(r.html);
+						}
+						objMapFilters = JSON.parse(r.json);
+						initMapGlobal();
+						if(loadingOverlay){
+							loadingOverlay.toggleClass('hidden');
+						}
+					});
+				})
+				.catch(function(msg){
+					alert(msg);
+				});
+			}
+		})
+		.catch(function(msg){
+			alert(msg);
+		});
+	}else{
+		initMapGlobal();
+	}
+});
+
+var initMapGlobal = function(){
 	$map           = $('.map__container');
 	$legend        = $('.map__legend');
 	$toggleLegend  = $('.map__legend__toggler');
@@ -47,46 +91,44 @@ window.addEventListener('load', (event) => {
 		applyFilters();
 	});
 
-	initMap();
-
-	// set legend after map init
-	if (objMapFilters.category) {
-		for(var c in objMapFilters.category.options) {
-	    	var category = objMapFilters.category.options[c];
-	    	for(var i in categories){
-	    		if(categories[i].id === category.value){
-	    			category = categories[i];
-	    			break;
-	    		}
-	    	}
-	    	if (category.marker) {
+	initMap().then((r) => {
+		// set legend after map init
+		if (categories) {
+			for(var c in categories) {
+		    	var category = categories[c];
+		    	for(var i in categories){
+		    		if(categories[i].id === category.value){
+		    			category = categories[i];
+		    			break;
+		    		}
+		    	}
 				// add marker to legend
-				$('.map__legend').append(`
+				$legend.append(`
 					<div class="map__legend__item">
-						<img src="${objMarkersConfig[category.alias].options.iconUrl}" width="${objMarkersConfig[category.alias].options.iconSize[0]}" height="${objMarkersConfig[category.alias].options.iconSize[1]}" alt="Icon for ${category.title} category"><span>${category.title}</span>
+						<img src="${objMarkersConfig[category.marker?category.alias:'default'].options.iconUrl}" width="${objMarkersConfig[category.marker?category.alias:'default'].options.iconSize[0]}" height="${objMarkersConfig[category.marker?category.alias:'default'].options.iconSize[1]}" alt="Icon for ${category.title} category"><span>${category.title}</span>
 					</div>
 				`);
-	    	}
-	    }
-	    $toggleLegend.on('click',()=>{
-	    	$legend.addClass('active');
-	    });
-	    $legend.find('.close').on('click',()=>{
-	    	$legend.removeClass('active');
-	    });
-	    if ($legend.find('.map__legend__item').length)
-	    	$toggleLegend.removeClass('hidden');
-	    
-	}
+		    }
+		    $toggleLegend.on('click',()=>{
+		    	$legend.addClass('active');
+		    });
+		    $legend.find('.close').on('click',()=>{
+		    	$legend.removeClass('active');
+		    });
+		    if ($legend.find('.map__legend__item').length && categories.length>1)
+		    	$toggleLegend.removeClass('hidden');
+		    
+		}
 
-	// manually trigger filters
-	$('.locations__filters, .map__filters').find('[id^=filter_]').first().trigger('change');
-
-	// console.log('arrMarkersInListAll',arrMarkersInListAll);
-	// console.log('arrMarkersInListCurrent',arrMarkersInListCurrent);
-	// console.log('arrMarkersAll',arrMarkersAll);
-	// console.log('arrMarkersCurrent',arrMarkersCurrent);
-});
+		// manually trigger filters
+		$('.locations__filters, .map__filters').find('[id^=filter_]').first().trigger('change');
+		// console.log('objMapFilters',objMapFilters);
+		// console.log('arrMarkersInListAll',arrMarkersInListAll);
+		// console.log('arrMarkersInListCurrent',arrMarkersInListCurrent);
+		// console.log('arrMarkersAll',arrMarkersAll);
+		// console.log('arrMarkersCurrent',arrMarkersCurrent);
+	});
+};
 
 var applyFilters = function(){
 	// console.log(filters);
@@ -94,12 +136,18 @@ var applyFilters = function(){
 		var match = true;
 		// console.log(item);
 		for(var f in filters){
-			if (f !== "search") {
-				if (filters[f] !== '' && item['filter_'+f] !== filters[f])
+			if (f == "search" || f == "category") {
+				if (filters[f] !== '' && item['filter_'+f].search(new RegExp(filters[f],'i')) == -1)
 					match = false;
 			} else { // input search code
-				if (item.filter_search.search(new RegExp(filters[f],'i')) == -1)
-					match = false;
+				if (filters[f] !== '' && item['filter_'+f] !== filters[f]){
+					if("undefined" !== typeof item['filter_'+f] && -1 != item['filter_'+f].indexOf(',')){
+						var values = item['filter_'+f].split(',');
+						match = values.includes(filters[f]);
+					}else{
+						match = false;
+					}
+				}
 			}
 		}
 		return match;
@@ -109,16 +157,21 @@ var applyFilters = function(){
 	arrMarkersInListCurrent = arrMarkersInListAll.filter( item => {
 		var match = true;
 		for(var f in filters){
-			if (f !== "search") {
-				// console.log(filters[f], item['filter_'+f], filters[f] !== '' && item['filter_'+f] !== filters[f] );
-				if (filters[f] !== '' && item['filter_'+f] !== filters[f]){
+			if (f == "search" || f == "category") {
+				if (filters[f] !== '' && item['filter_'+f].search(new RegExp(filters[f],'i')) == -1){
 					match = false;
 					return false;
 				}
 			} else { // input search code
-				if (item.filter_search.search(new RegExp(filters[f],'i')) == -1){
-					match = false;
-					return false;
+				if (filters[f] !== '' && item['filter_'+f] !== filters[f]){
+					if("undefined" !== typeof item['filter_'+f] && -1 != item['filter_'+f].indexOf(',')){
+						var values = item['filter_'+f].split(',');
+						match = values.includes(filters[f]);
+						return match;
+					}else{
+						match = false;
+						return false;
+					}
 				}
 			}
 		}
@@ -148,10 +201,9 @@ var applyFilters = function(){
 var getPopupHTML = function(obj){
 	return `
 		<div class="map__popup ">
-			<div class="map__popup__title map__list__item__title">
-				${obj.category.title ? '<div class="ft-b ft-0-8-em opa-4 ft-upper">'+obj.category.title+'</div>':''} 
-				${obj.title}
-			</div>
+			<div class="map__popup__title map__list__item__title"> ${obj.title} </div>
+        	${obj.category.title && categories.length>1 ? '<p class="opa-4 ft-l m-top-0">'+obj.category.title.toUpperCase()+'</p>':''}
+        	${Array.isArray(obj.category) && categories.length>1 ? '<p class="opa-4 ft-l m-top-0">'+(obj.category.map(function(c){return c.title})).join(', ').toUpperCase()+'</p>':''}
 			${obj.picture ? `<div class="map__popup__picture"><img src="${obj.picture.path}" alt="${obj.title}" /></div>` :''}
 			<div class="map__popup__infos map__list__item__text">
 				${obj.address ?'<div class="map__popup__infos__line "><i class="fa fa-map-marker-alt"></i> <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">'+obj.address+'</span></div>':''}
@@ -178,9 +230,142 @@ var selectMapItem = function(itemID){
 	}
 }
 
+var loopGetLocationsItemsPagined = function(nbElementsToManage, offset, limit){
+	return new Promise(function (resolve, reject) {
+		getLocationsItemsPaginedAjax(offset, limit)
+		.then(function(r){
+			if("error" == r.status) {
+				reject(r.msg);
+			} else {
+				offset = offset+limit;
+
+				// append results in list
+				if(r.html.length > 0){
+					for(var item of r.html){
+						$('.map__list__wrapper').append(item);
+					}
+				}
+				// append results in JS list
+				objMapData = objMapData.concat(JSON.parse(r.json));
+				if(offset < nbElementsToManage){
+					loopGetLocationsItemsPagined(nbElementsToManage, offset, limit)
+					.then(r=>resolve(r))
+					.catch(msg=>reject(msg))
+					;
+				}else{
+					resolve(r);
+				}
+			}
+		})
+		.catch(function(msg){
+			reject(msg);
+		});
+	});
+}
+
+var getLocationsListAjax = function(){
+	return new Promise(function(resolve,reject){
+		var request = new FormData();
+
+		request.append('TL_AJAX', 1);
+	    request.append('REQUEST_TOKEN', rt);
+	    request.append('module', mapModuleId);
+	    request.append('action', 'getLocationsList');
+
+		fetch(window.location,{
+			method: 'POST',
+			mode: 'same-origin',
+			cache: 'no-cache',
+			body: request
+		})
+		.then((response) => response.json())
+		.then((json) => {
+		  resolve(json);
+		})
+		.catch((error) => {
+		    reject(error);
+		});
+	});
+};
+var countLocationsAjax = function(){
+	return new Promise(function(resolve,reject){
+		var request = new FormData();
+
+		request.append('TL_AJAX', 1);
+	    request.append('REQUEST_TOKEN', rt);
+	    request.append('module', mapModuleId);
+	    request.append('action', 'countLocations');
+
+		fetch(window.location,{
+			method: 'POST',
+			mode: 'same-origin',
+			cache: 'no-cache',
+			body: request
+		})
+		.then((response) => response.json())
+		.then((json) => {
+		  resolve(json);
+		})
+		.catch((error) => {
+		    reject(error);
+		});
+	});
+};
+
+var getLocationsItemsPaginedAjax = function(offset, limit){
+	return new Promise(function(resolve,reject){
+		var request = new FormData();
+
+		request.append('TL_AJAX', 1);
+	    request.append('REQUEST_TOKEN', rt);
+	    request.append('module', mapModuleId);
+	    request.append('offset', offset);
+	    request.append('limit', limit);
+	    request.append('action', 'getLocationsItemsPagined');
+
+		fetch(window.location,{
+			method: 'POST',
+			mode: 'same-origin',
+			cache: 'no-cache',
+			body: request
+		})
+		.then((response) => response.json())
+		.then((json) => {
+		  resolve(json);
+		})
+		.catch((error) => {
+		    reject(error);
+		});
+	});
+};
+
+var getFiltersAjax = function(){
+	return new Promise(function(resolve,reject){
+		var request = new FormData();
+
+		request.append('TL_AJAX', 1);
+	    request.append('REQUEST_TOKEN', rt);
+	    request.append('module', mapModuleId);
+	    request.append('action', 'getFilters');
+
+		fetch(window.location,{
+			method: 'POST',
+			mode: 'same-origin',
+			cache: 'no-cache',
+			body: request
+		})
+		.then((response) => response.json())
+		.then((json) => {
+		  resolve(json);
+		})
+		.catch((error) => {
+		    reject(error);
+		});
+	});
+};
 // ------------------------------------------------------------------------------------------------------------------------------
 // UTILITIES
-var normalize = function(str = ''){return str.toLowerCase().replace(/ |\./g,'_'); }
+var normalize = function(str = ''){return str.toLowerCase().replace(/ |\.|\'/g,'_'); }
 
 window.addEventListener("load", function(e) {
 	$.fn.filterByData = function(prop, val) {

@@ -1,4 +1,4 @@
-<div class="map__list map__panel right ">
+<div class="map__list map__panel right active">
   <span class="map__list__toggler ">
     <div class="bar"></div>
     <div class="bar"></div>
@@ -6,41 +6,7 @@
   </span>
   <div class="map__list__wrapper scroll-custom">
     <?php foreach ($this->locations as $key => $location): ?>
-      <div class="map__list__item" data-id="<?= $location['id'] ?>" data-marker="<?= $location['country']['code'].'-'.str_replace(' ', '_', strtolower($location['title'])) ?>"
-        data-country        ="<?= $location['country']['code'] ?>" 
-        data-continent      ="<?= $location['continent']['code'] ?>"
-        data-category       ="<?php echo str_replace([' ','.'],'_', mb_strtolower($this->location['category']['id'], 'UTF-8'));?>" 
-        data-category-title ="<?php echo str_replace([' ','.'],'_', mb_strtolower($this->location['category']['title'], 'UTF-8'));?>" 
-        data-city           ="<?php echo str_replace([' ','.'],'_', mb_strtolower($this->location['city'], 'UTF-8'));?>" 
-        data-admin_lvl_1    ="<?php echo str_replace([' ','.'],'_', mb_strtolower($this->location['admin_lvl_1'], 'UTF-8'));?>" 
-        data-admin_lvl_2    ="<?php echo str_replace([' ','.'],'_', mb_strtolower($this->location['admin_lvl_2'], 'UTF-8'));?>" 
-       >
-        <span class="map__list__item__title "><?= $location['title'] ?></span>
-        <div class="map__list__item__text">
-          <?php if($location['address']): ?>
-            <div class="map__list__item__line" itemprop="location" itemscope itemtype="http://schema.org/Place">
-              <i class="fa fa-map-marker-alt"></i><span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress"><?= $location['address'] ?></span>
-            </div>
-          <?php endif; ?>
-          <?php if($location['phone']): ?>
-            <div class="map__list__item__line"><i class="fa fa-phone"></i><?= $location['phone'] ?></div>
-          <?php endif; ?>
-          <?php if($location['email']): ?>
-            <div class="map__list__item__line"><i class="fa fa-envelope"></i><?= $location['email'] ?></div>
-          <?php endif; ?>
-        </div>
-        <?php if ($location['teaser']): ?>
-          <div class="map__list__item__text">
-            <?= $location['teaser'] ?>
-          </div>
-        <?php endif ?>
-        
-        <?php if($location['url']): ?>
-          <div class="map__list__item__link">
-            <a href="<?= $location['url'] ?>" title="<?= $location['title'] ?>: <?= $GLOBALS['TL_LANG']['WEM']['LOCATIONS']['BUTTON']['READMORE'] ?>"></a>
-          </div>
-        <?php endif ?>
-      </div>
+      <?php $this->insert($this->customTplForGeodataItems,['location'=>$location]); ?>
     <?php endforeach ?>
   </div>
   <span class="map__legend__toggler btn-sm m-y-0 squared hidden">Legend</span>

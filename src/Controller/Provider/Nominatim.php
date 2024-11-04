@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2022 Web ex Machina
+ * Copyright (c) 2015-2024 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -38,7 +38,7 @@ class Nominatim extends Controller
      * @param Map            $objMap     Map Model
      * @param int            $intResults Number of API results wanted
      *
-     * @throws Exception
+     * @throws \Exception
      *
      * @return array [Address Components]
      */
@@ -48,24 +48,33 @@ class Nominatim extends Controller
         if ('nominatim' !== $objMap->geocodingProvider) {
             throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['missingConfigForGeocoding']);
         }
+        if (empty($objMap->geocodingProviderNominatimReferer)) {
+            throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['missingConfigForGeocoding']);
+        }
+
         // Standardize the address to geocode
         $args = [];
         if (is_a($varAddress, MapItem::class)) {
             if ($varAddress->street) {
                 $args[] = 'street='.trim(preg_replace('/\s+/', ' ', strip_tags($varAddress->street)));
             }
+
             if ($varAddress->postal) {
                 $args[] = 'postalcode='.$varAddress->postal;
             }
+
             if ($varAddress->city) {
                 $args[] = 'city='.$varAddress->city;
             }
+
             if ($varAddress->region) {
                 $args[] = 'state='.$varAddress->region;
             }
+
             if ($varAddress->admin_lvl_1) {
                 $args[] = 'state='.$varAddress->admin_lvl_1;
             }
+
             if ($varAddress->country) {
                 $args[] = 'countrycodes='.$varAddress->country;
             }
@@ -80,16 +89,20 @@ class Nominatim extends Controller
 
         // Then, cURL it baby.
         $ch = curl_init();
-        $strUrl = sprintf(static::$strGeocodingUrl, $strAddress, Config::get('adminEmail'));
+        $strUrl = \sprintf(static::$strGeocodingUrl, $strAddress, Config::get('adminEmail'));
         curl_setopt($ch, CURLOPT_URL, $strUrl);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Referer: '.$objMap->geocodingProviderNominatimReferer,
+        ]);
         $geoloc = json_decode(curl_exec($ch), true);
 
         // Catch Error
         if (!$geoloc) {
-            throw new \Exception(sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['invalidRequest'], $strUrl));
+            throw new \Exception(\sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['invalidRequest'], $strUrl));
         }
+
         // And return them
         if (1 === $intResults) {
             return ['lat' => $geoloc[0]['lat'], 'lng' => $geoloc[0]['lon']];

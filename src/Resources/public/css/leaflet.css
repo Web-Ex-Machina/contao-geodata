@@ -11,3 +11,4 @@ img.leaflet-marker-icon{-o-object-fit: contain;object-fit: contain;}
 .leaflet-marker-pane.has-selected .leaflet-marker-icon.selected{opacity: 1 !important;}
 
 .leaflet-control-container a[role=button]:hover{text-decoration: none;}
+.leaflet-container{font-family: inherit;}

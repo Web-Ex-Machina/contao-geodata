@@ -48,8 +48,8 @@
 			<target>Land</target>
 		</trans-unit>
 		<trans-unit id="WEM.LOCATIONS.TITLE.PANEL">
-			<source>Contact details for Altrad in</source>
-			<target>Kontaktdetails für Altrad in</target>
+			<source>Contact details</source>
+			<target>Kontaktdetails</target>
 		</trans-unit>
 		<trans-unit id="WEM.LOCATIONS.BUTTON.BACK">
 			<source>Back</source>
@@ -60,14 +60,31 @@
 			<source>Location %s saved !</source>
 			<target>Standort %s gespeichert!</target>
 		</trans-unit>
+		
+		<trans-unit id="WEM.LOCATIONS.LABEL.mapLoading">
+			<source>Loading ...</source>
+			<target>Laden ...</target>
+		</trans-unit>
 
 		<trans-unit id="WEM.LOCATIONS.ERROR.unknownAjaxRequest">
 			<source>Unknown AJAX action : "%s"</source>
 			<target>Unbekannte AJAX aktion : "%s"</target>
 		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.noMapFound">
+			<source>No map found !</source>
+			<target>Karte nicht gefunden</target>
+		</trans-unit>
 		<trans-unit id="WEM.LOCATIONS.ERROR.noLocationsFound">
 			<source>No locations found for this map !</source>
 			<target>Keine Standorte für diese Karte gefunden</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.noMapConfigured">
+			<source>No map configured for this module !</source>
+			<target>Für dieses Modul ist keine Karte konfiguriert!</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.noCategoryConfigured">
+			<source>No category configured for this map !</source>
+			<target>Für diese Karte ist keine Kategorie konfiguriert!</target>
 		</trans-unit>
 		<trans-unit id="WEM.LOCATIONS.ERROR.countryNotFound">
 			<source>The country %s doesn't match a known ISO Code. Maybe there is a typo ?</source>
@@ -120,6 +137,14 @@
 		<trans-unit id="WEM.LOCATIONS.ERROR.mapNotFound">
 			<source>No map found.</source>
 			<target>Keine Karte gefunden.</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.FILE_USAGE.tableNameMapItem">
+			<source>Map Item</source>
+			<target>Standort</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.FILE_USAGE.tableNameMapCategory">
+			<source>Map Item Category</source>
+			<target>Standortkategorie</target>
 		</trans-unit>
     </body>
   </file>

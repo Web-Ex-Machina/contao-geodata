@@ -1,14 +1,47 @@
-<div class="locations__list <?= $this->class ?> ">
+<div class="locations__list <?= $this->class ?><?php echo count($this->categories??[])<2?' hide-categories':'' ?>">
   <?php if($this->error): ?>
     <div class="error">
       <?= $this->msg ?>
     </div>
   <?php else: ?>
+    <?php if($this->filters): ?>  
+      <form action="<?= $this->filters_action ?>" method="<?= $this->filters_method ?>" class="locations__filters ft-0-8-em">
+          <?php foreach($this->filters as $f): ?>
+              <?php if('select' == $f['type'] && count($f['options']) <= 1): ?>
+                <!-- removed filter <?= $f['name'] ?> for it have only one selectable option -->
+              <?php else: ?>
+                <div class="location__filter form-group <?php echo ('text' == $f['type']) ? 'w-100' : '';?>">
+                  <?php if('text' == $f['type']) : ?>
+                    <label for="filter_<?= $f['name'] ?>"><?= $f['label'] ?></label>
+                    <input type="text" id="filter_<?= $f['name'] ?>" name="<?= $f['name'] ?>" value="<?= $f['value'] ?>" placeholder="<?= $f['placeholder'] ?>" />
+                  <?php elseif('select' == $f['type']): ?>
+                    <label for="filter_<?= $f['name'] ?>"><?= $f['label'] ?></label>
+                    <select id="filter_<?= $f['name'] ?>" name="<?= $f['name'] ?>" placeholder="<?= $f['placeholder'] ?>">
+                      <option value=""> - </option>
+                      <?php foreach($f['options'] as $o): ?>
+                        <option value="<?= $o['value'] ?>" <?= $o['selected'] ?>><?= $o['text'] ?></option>
+                      <?php endforeach; ?>
+                    </select>
+                  <?php endif; ?>
+                </div>
+              <?php endif ?>
+            <?php endforeach; ?>
+          <div class="location__filter flex-alignitems--flexend">
+            <input type="submit" class="btn-sm w-100 m-0" value="<?= $GLOBALS['TL_LANG']['MSC']['filter'] ?>" />
+          </div>
+      </form>
+    <?php endif; ?>
     <div class="location__list__wrapper flex-wrap">
       <?php foreach($this->locations as $location): ?>
         <?php $this->insert($this->customTplForGeodataItems,['location'=>$location]); ?>
       <?php endforeach; ?>
-      <?php echo $this->pagination; ?>
     </div>
+    <?php echo $this->pagination; ?>
+    <script type="text/javascript">
+      objMapData        = <?= json_encode($this->locations, JSON_INVALID_UTF8_IGNORE | JSON_INVALID_UTF8_SUBSTITUTE) ?>;
+      objMapConfig      = <?= json_encode($this->config) ?>;
+      categories        = <?= $this->categories ? json_encode($this->categories):'{}' ?>;
+      objMapFilters     = <?= $this->filters ? json_encode($this->filters):'{}' ?>;
+    </script>
   <?php endif; ?>
 </div>

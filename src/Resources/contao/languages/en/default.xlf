@@ -60,10 +60,27 @@
 			<source>Location %s saved !</source>
 			<target>Location %s saved !</target>
 		</trans-unit>
+		
+		<trans-unit id="WEM.LOCATIONS.LABEL.mapLoading">
+			<source>Loading ...</source>
+			<target>Loading ...</target>
+		</trans-unit>
 
 		<trans-unit id="WEM.LOCATIONS.ERROR.unknownAjaxRequest">
 			<source>Unknown AJAX action : "%s"</source>
 			<target>Unknown AJAX action : "%s"</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.noMapFound">
+			<source>No map found !</source>
+			<target>No map found !</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.noMapConfigured">
+			<source>No map configured for this module !</source>
+			<target>No map configured for this module !</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.noCategoryConfigured">
+			<source>No category configured for this map !</source>
+			<target>No category configured for this map !</target>
 		</trans-unit>
 		<trans-unit id="WEM.LOCATIONS.ERROR.noLocationsFound">
 			<source>No locations found for this map !</source>
@@ -76,6 +93,10 @@
 		<trans-unit id="WEM.LOCATIONS.ERROR.missingConfigForGeocoding">
 			<source>Config is missing for geocoding !</source>
 			<target>Config is missing for geocoding !</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.featureDeletedIn">
+			<source>The feature %s was deleted in %s version.</source>
+			<target>The feature %s was deleted in %s version.</target>
 		</trans-unit>
 		<trans-unit id="WEM.LOCATIONS.ERROR.errorWhenSavingTheLocation">
 			<source>An error happened when saving the location. Please try again.</source>
@@ -120,6 +141,14 @@
 		<trans-unit id="WEM.LOCATIONS.ERROR.mapNotFound">
 			<source>No map found.</source>
 			<target>No map found.</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.FILE_USAGE.tableNameMapItem">
+			<source>Map Item</source>
+			<target>Map Item</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.FILE_USAGE.tableNameMapCategory">
+			<source>Map Item Category</source>
+			<target>Map Item Category</target>
 		</trans-unit>
     </body>
   </file>

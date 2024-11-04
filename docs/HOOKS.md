@@ -10,6 +10,9 @@ This file list all available hooks in this package.
 | `WEMGEODATADOWNLOADLOCATIONSSAMPLE` | Called when generating a sample file for later locations import. Either alter the given `\PhpOffice\PhpSpreadsheet\Spreadsheet` object or completely overrides default behaviour.
 | `WEMGEODATADISPLAYLOCATIONSSAMPLE` | Called when generating a sample file format to display. Returns an array with header columns & exmaple rows.
 | `WEMGEODATADOWNLOADLOCATIONSEXPORT` | Called when generating an export file. Either alter the given `\PhpOffice\PhpSpreadsheet\Spreadsheet` object or completely overrides default behaviour.
+| `WEMGEODATAGETLOCATION` | Called when retrieving a location data in a module.
+| `WEMGEODATABUILDFILTERSSINGLEFILTEROPTION` | Called when building filters in a module.
+| `WEMGEODATAMAPITEMFORMATSTATEMENT` | Called when calling `MapItem::formatStatement` on a non default managed column.
 
 ## Details
 
@@ -25,6 +28,8 @@ Name | Type | Description
 --- | --- | ---
 $arrUploaded | `array` | Array of uploaded files path
 $arrExcelPattern | `array` | Array to make column in file match a field in the `\WEM\GeoDataBundle\Model\Item` object
+$updateExistingItems | `bool` | `true` if checkbox for updating existing items instead of simply creating new entries is checked
+$deleteExistingItems | `bool` | `true` if checkbox for deleting existing items not in import files is checked
 $objMap | `\WEM\GeoDataBundle\Model\Map` | The `\WEM\GeoDataBundle\Model\Map` in which items are to be imported
 $caller | `\WEM\GeoDataBundle\Backend\Callback` | The calling object
 
@@ -33,6 +38,8 @@ $caller | `\WEM\GeoDataBundle\Backend\Callback` | The calling object
 public function importLocations(
 	array $arrUploaded, 
 	array $arrExcelPattern, 
+	bool $updateExistingItems, 
+	bool $deleteExistingItems,
 	\WEM\GeoDataBundle\Model\Map $objMap, 
 	\WEM\GeoDataBundle\Backend\Callback $caller
 ): void
@@ -203,5 +210,129 @@ public function exportLocations(
     header('Cache-Control: max-age=0');
     echo $json;
     exit;
+}
+```
+
+### WEMGEODATAGETLOCATION
+
+This hook is called when retrieving a location data in a module.
+
+**Return value** : `array`
+
+**Arguments**:
+Name | Type | Description
+--- | --- | ---
+$arrItem | `array` | Array of data
+$objMap | `\WEM\GeoDataBundle\Model\Map` | The `\WEM\GeoDataBundle\Model\Map` the map item belongs to
+$objPage | null|`\Contao\PageModel` | The `\Contao\PageModel` corresponding to the `$objMap->jumpTo` if any
+$caller | `\WEM\GeoDataBundle\Module\Core` | The calling object
+
+**Code**:
+```php
+public function getLocation(
+	array $arrItem, 
+	\WEM\GeoDataBundle\Model\Map $objMap, 
+	\Contao\PageModel $objPage,
+	\WEM\GeoDataBundle\Module\Core $caller
+): array
+{
+	$arrItem['my_property'] = 'my_value';
+	return $arrItem;
+}
+```
+
+## WEMGEODATABUILDFILTERSSINGLEFILTEROPTION
+
+This hook is called when building filters in a module.
+
+**Return value** : `array`
+
+**Arguments**:
+Name | Type | Description
+--- | --- | ---
+$arrFilters | `array` | Array of filters
+$arrConfig | `array` | Array of values selected
+$filterField | `string` | The field used as a filter
+$lastKey | `null|string` | The last key in the filter (corresponds to `$location[$filterField]` value)
+$location | `array` | Array of location's data
+$caller | `\WEM\GeoDataBundle\Module\Core` | The calling object
+
+**Code**:
+```php
+public function buildFiltersSingleFilterOption(
+	array $arrFilters,
+	array $arrConfig,
+	string $filterField,
+	?string $lastKey,
+	array $location, 
+	\WEM\GeoDataBundle\Module\Core $caller
+): array
+{
+	// unset the last set options
+	if('select' === $arrFilters[$filterField]['type']){
+		switch($filterField){
+			case "my_field":
+				if(!$location[$filterField]){
+					break;
+				}
+				unset($arrFilters[$filterField]['options'][$lastKey]);
+				
+				$arrFilters[$filterField]['options'][$lastKey] = [
+                    'value' => str_replace([' ', '.'], '_', mb_strtolower($location[$filterField], 'UTF-8')),
+                    'text' => $location[$filterField],
+                    'selected' => (
+                    	\array_key_exists($filterField, $arrConfig) 
+                    	&& $arrConfig[$filterField] === str_replace([' ', '.'], '_', mb_strtolower($location[$filterField], 'UTF-8')) 
+                    	? 'selected' 
+                    	: ''
+                    ),
+                ];
+			break;
+		}
+	}
+	// do something else
+	// ...
+	return [$arrFilters,$arrConfig];
+}
+```
+
+## WEMGEODATAMAPITEMFORMATSTATEMENT
+
+This hook is called when calling `MapItem::formatStatement` on a non default managed column.
+
+**Return value** : `array`
+
+**Arguments**:
+Name | Type | Description
+--- | --- | ---
+$strField | `string` | The field
+$varValue | `mixed` | The value, can be an array
+$strOperator | `string` | The operator
+$arrColums | `array` | The formatted statements
+$callerClass | `string` | The formatted statements
+
+**Code**:
+```php
+public function mapItemFormatStatement(
+	string $strField, 
+	$varValue, 
+	string $strOperator,
+	array $arrColumns,
+	string $callerClass
+): ?array
+{
+	switch($strField){
+		case "my_field":
+			if(!is_array($varValue)){
+				$varValue = [$varValue];
+			}
+			$arrColumns[] = sprintf('my_table.my_field IN ("%s")',implode('","', $varValue));
+		break;
+		default:
+			return null;
+		break;
+	}
+
+	return $arrColumns;
 }
 ```

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2022 Web ex Machina
+ * Copyright (c) 2015-2024 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -14,26 +14,64 @@ declare(strict_types=1);
 
 namespace WEM\GeoDataBundle\DataContainer;
 
-use Contao\Backend;
+use Contao\DataContainer;
+use WEM\GeoDataBundle\Classes\Util;
+use WEM\GeoDataBundle\Model\Category;
 
-class MapCategory extends Backend
+class MapCategory extends CoreContainer
 {
     /**
-     * Import the back end user object.
+     * Design each row of the DCA.
      */
-    public function __construct()
+    public function listItems(array $row): string
     {
-        parent::__construct();
-        $this->import('BackendUser', 'User');
+        return $row['title'].($row['is_default'] ? ' ('.$GLOBALS['TL_LANG'][Category::getTable()]['is_default']['label'].')' : '');
+    }
+
+    public function onsubmitCallback(DataContainer $dc): void
+    {
+        if (!$dc->id) {
+            return;
+        }
+
+        // remove default tag on other categories of the same map
+        if ((bool) $dc->activeRecord->is_default) {
+            $this->Database
+            ->prepare('UPDATE '.Category::getTable().'
+                SET `is_default` = "0"
+                WHERE `pid` = ?
+                AND `id` != ?')
+            ->execute($dc->activeRecord->pid, $dc->activeRecord->id)
+            ;
+        } else {
+            // check if another category is the default one for the map
+            // if not, make this one the default's one, sorry not sorry
+            $defaultCategory = Category::findItems(['pid' => $dc->activeRecord->pid, 'is_default' => '1'], 1);
+            if (!$defaultCategory) {
+                $objCategory = Category::findByPk($dc->id);
+                $objCategory->is_default = 1;
+                $objCategory->save();
+            }
+        }
     }
 
     /**
-     * Design each row of the DCA.
-     *
-     * @return string
+     * @throws \Exception
      */
-    public function listItems($row)
+    public function ondeleteCallback(DataContainer $dc): void
     {
-        return $row['title'];
+        if (!$dc->id) {
+            return;
+        }
+
+        // if this category is the default one, you can't delete it
+        if ((bool) $dc->activeRecord->is_default) {
+            throw new \Exception('You cannot delete the default category');
+        }
+
+        $objCategory = Category::findByPk($dc->id);
+        if ($objCategory) {
+            Util::deleteMapItemCategoryForCategory($objCategory);
+        }
     }
 }

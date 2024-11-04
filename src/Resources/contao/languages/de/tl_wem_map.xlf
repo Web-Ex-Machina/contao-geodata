@@ -76,21 +76,18 @@
 			<source>Select the geocoding provider</source>
 			<target>Geocodinganbieter auswählen</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_map.geocodingProvider.gmaps">
-			<source>Google Maps</source>
-			<target>Google Maps</target>
-		</trans-unit>
 		<trans-unit id="tl_wem_map.geocodingProvider.nominatim">
 			<source>Nominatim</source>
 			<target>Nominatim</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_map.geocodingProviderGmapKey.0">
-			<source>API Key</source>
-			<target>API Key</target>
+
+		<trans-unit id="tl_wem_map.geocodingProviderNominatimReferer.0">
+			<source>Nominatim referer</source>
+			<target>Nominatim referer</target>
 		</trans-unit>
-		<trans-unit id="tl_wem_map.geocodingProviderGmapKey.1">
-			<source>Enter the Google Maps API Key</source>
-			<target>API Key von Google Maps eingeben</target>
+		<trans-unit id="tl_wem_map.geocodingProviderNominatimReferer.1">
+			<source>Enter a value</source>
+			<target>Einen Wert eingeben</target>
 		</trans-unit>
 
 		<trans-unit id="tl_wem_map.markers_legend">

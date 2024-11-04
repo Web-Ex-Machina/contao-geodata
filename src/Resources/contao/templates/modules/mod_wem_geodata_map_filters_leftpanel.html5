@@ -1,0 +1,31 @@
+
+				<div class="map__filters map__panel left active">
+					<span class="map__filters__toggler"><i class="far fa-sort-shapes-down-alt"></i></span>
+	  				<form class="map__filters__wrapper scroll-custom" action="<?= $this->filters_action ?>" method="<?= $this->filters_method ?>">
+						<?php foreach($this->filters as $f): ?>
+							<?php if('select' == $f['type'] && count($f['options']) <= 1): ?>
+								<!-- removed filter <?= $f['name'] ?> for it have only one selectable option -->
+							<?php else: ?>
+								<div class="map__filter form-group">
+									<?php if('text' == $f['type']) : ?>
+										<label for="filter_<?= $f['name'] ?>"><?= $f['label'] ?></label>
+										<input type="text" id="filter_<?= $f['name'] ?>" name="<?= $f['name'] ?>" value="<?= $f['value'] ?>" placeholder="<?= $f['placeholder'] ?>" />
+									<?php elseif('select' == $f['type']): ?>
+										<label for="filter_<?= $f['name'] ?>"><?= $f['label'] ?></label>
+										<select id="filter_<?= $f['name'] ?>" name="<?= $f['name'] ?>" placeholder="<?= $f['placeholder'] ?>" data-container="body" data-classdropdown="ft-0-8-em" <?= $f['name'] == 'category' ? '':'' ?>>
+											<option value=""> - </option>
+											<?php foreach($f['options'] as $o): ?>
+												<?php 
+													echo '<option value="'.str_replace([' ','.','\''],'_', mb_strtolower($o['value'], 'UTF-8')).'" '.$o['selected'].'>'.$o['text'].'</option>';
+												?>
+											<?php endforeach; ?>
+										</select>
+									<?php endif; ?>
+								</div>
+							<?php endif; ?>
+						<?php endforeach; ?>
+						<div class="submit txt-center">
+							<input type="submit" class="btn-sm w-100" value="<?= $GLOBALS['TL_LANG']['MSC']['filter'] ?>" />
+						</div>
+					</form>
+				</div>

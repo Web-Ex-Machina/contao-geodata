@@ -26,6 +26,26 @@
 			<source>Display a map on your website</source>
 			<target>Karte auf der Webseite anzeigen</target>
 		</trans-unit>
+		<trans-unit id="FMD.wem_display_map.1">
+			<source>Display a map on your website</source>
+			<target>Affiche une carte sur votre site</target>
+		</trans-unit>
+		<trans-unit id="FMD.wem_geodata_list.0">
+			<source>Locations list</source>
+			<target>Standortliste</target>
+		</trans-unit>
+		<trans-unit id="FMD.wem_geodata_list.1">
+			<source>Display a locations list on your website</source>
+			<target>Zeigen Sie eine Standortliste auf Ihrer Website an</target>
+		</trans-unit>
+		<trans-unit id="FMD.wem_geodata_reader.0">
+			<source>Locations reader</source>
+			<target>Standortleser</target>
+		</trans-unit>
+		<trans-unit id="FMD.wem_geodata_reader.1">
+			<source>Display a locations reader on your website</source>
+			<target>Zeigen Sie einen Standortleser auf Ihrer Website an</target>
+		</trans-unit>
     </body>
   </file>
 </xliff>

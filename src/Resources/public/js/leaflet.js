@@ -48,9 +48,9 @@ initMap = function() {
 			})
 		}
 
-		if (objMapFilters.category) {
-		    for(var c in objMapFilters.category.options) {
-		    	var category = objMapFilters.category.options[c];
+		if (categories) {
+		    for(var c in categories) {
+		    	var category = categories[c];
 		    	// find selected category in categories list
 		    	for(var i in categories){
 		    		if(categories[i].id === category.value){
@@ -119,13 +119,16 @@ initMap = function() {
 				var latLng = L.latLng({lat: 0, lng: 0});
 			}
 			var options = {};
-			if(location.category && location.category.title){
-				if (objMarkersConfig.hasOwnProperty(normalize(location.category.title)))
-					options.icon = objMarkersConfig[normalize(location.category.title)];
+			if(Array.isArray(location.category)){
+				if (location.category.length > 0 && location.category[0].title && objMarkersConfig.hasOwnProperty(normalize(location.category[0].title)))
+					options.icon = objMarkersConfig[normalize(location.category[0].title)];
 				else
 					options.icon = objMarkersConfig.default;
 			} else {
-				options.icon = objMarkersConfig.default;
+				if (location.category.title && objMarkersConfig.hasOwnProperty(normalize(location.category.title)))
+					options.icon = objMarkersConfig[normalize(location.category.title)];
+				else
+					options.icon = objMarkersConfig.default;
 			}
 
 			// construct marker
@@ -143,16 +146,22 @@ initMap = function() {
 				marker['filter_'+f] = '';
 				markerInList['filter_'+f] = '';
 				markerInList.filter_search = $('.map__list__item[data-id='+location.id+']').text()+' '+$(getPopupHTML(location)).text();
-				marker.filter_search = $('.map__list__item[data-id='+location.id+']').text()+' '+$(getPopupHTML(location)).text();
+				marker.filter_search       = $('.map__list__item[data-id='+location.id+']').text()+' '+$(getPopupHTML(location)).text();
+				// console.log(location);
 				if (location.hasOwnProperty(f)) {
 					switch(f){
 						case 'category': 
-							if(location[f].id){
+							if (Array.isArray(location[f])) {
+								for (var category of location[f]){
+									// console.log(normalize(category.title));
+									// marker['filter_'+f] += normalize(category.title);
+									// markerInList['filter_'+f] += normalize(category.title);
+								}
+								marker['filter_'+f]       = location[f].map(function(category){return normalize(category.title); }).join(',');
+								markerInList['filter_'+f] = location[f].map(function(category){return normalize(category.title); }).join(',');
+							} else if(location[f].id){
 								marker['filter_'+f] = normalize(location[f].id);
 								markerInList['filter_'+f] = normalize(location[f].id);
-							}else{
-								marker['filter_'+f] = '';
-								markerInList['filter_'+f] = '';
 							}
 						break;
 						case 'country':
@@ -160,9 +169,10 @@ initMap = function() {
 							markerInList['filter_'+f] = normalize(location[f].code);
 						break;
 						default: 
-							if (typeof location[f] === 'string')
+							if (typeof location[f] === 'string'){
 								marker['filter_'+f] = normalize(location[f]);
 								markerInList['filter_'+f] = normalize(location[f]);
+							}
 						break;
 					}
 				}

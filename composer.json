@@ -13,22 +13,25 @@
     ],
     "support":{
         "website":"https://www.webexmachina.fr/",
-        "issues":"https://github.com/webexmachina/contao-geodata/issues",
-        "source":"https://github.com/webexmachina/contao-geodata"
+        "issues":"https://github.com/Web-Ex-Machina/contao-geodata/issues",
+        "source":"https://github.com/Web-Ex-Machina/contao-geodata"
     },
     "require": {
-        "php": ">=7.4",
-        "contao/core-bundle": "~4.9",
-        "webexmachina/contao-utils": "^0.3",
-        "phpoffice/phpspreadsheet": "^1.21",
-        "terminal42/dcawizard":"^2.5"
+        "php": "^7.4 || ^8.1",
+        "contao/core-bundle": "^4.9 || ^5.3",
+        "webexmachina/contao-utils": "^2.0",
+        "phpoffice/phpspreadsheet": "^1.29 || ^3.3",
+        "terminal42/dcawizard":"^2.7 || ^3.0",
+        "ext-json": "*",
+        "ext-curl": "*"
     },
     "require-dev":
     {
         "phpunit/phpunit": "^9.0",
         "codeception/codeception": "^4",
         "codeception/module-asserts": "^1.0.0",
-        "contao/test-case":"~4"
+        "contao/test-case":"~4",
+        "rector/rector": "^1.0"
     },
     "autoload":{
         "psr-4": {
@@ -52,7 +55,8 @@
             "contao-components/installer": true,
             "contao/manager-plugin": true,
             "composer/package-versions-deprecated": true,
-            "contao-community-alliance/composer-plugin": true
+            "contao-community-alliance/composer-plugin": true,
+            "php-http/discovery": true
         }
     }
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2022 Web ex Machina
+ * Copyright (c) 2015-2024 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-smartgear
@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 $header = <<<'EOF'
 Geodata for Contao Open Source CMS
-Copyright (c) 2015-2022 Web ex Machina
+Copyright (c) 2015-2024 Web ex Machina
 
 @category ContaoBundle
 @package  Web-Ex-Machina/contao-geodata
@@ -42,7 +42,8 @@ return $config->setRules([
     'combine_consecutive_issets' => true,
     'combine_consecutive_unsets' => true,
     'comment_to_phpdoc' => true,
-    'compact_nullable_typehint' => true,
+    // 'compact_nullable_typehint' => true,
+    'compact_nullable_type_declaration' => true,
     'fully_qualified_strict_types' => true,
     'header_comment' => ['header' => $header, 'comment_type' => 'PHPDoc'],
     'heredoc_to_nowdoc' => true,
