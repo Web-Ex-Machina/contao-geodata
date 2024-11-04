@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2023 Web ex Machina
+ * Copyright (c) 2015-2024 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -46,9 +46,7 @@ class Category extends CoreModel
                 if (!\is_array($varValue)) {
                     $varValue = [$varValue];
                 }
-                $arrColumns[] = sprintf("$t.pid IN ('%s')",
-                    implode("','", $varValue),
-                );
+                $arrColumns[] = \sprintf($t.".pid IN ('%s')", implode("','", $varValue));
                 break;
             default:
                 $arrColumns = array_merge($arrColumns, parent::formatStatement($strField, $varValue, $strOperator));
@@ -57,7 +55,10 @@ class Category extends CoreModel
         return $arrColumns;
     }
 
-    public function delete()
+    /**
+     * @throws \Exception
+     */
+    public function delete(): int
     {
         // remove links item <-> category
         Util::deleteMapItemCategoryForCategory($this);

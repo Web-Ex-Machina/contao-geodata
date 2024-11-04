@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2023 Web ex Machina
+ * Copyright (c) 2015-2024 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -26,6 +26,7 @@ class Map extends CoreContainer
         if (!$dc->id) {
             return;
         }
+
         // check if another category is the default one for the map
         // if not, show an error
         $defaultCategory = Category::findItems(['pid' => $dc->id, 'is_default' => '1'], 1);
@@ -53,6 +54,7 @@ class Map extends CoreContainer
                 $newDefaultCategory->markerConfig = serialize([]);
                 $newDefaultCategory->pid = $dc->id;
             }
+
             $newDefaultCategory->is_default = 1;
             $newDefaultCategory->save();
         }
@@ -60,12 +62,8 @@ class Map extends CoreContainer
 
     /**
      * Generate the default map config array.
-     *
-     * @param [Array] $varValue
-     *
-     * @return [Array]
      */
-    public function getDefaultMapConfig($varValue, $objDc)
+    public function getDefaultMapConfig($varValue, DataContainer $objDc)
     {
         if (!$varValue) {
             switch ($objDc->activeRecord->mapProvider) {
@@ -87,10 +85,6 @@ class Map extends CoreContainer
 
     /**
      * Generate the default Excel pattern.
-     *
-     * @param [Array] $varValue
-     *
-     * @return [Array]
      */
     public function generateExcelPattern($varValue)
     {

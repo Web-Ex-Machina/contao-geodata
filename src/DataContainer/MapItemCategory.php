@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2023 Web ex Machina
+ * Copyright (c) 2015-2024 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -16,7 +16,6 @@ namespace WEM\GeoDataBundle\DataContainer;
 
 use Contao\DataContainer;
 use WEM\GeoDataBundle\Classes\Util;
-use WEM\GeoDataBundle\Model\Category;
 
 class MapItemCategory extends CoreContainer
 {
@@ -27,8 +26,8 @@ class MapItemCategory extends CoreContainer
         }
 
         $mapItem = MapItem::findByPk($dc->activeRecord->pid);
-        if($mapItem){
-            Util::refreshMapItemCategoriesField($mapItem,[$dc->activeRecord->category]);
+        if ($mapItem) {
+            Util::refreshMapItemCategoriesField($mapItem, [$dc->activeRecord->category]);
         }
     }
 }

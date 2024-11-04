@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2023 Web ex Machina
+ * Copyright (c) 2015-2024 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -16,7 +16,7 @@ $GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'wem_geodata_fil
 $GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'wem_geodata_filters_present';
 $GLOBALS['TL_DCA']['tl_module']['palettes']['wem_display_map'] = '
     {title_legend},name,type;
-    {config_legend},wem_geodata_map,wem_geodata_map_list,wem_geodata_filters;
+    {config_legend},wem_geodata_map,wem_geodata_map_nbItemsToForceAjaxLoading,wem_geodata_map_list,wem_geodata_filters;
     {template_legend:hide},customTpl;
     {protected_legend:hide},protected;
     {expert_legend:hide},guests,cssID
@@ -40,7 +40,6 @@ $GLOBALS['TL_DCA']['tl_module']['subpalettes']['wem_geodata_filters_below'] = 'w
 $GLOBALS['TL_DCA']['tl_module']['subpalettes']['wem_geodata_filters_present'] = 'wem_geodata_search,wem_geodata_filters_fields';
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_map'] = [
-    'label' => &$GLOBALS['TL_LANG']['tl_module']['wem_geodata_map'],
     'exclude' => true,
     'inputType' => 'select',
     'foreignKey' => 'tl_wem_map.title',
@@ -48,7 +47,6 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_map'] = [
     'sql' => "int(10) unsigned NOT NULL default '0'",
 ];
 $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_maps'] = [
-    'label' => &$GLOBALS['TL_LANG']['tl_module']['wem_geodata_maps'],
     'exclude' => true,
     'inputType' => 'select',
     'foreignKey' => 'tl_wem_map.title',
@@ -56,7 +54,6 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_maps'] = [
     'sql' => 'blob NULL',
 ];
 $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_map_list'] = [
-    'label' => &$GLOBALS['TL_LANG']['tl_module']['wem_geodata_map_list'],
     'exclude' => true,
     'inputType' => 'select',
     'options' => ['nolist', 'rightpanel', 'below'],
@@ -64,8 +61,13 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_map_list'] = [
     'eval' => ['chosen' => true, 'mandatory' => true, 'tl_class' => 'w50'],
     'sql' => "varchar(32) NOT NULL default 'nolist'",
 ];
+$GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_map_nbItemsToForceAjaxLoading'] = [
+    'exclude' => true,
+    'inputType' => 'text',
+    'eval' => ['mandatory' => true, 'tl_class' => 'w50'],
+    'sql' => "INT(10) NOT NULL default '0'",
+];
 $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_filters'] = [
-    'label' => &$GLOBALS['TL_LANG']['tl_module']['wem_geodata_filters'],
     'exclude' => true,
     'inputType' => 'select',
     'options' => ['nofilters', 'leftpanel', 'above', 'below'],
@@ -75,7 +77,6 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_filters'] = [
 ];
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_filters_present'] = [
-    'label' => &$GLOBALS['TL_LANG']['tl_module']['wem_geodata_filters_present'],
     'exclude' => true,
     'filter' => true,
     'flag' => 1,
@@ -85,10 +86,8 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_filters_present'] = [
 ];
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_filters_fields'] = [
-    'label' => &$GLOBALS['TL_LANG']['tl_module']['wem_geodata_filters_fields'],
     'exclude' => true,
     'inputType' => 'select',
-    // 'options' => ['category', 'country', 'admin_lvl_1', 'admin_lvl_2', 'city'],
     'options' => [
         'category' => 'category',
         'country' => 'country',
@@ -101,7 +100,6 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_filters_fields'] = [
     'sql' => "blob NULL'",
 ];
 $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_search'] = [
-    'label' => &$GLOBALS['TL_LANG']['tl_module']['wem_geodata_search'],
     'exclude' => true,
     'filter' => true,
     'flag' => 1,
@@ -113,7 +111,7 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_customTplForGeodataItems'
     'exclude' => true,
     'inputType' => 'select',
     'options_callback' => static function () {
-        return \Contao\Controller::getTemplateGroup('mod_wem_geodata_list_item', [], 'mod_wem_geodata_list_item');
+        return Contao\Controller::getTemplateGroup('mod_wem_geodata_list_item', [], 'mod_wem_geodata_list_item');
     },
     'eval' => ['chosen' => true, 'tl_class' => 'w50'],
     'sql' => "varchar(64) NOT NULL default ''",

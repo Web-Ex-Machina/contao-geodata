@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2023 Web ex Machina
+ * Copyright (c) 2015-2024 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -22,10 +22,8 @@ class MapCategory extends CoreContainer
 {
     /**
      * Design each row of the DCA.
-     *
-     * @return string
      */
-    public function listItems($row)
+    public function listItems(array $row): string
     {
         return $row['title'].($row['is_default'] ? ' ('.$GLOBALS['TL_LANG'][Category::getTable()]['is_default']['label'].')' : '');
     }
@@ -43,7 +41,8 @@ class MapCategory extends CoreContainer
                 SET `is_default` = "0"
                 WHERE `pid` = ?
                 AND `id` != ?')
-            ->execute($dc->activeRecord->pid,$dc->activeRecord->id);
+            ->execute($dc->activeRecord->pid, $dc->activeRecord->id)
+            ;
         } else {
             // check if another category is the default one for the map
             // if not, make this one the default's one, sorry not sorry
@@ -56,6 +55,9 @@ class MapCategory extends CoreContainer
         }
     }
 
+    /**
+     * @throws \Exception
+     */
     public function ondeleteCallback(DataContainer $dc): void
     {
         if (!$dc->id) {
@@ -66,8 +68,9 @@ class MapCategory extends CoreContainer
         if ((bool) $dc->activeRecord->is_default) {
             throw new \Exception('You cannot delete the default category');
         }
+
         $objCategory = Category::findByPk($dc->id);
-        if($objCategory){
+        if ($objCategory) {
             Util::deleteMapItemCategoryForCategory($objCategory);
         }
     }

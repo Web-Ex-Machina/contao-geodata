@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2023 Web ex Machina
+ * Copyright (c) 2015-2024 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -22,8 +22,7 @@ use WEM\GeoDataBundle\Model\MapItem;
 
 class SitemapListener
 {
-    /** @var int */
-    protected $currentTimestamp;
+    protected int $currentTimestamp;
 
     public function __invoke(SitemapEvent $event): void
     {
@@ -43,7 +42,7 @@ class SitemapListener
     protected function parseMaps(SitemapEvent $event, Collection $maps): void
     {
         while ($maps->next()) {
-            $this->parseMap($event, $maps->current());
+            $this->parseMap($event, $maps->current()); // TODO : Expected parameter of type '\WEM\GeoDataBundle\Model\Map', '\Contao\Model' provided
         }
     }
 
@@ -62,6 +61,7 @@ class SitemapListener
         if (!$items) {
             return;
         }
+
         $this->parseItems($event, $map, $items);
     }
 
@@ -71,7 +71,7 @@ class SitemapListener
     protected function parseItems(SitemapEvent $event, Map $map, Collection $items): void
     {
         while ($items->next()) {
-            $this->parseItem($event, $map, $items->current());
+            $this->parseItem($event, $map, $items->current()); // TODO : Expected parameter of type '\WEM\GeoDataBundle\Model\Map', '\Contao\Model' provided
         }
     }
 
@@ -95,6 +95,7 @@ class SitemapListener
         $loc = $sitemap->createElement('loc', $page->getAbsoluteUrl('/'.$item->alias));
         $urlEl = $sitemap->createElement('url');
         $urlEl->appendChild($loc);
+
         $urlSet->appendChild($urlEl);
     }
 }

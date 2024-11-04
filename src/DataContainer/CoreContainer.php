@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2023 Web ex Machina
+ * Copyright (c) 2015-2024 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -61,7 +61,7 @@ class CoreContainer extends Backend
         // step 2 - remove all ids not in $varValues
         if ($varValues) {
             Database::getInstance()->prepare(
-                sprintf(
+                \sprintf(
                     'DELETE FROM %s WHERE %s = %s AND %s.%s NOT IN (%s)',
                     $strTable,
                     $strParentField,

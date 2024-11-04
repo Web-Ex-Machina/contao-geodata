@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2023 Web ex Machina
+ * Copyright (c) 2015-2024 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -17,7 +17,6 @@ namespace WEM\GeoDataBundle\Migration;
 use Contao\CoreBundle\Migration\AbstractMigration;
 use Contao\CoreBundle\Migration\MigrationResult;
 use Doctrine\DBAL\Connection;
-use Exception;
 use WEM\GeoDataBundle\Model\MapItem;
 use WEM\GeoDataBundle\Model\MapItemCategory;
 
@@ -35,7 +34,7 @@ class M202307170826_MultiCategories extends AbstractMigration
 
     public function shouldRun(): bool
     {
-        $schemaManager = $this->connection->getSchemaManager();
+        $schemaManager = $this->connection->createSchemaManager();
 
         // If the database table itself does not exist we should do nothing
         if (!$schemaManager->tablesExist(['tl_wem_map_item', 'tl_wem_map_item_category'])) {
@@ -82,10 +81,10 @@ class M202307170826_MultiCategories extends AbstractMigration
         try {
             return MapItem::findItems([
                 'where' => [
-                    sprintf('LENGTH(%s.category) > 0 AND %s.category != 0 AND %s.id NOT IN (SELECT DISTINCT %s.pid FROM %s)', MapItem::getTable(), MapItem::getTable(), MapItem::getTable(), MapItemCategory::getTable(), MapItemCategory::getTable()),
+                    \sprintf('LENGTH(%s.category) > 0 AND %s.category != 0 AND %s.id NOT IN (SELECT DISTINCT %s.pid FROM %s)', MapItem::getTable(), MapItem::getTable(), MapItem::getTable(), MapItemCategory::getTable(), MapItemCategory::getTable()),
                 ],
             ]);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return null;
         }
     }

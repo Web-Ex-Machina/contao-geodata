@@ -1,0 +1,40 @@
+
+<div class="map__list__item" data-id="<?= $this->location['id'] ?>" data-marker="<?= $this->location['country']['code'].'-'.str_replace(' ', '_', strtolower($this->location['title'])) ?>"
+  data-country        ="<?= $this->location['country']['code'] ?>" 
+  data-continent      ="<?= $this->location['continent']['code'] ?>"
+  data-category       ="<?php echo str_replace([' ','.'],'_', mb_strtolower(implode(',',array_map(function($c){return $c['title'];},$this->location['category'])), 'UTF-8'));?>"
+  data-city           ="<?php echo str_replace([' ','.'],'_', mb_strtolower($this->location['city'], 'UTF-8'));?>" 
+  data-admin_lvl_1    ="<?php echo str_replace([' ','.'],'_', mb_strtolower($this->location['admin_lvl_1'], 'UTF-8'));?>" 
+  data-admin_lvl_2    ="<?php echo str_replace([' ','.'],'_', mb_strtolower($this->location['admin_lvl_2'], 'UTF-8'));?>" 
+ >
+  <span class="map__list__item__title "><?= $this->location['title'] ?></span>
+  <?php if ($this->location['category']['title']): ?>
+    <p class="map__list__item__categoryTitle"><?php echo mb_strtoupper($this->location['category']['title']); ?></p>
+  <?php elseif (is_array($this->location['category'])): ?>
+    <p class="map__list__item__categoryTitle"><?php echo mb_strtoupper(implode(', ',array_map(function($c){return $c['title'];},$this->location['category'])), 'UTF-8');?></p>
+  <?php endif ?>
+  <div class="map__list__item__text">
+    <?php if($this->location['address']): ?>
+      <div class="map__list__item__line" itemprop="location" itemscope itemtype="http://schema.org/Place">
+        <i class="fa fa-map-marker-alt"></i><span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress"><?= $this->location['address'] ?></span>
+      </div>
+    <?php endif; ?>
+    <?php if($this->location['phone']): ?>
+      <div class="map__list__item__line"><i class="fa fa-phone"></i><?= $this->location['phone'] ?></div>
+    <?php endif; ?>
+    <?php if($this->location['email']): ?>
+      <div class="map__list__item__line"><i class="fa fa-envelope"></i><?= $this->location['email'] ?></div>
+    <?php endif; ?>
+  </div>
+  <?php if ($this->location['teaser']): ?>
+    <div class="map__list__item__text">
+      <?= $this->location['teaser'] ?>
+    </div>
+  <?php endif ?>
+  
+  <?php if($this->location['url']): ?>
+    <div class="map__list__item__link">
+      <a href="<?= $this->location['url'] ?>" title="<?= $this->location['title'] ?>: <?= $GLOBALS['TL_LANG']['WEM']['LOCATIONS']['BUTTON']['READMORE'] ?>"></a>
+    </div>
+  <?php endif ?>
+</div>

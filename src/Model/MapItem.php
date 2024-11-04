@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2023 Web ex Machina
+ * Copyright (c) 2015-2024 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -31,8 +31,6 @@ class MapItem extends CoreModel
 
     /**
      * Search fields.
-     *
-     * @var array
      */
     protected static $arrSearchFields = ['title', 'teaser', 'attr_value_postal'];
 
@@ -43,34 +41,37 @@ class MapItem extends CoreModel
      * @param mixed  $varValue    [Value to use]
      * @param string $strOperator [Operator to use, default "="]
      */
-    public static function formatStatement(string $strField, $varValue, string $strOperator = '='): array
+    public static function formatStatement($strField, $varValue, $strOperator = '='): array
     {
         $arrColumns = [];
         $t = static::$strTable;
 
         switch ($strField) {
             case 'onlyWithCoords':
-                $arrColumns[] = "$t.lat != '' AND $t.lng != ''";
+                $arrColumns[] = $t.".lat != '' AND ".$t.".lng != ''";
                 break;
+
             case 'published':
                 $timestamp = (new \DateTime())->getTimestamp();
                 if (1 === (int) $varValue) {
-                    $arrColumns[] = sprintf("$t.published = 1
+                    $arrColumns[] = \sprintf("$t.published = 1
                         AND ($t.publishedAt = '' OR $t.publishedAt <= %s)
                         AND ($t.publishedUntil = '' OR $t.publishedUntil >= %s)", $timestamp, $timestamp
                     );
                 } else {
-                    $arrColumns[] = sprintf("$t.published = 0
+                    $arrColumns[] = \sprintf("$t.published = 0
                         OR ($t.published = 1 AND $t.publishedAt >= %s)
                         OR ($t.published = 1 AND $t.publishedUntil <= %s)", $timestamp, $timestamp
                     );
                 }
                 break;
+
             case 'category':
                 if (!\is_array($varValue)) {
                     $varValue = [$varValue];
                 }
-                $arrColumns[] = sprintf("$t.id IN (
+
+                $arrColumns[] = \sprintf("{$t}.id IN (
                     SELECT mic.pid
                     FROM %s mic
                     INNER JOIN %s mc ON mc.id = mic.category
@@ -89,7 +90,7 @@ class MapItem extends CoreModel
                 if (!\is_array($varValue)) {
                     $varValue = [$varValue];
                 }
-                $arrColumns[] = sprintf("$t.id IN (
+                $arrColumns[] = \sprintf("$t.id IN (
                     SELECT mic.pid
                     FROM %s mic
                     WHERE mic.category IN ('%s')
@@ -120,21 +121,20 @@ class MapItem extends CoreModel
     /**
      * Format Search statement.
      *
+     * @param string $strField
      * @param string $varValue [Value to use]
      */
-    public static function formatSearchStatement(string $strField, string $varValue): string
+    public static function formatSearchStatement($strField, $varValue): string
     {
         $t = static::$strTable;
 
         switch ($strField) {
             case 'attr_value_postal':
-                return "$t.id IN(
+                return $t.".id IN(
                     SELECT tl_wem_map_item_attribute_value.pid
                     FROM tl_wem_map_item_attribute_value
                     WHERE tl_wem_map_item_attribute_value.attribute = 'postal'
-                    AND tl_wem_map_item_attribute_value.value REGEXP '$varValue'
-                )";
-                break;
+                    AND tl_wem_map_item_attribute_value.value REGEXP '".$varValue."')";
             default:
                 return parent::formatSearchStatement($strField, $varValue);
         }

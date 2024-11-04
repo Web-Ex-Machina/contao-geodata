@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2023 Web ex Machina
+ * Copyright (c) 2015-2024 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -52,7 +52,7 @@ class MapItemAttributeValue extends Model
         }
 
         if (!isset($arrOptions['order'])) {
-            $arrOptions['order'] = "$t.createdAt ASC";
+            $arrOptions['order'] = $t.'.createdAt ASC';
         }
 
         if (empty($arrColumns)) {
@@ -64,17 +64,14 @@ class MapItemAttributeValue extends Model
 
     /**
      * Count items, depends on the arguments.
-     *
-     * @param array
-     * @param array
      */
     public static function countItems(array $arrConfig = [], array $arrOptions = []): int
     {
-        $t = static::$strTable;
+        $t = static::$strTable; // TODO : useless ?
         $arrColumns = static::formatColumns($arrConfig);
 
         if (empty($arrColumns)) {
-            return static::countAll($arrOptions);
+            return static::countAll($arrOptions); // TODO : useless $arrOptions ?
         }
 
         return static::countBy($arrColumns, null, $arrOptions);
@@ -83,9 +80,9 @@ class MapItemAttributeValue extends Model
     /**
      * Format ItemModel columns.
      *
-     * @param [Array] $arrConfig [Configuration to format]
+     * @param array $arrConfig Configuration to format
      *
-     * @return [Array] [The Model columns]
+     * @return array The Model columns
      */
     public static function formatColumns(array $arrConfig): array
     {
@@ -93,15 +90,15 @@ class MapItemAttributeValue extends Model
         $arrColumns = [];
 
         if ($arrConfig['pid']) {
-            $arrColumns[] = "$t.pid = ".$arrConfig['pid'];
+            $arrColumns[] = $t.'.pid = '.$arrConfig['pid'];
         }
 
         if ($arrConfig['attribute']) {
-            $arrColumns[] = "$t.attribute = '".$arrConfig['attribute']."'";
+            $arrColumns[] = $t.".attribute = '".$arrConfig['attribute']."'";
         }
 
         if ($arrConfig['value']) {
-            $arrColumns[] = "$t.value = '".$arrConfig['value']."'";
+            $arrColumns[] = $t.".value = '".$arrConfig['value']."'";
         }
 
         if ($arrConfig['not']) {

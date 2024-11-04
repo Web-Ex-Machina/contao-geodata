@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2023 Web ex Machina
+ * Copyright (c) 2015-2024 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -36,7 +36,7 @@ class M202307181508_DefaultMapCategory extends AbstractMigration
 
     public function shouldRun(): bool
     {
-        $schemaManager = $this->connection->getSchemaManager();
+        $schemaManager = $this->connection->createSchemaManager();
 
         // If the database table itself does not exist we should do nothing
         if (!$schemaManager->tablesExist(['tl_wem_map_category'])) {
@@ -117,7 +117,7 @@ class M202307181508_DefaultMapCategory extends AbstractMigration
     {
         return Map::findItems([
             'where' => [
-                sprintf('%s.id NOT IN (SELECT DISTINCT c.pid FROM %s c WHERE c.is_default = 1) AND %s.id NOT IN (SELECT DISTINCT c.pid FROM %s c)', Map::getTable(), Category::getTable(), Map::getTable(), Category::getTable()),
+                \sprintf('%s.id NOT IN (SELECT DISTINCT c.pid FROM %s c WHERE c.is_default = 1) AND %s.id NOT IN (SELECT DISTINCT c.pid FROM %s c)', Map::getTable(), Category::getTable(), Map::getTable(), Category::getTable()),
             ],
         ]);
     }
@@ -126,7 +126,7 @@ class M202307181508_DefaultMapCategory extends AbstractMigration
     {
         return Map::findItems([
             'where' => [
-                sprintf('%s.id NOT IN (SELECT DISTINCT c.pid FROM %s c)', Map::getTable(), Category::getTable()),
+                \sprintf('%s.id NOT IN (SELECT DISTINCT c.pid FROM %s c)', Map::getTable(), Category::getTable()),
             ],
         ]);
     }
@@ -136,7 +136,7 @@ class M202307181508_DefaultMapCategory extends AbstractMigration
         return MapItem::findItems([
             'pid' => $mapId,
             'where' => [
-                sprintf('%s.id NOT IN (SELECT DISTINCT %s.pid FROM %s)', MapItem::getTable(), MapItemCategory::getTable(), MapItemCategory::getTable()),
+                \sprintf('%s.id NOT IN (SELECT DISTINCT %s.pid FROM %s)', MapItem::getTable(), MapItemCategory::getTable(), MapItemCategory::getTable()),
             ],
         ]);
     }

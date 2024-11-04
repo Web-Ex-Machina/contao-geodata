@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2023 Web ex Machina
+ * Copyright (c) 2015-2024 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -36,13 +36,13 @@ class MapItemCategory extends CoreModel
      */
     protected static $strOrderColumn = 'created_at ASC';
 
-    public function delete(){
+    public function delete()
+    {
         // remove links item <-> category
         $mapItem = MapItem::findByPk($this->pid);
 
-        
-        if($mapItem){
-            Util::refreshMapItemCategoriesField($mapItem,[$this->category]);
+        if ($mapItem) {
+            Util::refreshMapItemCategoriesField($mapItem, [$this->category]);
         }
 
         return parent::delete();

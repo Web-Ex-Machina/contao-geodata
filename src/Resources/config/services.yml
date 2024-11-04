@@ -1,4 +1,9 @@
 services:
+    WEM\GeoDataBundle\Backend\Callback:
+        arguments:
+            $locales: '@contao.intl.locales'
+        public: true
+            
     WEM\GeoDataBundle\Migration\M202307170826_MultiCategories:
         arguments:
             $connection: '@database_connection'
@@ -8,5 +13,12 @@ services:
     WEM\GeoDataBundle\Migration\M202307181508_DefaultMapCategory:
         arguments:
             $connection: '@database_connection'
+        tags:
+            - { name: contao.migration, priority: 0 }
+
+    WEM\GeoDataBundle\Migration\M202410251433_EncodeMapProviderGmapKey:
+        arguments:
+            $connection: '@database_connection'
+            $encryption: '@wem.encryption_util'
         tags:
             - { name: contao.migration, priority: 0 }

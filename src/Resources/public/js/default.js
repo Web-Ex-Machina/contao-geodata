@@ -11,13 +11,57 @@ var arrMarkersInListCurrent = [];
 var arrMarkersAll= [];
 var arrMarkersCurrent = [];
 var filters = {};
+var mapModuleId;
+var rt;
+var limit = 100;
+var blnLoadInAjax = false;
 
 // providers functions, needs to be overriden in the proper dedicated file (eg. leaflet.js)
 var applyFilters_callback = function(){};
-var initMap = function(){};
+var initMap = function(){
+	return new Promise(function(resolve,reject){
+	    resolve()
+	});
+}
 
 // ONLAD
 window.addEventListener('load', (event) => {
+	if(blnLoadInAjax){
+		var loadingOverlay = $('.map__loading__overlay');
+		if(loadingOverlay){
+			loadingOverlay.toggleClass('hidden');
+		}
+		countLocationsAjax().then(r => {
+			var nbElementsToManage = r.count; // total number of elements to manage
+			if(nbElementsToManage > 0){
+				loopGetLocationsItemsPagined(nbElementsToManage, 0, limit)
+				.then(function(r){
+
+					getFiltersAjax().then(r => {
+						if(r.html.length > 0){
+							$('.map__filters__container').html(r.html);
+						}
+						objMapFilters = JSON.parse(r.json);
+						initMapGlobal();
+						if(loadingOverlay){
+							loadingOverlay.toggleClass('hidden');
+						}
+					});
+				})
+				.catch(function(msg){
+					alert(msg);
+				});
+			}
+		})
+		.catch(function(msg){
+			alert(msg);
+		});
+	}else{
+		initMapGlobal();
+	}
+});
+
+var initMapGlobal = function(){
 	$map           = $('.map__container');
 	$legend        = $('.map__legend');
 	$toggleLegend  = $('.map__legend__toggler');
@@ -59,7 +103,7 @@ window.addEventListener('load', (event) => {
 		    		}
 		    	}
 				// add marker to legend
-				$('.map__legend').append(`
+				$legend.append(`
 					<div class="map__legend__item">
 						<img src="${objMarkersConfig[category.marker?category.alias:'default'].options.iconUrl}" width="${objMarkersConfig[category.marker?category.alias:'default'].options.iconSize[0]}" height="${objMarkersConfig[category.marker?category.alias:'default'].options.iconSize[1]}" alt="Icon for ${category.title} category"><span>${category.title}</span>
 					</div>
@@ -84,7 +128,7 @@ window.addEventListener('load', (event) => {
 		// console.log('arrMarkersAll',arrMarkersAll);
 		// console.log('arrMarkersCurrent',arrMarkersCurrent);
 	});
-});
+};
 
 var applyFilters = function(){
 	// console.log(filters);
@@ -96,8 +140,14 @@ var applyFilters = function(){
 				if (filters[f] !== '' && item['filter_'+f].search(new RegExp(filters[f],'i')) == -1)
 					match = false;
 			} else { // input search code
-				if (filters[f] !== '' && item['filter_'+f] !== filters[f])
-					match = false;
+				if (filters[f] !== '' && item['filter_'+f] !== filters[f]){
+					if("undefined" !== typeof item['filter_'+f] && -1 != item['filter_'+f].indexOf(',')){
+						var values = item['filter_'+f].split(',');
+						match = values.includes(filters[f]);
+					}else{
+						match = false;
+					}
+				}
 			}
 		}
 		return match;
@@ -114,8 +164,14 @@ var applyFilters = function(){
 				}
 			} else { // input search code
 				if (filters[f] !== '' && item['filter_'+f] !== filters[f]){
-					match = false;
-					return false;
+					if("undefined" !== typeof item['filter_'+f] && -1 != item['filter_'+f].indexOf(',')){
+						var values = item['filter_'+f].split(',');
+						match = values.includes(filters[f]);
+						return match;
+					}else{
+						match = false;
+						return false;
+					}
 				}
 			}
 		}
@@ -174,6 +230,139 @@ var selectMapItem = function(itemID){
 	}
 }
 
+var loopGetLocationsItemsPagined = function(nbElementsToManage, offset, limit){
+	return new Promise(function (resolve, reject) {
+		getLocationsItemsPaginedAjax(offset, limit)
+		.then(function(r){
+			if("error" == r.status) {
+				reject(r.msg);
+			} else {
+				offset = offset+limit;
+
+				// append results in list
+				if(r.html.length > 0){
+					for(var item of r.html){
+						$('.map__list__wrapper').append(item);
+					}
+				}
+				// append results in JS list
+				objMapData = objMapData.concat(JSON.parse(r.json));
+				if(offset < nbElementsToManage){
+					loopGetLocationsItemsPagined(nbElementsToManage, offset, limit)
+					.then(r=>resolve(r))
+					.catch(msg=>reject(msg))
+					;
+				}else{
+					resolve(r);
+				}
+			}
+		})
+		.catch(function(msg){
+			reject(msg);
+		});
+	});
+}
+
+var getLocationsListAjax = function(){
+	return new Promise(function(resolve,reject){
+		var request = new FormData();
+
+		request.append('TL_AJAX', 1);
+	    request.append('REQUEST_TOKEN', rt);
+	    request.append('module', mapModuleId);
+	    request.append('action', 'getLocationsList');
+
+		fetch(window.location,{
+			method: 'POST',
+			mode: 'same-origin',
+			cache: 'no-cache',
+			body: request
+		})
+		.then((response) => response.json())
+		.then((json) => {
+		  resolve(json);
+		})
+		.catch((error) => {
+		    reject(error);
+		});
+	});
+};
+var countLocationsAjax = function(){
+	return new Promise(function(resolve,reject){
+		var request = new FormData();
+
+		request.append('TL_AJAX', 1);
+	    request.append('REQUEST_TOKEN', rt);
+	    request.append('module', mapModuleId);
+	    request.append('action', 'countLocations');
+
+		fetch(window.location,{
+			method: 'POST',
+			mode: 'same-origin',
+			cache: 'no-cache',
+			body: request
+		})
+		.then((response) => response.json())
+		.then((json) => {
+		  resolve(json);
+		})
+		.catch((error) => {
+		    reject(error);
+		});
+	});
+};
+
+var getLocationsItemsPaginedAjax = function(offset, limit){
+	return new Promise(function(resolve,reject){
+		var request = new FormData();
+
+		request.append('TL_AJAX', 1);
+	    request.append('REQUEST_TOKEN', rt);
+	    request.append('module', mapModuleId);
+	    request.append('offset', offset);
+	    request.append('limit', limit);
+	    request.append('action', 'getLocationsItemsPagined');
+
+		fetch(window.location,{
+			method: 'POST',
+			mode: 'same-origin',
+			cache: 'no-cache',
+			body: request
+		})
+		.then((response) => response.json())
+		.then((json) => {
+		  resolve(json);
+		})
+		.catch((error) => {
+		    reject(error);
+		});
+	});
+};
+
+var getFiltersAjax = function(){
+	return new Promise(function(resolve,reject){
+		var request = new FormData();
+
+		request.append('TL_AJAX', 1);
+	    request.append('REQUEST_TOKEN', rt);
+	    request.append('module', mapModuleId);
+	    request.append('action', 'getFilters');
+
+		fetch(window.location,{
+			method: 'POST',
+			mode: 'same-origin',
+			cache: 'no-cache',
+			body: request
+		})
+		.then((response) => response.json())
+		.then((json) => {
+		  resolve(json);
+		})
+		.catch((error) => {
+		    reject(error);
+		});
+	});
+};
 // ------------------------------------------------------------------------------------------------------------------------------
 // UTILITIES
 var normalize = function(str = ''){return str.toLowerCase().replace(/ |\.|\'/g,'_'); }

@@ -64,6 +64,11 @@
 			<source>Location %s saved !</source>
 			<target>Emplacement %s sauvegardé !</target>
 		</trans-unit>
+		
+		<trans-unit id="WEM.LOCATIONS.LABEL.mapLoading">
+			<source>Loading ...</source>
+			<target>Chargement ...</target>
+		</trans-unit>
 
 		<trans-unit id="WEM.LOCATIONS.ERROR.unknownAjaxRequest">
 			<source>Unknown AJAX action : "%s"</source>
@@ -92,6 +97,10 @@
 		<trans-unit id="WEM.LOCATIONS.ERROR.missingConfigForGeocoding">
 			<source>Config is missing for geocoding !</source>
 			<target>Absence de configuration pour le geocoding !</target>
+		</trans-unit>
+		<trans-unit id="WEM.LOCATIONS.ERROR.featureDeletedIn">
+			<source>The feature %s was deleted in %s version.</source>
+			<target>La fonctionnalité %s a été supprimée en version %s.</target>
 		</trans-unit>
 		<trans-unit id="WEM.LOCATIONS.ERROR.errorWhenSavingTheLocation">
 			<source>An error happened when saving the location. Please try again.</source>

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2023 Web ex Machina
+ * Copyright (c) 2015-2024 Web ex Machina
  *
  * @category ContaoBundle
  * @package  Web-Ex-Machina/contao-geodata
@@ -27,7 +27,7 @@ $GLOBALS['TL_DCA']['tl_wem_map_item_category'] = [
             ],
         ],
         'ondelete_callback' => [
-            [\WEM\GeoDataBundle\DataContainer\MapItemCategory::class, 'ondeleteCallback'],
+            [WEM\GeoDataBundle\DataContainer\MapItemCategory::class, 'ondeleteCallback'],
         ],
     ],
 
