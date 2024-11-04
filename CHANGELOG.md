@@ -1,6 +1,12 @@
 Extension "Geodata" for Contao Open Source CMS
 ========
 
+2.0.1 - 2024-11-04
+---
+- FIXED : `DisplayMap` module trying to display filters if no filters to display for the current map
+- FIXED : `DisplayMap` module's `$filters` are now set as an empty array by default
+- ADDED : migration guide to help upgrading from v1.x to v2.x
+
 2.0.0 - 2024-11-04
 ---
 - UPDATED : Encrypt Google Maps key in database using `webexmachina/contao-utils`
