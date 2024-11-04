@@ -11,6 +11,8 @@ Documentation
 -------------
 
  * [Change log][1]
+ * [Available hooks][6]
+ * [Migrating from v1 to v2][5]
  * [Git repository][2]
  * [List of administrative divisions by country][4]
 
@@ -37,3 +39,5 @@ You can get the extension with this repository URL : [Github][2]
 [2]: https://github.com/web-ex-machina/contao-geodata
 [3]: https://www.web-ex-machina.fr/
 [4]: https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country
+[5]: docs/migration_guide.md
+[6]: docs/HOOKS.md
