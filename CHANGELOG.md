@@ -1,6 +1,10 @@
 Extension "Geodata" for Contao Open Source CMS
 ========
 
+2.0.3 - 2024-11-05
+---
+- UPDATED : if some map items' marker config' values are missing, use the one from the map if they exists
+
 2.0.2 - 2024-11-04
 ---
 - FIXED : `generateBreadcrumb` hook trying to do stuff when it shouldn't

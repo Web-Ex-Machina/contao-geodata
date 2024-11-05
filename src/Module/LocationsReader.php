@@ -95,7 +95,7 @@ class LocationsReader extends Core
             $this->Template->shouldBeIndexed = $objMap->row();
 
             // Load the libraries
-            $strVersion = 1;
+            $strVersion = WEM_GEODATA_COMBINER_VERSION;
             $objCssCombiner = new Combiner();
             $objCssCombiner->add('bundles/wemgeodata/css/default.css', $strVersion);
             $objCssCombiner->add('bundles/wemgeodata/css/leaflet.css', $strVersion);
