@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace WEM\GeoDataBundle\Module;
 
 use Contao\BackendTemplate;
-use Contao\CoreBundle\Csrf\ContaoCsrfTokenManager;
 use Contao\FrontendTemplate;
 use Contao\Input;
 use Contao\PageModel;
@@ -179,7 +178,7 @@ class DisplayMap extends Core
             $this->Template->config = $arrMapConfig;
 
             $this->Template->moduleId = $this->id;
-            $this->Template->rt = System::getContainer()->get(ContaoCsrfTokenManager::class)->getToken(System::getContainer()->getParameter('contao.csrf_token_name'))->getValue();
+            $this->Template->rt = System::getContainer()->get('contao.csrf.token_manager')->getDefaultTokenValue();
             $this->Template->blnLoadInAjax = $blnLoadInAjax;
 
             // If the config says so, we will generate a template with a list of the locations
