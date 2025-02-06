@@ -57,7 +57,9 @@ class LocationsList extends Core
      */
     public function generate()
     {
-        if (TL_MODE === 'BE') {
+        $request = System::getContainer()->get('request_stack')->getCurrentRequest();
+        
+        if ($request && System::getContainer()->get('contao.routing.scope_matcher')->isBackendRequest($request))
             $objTemplate = new BackendTemplate('be_wildcard');
 
             $objTemplate->wildcard = '### '.utf8_strtoupper($GLOBALS['TL_LANG']['FMD']['wem_display_list'][0]).' ###';

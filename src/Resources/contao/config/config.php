@@ -43,15 +43,9 @@ ArrayUtil::arrayInsert(
 );
 
 /*
- * Load icon in Contao 4.2 backend
+ * Load backend css
  */
-// if ('BE' === TL_MODE) {
-//     if (version_compare(VERSION, '4.4', '<')) {
-//         $GLOBALS['TL_CSS'][] = 'bundles/wemgeodata/backend/backend.css';
-//     } else {
 $GLOBALS['TL_CSS'][] = 'bundles/wemgeodata/backend/backend_svg.css';
-//     }
-// }
 
 /*
  * Frontend modules
