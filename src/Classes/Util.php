@@ -436,7 +436,7 @@ class Util
      */
     public static function getCustomPackageVersion(string $package): ?string
     {
-        $packages = json_decode(file_get_contents(TL_ROOT.'/vendor/composer/installed.json'));
+        $packages = json_decode(file_get_contents(System::getContainer()->getParameter('kernel.project_dir') . '/vendor/composer/installed.json'));
 
         foreach ($packages->packages as $p) {
             $p = (array) $p;
