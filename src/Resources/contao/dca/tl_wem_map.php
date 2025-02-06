@@ -201,11 +201,6 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'foreignField' => 'pid',
             'eval' => [
                 'fields' => ['createdAt', 'title', 'is_default'],
-                'headerFields' => [
-                    &$GLOBALS['TL_LANG']['tl_wem_map_category']['createdAt'][0],
-                    &$GLOBALS['TL_LANG']['tl_wem_map_category']['title'][0],
-                    &$GLOBALS['TL_LANG']['tl_wem_map_category']['is_default'][0],
-                ],
                 'orderField' => 'createdAt DESC',
                 'hideButton' => false,
                 'showOperations' => true,
