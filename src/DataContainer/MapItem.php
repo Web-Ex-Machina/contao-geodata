@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace WEM\GeoDataBundle\DataContainer;
 
+use Contao\BackendUser;
 use Contao\DataContainer;
 use Contao\Image;
 use Contao\Input;
@@ -32,7 +33,6 @@ class MapItem extends CoreContainer
     public function __construct()
     {
         parent::__construct();
-        $this->import('BackendUser', 'User');
     }
 
     /**
@@ -150,7 +150,8 @@ class MapItem extends CoreContainer
         }
 
         // Check permissions AFTER checking the tid, so hacking attempts are logged
-        if (!$this->User->hasAccess('tl_wem_map_item::published', 'alexf')) {
+        $user = BackendUser::getInstance();
+        if (!$user->hasAccess('tl_wem_map_item::published', 'alexf')) {
             return '';
         }
 
@@ -173,7 +174,8 @@ class MapItem extends CoreContainer
         Input::setGet('act', 'toggle');
 
         // Check permissions to publish
-        if (!$this->User->hasAccess('tl_wem_map_item::published', 'alexf')) {
+        $user = BackendUser::getInstance();
+        if (!$user->hasAccess('tl_wem_map_item::published', 'alexf')) {
             $this->log('Not enough permissions to publish/unpublish agence item ID "'.$intId.'"', __METHOD__, TL_ERROR);
             $this->redirect('contao/main.php?act=error');
         }

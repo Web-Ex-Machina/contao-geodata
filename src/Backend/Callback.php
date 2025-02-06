@@ -16,6 +16,7 @@ namespace WEM\GeoDataBundle\Backend;
 
 use Contao\Backend;
 use Contao\BackendTemplate;
+use Contao\BackendUser;
 use Contao\Config;
 use Contao\CoreBundle\Intl\Locales;
 use Contao\DataContainer;
@@ -129,8 +130,8 @@ class Callback extends Backend
 
         $objMap = Map::findByPk(Input::get('id'));
 
-        $this->import('BackendUser', 'User');
-        $class = $this->User->uploader;
+        $user = BackendUser::getInstance();
+        $class = $user->uploader;
 
         // See #4086 and #7046
         if (!class_exists($class) || 'DropZone' === $class) {
