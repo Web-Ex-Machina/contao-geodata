@@ -388,7 +388,7 @@ class Callback extends Backend
         $objTemplate->importListCountriesNameCurrentLanguage = $arrLanguages[$GLOBALS['TL_LANGUAGE']];
         $objTemplate->importListCountriesNameEnglish = $arrLanguages['en'];
         $objTemplate->importListCountries = $strCountries;
-        $objTemplate->formRequestToken = REQUEST_TOKEN;
+        $objTemplate->formRequestToken = System::getContainer()->get('contao.csrf.token_manager')->getDefaultTokenValue();
         $objTemplate->formMaxFileSize = Config::get('maxFileSize');
 
         return $objTemplate->parse();
