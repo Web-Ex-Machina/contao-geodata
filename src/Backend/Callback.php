@@ -498,7 +498,7 @@ class Callback extends Backend
 
         $objTemplate->categories = $arrCategories;
         $objTemplate->countries = $arrCountries;
-        $objTemplate->formRequestToken = REQUEST_TOKEN;
+        $objTemplate->formRequestToken = System::getContainer()->get('contao.csrf.token_manager')->getDefaultTokenValue();
         $objTemplate->formMaxFileSize = Config::get('maxFileSize');
 
         return $objTemplate->parse();

@@ -19,7 +19,6 @@ use Contao\Combiner;
 use Contao\Environment;
 use Contao\FrontendTemplate;
 use Contao\Input;
-use Contao\RequestToken;
 use Contao\StringUtil;
 use Contao\System;
 use WEM\GeoDataBundle\Classes\Util;
@@ -192,7 +191,7 @@ class LocationsList extends Core
         }
 
         // Add Request Token to JSON answer and return
-        $arrResponse['rt'] = RequestToken::get();
+        $arrResponse['rt'] = System::getContainer()->get('contao.csrf.token_manager')->getDefaultTokenValue();
         echo json_encode($arrResponse);
         exit;
     }
