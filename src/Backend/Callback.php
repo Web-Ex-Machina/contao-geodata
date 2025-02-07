@@ -163,7 +163,7 @@ class Callback extends Backend
 
             foreach ($arrUploaded as $strFile) {
                 $objFile = new File($strFile, true);
-                $spreadsheet = IOFactory::load(TL_ROOT.'/'.$objFile->path);
+                $spreadsheet = IOFactory::load(System::getContainer()->getParameter('kernel.project_dir') . '/' . $objFile->path);
                 $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
                 $arrLocations = [];
                 $nbRow = 0;
