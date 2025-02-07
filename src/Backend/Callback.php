@@ -22,6 +22,7 @@ use Contao\CoreBundle\Intl\Locales;
 use Contao\DataContainer;
 use Contao\Environment;
 use Contao\File;
+use Contao\FileUpload;
 use Contao\Input;
 use Contao\Message;
 use Contao\StringUtil;
@@ -130,16 +131,8 @@ class Callback extends Backend
 
         $objMap = Map::findByPk(Input::get('id'));
 
-        $user = BackendUser::getInstance();
-        $class = $user->uploader;
-
-        // See #4086 and #7046
-        if (!class_exists($class) || 'DropZone' === $class) {
-            $class = 'FileUpload';
-        }
-
         /** @var \FileUpload $objUploader */
-        $objUploader = new $class();
+        $objUploader = new FileUpload();
 
         $arrExcelPattern = [];
         // Preformat Excel Pattern (key = Excel column, value = DB Column)
