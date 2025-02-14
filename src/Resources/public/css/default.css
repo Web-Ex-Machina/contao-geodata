@@ -1,5 +1,6 @@
 /* MODULE */
 .mod_wem_display_map{ }
+.hidden{display: none;}
 
 /* MAP */
 .map__wrapper{position: relative; display: flex; flex-wrap: wrap; min-height:400px;
