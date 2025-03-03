@@ -1,6 +1,6 @@
-<form action="<?= $this->filters_action ?>" method="<?= $this->filters_method ?>" class="locations__filters ft-0-8-em">
+<form action="<?= $this->filters_action ?>" method="<?= $this->filters_method ?>" class="map__filters ft-0-8-em">
   <?php foreach($this->filters as $f): ?>
-    <div class="location__filter form-group <?php echo ('text' == $f['type']) ? 'w-100' : '';?>">
+    <div class="map__filter form-group <?php echo ('text' == $f['type']) ? 'w-100' : '';?>">
       <?php if('text' == $f['type']) : ?>
         <label for="filter_<?= $f['name'] ?>"><?= $f['label'] ?></label>
         <input type="text" id="filter_<?= $f['name'] ?>" name="<?= $f['name'] ?>" value="<?= $f['value'] ?>" placeholder="<?= $f['placeholder'] ?>" />
@@ -15,7 +15,7 @@
       <?php endif; ?>
     </div>
   <?php endforeach; ?>
-  <div class="location__filter flex-alignitems--flexend">
+  <div class="map__filter flex-alignitems--flexend">
     <input type="submit" class="btn-sm w-100" value="<?= $GLOBALS['TL_LANG']['MSC']['filter'] ?>" />
   </div>
 </form>
