@@ -111,7 +111,7 @@ initMap = function() {
 		});
 
 		// MARKERS
-		for(var location of objMapData){
+		for(var location of objMapLocations){
 			// setup marker parameters
 			if('' != location.lat && '' != location.lng){
 				var latLng = L.latLng({lat: parseFloat(location.lat), lng: parseFloat(location.lng)});

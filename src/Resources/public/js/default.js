@@ -246,7 +246,7 @@ var loopGetLocationsItemsPagined = function(nbElementsToManage, offset, limit){
 					}
 				}
 				// append results in JS list
-				objMapData = objMapData.concat(JSON.parse(r.json));
+				objMapLocations = objMapLocations.concat(JSON.parse(r.json));
 				if(offset < nbElementsToManage){
 					loopGetLocationsItemsPagined(nbElementsToManage, offset, limit)
 					.then(r=>resolve(r))
