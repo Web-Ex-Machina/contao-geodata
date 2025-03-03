@@ -2,7 +2,7 @@
 // DATA SETTINGS
 var map;
 var categories;
-var objMapData;
+var objMapLocations;
 var objMapConfig;
 var objMapFilters;
 var objMarkersConfig;
