@@ -13,8 +13,9 @@ var arrMarkersCurrent = [];
 var filters = {};
 var mapModuleId;
 var rt;
-var limit = 100;
-var blnLoadInAjax = false;
+var nbItemsPerRequest = 10;
+
+var blnLoadInAjax 	= false;
 
 // providers functions, needs to be overriden in the proper dedicated file (eg. leaflet.js)
 var applyFilters_callback = function(){};

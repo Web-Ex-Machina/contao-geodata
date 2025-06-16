@@ -116,6 +116,7 @@ class LocationsList extends Core
                 $limit = $this->numberOfItems;
             }
 
+
             // Load the libraries
             // ClassLoader::loadLibraries($this->objMap, 2);
             $objCssCombiner = new Combiner();
@@ -137,6 +138,11 @@ class LocationsList extends Core
             if (0 === $this->numberOfItems) {
                 throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noLocationsFound']);
             }
+
+            $blnLoadInAjax = 0 === (int) $this->wem_geodata_map_nbItemsToForceAjaxLoading
+                            ? false
+                            : $this->numberOfItems > (int) $this->wem_geodata_map_nbItemsToForceAjaxLoading;
+            $this->Template->blnLoadInAjax = $blnLoadInAjax;
 
             $this->buildPagination($this->numberOfItems);
 

@@ -150,6 +150,8 @@ class DisplayMap extends Core
             $blnLoadInAjax = 0 === (int) $this->wem_geodata_map_nbItemsToForceAjaxLoading
                 ? false
                 : $nbItems > (int) $this->wem_geodata_map_nbItemsToForceAjaxLoading;
+            $this->Template->nbItemsPerRequest = (int) $this->wem_geodata_map_nbItemsToForceAjaxLoading;
+                
 
             // Get the jumpTo page
             $this->objJumpTo = PageModel::findByPk($this->objMap->jumpTo);

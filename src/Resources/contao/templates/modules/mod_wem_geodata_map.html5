@@ -38,12 +38,13 @@
 		<?php endif; ?>
     	<script type="text/javascript">
 			rt     = '<?= $this->rt ?>';
-			mapModuleId     = '<?= $this->moduleId ?>';
-			blnLoadInAjax   = <?= $this->blnLoadInAjax ? 1 : 0; ?>;
-			objMapLocations        = <?= $this->blnLoadInAjax ? '[]' : json_encode($this->locations, JSON_INVALID_UTF8_IGNORE | JSON_INVALID_UTF8_SUBSTITUTE) ?>;
+			mapModuleId       = '<?= $this->moduleId ?>';
+			blnLoadInAjax     = <?= $this->blnLoadInAjax ? 1 : 0; ?>;
+			nbItemsPerRequest = <?php echo $this->nbItemsPerRequest ? : 10  ?>;
 			objMapConfig      = <?= json_encode($this->config) ?>;
-		    categories        = <?= $this->categories ? json_encode($this->categories) : '{}' ?>;
+			objMapLocations   = <?= $this->blnLoadInAjax ? '[]' : json_encode($this->locations, JSON_INVALID_UTF8_IGNORE | JSON_INVALID_UTF8_SUBSTITUTE) ?>;
 			objMapFilters     = <?= !$this->blnLoadInAjax && $this->filters ? json_encode($this->filters ?? []) : '{}' ?>;
+		    categories        = <?= $this->categories ? json_encode($this->categories) : '{}' ?>;
 		</script>
 	<?php endif; ?>
 </div>
