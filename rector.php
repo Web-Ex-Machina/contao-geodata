@@ -14,8 +14,6 @@ return RectorConfig::configure()
     ->withSets([
         SetList::PHP_74,
         ContaoSetList::CONTAO_413,
-        ContaoSetList::ANNOTATIONS_TO_ATTRIBUTES,
-        ContaoSetList::FQCN
     ])
     ->withPreparedSets(
         codeQuality: true,
