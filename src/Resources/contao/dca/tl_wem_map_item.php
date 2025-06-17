@@ -16,16 +16,6 @@ use WEM\GeoDataBundle\Classes\Util;
 use WEM\GeoDataBundle\DataContainer\MapItem;
 
 /*
- * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2024 Web ex Machina
- *
- * @category ContaoBundle
- * @package  Web-Ex-Machina/contao-geodata
- * @author   Web ex Machina <contact@webexmachina.fr>
- * @link     https://github.com/Web-Ex-Machina/contao-geodata/
- */
-
-/*
  * Table tl_wem_map_item.
  */
 $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
