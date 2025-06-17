@@ -13,7 +13,7 @@
 					<?= $this->trans('WEM.LOCATIONS.LABEL.mapLoading'); ?>
 				</div>
 			</div>
-			<?php if($this->filters  && "leftpanel" == $this->filters_position): ?>
+			<?php if($this->filters  && "inmap" == $this->filters_position): ?>
 				<div class="map__filters__container"><?= $this->filters_html; ?></div>
 			<?php endif; ?>
 			<div id="map" class="map__container">

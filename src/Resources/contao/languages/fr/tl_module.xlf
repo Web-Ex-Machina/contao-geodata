@@ -50,7 +50,7 @@
         <source>No filters</source>
         <target>Pas de filtres</target>
       </trans-unit>
-      <trans-unit id="tl_module.wem_geodata_filters.leftpanel">
+      <trans-unit id="tl_module.wem_geodata_filters.inmap">
         <source>Left panel</source>
         <target>Panneau à gauche</target>
       </trans-unit>
