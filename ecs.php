@@ -9,7 +9,6 @@ use Contao\EasyCodingStandard\Set\SetList;
 use Symplify\EasyCodingStandard\Config\ECSConfig;
 
 return ECSConfig::configure()
-    ->withSets([SetList::CONTAO])
     ->withConfiguredRule(HeaderCommentFixer::class, [
         'header' =>
 "Geodata Bundle for Contao Open Source CMS
@@ -17,20 +16,20 @@ return ECSConfig::configure()
 
 @see        https://github.com/Web-Ex-Machina/contao-geodata
 @license    https://www.apache.org/licenses/LICENSE-2.0"])
-->withPaths([
-    __DIR__ . '/src',
-])
-->withSkip([
-    ArrayOpenerAndCloserNewlineFixer::class,
-    __DIR__ . '/migrations',
-    __DIR__ . '/vendor',
-    __DIR__ . '/var',
-    __DIR__ . '/config/jwt',
-    __DIR__ . '/config/secrets',
-    __DIR__ . '/config/bundles.php',
-])
-->withPreparedSets(
-    $psr12=true,
-    $common=true,
-    $strict=true,
-);
+    ->withPaths([
+        __DIR__ . '/src',
+    ])
+    ->withSkip([
+        ArrayOpenerAndCloserNewlineFixer::class,
+        __DIR__ . '/migrations',
+        __DIR__ . '/vendor',
+        __DIR__ . '/var',
+        __DIR__ . '/config/jwt',
+        __DIR__ . '/config/secrets',
+        __DIR__ . '/config/bundles.php',
+    ])
+    ->withPreparedSets(
+        $psr12=true,
+        $common=true,
+        $strict=true,
+    );
