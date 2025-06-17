@@ -2,20 +2,19 @@
 
 declare(strict_types=1);
 
-/**
- * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2024 Web ex Machina
+/*
+ * Geodata Bundle for Contao Open Source CMS
+ * @author     Web Ex Machina
  *
- * @category ContaoBundle
- * @package  Web-Ex-Machina/contao-geodata
- * @author   Web ex Machina <contact@webexmachina.fr>
- * @link     https://github.com/Web-Ex-Machina/contao-geodata/
+ * @see        https://github.com/Web-Ex-Machina/contao-geodata
+ * @license    https://www.apache.org/licenses/LICENSE-2.0
  */
 
 namespace WEM\GeoDataBundle\Controller\Provider;
 
 use Contao\Config;
 use Contao\Controller;
+use Exception;
 use WEM\GeoDataBundle\Model\Map;
 use WEM\GeoDataBundle\Model\MapItem;
 
@@ -38,48 +37,50 @@ class Nominatim extends Controller
      * @param Map            $objMap     Map Model
      * @param int            $intResults Number of API results wanted
      *
-     * @throws \Exception
-     *
      * @return array [Address Components]
      */
-    public static function geocoder($varAddress, Map $objMap, ?int $intResults = 1): array
-    {
+    public static function geocoder(
+        $varAddress,
+        Map $objMap,
+        int|null $intResults = 1
+    ): array {
         // Before everything, check if we can geocode this
-        if ('nominatim' !== $objMap->geocodingProvider) {
-            throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['missingConfigForGeocoding']);
+        if ($objMap->geocodingProvider !== 'nominatim') {
+            throw new Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['missingConfigForGeocoding']);
         }
+
         if (empty($objMap->geocodingProviderNominatimReferer)) {
-            throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['missingConfigForGeocoding']);
+            throw new Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['missingConfigForGeocoding']);
         }
 
         // Standardize the address to geocode
         $args = [];
         if (is_a($varAddress, MapItem::class)) {
             if ($varAddress->street) {
-                $args[] = 'street='.trim(preg_replace('/\s+/', ' ', strip_tags($varAddress->street)));
+                $args[] = 'street=' . trim(preg_replace('/\s+/', ' ', strip_tags($varAddress->street)));
             }
 
             if ($varAddress->postal) {
-                $args[] = 'postalcode='.$varAddress->postal;
+                $args[] = 'postalcode=' . $varAddress->postal;
             }
 
             if ($varAddress->city) {
-                $args[] = 'city='.$varAddress->city;
+                $args[] = 'city=' . $varAddress->city;
             }
 
             if ($varAddress->region) {
-                $args[] = 'state='.$varAddress->region;
+                $args[] = 'state=' . $varAddress->region;
             }
 
             if ($varAddress->admin_lvl_1) {
-                $args[] = 'state='.$varAddress->admin_lvl_1;
+                $args[] = 'state=' . $varAddress->admin_lvl_1;
             }
 
             if ($varAddress->country) {
-                $args[] = 'countrycodes='.$varAddress->country;
+                $args[] = 'countrycodes=' . $varAddress->country;
             }
 
-            $strAddress = '?'.implode('&', $args);
+            $strAddress = '?' . implode('&', $args);
         } else {
             $strAddress = $varAddress;
         }
@@ -94,22 +95,27 @@ class Nominatim extends Controller
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_TIMEOUT, 5);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Referer: '.$objMap->geocodingProviderNominatimReferer,
+            'Referer: ' . $objMap->geocodingProviderNominatimReferer,
         ]);
         $geoloc = json_decode(curl_exec($ch), true);
 
         // Catch Error
-        if (!$geoloc) {
-            throw new \Exception(\sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['invalidRequest'], $strUrl));
+        if (! $geoloc) {
+            throw new Exception(\sprintf(
+                $GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['invalidRequest'],
+                $strUrl
+            ));
         }
 
         // And return them
-        if (1 === $intResults) {
-            return ['lat' => $geoloc[0]['lat'], 'lng' => $geoloc[0]['lon']];
+        if ($intResults === 1) {
+            return ['lat' => $geoloc[0]['lat'],
+                'lng' => $geoloc[0]['lon']];
         }
 
         foreach ($geoloc as $result) {
-            $arrResults[] = ['lat' => $result['lat'], 'lng' => $result['lng']];
+            $arrResults[] = ['lat' => $result['lat'],
+                'lng' => $result['lng']];
         }
 
         return $arrResults;

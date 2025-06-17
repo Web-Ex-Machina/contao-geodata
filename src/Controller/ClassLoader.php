@@ -2,14 +2,12 @@
 
 declare(strict_types=1);
 
-/**
- * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2024 Web ex Machina
+/*
+ * Geodata Bundle for Contao Open Source CMS
+ * @author     Web Ex Machina
  *
- * @category ContaoBundle
- * @package  Web-Ex-Machina/contao-geodata
- * @author   Web ex Machina <contact@webexmachina.fr>
- * @link     https://github.com/Web-Ex-Machina/contao-geodata/
+ * @see        https://github.com/Web-Ex-Machina/contao-geodata
+ * @license    https://www.apache.org/licenses/LICENSE-2.0
  */
 
 namespace WEM\GeoDataBundle\Controller;
@@ -18,6 +16,7 @@ use Contao\Combiner;
 use Contao\Controller;
 use Contao\Input;
 use Contao\System;
+use Exception;
 use WEM\GeoDataBundle\Model\Map;
 
 /**
@@ -26,17 +25,15 @@ use WEM\GeoDataBundle\Model\Map;
 class ClassLoader extends Controller
 {
     /**
-     * Correctly load a generic Provider
-     * Not used for now, but keep it for later !
-     *
-     * @throws \Exception
+     * Correctly load a generic Provider Not used for now, but keep it for later !
      */
-    public static function loadProviderClass(string $strProvider): Controller
-    {
-        $strClass = \sprintf("WEM\GeoDataBundle\Controller\Provider\%s", ucfirst($strProvider));
+    public static function loadProviderClass(
+        string $strProvider
+    ): Controller {
+        $strClass = \sprintf('WEM\\GeoDataBundle\\Controller\\Provider\\%s', ucfirst($strProvider));
         // Throw error if class doesn't exists
-        if (!class_exists($strClass)) {
-            throw new \Exception(\sprintf('Unknown class %s', $strClass));
+        if (! class_exists($strClass)) {
+            throw new Exception(\sprintf('Unknown class %s', $strClass));
         }
 
         // Create the object
@@ -46,21 +43,23 @@ class ClassLoader extends Controller
 
     /**
      * Load the Map Provider Libraries.
-     *
-     * @throws \Exception
      */
-    public static function loadLibraries(Map $objMap, string $strVersion = '1'): void
-    {
+    public static function loadLibraries(
+        Map $objMap,
+        string $strVersion = '1'
+    ): void {
         $strVersion = Input::get('debug') ? time() : $strVersion;
         // Generate the combiners
         $objCssCombiner = new Combiner();
         $objJsCombiner = new Combiner();
 
-        // Load jQuery
-        // $GLOBALS['TL_JAVASCRIPT'][] = 'https://code.jquery.com/jquery-3.4.1.min.js';
+        // Load jQuery $GLOBALS['TL_JAVASCRIPT'][] =
 
-        // Load generic files
-        $objCssCombiner->add('bundles/wemgeodata/css/default.css', $strVersion);
+        // 'https://code.jquery.com/jquery-3.4.1.min.js'; Load generic files
+        $objCssCombiner->add(
+            'bundles/wemgeodata/css/default.css',
+            $strVersion
+        );
         $objJsCombiner->add('bundles/wemgeodata/js/default.js', $strVersion);
 
         // Depending on the provider, we will need more stuff
@@ -69,13 +68,16 @@ class ClassLoader extends Controller
                 // Load encryption service
                 $objService = System::getContainer()->get('wem.encryption_util');
 
-                if (!$objMap->mapProviderGmapKey) {
-                    throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['gmapNeedsAPIKey']);
+                if (! $objMap->mapProviderGmapKey) {
+                    throw new Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['gmapNeedsAPIKey']);
                 }
 
                 $objCssCombiner->add('bundles/wemgeodata/css/gmaps.css', $strVersion);
                 $objJsCombiner->add('bundles/wemgeodata/js/gmaps.js', $strVersion);
-                $GLOBALS['TL_JAVASCRIPT'][] = \sprintf('https://maps.googleapis.com/maps/api/js?key=%s', $objService->decrypt_b64($objMap->mapProviderGmapKey));
+                $GLOBALS['TL_JAVASCRIPT'][] = \sprintf(
+                    'https://maps.googleapis.com/maps/api/js?key=%s',
+                    $objService->decrypt_b64($objMap->mapProviderGmapKey)
+                );
                 break;
             case Map::MAP_PROVIDER_LEAFLET:
                 $GLOBALS['TL_HEAD'][] = '<link rel="stylesheet" href="https://unpkg.com/leaflet@latest/dist/leaflet.css">';
@@ -94,11 +96,14 @@ class ClassLoader extends Controller
                 ], $strVersion);
                 break;
             default:
-                throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['unknownProvider']);
+                throw new Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['unknownProvider']);
         }
 
         // And add them to pages
-        $GLOBALS['TL_HEAD'][] = \sprintf('<link rel="stylesheet" href="%s">', $objCssCombiner->getCombinedFile());
+        $GLOBALS['TL_HEAD'][] = \sprintf(
+            '<link rel="stylesheet" href="%s">',
+            $objCssCombiner->getCombinedFile()
+        );
         $GLOBALS['TL_JAVASCRIPT'][] = $objJsCombiner->getCombinedFile();
     }
 }

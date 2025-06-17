@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-/**
- * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2024 Web ex Machina
+/*
+ * Geodata Bundle for Contao Open Source CMS
+ * @author     Web Ex Machina
  *
- * @category ContaoBundle
- * @package  Web-Ex-Machina/contao-geodata
- * @author   Web ex Machina <contact@webexmachina.fr>
- * @link     https://github.com/Web-Ex-Machina/contao-geodata/
+ * @see        https://github.com/Web-Ex-Machina/contao-geodata
+ * @license    https://www.apache.org/licenses/LICENSE-2.0
  */
 
 namespace WEM\GeoDataBundle\EventListener;
 
 use Contao\ArticleModel;
 use Contao\ContentModel;
+use Contao\Database;
 use Contao\Input;
+use Contao\Model\Collection;
 use Contao\Module;
 use Contao\ModuleModel;
 use Contao\PageModel;
@@ -28,11 +28,12 @@ class GenerateBreadcrumbListener
     {
         // Modify $items …
         $lastItem = $items[\count($items) - 1];
-        if(!($lastItem['data']['id'] ?? false)){
+        if (! ($lastItem['data']['id'] ?? false)) {
             return $items;
         }
 
-        $query = \sprintf('
+        $query = \sprintf(
+            '
             SELECT m.id
             FROM %s p
             INNER JOIN %s a ON a.pid = p.id
@@ -49,12 +50,12 @@ class GenerateBreadcrumbListener
             $lastItem['data']['id']
         );
 
-        $db = \Contao\Database::getInstance();
+        $db = Database::getInstance();
         $res = $db->query($query);
 
         if ($res->count() >= 1) {
             $objMapItem = MapItem::findItems(['alias' => Input::get('auto_item')]);
-            if ($objMapItem) {
+            if ($objMapItem instanceof Collection) {
                 $items[\count($items) - 1]['title'] = $objMapItem->title;
                 $items[\count($items) - 1]['link'] = $objMapItem->title;
             }

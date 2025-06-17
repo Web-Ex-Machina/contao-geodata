@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-/**
- * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2024 Web ex Machina
+/*
+ * Geodata Bundle for Contao Open Source CMS
+ * @author     Web Ex Machina
  *
- * @category ContaoBundle
- * @package  Web-Ex-Machina/contao-geodata
- * @author   Web ex Machina <contact@webexmachina.fr>
- * @link     https://github.com/Web-Ex-Machina/contao-geodata/
+ * @see        https://github.com/Web-Ex-Machina/contao-geodata
+ * @license    https://www.apache.org/licenses/LICENSE-2.0
  */
 
+use Contao\DataContainer;
+use Contao\DC_Table;
 use WEM\GeoDataBundle\Model\Map;
 
 /*
@@ -20,7 +20,7 @@ use WEM\GeoDataBundle\Model\Map;
 $GLOBALS['TL_DCA']['tl_wem_map'] = [
     // Config
     'config' => [
-        'dataContainer' => Contao\DC_Table::class,
+        'dataContainer' => DC_Table::class,
         'ctable' => ['tl_wem_map_category', 'tl_wem_map_item'],
         'switchToEdit' => true,
         'enableVersioning' => true,
@@ -40,9 +40,9 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
     // List
     'list' => [
         'sorting' => [
-            'mode' => 1,
+            'mode' => DataContainer::MODE_SORTED,
             'fields' => ['title'],
-            'flag' => 1,
+            'flag' => DataContainer::SORT_INITIAL_LETTER_ASC,
             'panelLayout' => 'filter;search,limit',
         ],
         'label' => [
@@ -76,7 +76,7 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'delete' => [
                 'href' => 'act=delete',
                 'icon' => 'delete.gif',
-                'attributes' => 'onclick="if(!confirm(\''.$GLOBALS['TL_LANG']['MSC']['deleteConfirm'].'\'))return false;Backend.getScrollOffset()"',
+                'attributes' => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\'))return false;Backend.getScrollOffset()"',
             ],
             'show' => [
                 'href' => 'act=show',
@@ -123,16 +123,19 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'exclude' => true,
             'search' => true,
             'inputType' => 'text',
-            'eval' => ['mandatory' => true, 'maxlength' => 255],
+            'eval' => ['mandatory' => true,
+                'maxlength' => 255],
             'sql' => "varchar(255) NOT NULL default ''",
         ],
         'jumpTo' => [
             'exclude' => true,
             'inputType' => 'pageTree',
             'foreignKey' => 'tl_page.title',
-            'eval' => ['fieldType' => 'radio', 'tl_class' => 'clr'],
+            'eval' => ['fieldType' => 'radio',
+                'tl_class' => 'clr'],
             'sql' => "int(10) unsigned NOT NULL default '0'",
-            'relation' => ['type' => 'hasOne', 'load' => 'lazy'],
+            'relation' => ['type' => 'hasOne',
+                'load' => 'lazy'],
         ],
         'excelPattern' => [
             'exclude' => true,
@@ -148,7 +151,11 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'inputType' => 'select',
             'options' => [Map::MAP_PROVIDER_GMAP, Map::MAP_PROVIDER_LEAFLET],
             'reference' => &$GLOBALS['TL_LANG']['tl_wem_map']['mapProvider'],
-            'eval' => ['helpwizard' => true, 'mandatory' => true, 'submitOnChange' => true, 'chosen' => true, 'includeBlankOption' => true],
+            'eval' => ['helpwizard' => true,
+                'mandatory' => true,
+                'submitOnChange' => true,
+                'chosen' => true,
+                'includeBlankOption' => true],
             'explanation' => 'wem_geodata_mapProvider',
             'sql' => "varchar(255) NOT NULL default ''",
         ],
@@ -163,7 +170,8 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
         'mapProviderGmapKey' => [
             'exclude' => true,
             'inputType' => 'text',
-            'eval' => ['mandatory' => true, 'maxlength' => 255],
+            'eval' => ['mandatory' => true,
+                'maxlength' => 255],
             'load_callback' => [
                 ['wem.encryption_util', 'decrypt_b64'],
             ],
@@ -177,14 +185,18 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'inputType' => 'select',
             'options' => [Map::GEOCODING_PROVIDER_NOMINATIM],
             'reference' => &$GLOBALS['TL_LANG']['tl_wem_map']['geocodingProvider'],
-            'eval' => ['helpwizard' => true, 'includeBlankOption' => true, 'submitOnChange' => true, 'chosen' => true],
+            'eval' => ['helpwizard' => true,
+                'includeBlankOption' => true,
+                'submitOnChange' => true,
+                'chosen' => true],
             'explanation' => 'wem_geodata_geocodingProvider',
             'sql' => "varchar(255) NOT NULL default ''",
         ],
         'geocodingProviderNominatimReferer' => [
             'exclude' => true,
             'inputType' => 'text',
-            'eval' => ['mandatory' => true, 'maxlength' => 255],
+            'eval' => ['mandatory' => true,
+                'maxlength' => 255],
             'load_callback' => [
                 ['wem.encryption_util', 'decrypt_b64'],
             ],
@@ -210,33 +222,37 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
         'doNotAddItemsToContaoSitemap' => [
             'exclude' => true,
             'filter' => true,
-            'flag' => 1,
+            'flag' => DataContainer::SORT_INITIAL_LETTER_ASC,
             'inputType' => 'checkbox',
-            'eval' => ['doNotCopy' => true, 'tl_class' => 'w50 m12'],
+            'eval' => ['doNotCopy' => true,
+                'tl_class' => 'w50 m12'],
             'sql' => "char(1) NOT NULL default ''",
         ],
         'doNotAddItemsToContaoSearch' => [
             'exclude' => true,
             'filter' => true,
-            'flag' => 1,
+            'flag' => DataContainer::SORT_INITIAL_LETTER_ASC,
             'inputType' => 'checkbox',
-            'eval' => ['doNotCopy' => true, 'tl_class' => 'w50 m12'],
+            'eval' => ['doNotCopy' => true,
+                'tl_class' => 'w50 m12'],
             'sql' => "char(1) NOT NULL default ''",
         ],
         'updateExistingItems' => [
             'exclude' => true,
             'filter' => true,
-            'flag' => 1,
+            'flag' => DataContainer::SORT_INITIAL_LETTER_ASC,
             'inputType' => 'checkbox',
-            'eval' => ['doNotCopy' => true, 'tl_class' => 'w50 m12'],
+            'eval' => ['doNotCopy' => true,
+                'tl_class' => 'w50 m12'],
             'sql' => "char(1) NOT NULL default ''",
         ],
         'deleteExistingItemsNotInImportFile' => [
             'exclude' => true,
             'filter' => true,
-            'flag' => 1,
+            'flag' => DataContainer::SORT_INITIAL_LETTER_ASC,
             'inputType' => 'checkbox',
-            'eval' => ['doNotCopy' => true, 'tl_class' => 'w50 m12'],
+            'eval' => ['doNotCopy' => true,
+                'tl_class' => 'w50 m12'],
             'sql' => "char(1) NOT NULL default ''",
         ],
     ],
