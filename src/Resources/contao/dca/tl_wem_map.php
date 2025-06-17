@@ -30,10 +30,10 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             ],
         ],
         'onload_callback' => [
-            [Map::class, 'onloadCallback'],
+            [WEM\GeoDataBundle\DataContainer\Map::class, 'onloadCallback'],
         ],
         'onsubmit_callback' => [
-            [Map::class, 'onsubmitCallback'],
+            [WEM\GeoDataBundle\DataContainer\Map::class, 'onsubmitCallback'],
         ],
     ],
 
@@ -141,7 +141,7 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'exclude' => true,
             'inputType' => 'keyValueWizard',
             'load_callback' => [
-                [Map::class, 'generateExcelPattern'],
+                [WEM\GeoDataBundle\DataContainer\Map::class, 'generateExcelPattern'],
             ],
             'sql' => 'blob NULL',
         ],
@@ -163,7 +163,7 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'exclude' => true,
             'inputType' => 'keyValueWizard',
             'load_callback' => [
-                [Map::class, 'getDefaultMapConfig'],
+                [WEM\GeoDataBundle\DataContainer\Map::class, 'getDefaultMapConfig'],
             ],
             'sql' => 'blob NULL',
         ],
