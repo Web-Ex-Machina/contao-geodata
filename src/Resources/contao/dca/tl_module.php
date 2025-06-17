@@ -45,7 +45,7 @@ $GLOBALS['TL_DCA']['tl_module']['palettes']['wem_geodata_reader'] = '
     {expert_legend:hide},guests,cssID
 ';
 
-$GLOBALS['TL_DCA']['tl_module']['subpalettes']['wem_geodata_filters_leftpanel'] = 'wem_geodata_search,wem_geodata_filters_fields';
+$GLOBALS['TL_DCA']['tl_module']['subpalettes']['wem_geodata_filters_inmap'] = 'wem_geodata_search,wem_geodata_filters_fields';
 $GLOBALS['TL_DCA']['tl_module']['subpalettes']['wem_geodata_filters_above'] = 'wem_geodata_search,wem_geodata_filters_fields';
 $GLOBALS['TL_DCA']['tl_module']['subpalettes']['wem_geodata_filters_below'] = 'wem_geodata_search,wem_geodata_filters_fields';
 $GLOBALS['TL_DCA']['tl_module']['subpalettes']['wem_geodata_filters_present'] = 'wem_geodata_search,wem_geodata_filters_fields';
@@ -93,7 +93,7 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_map_nbItemsToForceAjaxLoa
 $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_filters'] = [
     'exclude' => true,
     'inputType' => 'select',
-    'options' => ['nofilters', 'leftpanel', 'above', 'below'],
+    'options' => ['nofilters', 'inmap', 'above', 'below'],
     'reference' => &$GLOBALS['TL_LANG']['tl_module']['wem_geodata_filters'],
     'eval' => ['submitOnChange' => true,
         'chosen' => true,
