@@ -2,7 +2,20 @@
 
 declare(strict_types=1);
 
-/**
+/*
+ * Geodata Bundle for Contao Open Source CMS
+ * @author     Web Ex Machina
+ *
+ * @see        https://github.com/Web-Ex-Machina/contao-geodata
+ * @license    https://www.apache.org/licenses/LICENSE-2.0
+ */
+
+use Contao\DataContainer;
+use Contao\DC_Table;
+use WEM\GeoDataBundle\DataContainer\Map;
+use WEM\GeoDataBundle\DataContainer\MapCategory;
+
+/*
  * Geodata for Contao Open Source CMS
  * Copyright (c) 2015-2024 Web ex Machina
  *
@@ -12,7 +25,9 @@ declare(strict_types=1);
  * @link     https://github.com/Web-Ex-Machina/contao-geodata/
  */
 
-$this->loadDataContainer('tl_wem_map');
+$this->loadDataContainer(
+    'tl_wem_map'
+);
 
 /*
  * Table tl_wem_map_category.
@@ -20,7 +35,7 @@ $this->loadDataContainer('tl_wem_map');
 $GLOBALS['TL_DCA']['tl_wem_map_category'] = [
     // Config
     'config' => [
-        'dataContainer' => Contao\DC_Table::class,
+        'dataContainer' => DC_Table::class,
         'ptable' => 'tl_wem_map',
         'switchToEdit' => true,
         'enableVersioning' => true,
@@ -31,21 +46,21 @@ $GLOBALS['TL_DCA']['tl_wem_map_category'] = [
             ],
         ],
         'onsubmit_callback' => [
-            [WEM\GeoDataBundle\DataContainer\MapCategory::class, 'onsubmitCallback'],
+            [MapCategory::class, 'onsubmitCallback'],
         ],
         'ondelete_callback' => [
-            [WEM\GeoDataBundle\DataContainer\MapCategory::class, 'ondeleteCallback'],
+            [MapCategory::class, 'ondeleteCallback'],
         ],
     ],
 
     // List
     'list' => [
         'sorting' => [
-            'mode' => 4,
+            'mode' => DataContainer::MODE_PARENT,
             'fields' => ['createdAt DESC'],
             'headerFields' => ['title'],
             'panelLayout' => 'filter;sort,search,limit',
-            'child_record_callback' => [WEM\GeoDataBundle\DataContainer\MapCategory::class, 'listItems'],
+            'child_record_callback' => [MapCategory::class, 'listItems'],
             'child_record_class' => 'no_padding',
         ],
         'global_operations' => [
@@ -63,7 +78,7 @@ $GLOBALS['TL_DCA']['tl_wem_map_category'] = [
             'delete' => [
                 'href' => 'act=delete',
                 'icon' => 'delete.gif',
-                'attributes' => 'onclick="if(!confirm(\''.$GLOBALS['TL_LANG']['MSC']['deleteConfirm'].'\'))return false;Backend.getScrollOffset()"',
+                'attributes' => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\'))return false;Backend.getScrollOffset()"',
             ],
             'show' => [
                 'href' => 'act=show',
@@ -92,7 +107,7 @@ $GLOBALS['TL_DCA']['tl_wem_map_category'] = [
             'sql' => "int(10) unsigned NOT NULL default '0'",
         ],
         'createdAt' => [
-            'flag' => 8,
+            'flag' => DataContainer::SORT_MONTH_DESC,
             'default' => time(),
             'sql' => "int(10) unsigned NOT NULL default '0'",
         ],
@@ -102,15 +117,18 @@ $GLOBALS['TL_DCA']['tl_wem_map_category'] = [
             'exclude' => true,
             'search' => true,
             'inputType' => 'text',
-            'eval' => ['mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50'],
+            'eval' => ['mandatory' => true,
+                'maxlength' => 255,
+                'tl_class' => 'w50'],
             'sql' => "varchar(255) NOT NULL default ''",
         ],
         'is_default' => [
             'exclude' => true,
             'filter' => true,
-            'flag' => 1,
+            'flag' => DataContainer::SORT_INITIAL_LETTER_ASC,
             'inputType' => 'checkbox',
-            'eval' => ['doNotCopy' => true, 'tl_class' => 'w50 m12'],
+            'eval' => ['doNotCopy' => true,
+                'tl_class' => 'w50 m12'],
             'sql' => "char(1) NOT NULL default ''",
         ],
 
@@ -118,14 +136,16 @@ $GLOBALS['TL_DCA']['tl_wem_map_category'] = [
         'marker' => [
             'exclude' => true,
             'inputType' => 'fileTree',
-            'eval' => ['filesOnly' => true, 'fieldType' => 'radio', 'tl_class' => 'clr'],
+            'eval' => ['filesOnly' => true,
+                'fieldType' => 'radio',
+                'tl_class' => 'clr'],
             'sql' => 'binary(16) NULL',
         ],
         'markerConfig' => [
             'exclude' => true,
             'inputType' => 'keyValueWizard',
             'load_callback' => [
-                [WEM\GeoDataBundle\DataContainer\Map::class, 'getDefaultMapConfig'],
+                [Map::class, 'getDefaultMapConfig'],
             ],
             'sql' => 'blob NULL',
         ],

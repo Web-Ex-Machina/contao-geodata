@@ -29,7 +29,7 @@ return ECSConfig::configure()
         __DIR__ . '/config/bundles.php',
     ])
     ->withPreparedSets(
-        $psr12=true,
-        $common=true,
-        $strict=true,
+        symplify: true, 
+        psr12: true, 
+        common: true,
     );

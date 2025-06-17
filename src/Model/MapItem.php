@@ -2,19 +2,18 @@
 
 declare(strict_types=1);
 
-/**
- * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2024 Web ex Machina
+/*
+ * Geodata Bundle for Contao Open Source CMS
+ * @author     Web Ex Machina
  *
- * @category ContaoBundle
- * @package  Web-Ex-Machina/contao-geodata
- * @author   Web ex Machina <contact@webexmachina.fr>
- * @link     https://github.com/Web-Ex-Machina/contao-geodata/
+ * @see        https://github.com/Web-Ex-Machina/contao-geodata
+ * @license    https://www.apache.org/licenses/LICENSE-2.0
  */
 
 namespace WEM\GeoDataBundle\Model;
 
 use Contao\Controller;
+use DateTime;
 use WEM\UtilsBundle\Model\Model as CoreModel;
 
 /**
@@ -41,37 +40,48 @@ class MapItem extends CoreModel
      * @param mixed  $varValue    [Value to use]
      * @param string $strOperator [Operator to use, default "="]
      */
-    public static function formatStatement($strField, $varValue, $strOperator = '='): array
-    {
+    public static function formatStatement(
+        string $strField,
+        $varValue,
+        string $strOperator = '='
+    ): array {
         $arrColumns = [];
         $t = static::$strTable;
 
         switch ($strField) {
             case 'onlyWithCoords':
-                $arrColumns[] = $t.".lat != '' AND ".$t.".lng != ''";
+                $arrColumns[] = $t . ".lat != '' AND " . $t . ".lng != ''";
                 break;
 
             case 'published':
-                $timestamp = (new \DateTime())->getTimestamp();
-                if (1 === (int) $varValue) {
-                    $arrColumns[] = \sprintf("$t.published = 1
-                        AND ($t.publishedAt = '' OR $t.publishedAt <= %s)
-                        AND ($t.publishedUntil = '' OR $t.publishedUntil >= %s)", $timestamp, $timestamp
+                $timestamp = (new DateTime())->getTimestamp();
+                if ((int) $varValue === 1) {
+                    $arrColumns[] = \sprintf(
+                        "{$t}.published = 1
+                        AND ({$t}.publishedAt = '' OR {$t}.publishedAt <= %s)
+                        AND ({$t}.publishedUntil = '' OR {$t}.publishedUntil >= %s)",
+                        $timestamp,
+                        $timestamp
                     );
                 } else {
-                    $arrColumns[] = \sprintf("$t.published = 0
-                        OR ($t.published = 1 AND $t.publishedAt >= %s)
-                        OR ($t.published = 1 AND $t.publishedUntil <= %s)", $timestamp, $timestamp
+                    $arrColumns[] = \sprintf(
+                        "{$t}.published = 0
+                        OR ({$t}.published = 1 AND {$t}.publishedAt >= %s)
+                        OR ({$t}.published = 1 AND {$t}.publishedUntil <= %s)",
+                        $timestamp,
+                        $timestamp
                     );
                 }
+
                 break;
 
             case 'category':
-                if (!\is_array($varValue)) {
+                if (! \is_array($varValue)) {
                     $varValue = [$varValue];
                 }
 
-                $arrColumns[] = \sprintf("{$t}.id IN (
+                $arrColumns[] = \sprintf(
+                    "{$t}.id IN (
                     SELECT mic.pid
                     FROM %s mic
                     INNER JOIN %s mc ON mc.id = mic.category
@@ -87,10 +97,12 @@ class MapItem extends CoreModel
                 );
                 break;
             case 'categories':
-                if (!\is_array($varValue)) {
+                if (! \is_array($varValue)) {
                     $varValue = [$varValue];
                 }
-                $arrColumns[] = \sprintf("$t.id IN (
+
+                $arrColumns[] = \sprintf(
+                    "{$t}.id IN (
                     SELECT mic.pid
                     FROM %s mic
                     WHERE mic.category IN ('%s')
@@ -101,17 +113,31 @@ class MapItem extends CoreModel
                 break;
             default:
                 // HOOK: add custom logic
-                if (isset($GLOBALS['TL_HOOKS']['WEMGEODATAMAPITEMFORMATSTATEMENT']) && \is_array($GLOBALS['TL_HOOKS']['WEMGEODATAMAPITEMFORMATSTATEMENT'])) {
+                if (
+
+                    isset($GLOBALS['TL_HOOKS']['WEMGEODATAMAPITEMFORMATSTATEMENT']) && \is_array(
+                        $GLOBALS['TL_HOOKS']['WEMGEODATAMAPITEMFORMATSTATEMENT']
+                    )
+
+                ) {
                     foreach ($GLOBALS['TL_HOOKS']['WEMGEODATAMAPITEMFORMATSTATEMENT'] as $callback) {
-                        $arrColumnsTemp = Controller::importStatic($callback[0])->{$callback[1]}($strField, $varValue, $strOperator, $arrColumns, self::class);
-                        if (null !== $arrColumnsTemp) {
+                        $arrColumnsTemp = Controller::importStatic(
+                            $callback[0]
+                        )->{$callback[1]}($strField, $varValue, $strOperator, $arrColumns, self::class);
+                        if ($arrColumnsTemp !== null) {
                             $arrColumns = $arrColumnsTemp;
                         } else {
-                            $arrColumns = array_merge($arrColumns, parent::formatStatement($strField, $varValue, $strOperator));
+                            $arrColumns = array_merge(
+                                $arrColumns,
+                                parent::formatStatement($strField, $varValue, $strOperator)
+                            );
                         }
                     }
                 } else {
-                    $arrColumns = array_merge($arrColumns, parent::formatStatement($strField, $varValue, $strOperator));
+                    $arrColumns = array_merge(
+                        $arrColumns,
+                        parent::formatStatement($strField, $varValue, $strOperator)
+                    );
                 }
         }
 
@@ -121,31 +147,32 @@ class MapItem extends CoreModel
     /**
      * Format Search statement.
      *
-     * @param string $strField
      * @param string $varValue [Value to use]
      */
-    public static function formatSearchStatement($strField, $varValue): string
-    {
+    public static function formatSearchStatement(
+        string $strField,
+        string $varValue
+    ): string {
         $t = static::$strTable;
 
         switch ($strField) {
             case 'attr_value_postal':
-                return $t.".id IN(
+                return $t . ".id IN(
                     SELECT tl_wem_map_item_attribute_value.pid
                     FROM tl_wem_map_item_attribute_value
                     WHERE tl_wem_map_item_attribute_value.attribute = 'postal'
-                    AND tl_wem_map_item_attribute_value.value REGEXP '".$varValue."')";
+                    AND tl_wem_map_item_attribute_value.value REGEXP '" . $varValue . "')";
             default:
                 return parent::formatSearchStatement($strField, $varValue);
         }
     }
 
-    public function isPublishedForTimestamp(?int $timestamp = null): bool
+    public function isPublishedForTimestamp(int|null $timestamp = null): bool
     {
-        $timestamp ?? (new \DateTime())->getTimestamp();
+        $timestamp ?? (new DateTime())->getTimestamp();
 
         return $this->published
-            && (empty($this->publishedAt) || (!empty($this->publishedAt) && (int) $this->publishedAt < $timestamp))
-            && (empty($this->publishedUntil) || (!empty($this->publishedUntil) && (int) $this->publishedUntil > $timestamp));
+            && (empty($this->publishedAt) || (! empty($this->publishedAt) && (int) $this->publishedAt < $timestamp))
+            && (empty($this->publishedUntil) || (! empty($this->publishedUntil) && (int) $this->publishedUntil > $timestamp));
     }
 }

@@ -2,20 +2,19 @@
 
 declare(strict_types=1);
 
-/**
- * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2024 Web ex Machina
+/*
+ * Geodata Bundle for Contao Open Source CMS
+ * @author     Web Ex Machina
  *
- * @category ContaoBundle
- * @package  Web-Ex-Machina/contao-geodata
- * @author   Web ex Machina <contact@webexmachina.fr>
- * @link     https://github.com/Web-Ex-Machina/contao-geodata/
+ * @see        https://github.com/Web-Ex-Machina/contao-geodata
+ * @license    https://www.apache.org/licenses/LICENSE-2.0
  */
 
 namespace WEM\GeoDataBundle\Migration;
 
 use Contao\CoreBundle\Migration\AbstractMigration;
 use Contao\CoreBundle\Migration\MigrationResult;
+use Contao\Model\Collection;
 use Doctrine\DBAL\Connection;
 use WEM\GeoDataBundle\Model\Category;
 use WEM\GeoDataBundle\Model\Map;
@@ -24,10 +23,7 @@ use WEM\GeoDataBundle\Model\MapItemCategory;
 
 class M202307181508_DefaultMapCategory extends AbstractMigration
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
     public function __construct(Connection $connection)
     {
@@ -39,13 +35,19 @@ class M202307181508_DefaultMapCategory extends AbstractMigration
         $schemaManager = $this->connection->createSchemaManager();
 
         // If the database table itself does not exist we should do nothing
-        if (!$schemaManager->tablesExist(['tl_wem_map_category'])) {
+        if (
+
+            ! $schemaManager->tablesExist(
+                ['tl_wem_map_category']
+            )
+
+        ) {
             return false;
         }
 
         $columns = $schemaManager->listTableColumns('tl_wem_map_category');
 
-        if (!isset($columns['is_default'])) {
+        if (! isset($columns['is_default'])) {
             return false;
         }
 
@@ -57,7 +59,7 @@ class M202307181508_DefaultMapCategory extends AbstractMigration
         $maps = $this->getMapsWithoutCategory();
         $i = 0;
         $arrIds = [];
-        if ($maps) {
+        if ($maps instanceof Collection) {
             while ($maps->next()) {
                 $objMapCategory = new Category();
                 $objMapCategory->tstamp = time();
@@ -72,7 +74,7 @@ class M202307181508_DefaultMapCategory extends AbstractMigration
                 ++$i;
 
                 $mapItems = $this->getMapItemsWithoutCategory((int) $maps->id);
-                if ($mapItems) {
+                if ($mapItems instanceof Collection) {
                     while ($mapItems->next()) {
                         $this->assignCategoryToMapItem($mapItems->current(), $objMapCategory);
                     }
@@ -81,11 +83,12 @@ class M202307181508_DefaultMapCategory extends AbstractMigration
         }
 
         $maps = $this->getMapsWithoutDefaultCategory();
-        if ($maps) {
+        if ($maps instanceof Collection) {
             while ($maps->next()) {
                 if (\in_array($maps->id, $arrIds, true)) {
                     continue;
                 }
+
                 $objMapCategory = new Category();
                 $objMapCategory->tstamp = time();
                 $objMapCategory->created_at = time();
@@ -99,7 +102,7 @@ class M202307181508_DefaultMapCategory extends AbstractMigration
                 ++$i;
 
                 $mapItems = $this->getMapItemsWithoutCategory((int) $maps->id);
-                if ($mapItems) {
+                if ($mapItems instanceof Collection) {
                     while ($mapItems->next()) {
                         $this->assignCategoryToMapItem($mapItems->current(), $objMapCategory);
                     }
@@ -109,20 +112,26 @@ class M202307181508_DefaultMapCategory extends AbstractMigration
 
         return $this->createResult(
             true,
-            $i.' default categories created/updated.'
+            $i . ' default categories created/updated.'
         );
     }
 
-    private function getMapsWithoutDefaultCategory()
+    private function getMapsWithoutDefaultCategory(): ?Collection
     {
         return Map::findItems([
             'where' => [
-                \sprintf('%s.id NOT IN (SELECT DISTINCT c.pid FROM %s c WHERE c.is_default = 1) AND %s.id NOT IN (SELECT DISTINCT c.pid FROM %s c)', Map::getTable(), Category::getTable(), Map::getTable(), Category::getTable()),
+                \sprintf(
+                    '%s.id NOT IN (SELECT DISTINCT c.pid FROM %s c WHERE c.is_default = 1) AND %s.id NOT IN (SELECT DISTINCT c.pid FROM %s c)',
+                    Map::getTable(),
+                    Category::getTable(),
+                    Map::getTable(),
+                    Category::getTable()
+                ),
             ],
         ]);
     }
 
-    private function getMapsWithoutCategory()
+    private function getMapsWithoutCategory(): ?Collection
     {
         return Map::findItems([
             'where' => [
@@ -131,12 +140,17 @@ class M202307181508_DefaultMapCategory extends AbstractMigration
         ]);
     }
 
-    private function getMapItemsWithoutCategory(int $mapId)
+    private function getMapItemsWithoutCategory(int $mapId): ?Collection
     {
         return MapItem::findItems([
             'pid' => $mapId,
             'where' => [
-                \sprintf('%s.id NOT IN (SELECT DISTINCT %s.pid FROM %s)', MapItem::getTable(), MapItemCategory::getTable(), MapItemCategory::getTable()),
+                \sprintf(
+                    '%s.id NOT IN (SELECT DISTINCT %s.pid FROM %s)',
+                    MapItem::getTable(),
+                    MapItemCategory::getTable(),
+                    MapItemCategory::getTable()
+                ),
             ],
         ]);
     }
@@ -159,10 +173,10 @@ class M202307181508_DefaultMapCategory extends AbstractMigration
         $mapsWithoutCategory = $this->getMapsWithoutCategory();
         $mapsWithoutDefaultCategory = $this->getMapsWithoutDefaultCategory();
 
-        if (!$mapsWithoutCategory && !$mapsWithoutDefaultCategory) {
+        if (! $mapsWithoutCategory instanceof Collection && ! $mapsWithoutDefaultCategory instanceof Collection) {
             return 0;
         }
 
-        return ($mapsWithoutCategory ? $mapsWithoutCategory->count() : 0) + ($mapsWithoutDefaultCategory ? $mapsWithoutDefaultCategory->count() : 0);
+        return ($mapsWithoutCategory instanceof Collection ? $mapsWithoutCategory->count() : 0) + ($mapsWithoutDefaultCategory instanceof Collection ? $mapsWithoutDefaultCategory->count() : 0);
     }
 }

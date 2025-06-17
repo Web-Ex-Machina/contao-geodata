@@ -2,14 +2,12 @@
 
 declare(strict_types=1);
 
-/**
- * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2024 Web ex Machina
+/*
+ * Geodata Bundle for Contao Open Source CMS
+ * @author     Web Ex Machina
  *
- * @category ContaoBundle
- * @package  Web-Ex-Machina/contao-geodata
- * @author   Web ex Machina <contact@webexmachina.fr>
- * @link     https://github.com/Web-Ex-Machina/contao-geodata/
+ * @see        https://github.com/Web-Ex-Machina/contao-geodata
+ * @license    https://www.apache.org/licenses/LICENSE-2.0
  */
 
 namespace WEM\GeoDataBundle\Model;
@@ -36,17 +34,21 @@ class Category extends CoreModel
      * @param mixed  $varValue    [Value to use]
      * @param string $strOperator [Operator to use, default "="]
      */
-    public static function formatStatement(string $strField, $varValue, string $strOperator = '='): array
-    {
+    public static function formatStatement(
+        string $strField,
+        $varValue,
+        string $strOperator = '='
+    ): array {
         $arrColumns = [];
         $t = static::$strTable;
 
         switch ($strField) {
             case 'pid':
-                if (!\is_array($varValue)) {
+                if (! \is_array($varValue)) {
                     $varValue = [$varValue];
                 }
-                $arrColumns[] = \sprintf($t.".pid IN ('%s')", implode("','", $varValue));
+
+                $arrColumns[] = \sprintf($t . ".pid IN ('%s')", implode("','", $varValue));
                 break;
             default:
                 $arrColumns = array_merge($arrColumns, parent::formatStatement($strField, $varValue, $strOperator));
@@ -55,9 +57,6 @@ class Category extends CoreModel
         return $arrColumns;
     }
 
-    /**
-     * @throws \Exception
-     */
     public function delete(): int
     {
         // remove links item <-> category

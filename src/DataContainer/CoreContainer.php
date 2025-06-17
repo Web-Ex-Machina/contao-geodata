@@ -2,14 +2,12 @@
 
 declare(strict_types=1);
 
-/**
- * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2024 Web ex Machina
+/*
+ * Geodata Bundle for Contao Open Source CMS
+ * @author     Web Ex Machina
  *
- * @category ContaoBundle
- * @package  Web-Ex-Machina/contao-geodata
- * @author   Web ex Machina <contact@webexmachina.fr>
- * @link     https://github.com/Web-Ex-Machina/contao-geodata/
+ * @see        https://github.com/Web-Ex-Machina/contao-geodata
+ * @license    https://www.apache.org/licenses/LICENSE-2.0
  */
 
 namespace WEM\GeoDataBundle\DataContainer;
@@ -37,20 +35,28 @@ class CoreContainer extends Backend
      * @param [string] $strParentField  [Parent Field]
      * @param [string] $strForeignField [Foreign field where to sync values]
      */
-    public function syncData($varValues, $strTable, $intParentId, $strParentField, $strForeignField): void
-    {
+    public function syncData(
+        $varValues,
+        $strTable,
+        $intParentId,
+        $strParentField,
+        $strForeignField
+    ): void {
         // Found Model class
         $stdModel = Model::getClassFromTable($strTable);
 
         // step 1 - update existing recipients, add new ones
         foreach ($varValues as $id) {
-            $objModel = $stdModel::findItems([$strParentField => $intParentId, $strForeignField => $id], 1);
+            $objModel = $stdModel::findItems([
+                $strParentField => $intParentId,
+                $strForeignField => $id,
+            ], 1);
 
-            if (!$objModel) {
+            if (! $objModel) {
                 $objModel = new $stdModel();
                 $objModel->createdAt = time();
-                $objModel->$strParentField = $intParentId;
-                $objModel->$strForeignField = $id;
+                $objModel->{$strParentField} = $intParentId;
+                $objModel->{$strForeignField} = $id;
             }
 
             $objModel->tstamp = time();
