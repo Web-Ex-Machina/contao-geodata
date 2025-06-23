@@ -51,7 +51,7 @@ $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
             'geocodeAll' => [
                 'href' => 'key=geocodeAll',
                 'class' => 'header_geocodeAll',
-                'attributes' => 'onclick="Backend.getScrollOffset()" data-confirm="' . $GLOBALS['TL_LANG']['tl_wem_map_item']['geocodeAllConfirm'] . '"',
+                'attributes' => 'onclick="Backend.getScrollOffset()" data-confirm="Geocode all?"',
                 'button_callback' => [MapItem::class, 'geocodeAllButtonGlobalOperations'],
             ],
             'import' => [
@@ -110,7 +110,7 @@ $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
     // Palettes
     'palettes' => [
         'default' => '
-            {location_legend},title,alias,categories,published, publishedAt, publishedUntil;
+            {location_legend},title,alias,categories,published,publishedAt,publishedUntil;
             {street_legend},country,admin_lvl_1,admin_lvl_2,admin_lvl_3,city,postal,street;
             {coords_legend},lat,lng;
             {data_legend},picture,teaser;
@@ -202,7 +202,7 @@ $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
             'flag' => DataContainer::SORT_INITIAL_LETTER_ASC,
             'inputType' => 'checkbox',
             'eval' => ['doNotCopy' => true,
-                'tl_class' => 'w50 m12'],
+                'tl_class' => 'w50 m12 clr'],
             'sql' => "char(1) NOT NULL default ''",
         ],
         'publishedAt' => [
@@ -210,7 +210,7 @@ $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
             'inputType' => 'text',
             'eval' => ['rgxp' => 'datim',
                 'datepicker' => true,
-                'tl_class' => 'w50 wizard'],
+                'tl_class' => 'w50 wizard clr'],
             'sql' => "varchar(10) NOT NULL default ''",
         ],
         'publishedUntil' => [

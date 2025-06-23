@@ -24,6 +24,7 @@ use Contao\Versions;
 use Exception;
 use WEM\GeoDataBundle\Model\Category;
 use WEM\GeoDataBundle\Model\Map;
+use WEM\UtilsBundle\Classes\CountriesUtil;
 
 class MapItem extends CoreContainer
 {
@@ -45,7 +46,7 @@ class MapItem extends CoreContainer
     ): array {
         $arrData = [];
 
-        if ($dc->activeRecord->pid) {
+        if ($dc->activeRecord && $dc->activeRecord->pid) {
             $objCategories = $this->Database->prepare(
                 'SELECT id, title FROM tl_wem_map_category WHERE pid = ? ORDER BY createdAt ASC'
             )
@@ -125,7 +126,7 @@ class MapItem extends CoreContainer
     {
         $objMap = Map::findById(Input::get('id'));
 
-        if ($objMap->geocodingProvider === '') {
+        if (!$objMap || $objMap->geocodingProvider === '') {
             unset($GLOBALS['TL_DCA']['tl_wem_map_item']['list']['global_operations']['geocodeAll'], $GLOBALS['TL_DCA']['tl_wem_map_item']['list']['operations']['geocode']);
         }
     }
@@ -148,6 +149,7 @@ class MapItem extends CoreContainer
      */
     public function listItems(array $arrRow): string
     {
+        $arrCountries = CountriesUtil::getCountries();
         $strColor = ! $arrRow['lat'] || ! $arrRow['lng'] ? '#ff0000' : '#333';
 
         $strRow = \sprintf(
@@ -155,7 +157,7 @@ class MapItem extends CoreContainer
             $strColor,
             $arrRow['title'],
             $arrRow['city'],
-            $GLOBALS['TL_LANG']['CNT'][$arrRow['country']]
+            $arrCountries[$arrRow['country']]
         );
 
         return $strRow . '<div class="ajax-results"></div>';
@@ -174,7 +176,7 @@ class MapItem extends CoreContainer
     ): string {
         // if (\strlen(Input::get('tid') ?? '')) {
         if (Input::get('tid')) {
-            $this->toggleVisibility(Input::get('tid'), Input::get('state') === '1', @func_get_arg(12) ?: null);
+            $this->toggleVisibility((int) Input::get('tid'), Input::get('state') === '1', @func_get_arg(12) ?: null);
             $this->redirect($this->getReferer());
         }
 
@@ -213,12 +215,7 @@ class MapItem extends CoreContainer
 
         // Check permissions to publish
         $user = BackendUser::getInstance();
-        if (! $user->hasAccess('tl_wem_map_item::published', 'alexf')) {
-            $this->log(
-                'Not enough permissions to publish/unpublish agence item ID "' . $intId . '"',
-                __METHOD__,
-                TL_ERROR
-            );
+        if (!$user->hasAccess('tl_wem_map_item::published', 'alexf')) {
             $this->redirect('contao/main.php?act=error');
         }
 
@@ -227,11 +224,8 @@ class MapItem extends CoreContainer
 
         // Trigger the save_callback
         if (
-
-            \is_array(
-                $GLOBALS['TL_DCA']['tl_wem_map_item']['fields']['published']['save_callback']
-            )
-
+            array_key_exists('save_callback', $GLOBALS['TL_DCA']['tl_wem_map_item']['fields']['published'])
+            && \is_array($GLOBALS['TL_DCA']['tl_wem_map_item']['fields']['published']['save_callback'])
         ) {
             foreach ($GLOBALS['TL_DCA']['tl_wem_map_item']['fields']['published']['save_callback'] as $callback) {
                 if (\is_array($callback)) {
@@ -251,14 +245,6 @@ class MapItem extends CoreContainer
         ;
 
         $objVersions->create();
-        $this->log(
-            'A new version of record "tl_wem_map_item.id=' . $intId . '" has been created' . $this->getParentEntries(
-                'tl_wem_map_item',
-                $intId
-            ),
-            __METHOD__,
-            TL_GENERAL
-        );
     }
 
     public function importButtonGlobalOperations(
@@ -323,7 +309,7 @@ class MapItem extends CoreContainer
         array|null $rootIds
     ): string {
         $objMap = Map::findById(Input::get('id'));
-        if (! $objMap || $objMap->geocodingProvider === null) {
+        if (!$objMap || $objMap->geocodingProvider === null) {
             return '';
         }
 
@@ -348,7 +334,7 @@ class MapItem extends CoreContainer
         string $attributes
     ): string {
         $objMap = Map::findById(Input::get('id'));
-        if (! $objMap || $objMap->geocodingProvider === null) {
+        if (!$objMap || $objMap->geocodingProvider === null) {
             return '';
         }
 
