@@ -1,4 +1,4 @@
-<div class="map__list map__panel right active">
+<div class="map__list map__panel right ">
   <span class="map__list__toggler ">
     <div class="bar"></div>
     <div class="bar"></div>

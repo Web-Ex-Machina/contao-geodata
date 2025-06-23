@@ -1,4 +1,4 @@
-<div class="map__filters map__panel left active">
+<div class="map__filters map__panel left ">
 	<span class="map__filters__toggler"><i class="far fa-sort-shapes-down-alt"></i></span>
 		<form class="map__filters__wrapper scroll-custom" action="<?= $this->filters_action ?>" method="<?= $this->filters_method ?>">
 		<?php foreach($this->filters as $f): ?>
