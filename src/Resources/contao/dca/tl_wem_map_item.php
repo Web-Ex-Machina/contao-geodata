@@ -95,9 +95,8 @@ $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
                 'icon' => 'show.gif',
             ],
             'toggle' => [
-                'icon' => 'visible.gif',
-                'attributes' => 'onclick="Backend.getScrollOffset();return AjaxRequest.toggleVisibility(this,%s)"',
-                'button_callback' => [MapItem::class, 'toggleIcon'],
+                'href' => 'act=toggle&amp;field=published',
+                'icon' => 'visible.svg',
             ],
             'geocode' => [
                 'href' => 'key=geocode',
@@ -199,6 +198,7 @@ $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
         'published' => [
             'exclude' => true,
             'filter' => true,
+            'toggle' => true,
             'flag' => DataContainer::SORT_INITIAL_LETTER_ASC,
             'inputType' => 'checkbox',
             'eval' => ['doNotCopy' => true,
