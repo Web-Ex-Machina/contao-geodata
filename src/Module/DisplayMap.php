@@ -208,6 +208,7 @@ class DisplayMap extends Core
         try {
             switch (Input::post('action')) {
                 case 'getLocations':
+                    $this->buildFilters();
                     $arrLocations = $this->getLocationsAjax();
                     $arrResponse = [
                         'status' => 'success',
@@ -268,17 +269,36 @@ class DisplayMap extends Core
                     ));
             }
         } catch (Exception $exception) {
-            $arrResponse = ['status' => 'error',
+            $arrResponse = [
+                'status' => 'error',
                 'msg' => $exception->getMessage(),
-                'trace' => $exception->getTrace()];
+                'trace' => $exception->getTrace(),
+            ];
         }
 
         // Add Request Token to JSON answer and return
         $arrResponse['rt'] = System::getContainer()->get(
             'contao.csrf.token_manager'
         )->getDefaultTokenValue();
+
         echo json_encode($arrResponse);
         exit;
+    }
+
+    /**
+     * Retrieve all GET keys and turn them into POST
+     */
+    protected function retrieveGetAttributes(): void
+    {
+        $arrKeys = Input::getKeys();
+
+        if (!empty($arrKeys)) {
+            foreach ($arrKeys as $k) {
+                if ("" !== Input::get($k)) {
+                    Input::setPost($k, Input::get($k));
+                }
+            }
+        }
     }
 
     protected function buildFilters(): void
@@ -286,8 +306,8 @@ class DisplayMap extends Core
         // Gather filters
         if ($this->wem_geodata_filters !== 'nofilters') {
             $this->filters = [];
+            $this->retrieveGetAttributes();
             $locations = MapItem::findItems($this->arrConfig);
-            
 
             if ($this->wem_geodata_search) {
                 $this->filters['search'] = [
@@ -295,10 +315,11 @@ class DisplayMap extends Core
                     'placeholder' => $GLOBALS['TL_LANG']['tl_wem_map_item']['search'][1],
                     'name' => 'search',
                     'type' => 'text',
-                    'value' => Input::get('search') ?: '',
+                    'value' => Input::post('search') ?: '',
                 ];
-                if (Input::get('search')) {
-                    $this->arrConfig['search'] = Input::get('search');
+
+                if (Input::post('search')) {
+                    $this->arrConfig['search'] = Input::post('search');
                 }
             }
 
@@ -313,8 +334,8 @@ class DisplayMap extends Core
             $arrCountries = Util::getCountries();
 
             foreach ($arrFilterFields as $filterField) {
-                if (Input::get($filterField)) {
-                    $this->arrConfig[$filterField] = Input::get($filterField);
+                if (Input::post($filterField)) {
+                    $this->arrConfig[$filterField] = Input::post($filterField);
                 }
 
                 $this->filters[$filterField] = [
@@ -468,8 +489,8 @@ class DisplayMap extends Core
         $arrFilterFields = unserialize($this->wem_geodata_filters_fields);
 
         foreach ($arrFilterFields as $filterField) {
-            if (Input::get($filterField)) {
-                $config[$filterField] = Input::get($filterField);
+            if (Input::post($filterField)) {
+                $config[$filterField] = Input::post($filterField);
             }
         }
 
