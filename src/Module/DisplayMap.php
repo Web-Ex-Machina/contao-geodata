@@ -184,7 +184,6 @@ class DisplayMap extends CoreList
             );
 
             $this->Template->config = $arrMapConfig;
-
             $this->Template->moduleId = $this->id;
             $this->Template->rt = System::getContainer()->get('contao.csrf.token_manager')->getDefaultTokenValue();
             $this->Template->blnLoadInAjax = $blnLoadInAjax;

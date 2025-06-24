@@ -81,7 +81,7 @@ class LocationsList extends CoreList
     protected function compile(): void
     {
         try {
-            if (! $this->wem_geodata_maps) {
+            if (!$this->wem_geodata_maps) {
                 throw new Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noMapConfigured']);
             }
 
@@ -92,24 +92,26 @@ class LocationsList extends CoreList
                 ],
             ]);
 
-            if (! $this->maps instanceof Collection) {
+            if (!$this->maps instanceof Collection) {
                 throw new Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noMapFound']);
             }
 
             $this->objMap = $this->maps->first();
 
             // Build the config (do not manage pagination here !)
-            $this->arrConfig = ['published' => 1,
+            $this->arrConfig = [
+                'published' => 1,
                 'where' => [
                     \sprintf(
                         '%s.pid in (%s)',
                         MapItem::getTable(),
                         implode(',', StringUtil::deserialize($this->wem_geodata_maps))
                     ),
-                ]];
+                ]
+            ];
 
             // Catch AJAX request
-            if (Input::post('TL_AJAX') && $this->id === Input::post('module')) {
+            if (Input::post('TL_AJAX') && $this->id === (int) Input::post('module')) {
                 $this->handleAjaxRequests();
             }
 
@@ -121,15 +123,11 @@ class LocationsList extends CoreList
                 $limit = $this->numberOfItems;
             }
 
-            // Load the libraries ClassLoader::loadLibraries($this->objMap, 2);
+            // Load the libraries
             $objCssCombiner = new Combiner();
             $objCssCombiner->add('bundles/wemgeodata/css/default.css', WEM_GEODATA_COMBINER_VERSION);
             $GLOBALS['TL_HEAD'][] = \sprintf('<link rel="stylesheet" href="%s">', $objCssCombiner->getCombinedFile());
-            Util::getCountries();
 
-            // Get the jumpTo page $this->objJumpTo =
-
-            // PageModel::findByPk($this->objMap->jumpTo); Gather filters
             $this->Template->filters = $this->buildFilters();
             $this->Template->filters_position = $this->wem_geodata_filters;
             $this->Template->filters_action = Environment::get('request');
@@ -148,17 +146,13 @@ class LocationsList extends CoreList
 
             $this->buildPagination($this->numberOfItems);
 
-            // Get locations $this->arrConfig['limit'] = $this->perPage;
             $limit = $this->perPage ?: $limit;
-            // $this->arrConfig['offset'] = $this->perPage * ((Input::get('page_n'.$this->id)
-
-            // ? (int) Input::get('page_n'.$this->id) : 1) - 1);
             $offset = $this->perPage * ((Input::get(
                 'page_n' . $this->id
             ) ? (int) Input::get(
                 'page_n' . $this->id
             ) : 1) - 1);
-            // $arrLocations = $this->getLocations($this->arrConfig);
+
             $arrLocations = $this->fetchItems(
                 null,
                 $limit ?: 0,
@@ -171,12 +165,6 @@ class LocationsList extends CoreList
             $arrCategories = $this->getCategories();
 
             $this->Template->categories = $arrCategories;
-
-            // Add the items if (!empty($arrLocations)) {     $this->Template->locations =
-
-            // $this->parseItems($arrLocations, $this->wem_geodata_customTplForGeodataItems);
-
-            // } Send the data to Map template
             $this->Template->config = $this->arrConfig;
             $this->Template->customTplForGeodataItems = empty($this->wem_geodata_customTplForGeodataItems) ? 'mod_wem_geodata_list_item' : $this->wem_geodata_customTplForGeodataItems;
         } catch (Exception $exception) {
