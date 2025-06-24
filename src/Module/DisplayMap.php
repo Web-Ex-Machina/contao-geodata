@@ -104,7 +104,7 @@ class DisplayMap extends Core
 
             // Load the libraries
             ClassLoader::loadLibraries($this->objMap, WEM_GEODATA_COMBINER_VERSION);
-            Util::getCountries();
+            System::loadLanguageFile('tl_wem_map_item');
 
             // Build the config
             $arrMapConfig = [];
@@ -130,12 +130,12 @@ class DisplayMap extends Core
             }
 
             // config for locations $arrConfigBase = ['pid' => $this->objMap->id, 'published'
-
             // => 1, 'onlyWithCoords' => 1]; $arrConfig = $arrConfigBase;
-
-            $this->arrConfig = ['pid' => $this->objMap->id,
+            $this->arrConfig = [
+                'pid' => $this->objMap->id,
                 'published' => 1,
-                'onlyWithCoords' => 1];
+                'onlyWithCoords' => 1
+            ];
             $this->arrConfigDefault = $this->arrConfig; // keep this one clean, so we load all items disregarding filters values
 
             // Catch AJAX request
@@ -160,7 +160,7 @@ class DisplayMap extends Core
 
             $arrLocations = [];
             $arrMarkers = [];
-            if (! $blnLoadInAjax) {
+            if (!$blnLoadInAjax) {
                 // Get locations
                 $arrLocations = $this->fetchItems();
                 // Now we retrieved all the locations, we will regroup the close ones into one
@@ -255,7 +255,6 @@ class DisplayMap extends Core
                     break;
                 case 'getFilters':
                     $this->buildFilters();
-                    $arrLocations = $this->fetchItems();
                     $arrResponse = [
                         'status' => 'success',
                         'html' => $this->parseFilters($this->filters, $this->wem_geodata_filters),
@@ -288,7 +287,7 @@ class DisplayMap extends Core
         if ($this->wem_geodata_filters !== 'nofilters') {
             $this->filters = [];
             $locations = MapItem::findItems($this->arrConfig);
-            System::loadLanguageFile('tl_wem_map_item');
+            
 
             if ($this->wem_geodata_search) {
                 $this->filters['search'] = [
@@ -327,14 +326,8 @@ class DisplayMap extends Core
                 ];
 
                 foreach ($arrLocations as $location) {
-                    if (! $location[$filterField]) {
-                        if (
-
-                            isset($GLOBALS['TL_HOOKS']['WEMGEODATABUILDFILTERSSINGLEFILTEROPTION']) && \is_array(
-                                $GLOBALS['TL_HOOKS']['WEMGEODATABUILDFILTERSSINGLEFILTEROPTION']
-                            )
-
-                        ) {
+                    if (!$location[$filterField]) {
+                        if (isset($GLOBALS['TL_HOOKS']['WEMGEODATABUILDFILTERSSINGLEFILTEROPTION']) && \is_array($GLOBALS['TL_HOOKS']['WEMGEODATABUILDFILTERSSINGLEFILTEROPTION'])) {
                             foreach ($GLOBALS['TL_HOOKS']['WEMGEODATABUILDFILTERSSINGLEFILTEROPTION'] as $callback) {
                                 [$this->filters,$this->arrConfig] = static::importStatic(
                                     $callback[0]
@@ -398,13 +391,7 @@ class DisplayMap extends Core
                     }
 
                     // HOOK: add custom logic
-                    if (
-
-                        isset($GLOBALS['TL_HOOKS']['WEMGEODATABUILDFILTERSSINGLEFILTEROPTION']) && \is_array(
-                            $GLOBALS['TL_HOOKS']['WEMGEODATABUILDFILTERSSINGLEFILTEROPTION']
-                        )
-
-                    ) {
+                    if (isset($GLOBALS['TL_HOOKS']['WEMGEODATABUILDFILTERSSINGLEFILTEROPTION']) && \is_array($GLOBALS['TL_HOOKS']['WEMGEODATABUILDFILTERSSINGLEFILTEROPTION'])) {
                         foreach ($GLOBALS['TL_HOOKS']['WEMGEODATABUILDFILTERSSINGLEFILTEROPTION'] as $callback) {
                             [$this->filters,$this->arrConfig] = static::importStatic(
                                 $callback[0]
