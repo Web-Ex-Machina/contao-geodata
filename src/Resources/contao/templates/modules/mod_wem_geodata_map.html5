@@ -37,14 +37,15 @@
 			<?php echo $this->list; ?>
 		<?php endif; ?>
     	<script type="text/javascript">
-			rt     = '<?= $this->rt ?>';
-			mapModuleId       = '<?= $this->moduleId ?>';
-			blnLoadInAjax     = <?= $this->blnLoadInAjax ? 1 : 0; ?>;
-			nbItemsPerRequest = <?php echo $this->nbItemsPerRequest ? : 10  ?>;
-			objMapConfig      = <?= json_encode($this->config) ?>;
-			objMapLocations   = <?= $this->blnLoadInAjax ? '[]' : json_encode($this->locations, JSON_INVALID_UTF8_IGNORE | JSON_INVALID_UTF8_SUBSTITUTE) ?>;
-			objMapFilters     = <?= !$this->blnLoadInAjax && $this->filters ? json_encode($this->filters ?? []) : '{}' ?>;
-		    categories        = <?= $this->categories ? json_encode($this->categories) : '{}' ?>;
+			rt                         = '<?= $this->rt ?>';
+			mapModuleId                = '<?= $this->moduleId ?>';
+			geodata.blnLoadInAjax      = <?= $this->blnLoadInAjax ? 1 : 0; ?>;
+			geodata.nbItems            = <?php echo $this->nbItems ? : 0 ?>;
+			geodata.nbItemsPerRequest  = <?php echo $this->nbItemsPerRequest ? : 10  ?>;
+			geodata.config             = <?= json_encode($this->config) ?>;
+			geodata.locations          = <?= $this->blnLoadInAjax ? '[]' : json_encode($this->locations, JSON_INVALID_UTF8_IGNORE | JSON_INVALID_UTF8_SUBSTITUTE) ?>;
+			// geodata.filters            = <?= !$this->blnLoadInAjax && $this->filters ? json_encode($this->filters ?? []) : '{}' ?>;
+		    geodata.markers.categories = <?= $this->categories ? json_encode($this->categories) : '{}' ?>;
 		</script>
 	<?php endif; ?>
 </div>

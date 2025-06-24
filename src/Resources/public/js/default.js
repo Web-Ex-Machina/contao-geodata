@@ -1,210 +1,233 @@
-// ------------------------------------------------------------------------------------------------------------------------------
-// DATA SETTINGS
-var map;
-var categories;
-var objMapLocations;
-var objMapConfig;
-var objMapFilters;
-var objMarkersConfig;
-var arrMarkersInListAll = [];
-var arrMarkersInListCurrent = [];
-var arrMarkersAll= [];
-var arrMarkersCurrent = [];
-var filters = {};
-var mapModuleId;
-var rt;
-var nbItemsPerRequest = 10;
-
-var blnLoadInAjax 	= false;
-
-// providers functions, needs to be overriden in the proper dedicated file (eg. leaflet.js)
-var applyFilters_callback = function(){};
-var initMap = function(){
-	return new Promise(function(resolve,reject){
-	    resolve()
-	});
+var geodata               = geodata || {};
+geodata.map               = {};
+geodata.locations         = {};
+geodata.config            = {};
+geodata.filters           = {};
+geodata.markers           = {
+	all: [],
+	current: [],
+	config:{},
+	categories:{}
+};
+geodata.markersInList     = {
+	all: [],
+	current: [],
+};
+geodata.blnLoadInAjax     = false;
+geodata.loaded = {
+	map     : false,
+	markers : false,
+	list    : false,
+	filters : false,
 }
+geodata.nbItems           = 0;
+geodata.nbItemsPerRequest = 100;
+geodata.functions         = {};
+geodata.callbacks         = {};
+geodata.ajax              = {};
+geodata.utils             = {};
 
-// ONLAD
-window.addEventListener('load', (event) => {
-	if(blnLoadInAjax){
-		var loadingOverlay = $('.map__loading__overlay');
-		if(loadingOverlay){
-			loadingOverlay.toggleClass('hidden');
-		}
-		countLocationsAjax().then(r => {
-			var nbElementsToManage = r.count; // total number of elements to manage
-			if(nbElementsToManage > 0){
-				loopGetLocationsItemsPagined(nbElementsToManage, 0, limit)
-				.then(function(r){
 
-					getFiltersAjax().then(r => {
-						if(r.html.length > 0){
-							$('.map__filters__container').html(r.html);
-						}
-						objMapFilters = JSON.parse(r.json);
-						initMapGlobal();
-						if(loadingOverlay){
-							loadingOverlay.toggleClass('hidden');
-						}
-					});
-				})
-				.catch(function(msg){
-					alert(msg);
-				});
-			}
-		})
-		.catch(function(msg){
-			alert(msg);
-		});
-	}else{
-		initMapGlobal();
-	}
+const delay_check = 100;
+var mapModuleID;
+var rt;
+
+window.addEventListener("load", function(e) {
+    console.log(geodata);
+    geodata.functions.init().then(r=>{
+    	// $list.addClass('active');
+    	$filters.addClass('active');
+    });
 });
 
-var initMapGlobal = function(){
-	$map           = $('.map__container');
-	$legend        = $('.map__legend');
-	$toggleLegend  = $('.map__legend__toggler');
-	$list          = $('.map__list');
-	$toggleList    = $('.map__list__toggler');
-	$filters       = $('.map__filters');
-	$toggleFilters = $('.map__filters__toggler');
+geodata.functions.init = function(){
+	return new Promise(function(resolve,reject){
+	    $map            = $('.map__container');
+	    $legend         = $('.map__legend');
+	    $toggleLegend   = $('.map__legend__toggler');
+	    $list           = $('.map__list');
+	    $listToggler    = $('.map__list__toggler');
+	    $filters	    = null;
+	    $filtersToggler	= null;
+
+	    // LIST
+	    let inter_list = setInterval(function(){
+	    	// console.log('checkin list loading');
+	    	if (geodata.loaded.list) {
+				clearInterval(inter_list);
+		    	$list           = $('.map__list');
+		    	$listToggler    = $('.map__list__toggler');
+			    if ($list.length) {
+			    	$listToggler.bind('click', function(){
+			    		$list.toggleClass('active');
+			    		if ($legend.length) 
+			    			$legend.removeClass('active');
+			    	});
+			    	$list.find('.map__list__item').on('click', function(e) {
+			    		geodata.functions.selectMapItem($(this).data('id'));
+			    	});
+			    }
+				console.log('list init done');
+			}
+	    },delay_check);
+
+	    // MARKERS
+	    let inter_markers = setInterval(function(){
+	    	// console.log('checkin markers loaded');
+	    	if (geodata.loaded.markers) {
+	    		clearInterval(inter_markers);
+
+	    		console.log('markers init done');
+	    	}
+	    },delay_check);
+
+	    // FILTERS
+	    let inter_filters = setInterval(function(){
+	    	// console.log('checkin filters loading');
+	    	if (geodata.loaded.filters) {
+				clearInterval(inter_filters);
+    			$filters        = $('.map__filters');
+    			$filtersToggler = $('.map__filters__toggler');
+			    if ($filters.length) {
+			    	if (typeof FontAwesome == 'undefined')
+			    		$filtersToggler.html('<svg fill="currentColor" viewBox="0 0 80 90" focusable="false" xmlns="http://www.w3.org/2000/svg"><path d="m 0,0 30,45 0,30 10,15 0,-45 30,-45 Z"></path></svg>');
+
+			    	$filtersToggler.bind('click', function(){
+			    		$filters.toggleClass('active');
+			    	});
+
+	    			geodata.filters = $filters.find('.map__filter [id^=filter_]').map((i,e)=>{return e.name}).toArray().reduce((a,v)=>({...a,[v]:''}),{})
+			    	
+			    	$('body').on('change keyup', '.map__filters [id^=filter_]', function(e) {
+
+			    		$('.map__filters').find('[id^=filter_]').each(function(){
+			    			geodata.filters[this.name] = this.value;
+			    		});
+			    		console.log(geodata.filters);
+			    		geodata.functions.applyFilters();
+			    	});
+			    }
+	    		console.log('filters init done');
+	    	}
+	    },delay_check);
+
+	    // MODULE
+	    let inter_module = setInterval(function(){
+	    	// console.log('checkin module loaded');
+	    	if (geodata.loaded.map && geodata.loaded.list && geodata.loaded.filters && geodata.loaded.markers) {
+	    		clearInterval(inter_module);
+	    		console.log('module init done');
+    			resolve()
+	    	}
+	    },delay_check);
 
 
-	// LIST events
-	$toggleList.bind('click', function(){
-		$list.toggleClass('active');
-		// $legend.removeClass('active');
-	});
-	$toggleFilters.bind('click', function(){
-		$filters.toggleClass('active');
-	});
-	$list.find('.map__list__item').on('click', function(e) {
-		selectMapItem($(this).data('id'));
-	});
-
-	// FILTERS events
-	$('.locations__filters, .map__filters').find('[id^=filter_]').on('change keyup', function(){
-		$('.locations__filters, .map__filters').find('[id^=filter_]').each(function(){
-			filters[this.name] = this.value;
-		});
-		applyFilters();
-	});
-
-	initMap().then((r) => {
-		// set legend after map init
-		if (categories) {
-			for(var c in categories) {
-		    	var category = categories[c];
-		    	for(var i in categories){
-		    		if(categories[i].id === category.value){
-		    			category = categories[i];
-		    			break;
-		    		}
-		    	}
-				// add marker to legend
-				$legend.append(`
-					<div class="map__legend__item">
-						<img src="${objMarkersConfig[category.marker?category.alias:'default'].options.iconUrl}" width="${objMarkersConfig[category.marker?category.alias:'default'].options.iconSize[0]}" height="${objMarkersConfig[category.marker?category.alias:'default'].options.iconSize[1]}" alt="Icon for ${category.title} category"><span>${category.title}</span>
-					</div>
-				`);
-		    }
-		    $toggleLegend.on('click',()=>{
-		    	$legend.addClass('active');
-		    });
-		    $legend.find('.close').on('click',()=>{
-		    	$legend.removeClass('active');
-		    });
-		    if ($legend.find('.map__legend__item').length && categories.length>1)
-		    	$toggleLegend.removeClass('hidden');
-		    
-		}
-
-		// manually trigger filters
-		$('.locations__filters, .map__filters').find('[id^=filter_]').first().trigger('change');
-		// console.log('objMapFilters',objMapFilters);
-		// console.log('arrMarkersInListAll',arrMarkersInListAll);
-		// console.log('arrMarkersInListCurrent',arrMarkersInListCurrent);
-		// console.log('arrMarkersAll',arrMarkersAll);
-		// console.log('arrMarkersCurrent',arrMarkersCurrent);
+	    // MAP
+	    geodata.functions.initMap().then((r)=>{
+	    	console.log(r);
+	    	geodata.loaded.map = true;
+	    	if (geodata.blnLoadInAjax) {
+	    		geodata.functions.getFilters().then((r)=>{
+	    			console.log(r);
+	    			geodata.loaded.filters = true;
+	    		});
+	    		geodata.functions.getLocations().then((r)=>{
+	    			console.log(r);
+	    			geodata.loaded.list = true;
+	    			geodata.loaded.markers = true;
+	    		});
+	    	} else {
+	    		geodata.loaded.list	= true;
+	    		geodata.functions.getFilters().then((r)=>{
+	    			console.log(r);
+	    			geodata.loaded.filters = true;
+	    		});
+	    		geodata.functions.addMarkers(geodata.locations,true,false).then(r=>{
+		    		if (geodata.config.map.fitBounds)
+		    			geodata.functions.fitBounds();
+		    		geodata.loaded.markers	= true;
+	    		});
+	    	}
+	    })
 	});
 };
-
-var applyFilters = function(){
-	// console.log(filters);
-	arrMarkersCurrent = arrMarkersAll.filter( item => {
-		var match = true;
-		// console.log(item);
-		for(var f in filters){
-			if (f == "search" || f == "category") {
-				if (filters[f] !== '' && item['filter_'+f].search(new RegExp(filters[f],'i')) == -1)
-					match = false;
-			} else { // input search code
-				if (filters[f] !== '' && item['filter_'+f] !== filters[f]){
-					if("undefined" !== typeof item['filter_'+f] && -1 != item['filter_'+f].indexOf(',')){
-						var values = item['filter_'+f].split(',');
-						match = values.includes(filters[f]);
-					}else{
-						match = false;
-					}
-				}
-			}
-		}
-		return match;
+geodata.functions.initMap = function(){
+	return new Promise(function(resolve,reject){
+		console.log('Please override this function (initMap) in map\'s provider own js file.');
+		resolve();
 	});
-	// console.log("==========");
-	// console.log(arrMarkersInListAll);
-	arrMarkersInListCurrent = arrMarkersInListAll.filter( item => {
-		var match = true;
-		for(var f in filters){
-			if (f == "search" || f == "category") {
-				if (filters[f] !== '' && item['filter_'+f].search(new RegExp(filters[f],'i')) == -1){
-					match = false;
-					return false;
-				}
-			} else { // input search code
-				if (filters[f] !== '' && item['filter_'+f] !== filters[f]){
-					if("undefined" !== typeof item['filter_'+f] && -1 != item['filter_'+f].indexOf(',')){
-						var values = item['filter_'+f].split(',');
-						match = values.includes(filters[f]);
-						return match;
-					}else{
-						match = false;
-						return false;
-					}
-				}
-			}
-		}
-		return match;
+};
+geodata.functions.addMarkers = function(locations=[],doUpdateLayers=false,doFitBounds=false){
+	return new Promise(function(resolve,reject){
+		console.log('Please override this function (addMarkers) in map\'s provider own js file.');
+		resolve();
 	});
-	// console.log(arrMarkersInListCurrent);
-
-	arrMarkersInListAll.forEach(item=>{
-		var item1 = $('.location[data-id="'+item.id+'"]');
-		var item2 = $('.map__list__item[data-id="'+item.id+'"]');
-		if(-1 === arrMarkersInListCurrent.indexOf(item)){
-			if(item1)
-				item1.addClass('hidden');
-			if(item2)
-				item2.addClass('hidden');
-		}else{
-			if(item1)
-				item1.removeClass('hidden');
-			if(item2)
-				item2.removeClass('hidden');
-		}
+};
+geodata.functions.addMarker = function(){
+	return new Promise(function(resolve,reject){
+		console.log('Please override this function (addMarker) in map\'s provider own js file.');
+		resolve();
 	});
-	
-	applyFilters_callback();
+};
+geodata.functions.fitBounds = function(){
+	return new Promise(function(resolve,reject){
+		console.log('Please override this function (fitBounds) in map\'s provider own js file.');
+		resolve();
+	});
+};
+geodata.functions.updateLayers = function(){
+	return new Promise(function(resolve,reject){
+		console.log('Please override this function (updateLayers) in map\'s provider own js file.');
+		resolve();
+	});
+};
+geodata.functions.getFilters = function(){
+	return new Promise(function(resolve,reject){
+	    console.log('functions.getFilters start');
+	    geodata.ajax.getFilters().then((r)=>{
+	    	if(r.html.length > 0){
+	    		$('.map__filters__container').html(r.html);
+	    	}
+	    	resolve('functions.getFilters done');
+	    });
+	});
 }
+geodata.functions.getLocations = function(){
+	return new Promise(function(resolve,reject){
+	    console.log('functions.getLocations start');
+	    let arrPromises = [];
+	    let offset = 0;
+	    while(offset < geodata.nbItems){
+		    arrPromises.push(geodata.ajax.getLocations(offset,geodata.nbItemsPerRequest).then((r)=>{
+		    	// console.log(r);
+		    	// append list item
+				if(r.html.length > 0){
+					for(var item of r.html)
+						$('.map__list__wrapper').append(item);
+				}
+				// append markers to map
+				geodata.locations = geodata.locations.concat(JSON.parse(r.json));
+				geodata.functions.addMarkers(JSON.parse(r.json),true,false);
+				return true;
+		    }));
+		    offset = offset+geodata.nbItemsPerRequest;
+	    }
 
-var getPopupHTML = function(obj){
+
+	    Promise.all(arrPromises).then((r)=>{
+	    	// console.log(r);
+	    	if (geodata.config.map.fitBounds)
+	    		geodata.functions.fitBounds();
+	    	resolve('functions.getLocations done');
+	    })
+	});
+};
+geodata.functions.getPopupHTML = function(obj){
 	return `
 		<div class="map__popup ">
 			<div class="map__popup__title map__list__item__title"> ${obj.title} </div>
-        	${obj.category.title && categories.length>1 ? '<p class="opa-4 ft-l m-top-0">'+obj.category.title.toUpperCase()+'</p>':''}
-        	${Array.isArray(obj.category) && categories.length>1 ? '<p class="opa-4 ft-l m-top-0">'+(obj.category.map(function(c){return c.title})).join(', ').toUpperCase()+'</p>':''}
+        	${obj.category.title && geodata.markers.categories.length>1 ? '<p class="opa-4 ft-l m-top-0">'+obj.category.title.toUpperCase()+'</p>':''}
+        	${Array.isArray(obj.category) && geodata.markers.categories.length>1 ? '<p class="opa-4 ft-l m-top-0">'+(obj.category.map(function(c){return c.title})).join(', ').toUpperCase()+'</p>':''}
 			${obj.picture ? `<div class="map__popup__picture"><img src="${obj.picture.path}" alt="${obj.title}" /></div>` :''}
 			<div class="map__popup__infos map__list__item__text">
 				${obj.address ?'<div class="map__popup__infos__line "><i class="fa fa-map-marker-alt"></i> <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">'+obj.address+'</span></div>':''}
@@ -220,127 +243,89 @@ var getPopupHTML = function(obj){
 			`:''}
 		</div>
 	`;
-}
-
-var selectMapItem = function(itemID){
+};
+geodata.functions.selectMapItem = function(itemID){
 	$list.removeClass('has-selected');
 	$list.find('.map__list__item').removeClass('selected');
 	if (itemID) {
 		$list.addClass('has-selected');
 		$list.find('.map__list__item[data-id="'+itemID+'"]').addClass('selected').get(0).scrollIntoView({behavior: "smooth", block: 'center', inline: "nearest"});
 	}
-}
-
-var loopGetLocationsItemsPagined = function(nbElementsToManage, offset, limit){
-	return new Promise(function (resolve, reject) {
-		getLocationsItemsPaginedAjax(offset, limit)
-		.then(function(r){
-			if("error" == r.status) {
-				reject(r.msg);
-			} else {
-				offset = offset+limit;
-
-				// append results in list
-				if(r.html.length > 0){
-					for(var item of r.html){
-						$('.map__list__wrapper').append(item);
+};
+geodata.functions.applyFilters = function(){
+	console.log(geodata.filters);
+	geodata.markers.current = geodata.markers.all.filter( item => {
+		var match = true;
+		// console.log(item);
+		for(var f in geodata.filters){
+			if (f == "search" || f == "category") {
+				if (geodata.filters[f] !== '' && item['filter_'+f].search(new RegExp(geodata.filters[f],'i')) == -1)
+					match = false;
+			} else { // input search code
+				if (geodata.filters[f] !== '' && item['filter_'+f] !== geodata.filters[f]){
+					if("undefined" !== typeof item['filter_'+f] && -1 != item['filter_'+f].indexOf(',')){
+						var values = item['filter_'+f].split(',');
+						match = values.includes(geodata.filters[f]);
+					}else{
+						match = false;
 					}
 				}
-				// append results in JS list
-				objMapLocations = objMapLocations.concat(JSON.parse(r.json));
-				if(offset < nbElementsToManage){
-					loopGetLocationsItemsPagined(nbElementsToManage, offset, limit)
-					.then(r=>resolve(r))
-					.catch(msg=>reject(msg))
-					;
-				}else{
-					resolve(r);
+			}
+		}
+		return match;
+	});
+	// console.log("==========");
+	// console.log(geodata.markersInList.all);
+	geodata.markersInList.current = geodata.markersInList.all.filter( item => {
+		var match = true;
+		for(var f in geodata.filters){
+			if (f == "search" || f == "category") {
+				if (geodata.filters[f] !== '' && item['filter_'+f].search(new RegExp(geodata.filters[f],'i')) == -1){
+					match = false;
+					return false;
+				}
+			} else { // input search code
+				if (geodata.filters[f] !== '' && item['filter_'+f] !== geodata.filters[f]){
+					if("undefined" !== typeof item['filter_'+f] && -1 != item['filter_'+f].indexOf(',')){
+						var values = item['filter_'+f].split(',');
+						match = values.includes(geodata.filters[f]);
+						return match;
+					}else{
+						match = false;
+						return false;
+					}
 				}
 			}
-		})
-		.catch(function(msg){
-			reject(msg);
-		});
+		}
+		return match;
 	});
+	// console.log(geodata.markersInList.current);
+
+	geodata.markersInList.all.forEach(item=>{
+		var item1 = $('.location[data-id="'+item.id+'"]');
+		var item2 = $('.map__list__item[data-id="'+item.id+'"]');
+		if(-1 === geodata.markersInList.current.indexOf(item)){
+			if(item1)
+				item1.addClass('hidden');
+			if(item2)
+				item2.addClass('hidden');
+		}else{
+			if(item1)
+				item1.removeClass('hidden');
+			if(item2)
+				item2.removeClass('hidden');
+		}
+	});
+	
+	geodata.callbacks.applyFilters();
+};
+
+geodata.callbacks.applyFilters = function(){
+	console.log('Please override this function (applyFilters) in map\'s provider own js file.');
 }
 
-var getLocationsListAjax = function(){
-	return new Promise(function(resolve,reject){
-		var request = new FormData();
-
-		request.append('TL_AJAX', 1);
-	    request.append('REQUEST_TOKEN', rt);
-	    request.append('module', mapModuleId);
-	    request.append('action', 'getLocationsList');
-
-		fetch(window.location,{
-			method: 'POST',
-			mode: 'same-origin',
-			cache: 'no-cache',
-			body: request
-		})
-		.then((response) => response.json())
-		.then((json) => {
-		  resolve(json);
-		})
-		.catch((error) => {
-		    reject(error);
-		});
-	});
-};
-var countLocationsAjax = function(){
-	return new Promise(function(resolve,reject){
-		var request = new FormData();
-
-		request.append('TL_AJAX', 1);
-	    request.append('REQUEST_TOKEN', rt);
-	    request.append('module', mapModuleId);
-	    request.append('action', 'countLocations');
-
-		fetch(window.location,{
-			method: 'POST',
-			mode: 'same-origin',
-			cache: 'no-cache',
-			body: request
-		})
-		.then((response) => response.json())
-		.then((json) => {
-		  resolve(json);
-		})
-		.catch((error) => {
-		    reject(error);
-		});
-	});
-};
-
-var getLocationsItemsPaginedAjax = function(offset, limit){
-	return new Promise(function(resolve,reject){
-		var request = new FormData();
-
-		request.append('TL_AJAX', 1);
-	    request.append('REQUEST_TOKEN', rt);
-	    request.append('module', mapModuleId);
-	    request.append('offset', offset);
-	    request.append('limit', limit);
-	    request.append('action', 'getLocationsItemsPagined');
-
-		fetch(window.location,{
-			method: 'POST',
-			mode: 'same-origin',
-			cache: 'no-cache',
-			body: request
-		})
-		.then((response) => response.json())
-		.then((json) => {
-		  resolve(json);
-		})
-		.catch((error) => {
-		    reject(error);
-		});
-	});
-};
-
-var getFiltersAjax = function(){
+geodata.ajax.getFilters = function(){
+	console.log('ajax.getFilters start');
 	return new Promise(function(resolve,reject){
 		var request = new FormData();
 
@@ -357,28 +342,41 @@ var getFiltersAjax = function(){
 		})
 		.then((response) => response.json())
 		.then((json) => {
-		  resolve(json);
+			console.log('ajax.getFilters done');
+		  	resolve(json);
 		})
 		.catch((error) => {
 		    reject(error);
 		});
 	});
 };
-// ------------------------------------------------------------------------------------------------------------------------------
-// UTILITIES
-var normalize = function(str = ''){return str.toLowerCase().replace(/ |\.|\'/g,'_'); }
+geodata.ajax.getLocations = function(offset = 0, limit = 0){
+	console.log('ajax.getLocations start');
+	return new Promise(function(resolve,reject){
+    	var request = new FormData();
 
-window.addEventListener("load", function(e) {
-	$.fn.filterByData = function(prop, val) {
-	  return this.filter(
-	      function() { return $(this).data(prop)==val; }
-	  );
-	}
-});
+    	request.append('TL_AJAX', 1);
+        request.append('REQUEST_TOKEN', rt);
+        request.append('module', mapModuleId);
+        request.append('offset', offset);
+        request.append('limit', limit);
+        request.append('action', 'getLocationsItemsPagined');
 
-// Object.hasKey = function(obj,key){
-//   if(Object.keys(obj).indexOf(key) != -1)
-//     return true;
-//   else
-//     return false;
-// }
+    	fetch(window.location,{
+    		method: 'POST',
+    		mode: 'same-origin',
+    		cache: 'no-cache',
+    		body: request
+    	})
+    	.then((response) => response.json())
+    	.then((json) => {
+			console.log('ajax.getLocations done');
+    	  	resolve(json);
+    	})
+    	.catch((error) => {
+    	    reject(error);
+    	});
+	});
+};
+
+geodata.utils.normalize = function(str = ''){return str.toLowerCase().replace(/ |\.|\'/g,'_'); }
