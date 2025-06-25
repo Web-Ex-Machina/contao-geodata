@@ -60,7 +60,7 @@ geodata.functions.init = function(){
 	    // LIST
 	    let loop_list = setInterval(function(){
 	    	// console.log('checkin list loading');
-	    	if (geodata.loaded.list) {
+	    	if (geodata.loaded.list === true) {
 				clearInterval(loop_list);
 		    	$list           = $('.map__list');
 		    	$listToggler    = $('.map__list__toggler');
@@ -81,7 +81,7 @@ geodata.functions.init = function(){
 	    // MARKERS
 	    let loop_markers = setInterval(function(){
 	    	// console.log('checkin markers loaded');
-	    	if (geodata.loaded.markers) {
+	    	if (geodata.loaded.markers === true) {
 	    		clearInterval(loop_markers);
 
 	    		console.log('markers init done');
