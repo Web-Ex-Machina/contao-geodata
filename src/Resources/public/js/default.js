@@ -228,9 +228,6 @@ geodata.functions.getLocations = function(){
 
 
 	    Promise.all(arrPromises).then((r)=>{
-	    	// console.log(r);
-	    	// if (geodata.config.map.fitBounds)
-	    		// geodata.functions.fitBounds();
 	    	resolve('functions.getLocations done');
 	    })
 	});
