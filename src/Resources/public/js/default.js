@@ -36,7 +36,7 @@ window.addEventListener("load", function(e) {
     console.log(geodata);
     geodata.functions.init().then(r=>{
     	if ($list) $list.addClass('active');
-    	if ($filters)  $filters.addClass('active');
+    	if ($filters) $filters.addClass('active');
     });
 });
 
@@ -101,9 +101,7 @@ geodata.functions.init = function(){
 		    	} else {
 		    		geodata.loaded.list	= true;
 		    		geodata.loaded.markers = 'pending';
-		    		geodata.functions.addMarkers(geodata.locations,true,false).then(r=>{
-			    		if (geodata.config.map.fitBounds)
-			    			geodata.functions.fitBounds();
+		    		geodata.functions.addMarkers(geodata.locations,true,true).then(r=>{
 			    		geodata.loaded.markers	= true;
 		    		});
 		    	}
@@ -128,11 +126,6 @@ geodata.functions.init = function(){
 	    			geodata.filters = $filters.find('.map__filter [id^=filter_]').map((i,e)=>{return e.name}).toArray().reduce((a,v)=>({...a,[v]:''}),{})
 			    	
 			    	$('body').on('change keyup', '.map__filters [id^=filter_]', function(e) {
-
-			    		$('.map__filters').find('[id^=filter_]').each(function(){
-			    			geodata.filters[this.name] = this.value;
-			    		});
-			    		console.log(geodata.filters);
 			    		geodata.functions.applyFilters();
 			    	});
 			    }
@@ -157,6 +150,10 @@ geodata.functions.init = function(){
 	    	// console.log('checkin module loaded');
 	    	if (Object.values(geodata.loaded).every((e)=>{return e != false && e != 'pending'})) {
 	    		clearInterval(loop_module);
+	    		if ($filters) 
+	    			geodata.functions.applyFilters()
+	    		else
+	    			geodata.functions.fitBounds()
 	    		console.log('module init done');
     			resolve()
 	    	}
@@ -232,8 +229,8 @@ geodata.functions.getLocations = function(){
 
 	    Promise.all(arrPromises).then((r)=>{
 	    	// console.log(r);
-	    	if (geodata.config.map.fitBounds)
-	    		geodata.functions.fitBounds();
+	    	// if (geodata.config.map.fitBounds)
+	    		// geodata.functions.fitBounds();
 	    	resolve('functions.getLocations done');
 	    })
 	});
@@ -269,6 +266,10 @@ geodata.functions.selectMapItem = function(itemID){
 	}
 };
 geodata.functions.applyFilters = function(){
+	console.log('geodata.functions.applyFilters');
+	$filters.find('[id^=filter_]').each(function(){
+		geodata.filters[this.name] = this.value;
+	});
 	// console.log(geodata.filters);
 	geodata.markers.current = geodata.markers.all.filter( item => {
 		var match = true;
