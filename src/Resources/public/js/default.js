@@ -356,10 +356,7 @@ geodata.ajax.getFilters = function(){
 			cache: 'no-cache',
 			body: request
 		})
-		.then((response) => {
-			data = response.json();
-			// try{ data = response.json(); } catch(e){reject(e);}
-		})
+    	.then((response) => response.json())
 		.then((json) => {
 			console.log('ajax.getFilters done',json);
 			if (json) 
