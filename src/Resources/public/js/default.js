@@ -49,12 +49,19 @@ geodata.functions.init = function(){
 	    $listToggler    = $('.map__list__toggler');
 	    $filters	    = null;
 	    $filtersToggler	= null;
+	    
+
+	    // MAP
+	    geodata.functions.initMap().then((r)=>{
+	    	console.log(r);
+	    	geodata.loaded.map = true;
+	    })
 
 	    // LIST
-	    let inter_list = setInterval(function(){
+	    let loop_list = setInterval(function(){
 	    	// console.log('checkin list loading');
 	    	if (geodata.loaded.list) {
-				clearInterval(inter_list);
+				clearInterval(loop_list);
 		    	$list           = $('.map__list');
 		    	$listToggler    = $('.map__list__toggler');
 			    if ($list.length) {
@@ -72,20 +79,42 @@ geodata.functions.init = function(){
 	    },delay_check);
 
 	    // MARKERS
-	    let inter_markers = setInterval(function(){
+	    let loop_markers = setInterval(function(){
 	    	// console.log('checkin markers loaded');
 	    	if (geodata.loaded.markers) {
-	    		clearInterval(inter_markers);
+	    		clearInterval(loop_markers);
 
 	    		console.log('markers init done');
+	    	} else if (geodata.loaded.map && geodata.loaded.filters && geodata.loaded.markers === false && geodata.loaded.list === false){
+		    	if (geodata.blnLoadInAjax) {
+		    		geodata.loaded.list = 'pending';
+		    		geodata.loaded.markers = 'pending';
+		    		geodata.functions.getLocations().then((r)=>{
+		    			console.log(r);
+		    			geodata.loaded.list = true;
+		    			geodata.loaded.markers = true;
+		    		}).catch((r)=>{
+		    			console.log(r);
+		    			geodata.loaded.list = 'failed';
+		    			geodata.loaded.markers = 'failed';
+		    		});
+		    	} else {
+		    		geodata.loaded.list	= true;
+		    		geodata.loaded.markers = 'pending';
+		    		geodata.functions.addMarkers(geodata.locations,true,false).then(r=>{
+			    		if (geodata.config.map.fitBounds)
+			    			geodata.functions.fitBounds();
+			    		geodata.loaded.markers	= true;
+		    		});
+		    	}
 	    	}
 	    },delay_check);
 
 	    // FILTERS
-	    let inter_filters = setInterval(function(){
+	    let loop_filters = setInterval(function(){
 	    	// console.log('checkin filters loading');
-	    	if (geodata.loaded.filters) {
-				clearInterval(inter_filters);
+	    	if (geodata.loaded.filters === true) {
+				clearInterval(loop_filters);
     			$filters        = $('.map__filters');
     			$filtersToggler = $('.map__filters__toggler');
 			    if ($filters.length) {
@@ -108,47 +137,30 @@ geodata.functions.init = function(){
 			    	});
 			    }
 	    		console.log('filters init done');
+	    	} else if(geodata.loaded.map && geodata.loaded.filters === false){
+	    		geodata.loaded.filters = 'pending';
+	    		geodata.functions.getFilters().then((r)=>{
+	    			console.log('success');
+	    			console.log(r);
+	    			geodata.loaded.filters = true;
+	    		}).catch((r)=>{
+	    			console.log(r);
+	    			geodata.loaded.filters = 'failed';
+	    		});
+	    	} else if (geodata.loaded.filters == 'failed'){
+				clearInterval(loop_filters);
 	    	}
 	    },delay_check);
 
 	    // MODULE
-	    let inter_module = setInterval(function(){
+	    let loop_module = setInterval(function(){
 	    	// console.log('checkin module loaded');
-	    	if (geodata.loaded.map && geodata.loaded.list && geodata.loaded.filters && geodata.loaded.markers) {
-	    		clearInterval(inter_module);
+	    	if (Object.values(geodata.loaded).every((e)=>{return e != false && e != 'pending'})) {
+	    		clearInterval(loop_module);
 	    		console.log('module init done');
     			resolve()
 	    	}
-	    },delay_check);
-
-
-	    // MAP
-	    geodata.functions.initMap().then((r)=>{
-	    	console.log(r);
-	    	geodata.loaded.map = true;
-	    	if (geodata.blnLoadInAjax) {
-	    		geodata.functions.getFilters().then((r)=>{
-	    			console.log(r);
-	    			geodata.loaded.filters = true;
-	    		});
-	    		geodata.functions.getLocations().then((r)=>{
-	    			console.log(r);
-	    			geodata.loaded.list = true;
-	    			geodata.loaded.markers = true;
-	    		});
-	    	} else {
-	    		geodata.loaded.list	= true;
-	    		geodata.functions.getFilters().then((r)=>{
-	    			console.log(r);
-	    			geodata.loaded.filters = true;
-	    		});
-	    		geodata.functions.addMarkers(geodata.locations,true,false).then(r=>{
-		    		if (geodata.config.map.fitBounds)
-		    			geodata.functions.fitBounds();
-		    		geodata.loaded.markers	= true;
-	    		});
-	    	}
-	    })
+	    },delay_check); 
 	});
 };
 geodata.functions.initMap = function(){
