@@ -9,6 +9,7 @@ var mapDefaultConfig  = {
 	zoomControlPosition  : 'bottomleft',
 	gestureHandling  	 : true,
 	fitBounds  	 		 : true,
+	doubleClickZoom	     : false,
 	mapUrl               : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 	mapAttribution       : '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 	marker               :  
@@ -26,6 +27,7 @@ geodata.functions.initMap = function(){return new Promise(function(resolve,rejec
 	if (geodata.config.map.zoomControlPosition === undefined ) geodata.config.map.zoomControlPosition = mapDefaultConfig.zoomControlPosition;
 	if (geodata.config.map.gestureHandling     === undefined ) geodata.config.map.gestureHandling     = mapDefaultConfig.gestureHandling;
 	if (geodata.config.map.fitBounds           === undefined ) geodata.config.map.fitBounds           = mapDefaultConfig.fitBounds;
+	if (geodata.config.map.doubleClickZoom     === undefined ) geodata.config.map.doubleClickZoom     = mapDefaultConfig.doubleClickZoom;
 
 	if (geodata.config.tileLayer               === undefined) geodata.config.tileLayer                = {};
 	if (geodata.config.tileLayer.url           === undefined) geodata.config.tileLayer.url            = mapDefaultConfig.mapUrl;
@@ -77,6 +79,7 @@ geodata.functions.initMap = function(){return new Promise(function(resolve,rejec
     geodata.map = L.map('map',{
 		zoomControl : geodata.config.map.zoomControl,
 		gestureHandling: geodata.config.map.gestureHandling,
+		doubleClickZoom: geodata.config.map.doubleClickZoom,
     }).setView([48.833, 2.333], geodata.config.map.zoom);
 	geodata.map.attributionControl.setPosition('bottomleft');
 	if (geodata.config.map.zoomControl)
@@ -104,14 +107,11 @@ geodata.functions.initMap = function(){return new Promise(function(resolve,rejec
 	if (!geodata.markers.bounds.hasOwnProperty('_southWest') || !geodata.markers.bounds.hasOwnProperty('_northEast')) 
 		geodata.markers.bounds = bounds;
 
-	if (geodata.config.map.fitBounds)
-		geodata.functions.fitBounds();
-	else{
-		if (geodata.config.map.center)
-			geodata.map.setView(L.latLng({lat: parseFloat(geodata.config.map.center.split(',')[0]), lng: parseFloat(geodata.config.map.center.split(',')[1])}), geodata.config.map.zoom);
-		else
-			geodata.map.setView(geodata.markers.bounds.getCenter(), geodata.config.map.zoom);
-	}
+	if (geodata.config.map.center)
+		geodata.map.setView(L.latLng({lat: parseFloat(geodata.config.map.center.split(',')[0]), lng: parseFloat(geodata.config.map.center.split(',')[1])}), geodata.config.map.zoom);
+	else
+		geodata.map.setView(geodata.markers.bounds.getCenter(), geodata.config.map.zoom);
+		// geodata.map.fitWorld();
 
 	// MAP EVENTS
 	geodata.map.on('drag', function() {geodata.map.panInsideBounds(bounds, { animate: false }); });
@@ -173,7 +173,7 @@ geodata.functions.updateLayers = function(doFitBounds=false){
 }
 
 geodata.functions.fitBounds = function(){
-	geodata.map.fitBounds(geodata.markers.bounds)
+	geodata.map.fitBounds(geodata.markers.cluster.getBounds())
 }
 
 geodata.functions.addMarker = function(latLng, options={'icon':geodata.markers.config.default}, location=false, updateLayers=true){
@@ -263,7 +263,8 @@ geodata.callbacks.applyFilters = function(){
 	geodata.markers.cluster.removeLayers(geodata.markers.all);
 	geodata.markers.cluster.addLayers(geodata.markers.current);
 	if (geodata.config.map.fitBounds)
-		geodata.map.fitBounds(geodata.markers.cluster.getBounds());
+		geodata.functions.fitBounds();
+		// geodata.map.fitBounds(geodata.markers.cluster.getBounds());
 }
 
 geodata.markers.cluster.on('clusterclick', function (a) {
