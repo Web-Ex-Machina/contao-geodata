@@ -35,8 +35,8 @@ var rt;
 window.addEventListener("load", function(e) {
     console.log(geodata);
     geodata.functions.init().then(r=>{
-    	// $list.addClass('active');
-    	$filters.addClass('active');
+    	if ($list) $list.addClass('active');
+    	if ($filters)  $filters.addClass('active');
     });
 });
 
@@ -189,6 +189,8 @@ geodata.functions.getFilters = function(){
 	    		$('.map__filters__container').html(r.html);
 	    	}
 	    	resolve('functions.getFilters done');
+	    }).catch(err=>{
+	    	reject(err)
 	    });
 	});
 }
@@ -209,6 +211,8 @@ geodata.functions.getLocations = function(){
 				geodata.locations = geodata.locations.concat(JSON.parse(r.json));
 				geodata.functions.addMarkers(JSON.parse(r.json),true,false);
 				return true;
+		    }).catch(err=>{
+		    	reject(err)
 		    }));
 		    offset = offset+geodata.nbItemsPerRequest;
 	    }
@@ -253,7 +257,7 @@ geodata.functions.selectMapItem = function(itemID){
 	}
 };
 geodata.functions.applyFilters = function(){
-	console.log(geodata.filters);
+	// console.log(geodata.filters);
 	geodata.markers.current = geodata.markers.all.filter( item => {
 		var match = true;
 		// console.log(item);
@@ -340,10 +344,16 @@ geodata.ajax.getFilters = function(){
 			cache: 'no-cache',
 			body: request
 		})
-		.then((response) => response.json())
+		.then((response) => {
+			data = response.json();
+			// try{ data = response.json(); } catch(e){reject(e);}
+		})
 		.then((json) => {
-			console.log('ajax.getFilters done');
-		  	resolve(json);
+			console.log('ajax.getFilters done',json);
+			if (json) 
+		  		resolve(json);
+		  	else
+		  		reject(new Error('failed to retrieve filters'))
 		})
 		.catch((error) => {
 		    reject(error);
@@ -370,8 +380,11 @@ geodata.ajax.getLocations = function(offset = 0, limit = 0){
     	})
     	.then((response) => response.json())
     	.then((json) => {
-			console.log('ajax.getLocations done');
-    	  	resolve(json);
+			console.log('ajax.getLocations done',json);
+	  		if (json) 
+	  	  		resolve(json);
+	  	  	else
+	  	  		reject(new Error('failed to retrieve locations'))
     	})
     	.catch((error) => {
     	    reject(error);

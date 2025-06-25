@@ -128,7 +128,7 @@ geodata.functions.initMap = function(){return new Promise(function(resolve,rejec
 
 
 geodata.functions.addMarkers = function(locations = [],doUpdateLayers=true,doFitBounds=false){return new Promise(function(resolve,reject){
-	console.log('leaflet addMarkers start',locations);
+	console.log('leaflet addMarkers start');
 	var arrPromises = [];
 	for(var location of locations){
 		// setup marker parameters
@@ -188,12 +188,12 @@ geodata.functions.addMarker = function(latLng, options={'icon':geodata.markers.c
 				geodata.functions.selectMapItem(this.locationID);
 			});
 			// setup for filters
+				// console.log(geodata.filters);
 			for(var f in geodata.filters) {
 				marker['filter_'+f] = '';
 				markerInList['filter_'+f] = '';
 				markerInList.filter_search = $('.map__list__item[data-id='+location.id+']').text()+' '+$(geodata.functions.getPopupHTML(location)).text();
 				marker.filter_search       = $('.map__list__item[data-id='+location.id+']').text()+' '+$(geodata.functions.getPopupHTML(location)).text();
-				// console.log(location);
 				if (location.hasOwnProperty(f)) {
 					switch(f){
 						case 'category': 
@@ -268,6 +268,6 @@ geodata.callbacks.applyFilters = function(){
 
 geodata.markers.cluster.on('clusterclick', function (a) {
 	geodata.functions.selectMapItem(false);
-	$list.removeClass('active');
-	$filters.removeClass('active');
+	if ($list) $list.removeClass('active');
+	if ($filters) $filters.removeClass('active');
 });
