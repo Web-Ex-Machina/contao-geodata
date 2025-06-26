@@ -115,7 +115,9 @@ class DisplayMap extends CoreList
                 'published' => 1,
                 'onlyWithCoords' => 1
             ];
-            $this->arrConfigDefault = $this->arrConfig; // keep this one clean, so we load all items disregarding filters values
+
+            // keep one config "clean", so we load all items disregarding filters values
+            $this->arrConfigDefault = $this->arrConfig; 
 
             // Catch AJAX request
             if (Input::post('TL_AJAX') && (int) $this->id === (int) Input::post('module')) {
