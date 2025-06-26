@@ -93,91 +93,89 @@ class DisplayMap extends CoreList
      */
     protected function compile(): void
     {
-        try {
-            // Load the map
-            $this->objMap = Map::findById($this->wem_geodata_map);
+        // Load the map
+        $this->objMap = Map::findById($this->wem_geodata_map);
 
-            if (! $this->objMap) {
-                throw new Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noMapFound']);
-            }
+        if (! $this->objMap) {
+            throw new Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noMapFound']);
+        }
 
-            // Load the libraries
-            ClassLoader::loadLibraries($this->objMap, WEM_GEODATA_COMBINER_VERSION);
-            System::loadLanguageFile('tl_wem_map_item');
+        // Load the libraries
+        ClassLoader::loadLibraries($this->objMap, WEM_GEODATA_COMBINER_VERSION);
+        System::loadLanguageFile('tl_wem_map_item');
 
-            // Retrieve the config
-            $arrMapConfig = $this->objMap->getConfig();
+        // Retrieve the config
+        $arrMapConfig = $this->objMap->getConfig();
 
-            // config for locations $arrConfigBase = ['pid' => $this->objMap->id, 'published'
-            // => 1, 'onlyWithCoords' => 1]; $arrConfig = $arrConfigBase;
-            $this->arrConfig = [
-                'pid' => $this->objMap->id,
-                'published' => 1,
-                'onlyWithCoords' => 1
-            ];
+        // config for locations $arrConfigBase = ['pid' => $this->objMap->id, 'published'
+        // => 1, 'onlyWithCoords' => 1]; $arrConfig = $arrConfigBase;
+        $this->arrConfig = [
+            'pid' => $this->objMap->id,
+            'published' => 1,
+            'onlyWithCoords' => 1
+        ];
 
-            // keep one config "clean", so we load all items disregarding filters values
-            $this->arrConfigDefault = $this->arrConfig; 
+        // keep one config "clean", so we load all items disregarding filters values
+        $this->arrConfigDefault = $this->arrConfig; 
 
-            // Catch AJAX request
-            if (Input::post('TL_AJAX') && (int) $this->id === (int) Input::post('module')) {
-                $this->handleAjaxRequests();
-            }
+        // Catch AJAX request
+        if (Input::post('TL_AJAX') && (int) $this->id === (int) Input::post('module')) {
+            $this->handleAjaxRequests();
+        }
 
-            // Gather filters
-            $this->buildFilters();
-            $this->Template->filters = $this->filters;
-            $this->Template->filters_position = $this->wem_geodata_filters;
+        // Gather filters
+        $this->buildFilters();
+        $this->Template->filters = $this->filters;
+        $this->Template->filters_position = $this->wem_geodata_filters;
 
-            $nbItems = $this->countItems();
-            $blnLoadInAjax = (int) $this->wem_geodata_map_nbItemsToForceAjaxLoading === 0
-                ? false
-                : $nbItems > (int) $this->wem_geodata_map_nbItemsToForceAjaxLoading;
-            $this->Template->nbItems = $this->countItems();
-            $this->Template->nbItemsPerRequest = (int) $this->wem_geodata_map_nbItemsToForceAjaxLoading;
+        $nbItems = $this->countItems();
+        $blnLoadInAjax = (int) $this->wem_geodata_map_nbItemsToForceAjaxLoading === 0
+            ? false
+            : $nbItems > (int) $this->wem_geodata_map_nbItemsToForceAjaxLoading;
+        $this->Template->nbItems = $this->countItems();
+        $this->Template->nbItemsPerRequest = (int) $this->wem_geodata_map_nbItemsToForceAjaxLoading;
 
-            // Get the jumpTo page
-            $this->objJumpTo = PageModel::findById($this->objMap->jumpTo);
+        // Get the jumpTo page
+        $this->objJumpTo = PageModel::findById($this->objMap->jumpTo);
 
-            $arrLocations = [];
-            $arrMarkers = [];
-            if (!$blnLoadInAjax) {
-                // Get locations
-                $arrLocations = $this->fetchItems();
-                // Now we retrieved all the locations, we will regroup the close ones into one
-                $arrMarkers = $this->buildMarkers(
-                    $arrLocations
-                );
-            }
+        $arrLocations = [];
+        $arrMarkers = [];
+        $strFilters = '';
 
-            // Get categories
-            $arrCategories = $this->getCategories();
+        // If we do not load data in ajax, retrieve items now
+        if (!$blnLoadInAjax) {
+            // Get locations
+            $arrLocations = $this->fetchItems();
+            // Now we retrieved all the locations, we will regroup the close ones into one
+            $arrMarkers = $this->buildMarkers(
+                $arrLocations
+            );
 
-            // Send the data to Map template
-            $this->Template->mapProvider = $this->objMap->mapProvider;
-            $this->Template->geocodingProvider = $this->objMap->geocodingProvider;
-            $this->Template->markers = $arrMarkers;
-            $this->Template->locations = $arrLocations;
-            $this->Template->categories = $arrCategories;
-            $this->Template->filters_html = $blnLoadInAjax ? '' : $this->parseFilters(
+            $strFilters = $this->parseFilters(
                 $this->filters,
                 $this->wem_geodata_filters
             );
-
-            $this->Template->config = $arrMapConfig;
-            $this->Template->moduleId = $this->id;
-            $this->Template->rt = System::getContainer()->get('contao.csrf.token_manager')->getDefaultTokenValue();
-            $this->Template->blnLoadInAjax = $blnLoadInAjax;
 
             // If the config says so, we will generate a template with a list of the locations
             if ($this->wem_geodata_map_list !== 'nolist') {
                 $this->Template->list = $this->parseLocationsList($arrLocations);
             }
-        } catch (Exception $exception) {
-            $this->Template->error = true;
-            $this->Template->msg = $exception->getMessage();
-            $this->Template->trace = $exception->getTraceAsString();
         }
+
+        // Get categories
+        $arrCategories = $this->getCategories();
+
+        // Send the data to Map template
+        $this->Template->mapProvider = $this->objMap->mapProvider;
+        $this->Template->geocodingProvider = $this->objMap->geocodingProvider;
+        $this->Template->markers = $arrMarkers;
+        $this->Template->locations = $arrLocations;
+        $this->Template->categories = $arrCategories;
+        $this->Template->filters_html = $strFilters;
+        $this->Template->config = $arrMapConfig;
+        $this->Template->moduleId = $this->id;
+        $this->Template->rt = System::getContainer()->get('contao.csrf.token_manager')->getDefaultTokenValue();
+        $this->Template->blnLoadInAjax = $blnLoadInAjax;
     }
 
     protected function buildMarkers(array $arrLocations): array
