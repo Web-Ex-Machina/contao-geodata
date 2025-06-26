@@ -17,7 +17,6 @@ use Contao\FrontendTemplate;
 use Contao\Input;
 use Contao\Model\Collection;
 use Contao\PageModel;
-use Contao\StringUtil;
 use Contao\System;
 use Exception;
 use WEM\GeoDataBundle\Classes\Util;
@@ -106,28 +105,8 @@ class DisplayMap extends CoreList
             ClassLoader::loadLibraries($this->objMap, WEM_GEODATA_COMBINER_VERSION);
             System::loadLanguageFile('tl_wem_map_item');
 
-            // Build the config
-            $arrMapConfig = [];
-            if ($this->objMap->mapConfig) {
-                foreach (StringUtil::deserialize($this->objMap->mapConfig) as $arrRow) {
-                    if ($arrRow['value'] === 'true') {
-                        $varValue = true;
-                    } elseif ($arrRow['value'] === 'false') {
-                        $varValue = false;
-                    } elseif (\is_string($arrRow['value'])) {
-                        $varValue = html_entity_decode($arrRow['value']);
-                    } else {
-                        $varValue = $arrRow['value'];
-                    }
-
-                    if (str_contains($arrRow['key'], '_')) {
-                        $arrOption = explode('_', $arrRow['key']);
-                        $arrMapConfig[$arrOption[0]][$arrOption[1]] = $varValue;
-                    } else {
-                        $arrMapConfig['map'][$arrRow['key']] = $varValue;
-                    }
-                }
-            }
+            // Retrieve the config
+            $arrMapConfig = $this->objMap->getConfig();
 
             // config for locations $arrConfigBase = ['pid' => $this->objMap->id, 'published'
             // => 1, 'onlyWithCoords' => 1]; $arrConfig = $arrConfigBase;
