@@ -42,7 +42,7 @@ abstract class CoreList extends Core
         if ($this->wem_geodata_filters !== 'nofilters') {
             $this->filters = [];
             $this->retrieveGetAttributes();
-            $locations = MapItem::findItems($this->arrConfig);
+            $locations = MapItem::findItems($this->arrConfigDefault);
 
             if ($this->wem_geodata_search) {
                 $this->filters['search'] = [
@@ -59,6 +59,17 @@ abstract class CoreList extends Core
             }
 
             $arrFilterFields = unserialize($this->wem_geodata_filters_fields);
+
+            // Make sure country filter is BEFORE city filter
+            if (
+                in_array('country', $arrFilterFields)
+                && in_array('city', $arrFilterFields)
+                && array_search('city', $arrFilterFields) < array_search('country', $arrFilterFields)
+            ) {
+                $arrFilterFields[array_search('city', $arrFilterFields)] = 'country';
+                $arrFilterFields[array_search('country', $arrFilterFields)] = 'city';
+            }
+
             $arrLocations = [];
             if ($locations instanceof Collection) {
                 while ($locations->next()) {
@@ -80,6 +91,7 @@ abstract class CoreList extends Core
                     'type' => 'select',
                     'options' => [],
                 ];
+                $arrSortOptions = [];
 
                 foreach ($arrLocations as $location) {
                     if (!$location[$filterField]) {
@@ -102,22 +114,18 @@ abstract class CoreList extends Core
                         $this->filters[$filterField]['options'][$location[$filterField]] = [
                             'value' => Util::formatStringValueForFilters((string) $location[$filterField]),
                             'text' => $location[$filterField],
-                            'selected' => (\array_key_exists(
+                            'selected' => \array_key_exists(
                                 $filterField,
                                 $this->arrConfig
                             ) && $this->arrConfig[$filterField] === Util::formatStringValueForFilters(
                                 (string) $location[$filterField]
-                            ) ? 'selected' : ''),
+                            ) ? 'selected' : '',
                         ];
+
+                        $arrSortOptions[$location[$filterField]] = $location[$filterField];
                     }
 
                     switch ($filterField) {
-                        case 'city':
-                            // $this->filters[$filterField]['options'][$location[$filterField]]['text'] =
-
-                            // $location[$filterField].' ('.$location['admin_lvl_2'].')';
-                            $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $location[$filterField] . ($location['admin_lvl_2'] ? ' (' . $location['admin_lvl_2'] . ')' : '');
-                            break;
                         case 'category':
                             $mapItemCategories = MapItemCategory::findItems(['pid' => $location['id']]);
                             if ($mapItemCategories instanceof Collection) {
@@ -134,13 +142,28 @@ abstract class CoreList extends Core
                                         ) && $this->arrConfig[$filterField] === Util::formatStringValueForFilters(
                                             (string) $objCategory->title
                                         ) ? 'selected' : '');
+
+                                        $arrSortOptions[$objCategory->id] = $objCategory->title;
                                     }
                                 }
                             }
 
                             break;
                         case 'country':
-                            $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $arrCountries[$location[$filterField]] ?? $location[$filterField];
+                            $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $arrCountries[$location[$filterField]] ?? ucfirst($location[$filterField]);
+                            $arrSortOptions[$location[$filterField]] = $this->filters[$filterField]['options'][$location[$filterField]]['text'];
+                            break;
+
+                        case 'city':
+                            // Skip options not in the current country
+                            if (array_key_exists('country', $this->arrConfig) && $location['country'] !== $this->arrConfig['country']) {
+                                unset($this->filters[$filterField]['options'][$location[$filterField]]);
+                                unset($arrSortOptions[$location[$filterField]]);
+                            } else {
+                                $this->filters[$filterField]['options'][$location[$filterField]]['text'] = ucfirst($location[$filterField]) . ($location['admin_lvl_2'] ? ' (' . $location['admin_lvl_2'] . ')' : '');
+                                $arrSortOptions[$location[$filterField]] = $this->filters[$filterField]['options'][$location[$filterField]]['text'];
+                            }
+
                             break;
                         default:
                             break;
@@ -155,6 +178,25 @@ abstract class CoreList extends Core
                         }
                     }
                 }
+
+                // If we have only one option, activate it (may activate other filters conditions)
+                if (1 === count($this->filters[$filterField]['options'])) {
+                    $opt = $this->filters[$filterField]['options'][array_key_first($this->arrConfig[$filterField]['options'])];
+                    $this->arrConfig[$filterField] = $opt['value'];
+                    $this->filters[$filterField]['options'][array_key_first($this->arrConfig[$filterField]['options'])]['selected'] = 'selected';
+                }
+                
+                // Sort options
+                array_multisort($arrSortOptions, SORT_ASC, $this->filters[$filterField]['options']);
+            }
+
+            /**
+             ** Adjustements after formatting every filter
+             **/
+
+            // If no country was selected, remove city filter
+            if (array_key_exists('city', $this->filters) && !array_key_exists('country', $this->arrConfig)) {
+                unset($this->filters['city']);
             }
         }
     }
