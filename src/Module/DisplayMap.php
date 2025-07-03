@@ -17,7 +17,6 @@ use Contao\FrontendTemplate;
 use Contao\Input;
 use Contao\Model\Collection;
 use Contao\PageModel;
-use Contao\StringUtil;
 use Contao\System;
 use Exception;
 use WEM\GeoDataBundle\Classes\Util;
@@ -30,7 +29,7 @@ use WEM\GeoDataBundle\Model\MapItemCategory;
 /**
  * Front end module "locations map".
  */
-class DisplayMap extends Core
+class DisplayMap extends CoreList
 {
     /**
      * Map Template.
@@ -94,353 +93,89 @@ class DisplayMap extends Core
      */
     protected function compile(): void
     {
-        try {
-            // Load the map
-            $this->objMap = Map::findById($this->wem_geodata_map);
+        // Load the map
+        $this->objMap = Map::findById($this->wem_geodata_map);
 
-            if (! $this->objMap) {
-                throw new Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noMapFound']);
-            }
+        if (! $this->objMap) {
+            throw new Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noMapFound']);
+        }
 
-            // Load the libraries
-            ClassLoader::loadLibraries($this->objMap, WEM_GEODATA_COMBINER_VERSION);
-            System::loadLanguageFile('tl_wem_map_item');
+        // Load the libraries
+        ClassLoader::loadLibraries($this->objMap, WEM_GEODATA_COMBINER_VERSION);
+        System::loadLanguageFile('tl_wem_map_item');
 
-            // Build the config
-            $arrMapConfig = [];
-            if ($this->objMap->mapConfig) {
-                foreach (StringUtil::deserialize($this->objMap->mapConfig) as $arrRow) {
-                    if ($arrRow['value'] === 'true') {
-                        $varValue = true;
-                    } elseif ($arrRow['value'] === 'false') {
-                        $varValue = false;
-                    } elseif (\is_string($arrRow['value'])) {
-                        $varValue = html_entity_decode($arrRow['value']);
-                    } else {
-                        $varValue = $arrRow['value'];
-                    }
+        // Retrieve the config
+        $arrMapConfig = $this->objMap->getConfig();
 
-                    if (str_contains($arrRow['key'], '_')) {
-                        $arrOption = explode('_', $arrRow['key']);
-                        $arrMapConfig[$arrOption[0]][$arrOption[1]] = $varValue;
-                    } else {
-                        $arrMapConfig['map'][$arrRow['key']] = $varValue;
-                    }
-                }
-            }
+        // config for locations $arrConfigBase = ['pid' => $this->objMap->id, 'published'
+        // => 1, 'onlyWithCoords' => 1]; $arrConfig = $arrConfigBase;
+        $this->arrConfig = [
+            'pid' => $this->objMap->id,
+            'published' => 1,
+            'onlyWithCoords' => 1
+        ];
 
-            // config for locations $arrConfigBase = ['pid' => $this->objMap->id, 'published'
-            // => 1, 'onlyWithCoords' => 1]; $arrConfig = $arrConfigBase;
-            $this->arrConfig = [
-                'pid' => $this->objMap->id,
-                'published' => 1,
-                'onlyWithCoords' => 1
-            ];
-            $this->arrConfigDefault = $this->arrConfig; // keep this one clean, so we load all items disregarding filters values
+        // keep one config "clean", so we load all items disregarding filters values
+        $this->arrConfigDefault = $this->arrConfig; 
 
-            // Catch AJAX request
-            if (Input::post('TL_AJAX') && (int) $this->id === (int) Input::post('module')) {
-                $this->handleAjaxRequests();
-            }
+        // Catch AJAX request
+        if (Input::post('TL_AJAX') && (int) $this->id === (int) Input::post('module')) {
+            $this->handleAjaxRequests();
+        }
 
-            // Gather filters
-            $this->buildFilters();
-            $this->Template->filters = $this->filters;
-            $this->Template->filters_position = $this->wem_geodata_filters;
+        // Gather filters
+        $this->buildFilters();
+        $this->Template->filters = $this->filters;
+        $this->Template->filters_position = $this->wem_geodata_filters;
 
-            $nbItems = $this->countItems();
-            $blnLoadInAjax = (int) $this->wem_geodata_map_nbItemsToForceAjaxLoading === 0
-                ? false
-                : $nbItems > (int) $this->wem_geodata_map_nbItemsToForceAjaxLoading;
-            $this->Template->nbItems = $this->countItems();
-            $this->Template->nbItemsPerRequest = (int) $this->wem_geodata_map_nbItemsToForceAjaxLoading;
+        $nbItems = $this->countItems();
+        $blnLoadInAjax = (int) $this->wem_geodata_map_nbItemsToForceAjaxLoading === 0
+            ? false
+            : $nbItems > (int) $this->wem_geodata_map_nbItemsToForceAjaxLoading;
+        $this->Template->nbItems = $this->countItems();
+        $this->Template->nbItemsPerRequest = (int) $this->wem_geodata_map_nbItemsToForceAjaxLoading;
 
-            // Get the jumpTo page
-            $this->objJumpTo = PageModel::findById($this->objMap->jumpTo);
+        // Get the jumpTo page
+        $this->objJumpTo = PageModel::findById($this->objMap->jumpTo);
 
-            $arrLocations = [];
-            $arrMarkers = [];
-            if (!$blnLoadInAjax) {
-                // Get locations
-                $arrLocations = $this->fetchItems();
-                // Now we retrieved all the locations, we will regroup the close ones into one
-                $arrMarkers = $this->buildMarkers(
-                    $arrLocations
-                );
-            }
+        $arrLocations = [];
+        $arrMarkers = [];
+        $strFilters = '';
 
-            // Get categories
-            $arrCategories = $this->getCategories();
+        // If we do not load data in ajax, retrieve items now
+        if (!$blnLoadInAjax) {
+            // Get locations
+            $arrLocations = $this->fetchItems();
+            // Now we retrieved all the locations, we will regroup the close ones into one
+            $arrMarkers = $this->buildMarkers(
+                $arrLocations
+            );
 
-            // Send the data to Map template
-            $this->Template->mapProvider = $this->objMap->mapProvider;
-            $this->Template->geocodingProvider = $this->objMap->geocodingProvider;
-            $this->Template->markers = $arrMarkers;
-            $this->Template->locations = $arrLocations;
-            $this->Template->categories = $arrCategories;
-            $this->Template->filters_html = $blnLoadInAjax ? '' : $this->parseFilters(
+            $strFilters = $this->parseFilters(
                 $this->filters,
                 $this->wem_geodata_filters
             );
-
-            $this->Template->config = $arrMapConfig;
-
-            $this->Template->moduleId = $this->id;
-            $this->Template->rt = System::getContainer()->get('contao.csrf.token_manager')->getDefaultTokenValue();
-            $this->Template->blnLoadInAjax = $blnLoadInAjax;
 
             // If the config says so, we will generate a template with a list of the locations
             if ($this->wem_geodata_map_list !== 'nolist') {
                 $this->Template->list = $this->parseLocationsList($arrLocations);
             }
-        } catch (Exception $exception) {
-            $this->Template->error = true;
-            $this->Template->msg = $exception->getMessage();
-            $this->Template->trace = $exception->getTraceAsString();
-        }
-    }
-
-    /**
-     * Catch Ajax Requests.
-     */
-    protected function handleAjaxRequests(): void
-    {
-        try {
-            switch (Input::post('action')) {
-                case 'getLocations':
-                    $arrLocations = $this->getLocationsAjax();
-                    $arrResponse = [
-                        'status' => 'success',
-                        'locations' => $arrLocations,
-                        'markers' => $arrLocations === [] ? [] : $this->buildMarkers($arrLocations),
-                    ];
-                    break;
-                case 'getLocationsList':
-                    $this->buildFilters();
-                    $arrLocations = $this->fetchItems();
-                    $arrResponse = [
-                        'status' => 'success',
-                        'html' => $this->wem_geodata_map_list !== 'nolist' ? $this->parseLocationsList(
-                            $arrLocations
-                        ) : '',
-                        'json' => json_encode(
-                            $arrLocations,
-                            JSON_INVALID_UTF8_IGNORE | JSON_INVALID_UTF8_SUBSTITUTE
-                        ),
-                    ];
-                    break;
-                case 'getLocationsItemsPagined':
-                    $this->buildFilters();
-                    $arrLocations = $this->fetchItems(
-                        null,
-                        Input::post('limit') ? (int) Input::post('limit') : 50,
-                        Input::post('offset') ? (int) Input::post('offset') : 0
-                    );
-                    $arrResponse = [
-                        'status' => 'success',
-                        'html' => $this->parseItems($arrLocations),
-                        'json' => json_encode(
-                            $arrLocations,
-                            JSON_INVALID_UTF8_IGNORE | JSON_INVALID_UTF8_SUBSTITUTE
-                        ),
-                    ];
-                    break;
-                case 'countLocations':
-                    $this->buildFilters();
-                    $arrLocations = $this->countItems();
-                    $arrResponse = [
-                        'status' => 'success',
-                        'count' => $this->countItems(),
-                    ];
-                    break;
-                case 'getFilters':
-                    $this->buildFilters();
-                    $arrResponse = [
-                        'status' => 'success',
-                        'html' => $this->parseFilters($this->filters, $this->wem_geodata_filters),
-                        'json' => json_encode($this->filters),
-                    ];
-                    break;
-                default:
-                    throw new Exception(\sprintf(
-                        $GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['unknownAjaxRequest'],
-                        Input::post('action')
-                    ));
-            }
-        } catch (Exception $exception) {
-            $arrResponse = ['status' => 'error',
-                'msg' => $exception->getMessage(),
-                'trace' => $exception->getTrace()];
         }
 
-        // Add Request Token to JSON answer and return
-        $arrResponse['rt'] = System::getContainer()->get(
-            'contao.csrf.token_manager'
-        )->getDefaultTokenValue();
-        echo json_encode($arrResponse);
-        exit;
-    }
+        // Get categories
+        $arrCategories = $this->getCategories();
 
-    protected function buildFilters(): void
-    {
-        // Gather filters
-        if ($this->wem_geodata_filters !== 'nofilters') {
-            $this->filters = [];
-            $locations = MapItem::findItems($this->arrConfig);
-            
-
-            if ($this->wem_geodata_search) {
-                $this->filters['search'] = [
-                    'label' => $GLOBALS['TL_LANG']['tl_wem_map_item']['search'][0],
-                    'placeholder' => $GLOBALS['TL_LANG']['tl_wem_map_item']['search'][1],
-                    'name' => 'search',
-                    'type' => 'text',
-                    'value' => Input::get('search') ?: '',
-                ];
-                if (Input::get('search')) {
-                    $this->arrConfig['search'] = Input::get('search');
-                }
-            }
-
-            $arrFilterFields = unserialize($this->wem_geodata_filters_fields);
-            $arrLocations = [];
-            if ($locations instanceof Collection) {
-                while ($locations->next()) {
-                    $arrLocations[] = $locations->current()->row();
-                }
-            }
-
-            $arrCountries = Util::getCountries();
-
-            foreach ($arrFilterFields as $filterField) {
-                if (Input::get($filterField)) {
-                    $this->arrConfig[$filterField] = Input::get($filterField);
-                }
-
-                $this->filters[$filterField] = [
-                    'label' => \sprintf('%s :', $GLOBALS['TL_LANG']['tl_wem_map_item'][$filterField][0]),
-                    'placeholder' => $GLOBALS['TL_LANG']['tl_wem_map_item'][$filterField][1],
-                    'name' => $filterField,
-                    'type' => 'select',
-                    'options' => [],
-                ];
-
-                foreach ($arrLocations as $location) {
-                    if (!$location[$filterField]) {
-                        if (isset($GLOBALS['TL_HOOKS']['WEMGEODATABUILDFILTERSSINGLEFILTEROPTION']) && \is_array($GLOBALS['TL_HOOKS']['WEMGEODATABUILDFILTERSSINGLEFILTEROPTION'])) {
-                            foreach ($GLOBALS['TL_HOOKS']['WEMGEODATABUILDFILTERSSINGLEFILTEROPTION'] as $callback) {
-                                [$this->filters,$this->arrConfig] = static::importStatic(
-                                    $callback[0]
-                                )->{$callback[1]}($this->filters, $this->arrConfig, $filterField, (string) $location[$filterField], $location, $this);
-                            }
-                        }
-
-                        continue;
-                    }
-
-                    if (\array_key_exists($location[$filterField], $this->filters[$filterField]['options'])) {
-                        continue;
-                    }
-
-                    if ($filterField !== 'category') {
-                        $this->filters[$filterField]['options'][$location[$filterField]] = [
-                            'value' => Util::formatStringValueForFilters((string) $location[$filterField]),
-                            'text' => $location[$filterField],
-                            'selected' => (\array_key_exists(
-                                $filterField,
-                                $this->arrConfig
-                            ) && $this->arrConfig[$filterField] === Util::formatStringValueForFilters(
-                                (string) $location[$filterField]
-                            ) ? 'selected' : ''),
-                        ];
-                    }
-
-                    switch ($filterField) {
-                        case 'city':
-                            // $this->filters[$filterField]['options'][$location[$filterField]]['text'] =
-
-                            // $location[$filterField].' ('.$location['admin_lvl_2'].')';
-                            $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $location[$filterField] . ($location['admin_lvl_2'] ? ' (' . $location['admin_lvl_2'] . ')' : '');
-                            break;
-                        case 'category':
-                            $mapItemCategories = MapItemCategory::findItems(['pid' => $location['id']]);
-                            if ($mapItemCategories instanceof Collection) {
-                                while ($mapItemCategories->next()) {
-                                    $objCategory = Category::findById($mapItemCategories->category);
-                                    if ($objCategory) {
-                                        $this->filters[$filterField]['options'][$objCategory->id]['text'] = $objCategory->title;
-                                        $this->filters[$filterField]['options'][$objCategory->id]['value'] = Util::formatStringValueForFilters(
-                                            (string) $objCategory->title
-                                        );
-                                        $this->filters[$filterField]['options'][$objCategory->id]['selected'] = (\array_key_exists(
-                                            $filterField,
-                                            $this->arrConfig
-                                        ) && $this->arrConfig[$filterField] === Util::formatStringValueForFilters(
-                                            (string) $objCategory->title
-                                        ) ? 'selected' : '');
-                                    }
-                                }
-                            }
-
-                            break;
-                        case 'country':
-                            $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $arrCountries[$location[$filterField]] ?? $location[$filterField];
-                            break;
-                        default:
-                            break;
-                    }
-
-                    // HOOK: add custom logic
-                    if (isset($GLOBALS['TL_HOOKS']['WEMGEODATABUILDFILTERSSINGLEFILTEROPTION']) && \is_array($GLOBALS['TL_HOOKS']['WEMGEODATABUILDFILTERSSINGLEFILTEROPTION'])) {
-                        foreach ($GLOBALS['TL_HOOKS']['WEMGEODATABUILDFILTERSSINGLEFILTEROPTION'] as $callback) {
-                            [$this->filters,$this->arrConfig] = static::importStatic(
-                                $callback[0]
-                            )->{$callback[1]}($this->filters, $this->arrConfig, $filterField, (string) $location[$filterField], $location, $this);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    protected function getListConfig()
-    {
-        return $this->arrConfig;
-    }
-
-    protected function getDefaultListConfig()
-    {
-        return $this->arrConfigDefault;
-    }
-
-    /**
-     * Count the total matching items.
-     */
-    protected function countItems(array $c = []): int
-    {
-        $c = $c === [] ? $this->getDefaultListConfig() : $c; // we don't want filters to interfere here
-
-        return $this->countLocations($c);
-    }
-
-    /**
-     * Fetch the matching items.
-     *
-     * @param array|null $c       configuration. If none provided, the default one will be used
-     * @param array|null $options
-     */
-    protected function fetchItems(
-        array|null $c = [],
-        int|null $limit = 0,
-        int|null $offset = 0,
-        $options = []
-    ): array|null {
-        $c = $c === null || $c === [] ? $this->getDefaultListConfig() : $c; // we don't want filters to interfere here
-
-        $c['limit'] = $limit;
-        $c['offset'] = $offset;
-
-        return $this->getLocations($c);
+        // Send the data to Map template
+        $this->Template->mapProvider = $this->objMap->mapProvider;
+        $this->Template->geocodingProvider = $this->objMap->geocodingProvider;
+        $this->Template->markers = $arrMarkers;
+        $this->Template->locations = $arrLocations;
+        $this->Template->categories = $arrCategories;
+        $this->Template->filters_html = $strFilters;
+        $this->Template->config = $arrMapConfig;
+        $this->Template->moduleId = $this->id;
+        $this->Template->rt = System::getContainer()->get('contao.csrf.token_manager')->getDefaultTokenValue();
+        $this->Template->blnLoadInAjax = $blnLoadInAjax;
     }
 
     protected function buildMarkers(array $arrLocations): array
@@ -460,20 +195,6 @@ class DisplayMap extends Core
         }
 
         return $arrMarkers;
-    }
-
-    protected function getLocationsAjax(): array
-    {
-        $config = $this->arrConfig;
-        $arrFilterFields = unserialize($this->wem_geodata_filters_fields);
-
-        foreach ($arrFilterFields as $filterField) {
-            if (Input::get($filterField)) {
-                $config[$filterField] = Input::get($filterField);
-            }
-        }
-
-        return $this->fetchItems($config);
     }
 
     protected function parseLocationsList(array $arrLocations): string

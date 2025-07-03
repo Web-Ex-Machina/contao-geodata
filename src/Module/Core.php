@@ -260,68 +260,7 @@ abstract class Core extends Module
         return $arrItem;
     }
 
-    /**
-     * Build Pagination.
-     *
-     * @param int $intTotal Number of items
-     *
-     * @return [Void]
-     */
-    protected function buildPagination(
-        int $intTotal
-    ): void {
-        $total = $intTotal - $this->offset;
-
-        // Split the results
-        if (
-
-            $this->perPage > 0 && (! property_exists(
-                $this,
-                'limit'
-            ) || $this->limit === null || $this->numberOfItems > $this->perPage)
-
-        ) {
-            // Adjust the overall limit
-            if (property_exists($this, 'limit') && $this->limit !== null) {
-                $total = min($this->limit, $total);
-            }
-
-            // Get the current page
-            $id = 'page_n' . $this->id;
-            $page = Input::get($id) ?? 1;
-
-            // Do not index or cache the page if the page number is outside the range
-            if (
-
-                $page < 1 || $page > max(
-                    ceil($total / $this->perPage),
-                    1
-                )
-
-            ) {
-                throw new Exception(\sprintf(
-                    $GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['pageNotFound'],
-                    Environment::get('uri')
-                ));
-            }
-
-            // Set limit and offset
-            $this->limit = $this->perPage;
-            $this->offset += (max($page, 1) - 1) * $this->perPage;
-            $skip = (int) $this->skipFirst;
-
-            // Overall limit
-            if ($this->offset + $this->limit > $total + $skip) {
-                $this->limit = $total + $skip - $this->offset;
-            }
-
-            // Add the pagination menu
-            $objPagination = new Pagination($total, $this->perPage, Config::get(
-                'maxPaginationLinks'
-            ) ?? 7, $id);
-            $this->Template->pagination = $objPagination->generate("\n  ");
-        }
-    }
+    
 
     protected function getCategories()
     {
