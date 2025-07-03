@@ -1,6 +1,9 @@
 <div class="map__filters map__panel left ">
 	<span class="map__filters__toggler"><i class="far fa-sort-shapes-down-alt"></i></span>
-		<form class="map__filters__wrapper scroll-custom" action="<?= $this->filters_action ?>" method="<?= $this->filters_method ?>">
+	<form class="map__filters__wrapper scroll-custom" action="<?= $this->filters_action ?>" method="<?= $this->filters_method ?>">
+		<?php if ($_GET['debug']): ?>
+			<input type="hidden" name="debug" value="true">
+		<?php endif ?>
 		<?php foreach($this->filters as $f): ?>
 			<?php if('select' == $f['type'] && count($f['options']) <= 1): ?>
 				<!-- removed filter <?= $f['name'] ?> for it have only one selectable option -->
