@@ -26,8 +26,8 @@
 				</div>
 			<?php endif; ?>
 		<?php endforeach; ?>
-		<div class="submit txt-center">
-			<input type="submit" class="btn-sm w-100" value="<?= $GLOBALS['TL_LANG']['MSC']['filter'] ?>" />
+		<div class="txt-center">
+			<input type="submit" class="submit btn-sm w-100" value="<?= $GLOBALS['TL_LANG']['MSC']['filter'] ?>" />
 		</div>
 	</form>
 </div>
