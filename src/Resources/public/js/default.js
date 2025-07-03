@@ -331,11 +331,18 @@ geodata.functions.applyFilters = function(){
 		}
 	});
 	
-	geodata.callbacks.applyFilters();
+	geodata.callbacks.applyFilters().then((r)=>{
+		// geodata.loaded.filters = false;
+		// geodata.functions.check_filters();
+		geodata.ajax.getFilters()
+	});
 };
 
 geodata.callbacks.applyFilters = function(){
-	console.log('Please override this function (applyFilters) in map\'s provider own js file.');
+	return new Promise(function(resolve,reject){
+		console.log('Please override this function (applyFilters) in map\'s provider own js file.');
+		resolve()
+	});
 }
 
 geodata.ajax.getFilters = function(){

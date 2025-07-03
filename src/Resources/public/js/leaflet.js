@@ -260,11 +260,14 @@ geodata.functions.selectMapItem = function(itemID){
 }
 
 geodata.callbacks.applyFilters = function(){
-	geodata.markers.cluster.removeLayers(geodata.markers.all);
-	geodata.markers.cluster.addLayers(geodata.markers.current);
-	if (geodata.config.map.fitBounds)
-		geodata.functions.fitBounds();
-		// geodata.map.fitBounds(geodata.markers.cluster.getBounds());
+	return new Promise(function(resolve,reject){
+		geodata.markers.cluster.removeLayers(geodata.markers.all);
+		geodata.markers.cluster.addLayers(geodata.markers.current);
+		if (geodata.config.map.fitBounds)
+			geodata.functions.fitBounds();
+			// geodata.map.fitBounds(geodata.markers.cluster.getBounds());
+		resolve()
+	});
 }
 
 geodata.markers.cluster.on('clusterclick', function (a) {
