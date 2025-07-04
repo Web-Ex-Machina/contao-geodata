@@ -250,7 +250,7 @@ abstract class CoreList extends Core
 
         if (!empty($arrKeys)) {
             foreach ($arrKeys as $k) {
-                if ("" !== Input::get($k)) {
+                if ("" !== Input::get($k) && !Input::post($k)) {
                     Input::setPost($k, Input::get($k));
                 }
             }
