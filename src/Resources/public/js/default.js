@@ -134,6 +134,9 @@ geodata.functions.init = function(){
 	    			if (geodata.filters.city === undefined) 
 			    		geodata.filters.city = '';
 			    	
+			    	$('body').on('change keyup', '.map__filters [id=filter_country]', function(e) {
+			    		$('.map__filters [id=filter_city]').val('');
+			    	});
 			    	$('body').on('change keyup', '.map__filters [id^=filter_]', function(e) {
 			    		geodata.functions.applyFilters();
 			    	});
@@ -276,7 +279,9 @@ geodata.functions.applyFilters = function(){
 	$filters.find('[id^=filter_]').each(function(){
 		geodata.filters[this.name] = this.value;
 	});
-	// console.log(geodata.filters);
+	if (geodata.filters['country'] !== undefined && geodata.filters['country'] == '')
+		geodata.filters['city'] = '';
+	console.log(geodata.filters);
 	geodata.markers.current = geodata.markers.all.filter( item => {
 		var match = true;
 		// console.log(item);
