@@ -430,4 +430,29 @@ geodata.ajax.getLocations = function(offset = 0, limit = 0){
 	});
 };
 
+geodata.ajax.getLocationsList = function(){
+	return new Promise(function(resolve,reject){
+		var request = new FormData();
+
+		request.append('TL_AJAX', 1);
+	    request.append('REQUEST_TOKEN', rt);
+	    request.append('module', mapModuleId);
+	    request.append('action', 'getLocationsList');
+
+		fetch(window.location,{
+			method: 'POST',
+			mode: 'same-origin',
+			cache: 'no-cache',
+			body: request
+		})
+		.then((response) => response.json())
+		.then((json) => {
+		  resolve(json);
+		})
+		.catch((error) => {
+		    reject(error);
+		});
+	});
+};
+
 geodata.utils.normalize = function(str = ''){return str.toLowerCase().replace(/ |\.|\'/g,'_'); }
