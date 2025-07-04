@@ -348,7 +348,18 @@ geodata.functions.applyFilters = function(){
 	geodata.callbacks.applyFilters().then((r)=>{
 		// geodata.loaded.filters = false;
 		// geodata.functions.check_filters();
-		geodata.ajax.getFilters()
+		geodata.ajax.getFilters(geodata.filters.country!='' ? geodata.filters.country:false).then((r)=>{
+			console.log(r);
+			if(r.status == 'success' && r.html){
+				let $html = $(r.html);
+				if ($html.hasClass('map__panel')) {
+					$html = $html.find('.map__filters__wrapper');
+					$filters.find('.map__filters__wrapper').replaceWith($html);
+				} else {
+					$filters.replaceWith($html);
+				}
+			}
+		})	
 	});
 };
 
