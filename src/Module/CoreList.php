@@ -194,9 +194,10 @@ abstract class CoreList extends Core
              ** Adjustements after formatting every filter
              **/
 
-            // If no country was selected, remove city filter
+            // If no country was selected, remove city filter + config
             if (array_key_exists('city', $this->filters) && !array_key_exists('country', $this->arrConfig)) {
                 unset($this->filters['city']);
+                unset($this->arrConfig['city']);
             }
         }
     }
