@@ -129,6 +129,10 @@ geodata.functions.init = function(){
 			    	});
 
 	    			geodata.filters = $filters.find('.map__filter [id^=filter_]').map((i,e)=>{return e.name}).toArray().reduce((a,v)=>({...a,[v]:''}),{})
+	    			if (geodata.filters.country === undefined) 
+			    		geodata.filters.country = '';
+	    			if (geodata.filters.city === undefined) 
+			    		geodata.filters.city = '';
 			    	
 			    	$('body').on('change keyup', '.map__filters [id^=filter_]', function(e) {
 			    		geodata.functions.applyFilters();
