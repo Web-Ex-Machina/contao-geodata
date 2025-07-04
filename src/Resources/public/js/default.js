@@ -68,8 +68,13 @@ geodata.functions.init = function(){
 			    	$listToggler.bind('click', function(){
 			    		$list.toggleClass('active');
 			    		if ($legend.length) 
-			    			$legend.removeClass('active');
-			    	});
+			    	if ($listToggler.length) {
+				    	$listToggler.bind('click', function(){
+				    		$list.toggleClass('active');
+				    		if ($legend.length) 
+				    			$legend.removeClass('active');
+				    	});
+			    	}
 			    	$list.find('.map__list__item').on('click', function(e) {
 			    		geodata.functions.selectMapItem($(this).data('id'));
 			    	});
