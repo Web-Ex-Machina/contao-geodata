@@ -5,9 +5,11 @@
     <div class="bar"></div>
   </span>
   <div class="map__list__wrapper scroll-custom">
+    <?php if(!empty($this->locations)): ?>
     <?php foreach ($this->locations as $key => $location): ?>
       <?php $this->insert($this->customTplForGeodataItems,['location'=>$location]); ?>
     <?php endforeach ?>
+    <?php endif ?>
   </div>
   <span class="map__legend__toggler btn-sm m-y-0 squared hidden">Legend</span>
   <div class="map__legend">

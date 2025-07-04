@@ -155,13 +155,13 @@ class DisplayMap extends CoreList
                 $this->filters,
                 $this->wem_geodata_filters
             );
-
-            // If the config says so, we will generate a template with a list of the locations
-            if ($this->wem_geodata_map_list !== 'nolist') {
-                $this->Template->list = $this->parseLocationsList($arrLocations);
-            }
         }
 
+        // If the config says so, we will generate a template with a list of the locations
+        if ($this->wem_geodata_map_list !== 'nolist') {
+            $this->Template->list = $this->parseLocationsList($arrLocations);
+        }
+        
         // Get categories
         $arrCategories = $this->getCategories();
 
