@@ -65,9 +65,6 @@ geodata.functions.init = function(){
 		    	$list           = $('.map__list');
 		    	$listToggler    = $('.map__list__toggler');
 			    if ($list.length) {
-			    	$listToggler.bind('click', function(){
-			    		$list.toggleClass('active');
-			    		if ($legend.length) 
 			    	if ($listToggler.length) {
 				    	$listToggler.bind('click', function(){
 				    		$list.toggleClass('active');
@@ -379,6 +376,8 @@ geodata.ajax.getFilters = function(){
 	    request.append('REQUEST_TOKEN', rt);
 	    request.append('module', mapModuleId);
 	    request.append('action', 'getFilters');
+        for(var filter in geodata.filters)
+        	request.append(filter, geodata.filters[filter]);
 
 		fetch(window.location,{
 			method: 'POST',
@@ -388,7 +387,7 @@ geodata.ajax.getFilters = function(){
 		})
     	.then((response) => response.json())
 		.then((json) => {
-			console.log('ajax.getFilters done',json);
+			console.log('ajax.getFilters done');
 			if (json) 
 		  		resolve(json);
 		  	else
