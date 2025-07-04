@@ -24,7 +24,13 @@
 .map__panel.left.active{-webkit-transform: translate3d(100%,0,0); transform: translate3d(100%,0,0); margin-right: 0;}
 
 .map__filters{overflow: hidden;margin-right: -2.8em;width: clamp(200px,30vw,300px);}
-.map__filters__wrapper{ padding: 1rem; margin-right: 2.8em; direction: rtl; background: #fff;box-shadow: 0 1px 4px rgb(0,0,0,0.25); }
+.map__filters__wrapper{ padding: 1rem; margin-right: 2.8em; direction: rtl; background: #fff;box-shadow: 0 1px 4px rgb(0,0,0,0.25); 
+      display: grid ;
+      gap: 1em;
+      grid-template-columns: 100%;
+      grid-auto-flow: row;
+      grid-auto-rows: min-content;
+}
 .map__filters__wrapper>*{direction: ltr; font-size: 0.8em;}
 .map__filters__toggler{
   flex-shrink: 0;
