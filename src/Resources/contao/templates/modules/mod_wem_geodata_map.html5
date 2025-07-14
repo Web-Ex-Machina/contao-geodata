@@ -1,4 +1,4 @@
-<div class="<?= $this->class ?> block<?php echo count($this->categories ?? [])<2?' hide-categories':'' ?>">
+<div class="<?= $this->class ?> block<?= count($this->categories ?? [])<2?' hide-categories':'' ?>">
 	<?php if($this->error): ?>
 		<div class="error">
 			<?= $this->msg ?>
@@ -28,7 +28,7 @@
 	    	</div>
 			<?php if('rightpanel' === $this->wem_geodata_map_list): ?>
 				<div class="map__list__container">
-					<?php echo $this->list; ?>
+					<?= $this->list; ?>
 				</div>
 			<?php endif; ?>
 		</div>
@@ -36,14 +36,14 @@
 			<div class="map__filters__container"><?= $this->filters_html_; ?></div>
 	    <?php endif; ?>
     	<?php if('below' === $this->wem_geodata_map_list): ?>
-			<?php echo $this->list; ?>
+			<?= $this->list; ?>
 		<?php endif; ?>
     	<script type="text/javascript">
 			rt                         = '<?= $this->rt ?>';
 			mapModuleId                = '<?= $this->moduleId ?>';
 			geodata.blnLoadInAjax      = <?= $this->blnLoadInAjax ? 1 : 0; ?>;
-			geodata.nbItems            = <?php echo $this->nbItems ? : 0 ?>;
-			geodata.nbItemsPerRequest  = <?php echo $this->nbItemsPerRequest ? : 10  ?>;
+			geodata.nbItems            = <?= $this->nbItems ? : 0 ?>;
+			geodata.nbItemsPerRequest  = <?= $this->nbItemsPerRequest ? : 10  ?>;
 			geodata.config             = <?= json_encode($this->config) ?>;
 			geodata.locations          = <?= $this->blnLoadInAjax ? '[]' : json_encode($this->locations, JSON_INVALID_UTF8_IGNORE | JSON_INVALID_UTF8_SUBSTITUTE) ?>;
 			// geodata.filters            = <?= !$this->blnLoadInAjax && $this->filters ? json_encode($this->filters ?? []) : '{}' ?>;
