@@ -199,13 +199,17 @@ abstract class Core extends Module
         }
 
         // Get country and continent
-        Util::getCountries();
+        $arrCountries = Util::getCountries();
         $strCountry = strtoupper($arrItem['country']);
         $strContinent = Util::getCountryContinent($strCountry);
-        $arrItem['country'] = ['code' => $strCountry,
-            'name' => $GLOBALS['TL_LANG']['CNT'][$arrItem['country']]];
-        $arrItem['continent'] = ['code' => $strContinent,
-            'name' => $strContinent !== null ? $GLOBALS['TL_LANG']['CONTINENT'][$strContinent] : ''];
+        $arrItem['country'] = [
+            'code' => $strCountry,
+            'name' => $arrCountries[$arrItem['country']]
+        ];
+        $arrItem['continent'] = [
+            'code' => $strContinent,
+            'name' => $strContinent !== null ? $GLOBALS['TL_LANG']['CONTINENT'][$strContinent] : ''
+        ];
         $strContent = '';
         $objElement = ContentModel::findPublishedByPidAndTable($arrItem['id'], 'tl_wem_map_item');
         if ($objElement !== null) {
@@ -295,7 +299,7 @@ abstract class Core extends Module
         if ($c === null) {
             $c = ['published' => 1,
                 'onlyWithCoords' => 1];
-            if ($this->wem_geodata_map !== null) {
+            if ($this->wem_geodata_map !== null && $this->wem_geodata_map !== 0) {
                 $c['pid'] = $this->wem_geodata_map;
             } elseif (! empty($this->wem_geodata_maps)) {
                 $pids = StringUtil::deserialize($this->wem_geodata_maps);

@@ -96,19 +96,19 @@ class MapItemAttributeValue extends Model
         $t = static::$strTable;
         $arrColumns = [];
 
-        if ($arrConfig['pid']) {
+        if (array_key_exists('pid', $arrConfig)) {
             $arrColumns[] = $t . '.pid = ' . $arrConfig['pid'];
         }
 
-        if ($arrConfig['attribute']) {
+        if (array_key_exists('attribute', $arrConfig)) {
             $arrColumns[] = $t . ".attribute = '" . $arrConfig['attribute'] . "'";
         }
 
-        if ($arrConfig['value']) {
+        if (array_key_exists('value', $arrConfig)) {
             $arrColumns[] = $t . ".value = '" . $arrConfig['value'] . "'";
         }
 
-        if ($arrConfig['not']) {
+        if (array_key_exists('not', $arrConfig)) {
             $arrColumns[] = $arrConfig['not'];
         }
 
