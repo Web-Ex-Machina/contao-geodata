@@ -7,7 +7,7 @@
 		<?php if($this->filters && "above" == $this->filters_position): ?>  
 			<div class="map__filters__container"><?= $this->filters_html_; ?></div>
 	    <?php endif; ?>
-		<div class="map__wrapper"  style="width: <?= $this->config['map']['width'] ?:'100%' ?>; height:<?= $this->config['map']['height'] ?: '60vh;' ?>">
+		<div class="map__wrapper"  style="width: <?= $this->config['map']['width'] ?? '100%' ?>; height:<?= $this->config['map']['height'] ?? '60vh;' ?>">
 			<div class="map__loading__overlay hidden">
 				<div class="map__loading__overlay__text">
 					<?= $this->trans('WEM.LOCATIONS.LABEL.mapLoading'); ?>
