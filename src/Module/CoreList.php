@@ -86,20 +86,32 @@ abstract class CoreList extends Core
 
                 $this->filters[$filterField] = [
                     'label' => \sprintf('%s :', $GLOBALS['TL_LANG']['tl_wem_map_item'][$filterField][0]),
-                    'placeholder' => $GLOBALS['TL_LANG']['tl_wem_map_item'][$filterField][1],
+                    'placeholder' => array_key_exists(1, $GLOBALS['TL_LANG']['tl_wem_map_item']) ? 
+                        $GLOBALS['TL_LANG']['tl_wem_map_item'][$filterField][1] 
+                        : ''
+                    ,
                     'name' => $filterField,
                     'type' => 'select',
                     'options' => [],
                 ];
-                $arrSortOptions = [];
 
                 foreach ($arrLocations as $location) {
-                    if (!$location[$filterField]) {
-                        if (isset($GLOBALS['TL_HOOKS']['WEMGEODATABUILDFILTERSSINGLEFILTEROPTION']) && \is_array($GLOBALS['TL_HOOKS']['WEMGEODATABUILDFILTERSSINGLEFILTEROPTION'])) {
+                    if (!array_key_exists($filterField, $location)) {
+                        if (
+                            isset($GLOBALS['TL_HOOKS']['WEMGEODATABUILDFILTERSSINGLEFILTEROPTION']) 
+                            && \is_array($GLOBALS['TL_HOOKS']['WEMGEODATABUILDFILTERSSINGLEFILTEROPTION'])
+                        ) {
                             foreach ($GLOBALS['TL_HOOKS']['WEMGEODATABUILDFILTERSSINGLEFILTEROPTION'] as $callback) {
-                                [$this->filters,$this->arrConfig] = static::importStatic(
+                                [$this->filters, $this->arrConfig] = static::importStatic(
                                     $callback[0]
-                                )->{$callback[1]}($this->filters, $this->arrConfig, $filterField, (string) $location[$filterField], $location, $this);
+                                )->{$callback[1]} (
+                                    $this->filters, 
+                                    $this->arrConfig, 
+                                    $filterField, 
+                                    array_key_exists($filterField, $location) ? (string) $location[$filterField] : '', 
+                                    $location, 
+                                    $this
+                                );
                             }
                         }
 
@@ -121,8 +133,6 @@ abstract class CoreList extends Core
                                 (string) $location[$filterField]
                             ) ? 'selected' : '',
                         ];
-
-                        $arrSortOptions[$location[$filterField]] = $location[$filterField];
                     }
 
                     switch ($filterField) {
@@ -142,8 +152,6 @@ abstract class CoreList extends Core
                                         ) && $this->arrConfig[$filterField] === Util::formatStringValueForFilters(
                                             (string) $objCategory->title
                                         ) ? 'selected' : '');
-
-                                        $arrSortOptions[$objCategory->id] = $objCategory->title;
                                     }
                                 }
                             }
@@ -151,17 +159,14 @@ abstract class CoreList extends Core
                             break;
                         case 'country':
                             $this->filters[$filterField]['options'][$location[$filterField]]['text'] = $arrCountries[$location[$filterField]] ?? ucfirst($location[$filterField]);
-                            $arrSortOptions[$location[$filterField]] = $this->filters[$filterField]['options'][$location[$filterField]]['text'];
                             break;
 
                         case 'city':
                             // Skip options not in the current country
                             if (array_key_exists('country', $this->arrConfig) && $location['country'] !== $this->arrConfig['country']) {
                                 unset($this->filters[$filterField]['options'][$location[$filterField]]);
-                                unset($arrSortOptions[$location[$filterField]]);
                             } else {
                                 $this->filters[$filterField]['options'][$location[$filterField]]['text'] = ucfirst($location[$filterField]) . ($location['admin_lvl_2'] ? ' (' . $location['admin_lvl_2'] . ')' : '');
-                                $arrSortOptions[$location[$filterField]] = $this->filters[$filterField]['options'][$location[$filterField]]['text'];
                             }
 
                             break;
@@ -187,6 +192,11 @@ abstract class CoreList extends Core
                 }
                 
                 // Sort options
+                $arrSortOptions = [];
+                foreach ($this->filters[$filterField]['options'] as $key => $opt) {
+                    $arrSortOptions[$key] = $opt['text'];
+                }
+
                 array_multisort($arrSortOptions, SORT_ASC, $this->filters[$filterField]['options']);
             }
 
