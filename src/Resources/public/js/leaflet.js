@@ -139,13 +139,13 @@ geodata.functions.addMarkers = function(locations = [],doUpdateLayers=true,doFit
 		}
 		var options = {};
 		if(Array.isArray(location.category)){
-			if (location.category.length > 0 && location.category[0].title && geodata.markers.config.hasOwnProperty(normalize(location.category[0].title)))
-				options.icon = geodata.markers.config[normalize(location.category[0].title)];
+			if (location.category.length > 0 && location.category[0].title && geodata.markers.config.hasOwnProperty(geodata.utils.normalize(location.category[0].title)))
+				options.icon = geodata.markers.config[geodata.utils.normalize(location.category[0].title)];
 			else
 				options.icon = geodata.markers.config.default;
 		} else {
-			if (location.category.title && geodata.markers.config.hasOwnProperty(normalize(location.category.title)))
-				options.icon = geodata.markers.config[normalize(location.category.title)];
+			if (location.category.title && geodata.markers.config.hasOwnProperty(geodata.utils.normalize(location.category.title)))
+				options.icon = geodata.markers.config[geodata.utils.normalize(location.category.title)];
 			else
 				options.icon = geodata.markers.config.default;
 		}
