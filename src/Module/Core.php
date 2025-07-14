@@ -239,10 +239,7 @@ abstract class Core extends Module
         }
 
         if ($objPage instanceof PageModel) {
-            // if ($this->objJumpTo instanceof PageModel) {
-            $params = (Config::get(
-                'useAutoItem'
-            ) ? '/' : '/items/') . ($arrItem['alias'] ?: $arrItem['id']);
+            $params = '/' . ($arrItem['alias'] ?: $arrItem['id']);
             $arrItem['url'] = StringUtil::ampersand(
                 $blnAbsolute ? $objPage->getAbsoluteUrl($params) : $objPage->getFrontendUrl($params)
             );

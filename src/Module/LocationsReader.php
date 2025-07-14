@@ -58,13 +58,7 @@ class LocationsReader extends Core
         }
 
         // Set the item from the auto_item parameter
-        if (
-
-            ! isset($_GET['items']) && Config::get(
-                'useAutoItem'
-            ) && isset($_GET['auto_item'])
-
-        ) {
+        if (Input::get('auto_item')) {
             Input::setGet('items', Input::get('auto_item'));
         }
 
