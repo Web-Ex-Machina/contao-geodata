@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace WEM\GeoDataBundle\Model;
 
 use Contao\Model;
+use Contao\Model\Collection;
 
 /**
  * Reads and writes items.
@@ -29,14 +30,12 @@ class MapItemAttributeValue extends Model
     /**
      * Find items, depends on the arguments.
      *
-     * @param array
- $arrConfig
-     * @param int
- $intLimit
-     * @param int
- $intOffset
-     * @param array
- $arrOptions
+     * @param array $arrConfig
+     * @param int $intLimit
+     * @param int $intOffset
+     * @param array $arrOptions
+     * 
+     * @return Collection|null
      */
     public static function findItems(
         array $arrConfig = [],
@@ -73,7 +72,6 @@ class MapItemAttributeValue extends Model
         array $arrConfig = [],
         array $arrOptions = []
     ): int {
-        // TODO : useless ?
         $arrColumns = static::formatColumns($arrConfig);
 
         if ($arrColumns === []) {
