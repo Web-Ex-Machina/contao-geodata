@@ -49,11 +49,10 @@ class ClassLoader extends Controller
         string $strVersion = '1'
     ): void {
         $strVersion = Input::get('debug') ? time() : $strVersion;
+        
         // Generate the combiners
         $objCssCombiner = new Combiner();
         $objJsCombiner = new Combiner();
-
-        // Load jQuery $GLOBALS['TL_JAVASCRIPT'][] =
 
         // 'https://code.jquery.com/jquery-3.4.1.min.js'; Load generic files
         $objCssCombiner->add(
@@ -84,16 +83,12 @@ class ClassLoader extends Controller
                 $GLOBALS['TL_HEAD'][] = '<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@latest/dist/MarkerCluster.css">';
                 $GLOBALS['TL_HEAD'][] = '<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@latest/dist/MarkerCluster.Default.css">';
                 $GLOBALS['TL_HEAD'][] = '<link rel="stylesheet" href="https://unpkg.com/leaflet-gesture-handling@latest/dist/leaflet-gesture-handling.min.css">';
-                $objCssCombiner->addMultiple([
-                    'bundles/wemgeodata/css/leaflet.css',
-                ], $strVersion);
+                $objCssCombiner->add('bundles/wemgeodata/css/leaflet.css', $strVersion);
 
                 $GLOBALS['TL_JAVASCRIPT'][] = 'https://unpkg.com/leaflet@latest/dist/leaflet.js';
                 $GLOBALS['TL_JAVASCRIPT'][] = 'https://unpkg.com/leaflet.markercluster@latest/dist/leaflet.markercluster.js';
                 $GLOBALS['TL_JAVASCRIPT'][] = 'https://unpkg.com/leaflet-gesture-handling@latest/dist/leaflet-gesture-handling.min.js';
-                $objJsCombiner->addMultiple([
-                    'bundles/wemgeodata/js/leaflet.js',
-                ], $strVersion);
+                $objJsCombiner->add('bundles/wemgeodata/js/leaflet.js', $strVersion);
                 break;
             default:
                 throw new Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['unknownProvider']);
