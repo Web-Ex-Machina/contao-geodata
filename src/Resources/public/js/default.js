@@ -114,35 +114,36 @@ geodata.functions.init = function(){
 	    	// console.log('checkin filters loading');
 	    	if (geodata.loaded.filters === true) {
 				clearInterval(loop_filters);
-    			$filters        = $('.map__filters');
-    			$filtersToggler = $('.map__filters__toggler');
-			    if ($filters.length) {
-			    	if (typeof FontAwesome == 'undefined')
-			    		$filtersToggler.html('<svg fill="currentColor" viewBox="0 0 80 90" focusable="false" xmlns="http://www.w3.org/2000/svg"><path d="m 0,0 30,45 0,30 10,15 0,-45 30,-45 Z"></path></svg>');
-
-			    	$filtersToggler.bind('click', function(){
-			    		$filters.toggleClass('active');
-			    	});
-
-	    			geodata.filters = $filters.find('.map__filter [id^=filter_]').map((i,e)=>{return e.name}).toArray().reduce((a,v)=>({...a,[v]:''}),{})
-	    			if (geodata.filters.country === undefined) 
-			    		geodata.filters.country = '';
-	    			if (geodata.filters.city === undefined) 
-			    		geodata.filters.city = '';
-			    	
-			    	$('body').on('change keyup', '.map__filters [id=filter_country]', function(e) {
-			    		$('.map__filters [id=filter_city]').val('');
-			    	});
-			    	$('body').on('change keyup', '.map__filters [id^=filter_]', function(e) {
-			    		geodata.functions.applyFilters();
-			    	});
-			    }
-	    		console.log('filters init done');
 	    	} else if(geodata.loaded.map && geodata.loaded.filters === false){
 	    		geodata.loaded.filters = 'pending';
 	    		geodata.functions.getFilters().then((r)=>{
 	    			console.log('success');
 	    			console.log(r);
+	    			$filters        = $('.map__filters');
+	    			$filtersToggler = $('.map__filters__toggler');
+				    if ($filters.length) {
+				    	if (typeof FontAwesome == 'undefined')
+				    		$filtersToggler.html('<svg fill="currentColor" viewBox="0 0 80 90" focusable="false" xmlns="http://www.w3.org/2000/svg"><path d="m 0,0 30,45 0,30 10,15 0,-45 30,-45 Z"></path></svg>');
+
+				    	$filtersToggler.bind('click', function(){
+				    		$filters.toggleClass('active');
+				    	});
+
+		    			geodata.filters = $filters.find('.map__filter [id^=filter_]').map((i,e)=>{return e.name}).toArray().reduce((a,v)=>({...a,[v]:''}),{})
+		    			if (geodata.filters.country === undefined) 
+				    		geodata.filters.country = '';
+		    			if (geodata.filters.city === undefined) 
+				    		geodata.filters.city = '';
+				    	
+				    	$('body').on('change keyup', '.map__filters [id=filter_country]', function(e) {
+				    		$('.map__filters [id=filter_city]').val('');
+				    	});
+				    	$('body').on('change keyup', '.map__filters [id^=filter_]', function(e) {
+				    		geodata.functions.applyFilters();
+				    	});
+				    }
+	    			
+	    			console.log('filters init done');
 	    			geodata.loaded.filters = true;
 	    		}).catch((r)=>{
 	    			console.log(r);
@@ -155,8 +156,9 @@ geodata.functions.init = function(){
 
 	    // MODULE
 	    let loop_module = setInterval(function(){
-	    	// console.log('checkin module loaded');
-	    	if (Object.values(geodata.loaded).every((e)=>{return e != false && e != 'pending'})) {
+	    	console.log('checkin module loaded',Object.values(geodata.loaded).every((e)=>{return e !== false && e != 'pending'}));
+	    	console.table(geodata.loaded);
+	    	if (Object.values(geodata.loaded).every((e)=>{return e !== false && e != 'pending'})) {
 	    		clearInterval(loop_module);
 	    		if ($filters) 
 	    			geodata.functions.applyFilters()
