@@ -58,7 +58,31 @@ abstract class Core extends Module
             $arrItem['marker']['icon']['iconUrl'] = $objFile->path;
             $arrItem['marker']['icon']['iconSize'] = [$sizes[0], $sizes[1]];
 
-            // Get the entire config
+            // Get the map config
+            $objMap = Map::findById($arrItem['pid']);
+            if (!$objMap) {
+                throw new Exception('nothing to do here');
+            }
+
+            $mapConfig = unserialize($objMap->mapConfig);
+            if (\is_array($mapConfig) && $mapConfig !== []) {
+                foreach ($mapConfig as $v) {
+                    // Skip configs not prefix by icon_
+                    if (false === strpos($v['key'], 'icon_')) {
+                        continue;
+                    }
+
+                    // Convert "values" who contains "," char into array values
+                    if (strpos($v['value'], ',') > -1) {
+                        $v['value'] = explode(',', $v['value']);
+                    }
+
+                    $v['key'] = explode('_', $v['key']);
+                    $arrItem['marker']['icon'][$v['key'][1]] = $v['value'];
+                }
+            }
+
+            // Get the marker config
             // https://leafletjs.com/reference-1.4.0.html#marker
             // https://leafletjs.com/reference-1.4.0.html#icon
             $data = unserialize($arrItem['markerConfig']);
@@ -79,68 +103,6 @@ abstract class Core extends Module
             }
         } else {
             unset($arrItem['marker']);
-        }
-
-        if (
-
-            ! ($arrItem['marker']['icon']['iconUrl'] ?? false)
-            || ! ($arrItem['marker']['icon']['iconSize'] ?? false)
-            || ! ($arrItem['marker']['icon']['iconAnchor'] ?? false)
-            || ! ($arrItem['marker']['icon']['popupAnchor'] ?? false)
-        ) {
-            try {
-                // retrieve default map category $objDefaultCategory =
-
-                // Category::findItems(['pid'=>$arrItem['pid'],'is_default'=>1]);
-
-                // if(!$objDefaultCategory){     throw new Exception('nothing to do here'); }
-
-                // $objDefaultCategory = $objDefaultCategory->current(); if((int)
-
-                // $objDefaultCategory->id === (int) $arrItem['id']){     throw new
-
-                // Exception('nothing to do here'); } retrieve map
-                $objMap = Map::findById($arrItem['pid']);
-                if (! $objMap) {
-                    throw new Exception('nothing to do here');
-                }
-
-                $mapConfig = unserialize($objMap->mapConfig);
-                // set missing infos
-                if (
-
-                    ! ($arrItem['marker']['icon']['iconUrl'] ?? false)
-                    && $mapConfig['icon_iconUrl'] ?? false
-                ) {
-                    $arrItem['marker']['icon']['iconUrl'] = $mapConfig['icon_iconUrl'];
-                }
-
-                if (
-
-                    ! ($arrItem['marker']['icon']['iconSize'] ?? false)
-                    && $mapConfig['icon_iconSize'] ?? false
-                ) {
-                    $arrItem['marker']['icon']['iconSize'] = explode(',', $mapConfig['icon_iconSize']);
-                }
-
-                if (
-
-                    ! ($arrItem['marker']['icon']['iconAnchor'] ?? false)
-                    && $mapConfig['icon_iconAnchor'] ?? false
-                ) {
-                    $arrItem['marker']['icon']['iconAnchor'] = explode(',', $mapConfig['iconAnchor']);
-                }
-
-                if (
-
-                    ! ($arrItem['marker']['icon']['popupAnchor'] ?? false)
-                    && $mapConfig['icon_popupAnchor'] ?? false
-                ) {
-                    $arrItem['marker']['icon']['popupAnchor'] = explode(',', $mapConfig['popupAnchor']);
-                }
-            } catch (Exception $e) {
-                // do nothing
-            }
         }
 
         return $arrItem;
