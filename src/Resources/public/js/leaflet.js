@@ -172,8 +172,10 @@ geodata.functions.updateLayers = function(doFitBounds=false){
 	}
 }
 
-geodata.functions.fitBounds = function(){
-	geodata.map.fitBounds(geodata.markers.cluster.getBounds())
+geodata.functions.fitBounds = function(animate = true){
+	geodata.map.fitBounds(geodata.markers.cluster.getBounds(),{
+		animate:animate
+	})
 }
 
 geodata.functions.addMarker = function(latLng, options={'icon':geodata.markers.config.default}, location=false, updateLayers=true){
@@ -265,7 +267,6 @@ geodata.callbacks.applyFilters = function(){
 		geodata.markers.cluster.addLayers(geodata.markers.current);
 		if (geodata.config.map.fitBounds)
 			geodata.functions.fitBounds();
-			// geodata.map.fitBounds(geodata.markers.cluster.getBounds());
 		resolve()
 	});
 }
