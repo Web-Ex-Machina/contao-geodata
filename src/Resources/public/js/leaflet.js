@@ -20,7 +20,7 @@ var mapDefaultConfig  = {
 };
 
 geodata.functions.initMap = function(){return new Promise(function(resolve,reject){
-	console.log('leaflet initMap start');
+	geodata.utils.log('leaflet initMap start');
 	if (geodata.config.map                	   === undefined ) geodata.config.map               	  = {};
 	if (geodata.config.map.zoom                === undefined ) geodata.config.map.zoom                = mapDefaultConfig.zoom;
 	if (geodata.config.map.zoomControl         === undefined ) geodata.config.map.zoomControl         = mapDefaultConfig.zoomControl;
@@ -62,7 +62,7 @@ geodata.functions.initMap = function(){return new Promise(function(resolve,rejec
 	    	}
 	    	category.alias = geodata.utils.normalize(category.title);
 	    	if (category.marker) {
-	    		// console.log(category.marker);
+	    		// geodata.utils.log(category.marker);
 	    		geodata.markers.config[category.alias] = L.icon({
 					iconUrl: 		 (category.marker.icon.iconUrl       !== undefined)                                                       ? category.marker.icon.iconUrl                   : geodata.markers.config.default.options.iconUrl,
 				    iconSize:     	 (category.marker.icon.iconSize      !== undefined && Array.isArray(category.marker.icon.iconSize))	      ? category.marker.icon.iconSize.map(Number)  	   : geodata.markers.config.default.options.iconSize,
@@ -70,7 +70,7 @@ geodata.functions.initMap = function(){return new Promise(function(resolve,rejec
 				    popupAnchor:  	 (category.marker.icon.popupAnchor   !== undefined && Array.isArray(category.marker.icon.popupAnchor))	  ? category.marker.icon.popupAnchor.map(Number)   : geodata.markers.config.default.options.popupAnchor,
 				    tooltipAnchor: 	 (category.marker.icon.tooltipAnchor !== undefined && Array.isArray(category.marker.icon.tooltipAnchor))  ? category.marker.icon.tooltipAnchor.map(Number) : geodata.markers.config.default.options.tooltipAnchor,
 				});
-				// console.log(geodata.markers.config[category.alias]);
+				// geodata.utils.log(geodata.markers.config[category.alias]);
 	    	}
 	    }
 	}
@@ -128,7 +128,7 @@ geodata.functions.initMap = function(){return new Promise(function(resolve,rejec
 
 
 geodata.functions.addMarkers = function(locations = [],doUpdateLayers=true,doFitBounds=false){return new Promise(function(resolve,reject){
-	console.log('leaflet addMarkers start');
+	geodata.utils.log('leaflet addMarkers start');
 	var arrPromises = [];
 	for(var location of locations){
 		// setup marker parameters
@@ -190,7 +190,7 @@ geodata.functions.addMarker = function(latLng, options={'icon':geodata.markers.c
 				geodata.functions.selectMapItem(this.locationID);
 			});
 			// setup for filters
-				// console.log(geodata.filters);
+				// geodata.utils.log(geodata.filters);
 			for(var f in geodata.filters) {
 				marker['filter_'+f] = '';
 				markerInList['filter_'+f] = '';
@@ -201,7 +201,7 @@ geodata.functions.addMarker = function(latLng, options={'icon':geodata.markers.c
 						case 'category': 
 							if (Array.isArray(location[f])) {
 								for (var category of location[f]){
-									// console.log(normalize(category.title));
+									// geodata.utils.log(normalize(category.title));
 									// marker['filter_'+f] += geodata.utils.normalize(category.title);
 									// markerInList['filter_'+f] += geodata.utils.normalize(category.title);
 								}

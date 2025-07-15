@@ -26,6 +26,7 @@ geodata.functions         = {};
 geodata.callbacks         = {};
 geodata.ajax              = {};
 geodata.utils             = {};
+geodata.debug             = false;
 
 
 const delay_check = 100;
@@ -33,7 +34,7 @@ var mapModuleID;
 var rt;
 
 window.addEventListener("load", function(e) {
-    console.log(geodata);
+    geodata.utils.log(geodata);
     geodata.functions.init().then(r=>{
     	if ($list) $list.addClass('active');
     	if ($filters) $filters.addClass('active');
@@ -53,13 +54,13 @@ geodata.functions.init = function(){
 
 	    // MAP
 	    geodata.functions.initMap().then((r)=>{
-	    	console.log(r);
+	    	geodata.utils.log(r);
 	    	geodata.loaded.map = true;
 	    })
 
 	    // LIST
 	    let loop_list = setInterval(function(){
-	    	// console.log('checkin list loading');
+	    	// geodata.utils.log('checkin list loading');
 	    	if (geodata.loaded.list === true) {
 				clearInterval(loop_list);
 		    	$list           = $('.map__list');
@@ -76,26 +77,26 @@ geodata.functions.init = function(){
 			    		geodata.functions.selectMapItem($(this).data('id'));
 			    	});
 			    }
-				console.log('list init done');
+				geodata.utils.log('list init done');
 			}
 	    },delay_check);
 
 	    // MARKERS
 	    let loop_markers = setInterval(function(){
-	    	// console.log('checkin markers loaded');
+	    	// geodata.utils.log('checkin markers loaded');
 	    	if (geodata.loaded.markers === true) {
 	    		clearInterval(loop_markers);
-	    		console.log('markers init done');
+	    		geodata.utils.log('markers init done');
 	    	} else if (geodata.loaded.map === true && geodata.loaded.filters === true && geodata.loaded.markers === false && geodata.loaded.list === false){
 		    	if (geodata.blnLoadInAjax) {
 		    		geodata.loaded.list = 'pending';
 		    		geodata.loaded.markers = 'pending';
 		    		geodata.functions.getLocations().then((r)=>{
-		    			console.log(r);
+		    			geodata.utils.log(r);
 		    			geodata.loaded.list = true;
 		    			geodata.loaded.markers = true;
 		    		}).catch((r)=>{
-		    			console.log(r);
+		    			geodata.utils.log(r);
 		    			geodata.loaded.list = 'failed';
 		    			geodata.loaded.markers = 'failed';
 		    		});
@@ -111,14 +112,14 @@ geodata.functions.init = function(){
 
 	    // FILTERS
 	    let loop_filters = setInterval(function(){
-	    	// console.log('checkin filters loading');
+	    	// geodata.utils.log('checkin filters loading');
 	    	if (geodata.loaded.filters === true) {
 				clearInterval(loop_filters);
 	    	} else if(geodata.loaded.map && geodata.loaded.filters === false){
 	    		geodata.loaded.filters = 'pending';
 	    		geodata.functions.getFilters().then((r)=>{
-	    			console.log('success');
-	    			console.log(r);
+	    			geodata.utils.log('success');
+	    			geodata.utils.log(r);
 	    			$filters        = $('.map__filters');
 	    			$filtersToggler = $('.map__filters__toggler');
 				    if ($filters.length) {
@@ -143,10 +144,10 @@ geodata.functions.init = function(){
 				    	});
 				    }
 	    			
-	    			console.log('filters init done');
+	    			geodata.utils.log('filters init done');
 	    			geodata.loaded.filters = true;
 	    		}).catch((r)=>{
-	    			console.log(r);
+	    			geodata.utils.log(r);
 	    			geodata.loaded.filters = 'failed';
 	    		});
 	    	} else if (geodata.loaded.filters == 'failed'){
@@ -156,15 +157,15 @@ geodata.functions.init = function(){
 
 	    // MODULE
 	    let loop_module = setInterval(function(){
-	    	console.log('checkin module loaded',Object.values(geodata.loaded).every((e)=>{return e !== false && e != 'pending'}));
-	    	console.table(geodata.loaded);
+	    	geodata.utils.log('checkin module loaded',Object.values(geodata.loaded).every((e)=>{return e !== false && e != 'pending'}));
+	    	geodata.utils.logtable(geodata.loaded);
 	    	if (Object.values(geodata.loaded).every((e)=>{return e !== false && e != 'pending'})) {
 	    		clearInterval(loop_module);
 	    		if ($filters) 
 	    			geodata.functions.applyFilters()
 	    		else
 	    			geodata.functions.fitBounds()
-	    		console.log('module init done');
+	    		geodata.utils.log('module init done');
     			resolve()
 	    	}
 	    },delay_check); 
@@ -172,37 +173,37 @@ geodata.functions.init = function(){
 };
 geodata.functions.initMap = function(){
 	return new Promise(function(resolve,reject){
-		console.log('Please override this function (initMap) in map\'s provider own js file.');
+		geodata.utils.log('Please override this function (initMap) in map\'s provider own js file.');
 		resolve();
 	});
 };
 geodata.functions.addMarkers = function(locations=[],doUpdateLayers=false,doFitBounds=false){
 	return new Promise(function(resolve,reject){
-		console.log('Please override this function (addMarkers) in map\'s provider own js file.');
+		geodata.utils.log('Please override this function (addMarkers) in map\'s provider own js file.');
 		resolve();
 	});
 };
 geodata.functions.addMarker = function(){
 	return new Promise(function(resolve,reject){
-		console.log('Please override this function (addMarker) in map\'s provider own js file.');
+		geodata.utils.log('Please override this function (addMarker) in map\'s provider own js file.');
 		resolve();
 	});
 };
 geodata.functions.fitBounds = function(){
 	return new Promise(function(resolve,reject){
-		console.log('Please override this function (fitBounds) in map\'s provider own js file.');
+		geodata.utils.log('Please override this function (fitBounds) in map\'s provider own js file.');
 		resolve();
 	});
 };
 geodata.functions.updateLayers = function(){
 	return new Promise(function(resolve,reject){
-		console.log('Please override this function (updateLayers) in map\'s provider own js file.');
+		geodata.utils.log('Please override this function (updateLayers) in map\'s provider own js file.');
 		resolve();
 	});
 };
 geodata.functions.getFilters = function(){
 	return new Promise(function(resolve,reject){
-	    console.log('functions.getFilters start');
+	    geodata.utils.log('functions.getFilters start');
 	    geodata.ajax.getFilters().then((r)=>{
 	    	if(r.html.length > 0){
 	    		$('.map__filters__container').html(r.html);
@@ -215,12 +216,12 @@ geodata.functions.getFilters = function(){
 }
 geodata.functions.getLocations = function(){
 	return new Promise(function(resolve,reject){
-	    console.log('functions.getLocations start');
+	    geodata.utils.log('functions.getLocations start');
 	    let arrPromises = [];
 	    let offset = 0;
 	    while(offset < geodata.nbItems){
 		    arrPromises.push(geodata.ajax.getLocations(offset,geodata.nbItemsPerRequest).then((r)=>{
-		    	// console.log(r);
+		    	// geodata.utils.log(r);
 		    	// append list item
 				if(r.html.length > 0){
 					for(var item of r.html)
@@ -273,16 +274,16 @@ geodata.functions.selectMapItem = function(itemID){
 	}
 };
 geodata.functions.applyFilters = function(){
-	console.log('geodata.functions.applyFilters');
+	geodata.utils.log('geodata.functions.applyFilters');
 	$filters.find('[id^=filter_]').each(function(){
 		geodata.filters[this.name] = this.value;
 	});
 	if (geodata.filters['country'] !== undefined && geodata.filters['country'] == '')
 		geodata.filters['city'] = '';
-	console.log(geodata.filters);
+	geodata.utils.log(geodata.filters);
 	geodata.markers.current = geodata.markers.all.filter( item => {
 		var match = true;
-		// console.log(item);
+		// geodata.utils.log(item);
 		for(var f in geodata.filters){
 			if (f == "search" || f == "category") {
 				if (geodata.filters[f] !== '' && item['filter_'+f].search(new RegExp(geodata.filters[f],'i')) == -1)
@@ -300,8 +301,8 @@ geodata.functions.applyFilters = function(){
 		}
 		return match;
 	});
-	// console.log("==========");
-	// console.log(geodata.markersInList.all);
+	// geodata.utils.log("==========");
+	// geodata.utils.log(geodata.markersInList.all);
 	geodata.markersInList.current = geodata.markersInList.all.filter( item => {
 		var match = true;
 		for(var f in geodata.filters){
@@ -325,7 +326,7 @@ geodata.functions.applyFilters = function(){
 		}
 		return match;
 	});
-	// console.log(geodata.markersInList.current);
+	// geodata.utils.log(geodata.markersInList.current);
 
 	geodata.markersInList.all.forEach(item=>{
 		var item1 = $('.location[data-id="'+item.id+'"]');
@@ -347,7 +348,7 @@ geodata.functions.applyFilters = function(){
 		// geodata.loaded.filters = false;
 		// geodata.functions.check_filters();
 		geodata.ajax.getFilters(geodata.filters.country!='' ? geodata.filters.country:false).then((r)=>{
-			console.log(r);
+			geodata.utils.log(r);
 			if(r.status == 'success' && r.html){
 				let $html = $(r.html);
 				if ($html.hasClass('map__panel')) {
@@ -364,13 +365,13 @@ geodata.functions.applyFilters = function(){
 
 geodata.callbacks.applyFilters = function(){
 	return new Promise(function(resolve,reject){
-		console.log('Please override this function (applyFilters) in map\'s provider own js file.');
+		geodata.utils.log('Please override this function (applyFilters) in map\'s provider own js file.');
 		resolve()
 	});
 }
 
 geodata.ajax.getFilters = function(){
-	console.log('ajax.getFilters start');
+	geodata.utils.log('ajax.getFilters start');
 	return new Promise(function(resolve,reject){
 		var request = new FormData();
 
@@ -389,7 +390,7 @@ geodata.ajax.getFilters = function(){
 		})
     	.then((response) => response.json())
 		.then((json) => {
-			console.log('ajax.getFilters done');
+			geodata.utils.log('ajax.getFilters done');
 			if (json) 
 		  		resolve(json);
 		  	else
@@ -401,7 +402,7 @@ geodata.ajax.getFilters = function(){
 	});
 };
 geodata.ajax.getLocations = function(offset = 0, limit = 0){
-	console.log('ajax.getLocations start');
+	geodata.utils.log('ajax.getLocations start');
 	return new Promise(function(resolve,reject){
     	var request = new FormData();
 
@@ -420,7 +421,7 @@ geodata.ajax.getLocations = function(offset = 0, limit = 0){
     	})
     	.then((response) => response.json())
     	.then((json) => {
-			console.log('ajax.getLocations done',json);
+			geodata.utils.log('ajax.getLocations done',json);
 	  		if (json) 
 	  	  		resolve(json);
 	  	  	else
@@ -458,3 +459,11 @@ geodata.ajax.getLocationsList = function(){
 };
 
 geodata.utils.normalize = function(str = ''){return str.toLowerCase().replace(/ |\.|\'/g,'_'); }
+geodata.utils.log = function(log = ''){
+	if (geodata.debug === true)
+		console.log(log);
+}
+geodata.utils.logtable = function(log = []){
+	if (geodata.debug === true)
+		console.table(log);
+}
