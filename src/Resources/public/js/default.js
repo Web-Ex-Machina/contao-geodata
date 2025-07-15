@@ -351,8 +351,8 @@ geodata.functions.applyFilters = function(){
 			if(r.status == 'success' && r.html){
 				let $html = $(r.html);
 				if ($html.hasClass('map__panel')) {
-					$html = $html.find('.map__filters__wrapper');
-					$filters.find('.map__filters__wrapper').replaceWith($html);
+					$html = $html.find('.map__filter');
+					$filters.find('.map__filters__wrapper').html($html);
 				} else {
 					$filters.replaceWith($html);
 				}
