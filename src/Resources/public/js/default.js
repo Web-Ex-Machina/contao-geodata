@@ -85,9 +85,8 @@ geodata.functions.init = function(){
 	    	// console.log('checkin markers loaded');
 	    	if (geodata.loaded.markers === true) {
 	    		clearInterval(loop_markers);
-
 	    		console.log('markers init done');
-	    	} else if (geodata.loaded.map && geodata.loaded.filters && geodata.loaded.markers === false && geodata.loaded.list === false){
+	    	} else if (geodata.loaded.map === true && geodata.loaded.filters === true && geodata.loaded.markers === false && geodata.loaded.list === false){
 		    	if (geodata.blnLoadInAjax) {
 		    		geodata.loaded.list = 'pending';
 		    		geodata.loaded.markers = 'pending';
