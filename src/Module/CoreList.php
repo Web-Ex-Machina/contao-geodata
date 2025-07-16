@@ -183,12 +183,11 @@ abstract class CoreList extends Core
                         }
                     }
                 }
-
                 // If we have only one option, activate it (may activate other filters conditions)
                 if (1 === count($this->filters[$filterField]['options'])) {
-                    $opt = $this->filters[$filterField]['options'][array_key_first($this->arrConfig[$filterField]['options'])];
+                    $opt = $this->filters[$filterField]['options'][array_key_first($this->filters[$filterField]['options'])];
                     $this->arrConfig[$filterField] = $opt['value'];
-                    $this->filters[$filterField]['options'][array_key_first($this->arrConfig[$filterField]['options'])]['selected'] = 'selected';
+                    $this->filters[$filterField]['options'][array_key_first($this->filters[$filterField]['options'])]['selected'] = 'selected';
                 }
                 
                 // Sort options
