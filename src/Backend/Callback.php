@@ -256,6 +256,11 @@ class Callback extends Backend
                                     }
 
                                     break;
+                                case 'picture':
+                                    if(!empty($strValue)){
+                                        $arrLocation['picture'] = hex2bin($strValue);
+                                    }
+                                break;
                                 default:
                                     if ($strValue === null) {
                                         break;
@@ -291,7 +296,7 @@ class Callback extends Backend
                     try {
                         $blnCreated = false;
                         $blnUpdated = false;
-                        $arrLocation['alias'] = StringUtil::generateAlias(
+                        $arrLocation['alias'] = $arrLocation['alias'] ?? StringUtil::generateAlias(
                             $arrLocation['title'] . '-' . $arrLocation['city'] . '-' . $arrLocation['country'] . '-' . ($k + 1)
                         );
 
@@ -349,10 +354,12 @@ class Callback extends Backend
                     $objLocations = MapItem::findItems(['pid' => $objMap->id,
                         'published' => 1]);
 
-                    while ($objLocations->next()) {
-                        if (! \in_array($objLocations->id, $arrNewLocations, true)) {
-                            $objLocations->delete();
-                            ++$intDeleted;
+                    if ($objLocations instanceof Collection) {
+                        while ($objLocations->next()) {
+                            if (! \in_array($objLocations->id, $arrNewLocations, true)) {
+                                $objLocations->delete();
+                                ++$intDeleted;
+                            }
                         }
                     }
                 }
@@ -672,6 +679,9 @@ class Callback extends Backend
                         break;
                     case 'region':
                         $arrRow[$strExcelColumn] = $objLocations->admin_lvl_1;
+                        break;
+                    case 'picture':
+                        $arrRow[$strExcelColumn] = null !== $objLocations->picture ? bin2hex($objLocations->picture) : '';
                         break;
                     default:
                         $arrRow[$strExcelColumn] = $objLocations->{$strDbColumn};
