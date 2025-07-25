@@ -36,8 +36,8 @@ var rt;
 window.addEventListener("load", function(e) {
     geodata.utils.log(geodata);
     geodata.functions.init().then(r=>{
-    	if ($list) $list.addClass('active');
-    	if ($filters) $filters.addClass('active');
+    	// if ($list) $list.addClass('active');
+    	// if ($filters) $filters.addClass('active');
     });
 });
 
