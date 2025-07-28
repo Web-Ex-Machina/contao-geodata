@@ -1,7 +1,7 @@
 <div id="tl_buttons">
     <a href="<?php echo $this->backButtonHref; ?>" class="header_back" title="'<?php echo $this->backButtonTitle; ?>" accesskey="b"><?php echo $this->backButtonLabel; ?></a>
 </div>
-    <?php echo Message::generate(); ?>
+    <?php echo Contao\Message::generate(); ?>
 <form action="<?php echo $this->formAction; ?>" id="tl_wem_items_import" class="tl_form" method="post" enctype="multipart/form-data">
     <div class="tl_formbody_edit">
         <input type="hidden" name="FORM_SUBMIT" value="tl_wem_items_import">

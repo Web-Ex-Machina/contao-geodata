@@ -2,22 +2,28 @@
 
 declare(strict_types=1);
 
-/**
- * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2024 Web ex Machina
+/*
+ * Geodata Bundle for Contao Open Source CMS
+ * @author     Web Ex Machina
  *
- * @category ContaoBundle
- * @package  Web-Ex-Machina/contao-geodata
- * @author   Web ex Machina <contact@webexmachina.fr>
- * @link     https://github.com/Web-Ex-Machina/contao-geodata/
+ * @see        https://github.com/Web-Ex-Machina/contao-geodata
+ * @license    https://www.apache.org/licenses/LICENSE-2.0
  */
 
 use Contao\ArrayUtil;
+use WEM\GeoDataBundle\Backend\Callback;
 use WEM\GeoDataBundle\Classes\Util;
-use WEM\GeoDataBundle\Model;
+use WEM\GeoDataBundle\Model\Category;
+use WEM\GeoDataBundle\Model\Map;
+use WEM\GeoDataBundle\Model\MapItem;
+use WEM\GeoDataBundle\Model\MapItemAttributeValue;
+use WEM\GeoDataBundle\Model\MapItemCategory;
+use WEM\GeoDataBundle\Module\DisplayMap;
+use WEM\GeoDataBundle\Module\LocationsList;
+use WEM\GeoDataBundle\Module\LocationsReader;
 
-if (!\defined('WEM_GEODATA_COMBINER_VERSION')) {
-    \define('WEM_GEODATA_COMBINER_VERSION', Util::getCustomPackageVersion('webexmachina/contao-geodata'));
+if (! defined('WEM_GEODATA_COMBINER_VERSION')) {
+    define('WEM_GEODATA_COMBINER_VERSION', Util::getCustomPackageVersion('webexmachina/contao-geodata'));
 }
 
 /*
@@ -29,13 +35,20 @@ ArrayUtil::arrayInsert(
     [
         'wem-geodata' => [
             'wem-maps' => [
-                'tables' => ['tl_wem_map', 'tl_wem_map_category', 'tl_wem_map_item', 'tl_wem_map_item_category', 'tl_content', 'tl_wem_map_item_attribute_value'],
-                'import' => ['WEM\GeoDataBundle\Backend\Callback', 'importLocations'],
-                'download_import_sample' => ['WEM\GeoDataBundle\Backend\Callback', 'downloadImportSample'],
-                'export_form' => ['WEM\GeoDataBundle\Backend\Callback', 'exportLocationsForm'],
-                'export' => ['WEM\GeoDataBundle\Backend\Callback', 'exportLocations'],
-                'geocode' => ['WEM\GeoDataBundle\Backend\Callback', 'geocode'],
-                'copy_map_item' => ['WEM\GeoDataBundle\Backend\Callback', 'copyMapItem'],
+                'tables' => [
+                    'tl_wem_map',
+                    'tl_wem_map_category',
+                    'tl_wem_map_item',
+                    'tl_wem_map_item_category',
+                    'tl_content',
+                    'tl_wem_map_item_attribute_value',
+                ],
+                'import' => [Callback::class, 'importLocations'],
+                'download_import_sample' => [Callback::class, 'downloadImportSample'],
+                'export_form' => [Callback::class, 'exportLocationsForm'],
+                'export' => [Callback::class, 'exportLocations'],
+                'geocode' => [Callback::class, 'geocode'],
+                'copy_map_item' => [Callback::class, 'copyMapItem'],
                 'icon' => 'system/bundles/wemgeodata/backend/icon_map_16_c3.png',
             ],
         ],
@@ -43,15 +56,9 @@ ArrayUtil::arrayInsert(
 );
 
 /*
- * Load icon in Contao 4.2 backend
+ * Load backend css
  */
-// if ('BE' === TL_MODE) {
-//     if (version_compare(VERSION, '4.4', '<')) {
-//         $GLOBALS['TL_CSS'][] = 'bundles/wemgeodata/backend/backend.css';
-//     } else {
 $GLOBALS['TL_CSS'][] = 'bundles/wemgeodata/backend/backend_svg.css';
-//     }
-// }
 
 /*
  * Frontend modules
@@ -61,9 +68,9 @@ ArrayUtil::arrayInsert(
     2,
     [
         'wem_geodata' => [
-            'wem_display_map' => 'WEM\GeoDataBundle\Module\DisplayMap',
-            'wem_geodata_list' => 'WEM\GeoDataBundle\Module\LocationsList',
-            'wem_geodata_reader' => 'WEM\GeoDataBundle\Module\LocationsReader',
+            'wem_display_map' => DisplayMap::class,
+            'wem_geodata_list' => LocationsList::class,
+            'wem_geodata_reader' => LocationsReader::class,
         ],
     ]
 );
@@ -71,16 +78,19 @@ ArrayUtil::arrayInsert(
 /*
  * Models
  */
-$GLOBALS['TL_MODELS'][Model\Map::getTable()] = 'WEM\GeoDataBundle\Model\Map';
-$GLOBALS['TL_MODELS'][Model\MapItem::getTable()] = 'WEM\GeoDataBundle\Model\MapItem';
-$GLOBALS['TL_MODELS'][Model\MapItemCategory::getTable()] = 'WEM\GeoDataBundle\Model\MapItemCategory';
-$GLOBALS['TL_MODELS'][Model\MapItemAttributeValue::getTable()] = 'WEM\GeoDataBundle\Model\MapItemAttributeValue';
-$GLOBALS['TL_MODELS'][Model\Category::getTable()] = 'WEM\GeoDataBundle\Model\Category';
+$GLOBALS['TL_MODELS'][Map::getTable()] = Map::class;
+$GLOBALS['TL_MODELS'][MapItem::getTable()] = MapItem::class;
+$GLOBALS['TL_MODELS'][MapItemCategory::getTable()] = MapItemCategory::class;
+$GLOBALS['TL_MODELS'][MapItemAttributeValue::getTable()] = MapItemAttributeValue::class;
+$GLOBALS['TL_MODELS'][Category::getTable()] = Category::class;
 
 /*
  * Hooks
  */
-$GLOBALS['TL_HOOKS']['replaceInsertTags'][] = ['wem.geodata.listener.replace_insert_tags_listener', '__invoke'];
+$GLOBALS['TL_HOOKS']['replaceInsertTags'][] = [
+    'wem.geodata.listener.replace_insert_tags_listener',
+    '__invoke',
+];
 $GLOBALS['TL_HOOKS']['generateBreadcrumb'][] = ['wem.geodata.listener.generate_breadcrumb_listener', '__invoke'];
 
 // File Usage bundle

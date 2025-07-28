@@ -2,14 +2,12 @@
 
 declare(strict_types=1);
 
-/**
- * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2024 Web ex Machina
+/*
+ * Geodata Bundle for Contao Open Source CMS
+ * @author     Web Ex Machina
  *
- * @category ContaoBundle
- * @package  Web-Ex-Machina/contao-geodata
- * @author   Web ex Machina <contact@webexmachina.fr>
- * @link     https://github.com/Web-Ex-Machina/contao-geodata/
+ * @see        https://github.com/Web-Ex-Machina/contao-geodata
+ * @license    https://www.apache.org/licenses/LICENSE-2.0
  */
 
 namespace WEM\GeoDataBundle\EventListener;
@@ -17,6 +15,7 @@ namespace WEM\GeoDataBundle\EventListener;
 use Contao\Database;
 use Contao\File;
 use Contao\Message;
+use Contao\Model\Collection;
 use Contao\StringUtil;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use WEM\GeoDataBundle\Model\Map;
@@ -33,15 +32,17 @@ class ImportLocationsListener
      *
      * @param array $arrUploaded an array of file paths to be imported
      * @param Map   $objMap      the map object to update
-     *
-     * @throws \Exception
      */
-    public function importPostalCodes(array $arrUploaded, Map $objMap): void
-    {
+    public function importPostalCodes(
+        array $arrUploaded,
+        Map $objMap
+    ): void {
         foreach ($arrUploaded as $strFile) {
             $objFile = new File($strFile, true);
-            $spreadsheet = IOFactory::load(TL_ROOT.'/'.$objFile->path);
-            $sheetData = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
+            $spreadsheet = IOFactory::load(TL_ROOT . '/' . $objFile->path);
+            $sheetData = $spreadsheet->getActiveSheet()
+                ->toArray(null, true, true, true)
+            ;
 
             $intCreated = 0;
             $intUpdated = 0;
@@ -52,15 +53,16 @@ class ImportLocationsListener
 
             foreach ($sheetData as $arrRow) {
                 // Skip first row
-                if ('XCP_0' === $arrRow['A']) {
+                if ($arrRow['A'] === 'XCP_0') {
                     continue;
                 }
 
                 // Find parent
-                $objLocation = MapItem::findItems(['pid' => $objMap->id, 'title' => $arrRow['F']], 1);
+                $objLocation = MapItem::findItems(['pid' => $objMap->id,
+                    'title' => $arrRow['F']], 1);
 
                 // Create if don't exists
-                if (!$objLocation) {
+                if (! $objLocation instanceof Collection) {
                     $objLocation = new MapItem();
                     $objLocation->createdAt = time();
                     $objLocation->pid = $objMap->id;
@@ -79,11 +81,11 @@ class ImportLocationsListener
                 // Extract admin_lvl_2 (2 first chars) and add it to perso sheet
                 $strDep = substr($arrRow['A'], 0, 2);
 
-                if ($strDep && '' !== $strDep) {
+                if ($strDep && $strDep !== '') {
                     if (\in_array($objLocation->id, $arrDepCache, true)) {
                         $arrLocationDeps = $arrDepCache[$objLocation->id];
                     } else {
-                        if (' / ' === substr($objLocation->admin_lvl_2, 0, 3)) {
+                        if (substr($objLocation->admin_lvl_2, 0, 3) === ' / ') {
                             $objLocation->admin_lvl_2 = substr($objLocation->admin_lvl_2, 3);
                         }
 
@@ -91,7 +93,7 @@ class ImportLocationsListener
                         sort($arrLocationDeps);
                     }
 
-                    if (!\in_array($strDep, $arrLocationDeps, true)) {
+                    if (! \in_array($strDep, $arrLocationDeps, true)) {
                         $arrLocationDeps[] = $strDep;
                         sort($arrLocationDeps);
                         $arrDepCache[$objLocation->id] = $arrLocationDeps;
@@ -104,10 +106,16 @@ class ImportLocationsListener
                 $arrNewLocations[] = $objLocation->id;
 
                 // Find attribute (postal code here)
-                $objLocationAttributeValue = MapItemAttributeValue::findItems(['pid' => $objLocation->id, 'attribute' => 'postal', 'value' => $arrRow['A']], 1);
+                $objLocationAttributeValue = MapItemAttributeValue::findItems(
+                    [
+                        'pid' => $objLocation->id,
+                        'attribute' => 'postal',
+                        'value' => $arrRow['A']],
+                    1
+                );
 
                 // Create if don't exists
-                if (!$objLocationAttributeValue) {
+                if (! $objLocationAttributeValue instanceof \WEM\GeoDataBundle\Model\Collection) {
                     $objLocationAttributeValue = new MapItemAttributeValue();
                     $objLocationAttributeValue->createdAt = time();
                     $objLocationAttributeValue->pid = $objLocation->id;
@@ -121,17 +129,24 @@ class ImportLocationsListener
             }
 
             $objLocations = MapItem::findItems(['pid' => $objMap->id]);
+
             while ($objLocations->next()) {
-                if (!\in_array($objLocations->id, $arrNewLocations, true)) {
+                if (! \in_array($objLocations->id, $arrNewLocations, true)) {
                     $objLocations->delete();
                     ++$intDeleted;
                 }
             }
 
-            $strSql = \sprintf('DELETE FROM tl_wem_map_item_attribute_value WHERE pid IN (%s) AND attribute = "postal" AND id NOT IN(%s)', implode(',', $arrNewLocations), implode(',', $arrNewLocationAttributes));
+            $strSql = \sprintf(
+                'DELETE FROM tl_wem_map_item_attribute_value WHERE pid IN (%s) AND attribute = "postal" AND id NOT IN(%s)',
+                implode(',', $arrNewLocations),
+                implode(',', $arrNewLocationAttributes)
+            );
             Database::getInstance()->prepare($strSql)->execute();
 
-            Message::addConfirmation(\sprintf($GLOBALS['TL_LANG']['tl_wem_map_item']['createdConfirmation'], $intCreated));
+            Message::addConfirmation(
+                \sprintf($GLOBALS['TL_LANG']['tl_wem_map_item']['createdConfirmation'], $intCreated)
+            );
             Message::addInfo(\sprintf($GLOBALS['TL_LANG']['tl_wem_map_item']['updatedConfirmation'], $intUpdated));
             Message::addInfo(\sprintf($GLOBALS['TL_LANG']['tl_wem_map_item']['deletedConfirmation'], $intDeleted));
         }

@@ -2,30 +2,27 @@
 
 declare(strict_types=1);
 
-/**
- * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2024 Web ex Machina
+/*
+ * Geodata Bundle for Contao Open Source CMS
+ * @author     Web Ex Machina
  *
- * @category ContaoBundle
- * @package  Web-Ex-Machina/contao-geodata
- * @author   Web ex Machina <contact@webexmachina.fr>
- * @link     https://github.com/Web-Ex-Machina/contao-geodata/
+ * @see        https://github.com/Web-Ex-Machina/contao-geodata
+ * @license    https://www.apache.org/licenses/LICENSE-2.0
  */
 
 namespace WEM\GeoDataBundle\Migration;
 
 use Contao\CoreBundle\Migration\AbstractMigration;
 use Contao\CoreBundle\Migration\MigrationResult;
+use Contao\Model\Collection;
 use Doctrine\DBAL\Connection;
+use Exception;
 use WEM\GeoDataBundle\Model\MapItem;
 use WEM\GeoDataBundle\Model\MapItemCategory;
 
 class M202307170826_MultiCategories extends AbstractMigration
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
     public function __construct(Connection $connection)
     {
@@ -37,13 +34,19 @@ class M202307170826_MultiCategories extends AbstractMigration
         $schemaManager = $this->connection->createSchemaManager();
 
         // If the database table itself does not exist we should do nothing
-        if (!$schemaManager->tablesExist(['tl_wem_map_item', 'tl_wem_map_item_category'])) {
+        if (
+
+            ! $schemaManager->tablesExist(
+                ['tl_wem_map_item', 'tl_wem_map_item_category']
+            )
+
+        ) {
             return false;
         }
 
         $columns = $schemaManager->listTableColumns('tl_wem_map_item');
 
-        if (!isset($columns['categories'])) {
+        if (! isset($columns['categories'])) {
             return false;
         }
 
@@ -54,7 +57,7 @@ class M202307170826_MultiCategories extends AbstractMigration
     {
         $mapItems = $this->getItems();
         $i = 0;
-        if ($mapItems) {
+        if ($mapItems instanceof Collection) {
             while ($mapItems->next()) {
                 $objMapItem = $mapItems->current();
                 $objMapItem->categories = serialize([$objMapItem->category]);
@@ -72,19 +75,26 @@ class M202307170826_MultiCategories extends AbstractMigration
 
         return $this->createResult(
             true,
-            $i.' location(s) updated.'
+            $i . ' location(s) updated.'
         );
     }
 
-    private function getItems()
+    private function getItems(): ?Collection
     {
         try {
             return MapItem::findItems([
                 'where' => [
-                    \sprintf('LENGTH(%s.category) > 0 AND %s.category != 0 AND %s.id NOT IN (SELECT DISTINCT %s.pid FROM %s)', MapItem::getTable(), MapItem::getTable(), MapItem::getTable(), MapItemCategory::getTable(), MapItemCategory::getTable()),
+                    \sprintf(
+                        'LENGTH(%s.category) > 0 AND %s.category != 0 AND %s.id NOT IN (SELECT DISTINCT %s.pid FROM %s)',
+                        MapItem::getTable(),
+                        MapItem::getTable(),
+                        MapItem::getTable(),
+                        MapItemCategory::getTable(),
+                        MapItemCategory::getTable()
+                    ),
                 ],
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $exception) {
             return null;
         }
     }
@@ -92,7 +102,7 @@ class M202307170826_MultiCategories extends AbstractMigration
     private function countItems()
     {
         $items = $this->getItems();
-        if (!$items) {
+        if (! $items instanceof Collection) {
             return 0;
         }
 

@@ -8,31 +8,31 @@
   data-admin_lvl_2    ="<?php echo str_replace([' ','.'],'_', mb_strtolower($this->location['admin_lvl_2'], 'UTF-8'));?>" 
  >
   <span class="map__list__item__title "><?= $this->location['title'] ?></span>
-  <?php if ($this->location['category']['title']): ?>
+  <?php if (array_key_exists('category', $this->location) && array_key_exists('title', $this->location['category'])): ?>
     <p class="map__list__item__categoryTitle"><?php echo mb_strtoupper($this->location['category']['title']); ?></p>
   <?php elseif (is_array($this->location['category'])): ?>
     <p class="map__list__item__categoryTitle"><?php echo mb_strtoupper(implode(', ',array_map(function($c){return $c['title'];},$this->location['category'])), 'UTF-8');?></p>
   <?php endif ?>
   <div class="map__list__item__text">
-    <?php if($this->location['address']): ?>
+    <?php if (array_key_exists('address', $this->location)): ?>
       <div class="map__list__item__line" itemprop="location" itemscope itemtype="http://schema.org/Place">
         <i class="fa fa-map-marker-alt"></i><span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress"><?= $this->location['address'] ?></span>
       </div>
     <?php endif; ?>
-    <?php if($this->location['phone']): ?>
+    <?php if (array_key_exists('phone', $this->location)): ?>
       <div class="map__list__item__line"><i class="fa fa-phone"></i><?= $this->location['phone'] ?></div>
     <?php endif; ?>
-    <?php if($this->location['email']): ?>
+    <?php if (array_key_exists('email', $this->location)): ?>
       <div class="map__list__item__line"><i class="fa fa-envelope"></i><?= $this->location['email'] ?></div>
     <?php endif; ?>
   </div>
-  <?php if ($this->location['teaser']): ?>
+  <?php if (array_key_exists('teaser', $this->location)): ?>
     <div class="map__list__item__text">
       <?= $this->location['teaser'] ?>
     </div>
   <?php endif ?>
   
-  <?php if($this->location['url']): ?>
+  <?php if (array_key_exists('url', $this->location)): ?>
     <div class="map__list__item__link">
       <a href="<?= $this->location['url'] ?>" title="<?= $this->location['title'] ?>: <?= $GLOBALS['TL_LANG']['WEM']['LOCATIONS']['BUTTON']['READMORE'] ?>"></a>
     </div>

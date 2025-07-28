@@ -2,14 +2,12 @@
 
 declare(strict_types=1);
 
-/**
- * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2024 Web ex Machina
+/*
+ * Geodata Bundle for Contao Open Source CMS
+ * @author     Web Ex Machina
  *
- * @category ContaoBundle
- * @package  Web-Ex-Machina/contao-geodata
- * @author   Web ex Machina <contact@webexmachina.fr>
- * @link     https://github.com/Web-Ex-Machina/contao-geodata/
+ * @see        https://github.com/Web-Ex-Machina/contao-geodata
+ * @license    https://www.apache.org/licenses/LICENSE-2.0
  */
 
 namespace WEM\GeoDataBundle\Module;
@@ -19,6 +17,7 @@ use Contao\ContentModel;
 use Contao\Environment;
 use Contao\FilesModel;
 use Contao\Input;
+use Contao\Model\Collection;
 use Contao\Module;
 use Contao\PageModel;
 use Contao\Pagination;
@@ -33,8 +32,6 @@ use WEM\GeoDataBundle\Model\MapItemCategory;
 
 /**
  * Parent class for locations modules.
- *
- * @author Web ex Machina <https://www.webexmachina.fr>
  */
 abstract class Core extends Module
 {
@@ -44,11 +41,15 @@ abstract class Core extends Module
             $arrItem = $varItem->row();
         } elseif (\is_array($varItem)) {
             $arrItem = $varItem;
-        } elseif ($objItem = Category::findByPk($varItem)) {
+        } elseif ($objItem = Category::findById($varItem)) {
             $arrItem = $objItem->row();
         } else {
-            throw new \Exception(\sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noCategoryFound'], $varItem));
+            throw new Exception(\sprintf(
+                $GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noCategoryFound'],
+                $varItem
+            ));
         }
+
         // Get marker file
         if ($arrItem['marker'] && $objFile = FilesModel::findByUuid($arrItem['marker'])) {
             // Get size of the picture
@@ -57,18 +58,42 @@ abstract class Core extends Module
             $arrItem['marker']['icon']['iconUrl'] = $objFile->path;
             $arrItem['marker']['icon']['iconSize'] = [$sizes[0], $sizes[1]];
 
-            // Get the entire config
-            // https://leafletjs.com/reference-1.4.0.html#marker
-            // https://leafletjs.com/reference-1.4.0.html#icon
-            $data = unserialize($arrItem['markerConfig']);
-            if (\is_array($data) && [] !== $data) {
-                foreach ($data as $v) {
+            // Get the map config
+            $objMap = Map::findById($arrItem['pid']);
+            if (!$objMap) {
+                throw new Exception('nothing to do here');
+            }
+
+            $mapConfig = unserialize($objMap->mapConfig);
+            if (\is_array($mapConfig) && $mapConfig !== []) {
+                foreach ($mapConfig as $v) {
+                    // Skip configs not prefix by icon_
+                    if (false === strpos($v['key'], 'icon_')) {
+                        continue;
+                    }
+
                     // Convert "values" who contains "," char into array values
-                    if (-1 < strpos($v['value'], ',')) {
+                    if (strpos($v['value'], ',') > -1) {
                         $v['value'] = explode(',', $v['value']);
                     }
 
-                    if (-1 < strpos($v['key'], '_')) {
+                    $v['key'] = explode('_', $v['key']);
+                    $arrItem['marker']['icon'][$v['key'][1]] = $v['value'];
+                }
+            }
+
+            // Get the marker config
+            // https://leafletjs.com/reference-1.4.0.html#marker
+            // https://leafletjs.com/reference-1.4.0.html#icon
+            $data = unserialize($arrItem['markerConfig']);
+            if (\is_array($data) && $data !== []) {
+                foreach ($data as $v) {
+                    // Convert "values" who contains "," char into array values
+                    if (strpos($v['value'], ',') > -1) {
+                        $v['value'] = explode(',', $v['value']);
+                    }
+
+                    if (strpos($v['key'], '_') > -1) {
                         $v['key'] = explode('_', $v['key']);
                         $arrItem['marker'][$v['key'][0]][$v['key'][1]] = $v['value'];
                     } else {
@@ -139,25 +164,38 @@ abstract class Core extends Module
         } elseif ($objItem = MapItem::findByIdOrAlias($varItem)) {
             $arrItem = $objItem->row();
         } else {
-            throw new \Exception(\sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noLocationFound'], $varItem));
+            throw new Exception(\sprintf(
+                $GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noLocationFound'],
+                $varItem
+            ));
         }
+
         // Format Address
-        $arrItem['address'] = $arrItem['street'].' '.$arrItem['postal'].' '.$arrItem['city'];
+        $arrItem['address'] = $arrItem['street'] . ' ' . $arrItem['postal'] . ' ' . $arrItem['city'];
         // Format website (we assume that every url is an external one)
-        if ($arrItem['website'] && 'http' !== substr($arrItem['website'], 0, 4)) {
-            $arrItem['website'] = 'http://'.$arrItem['website'];
+        if (
+
+            $arrItem['website'] && substr(
+                $arrItem['website'],
+                0,
+                4
+            ) !== 'http'
+
+        ) {
+            $arrItem['website'] = 'http://' . $arrItem['website'];
         }
-        // Get category
-        // if ($arrItem['category']) {
-        //     $arrItem['category'] = $this->getCategory($arrItem['category']);
-        // }
+
+        // Get category if ($arrItem['category']) {     $arrItem['category'] =
+
+        // $this->getCategory($arrItem['category']); }
         $arrItem['category'] = [];
         $mapItemCategories = MapItemCategory::findItems(['pid' => $arrItem['id']]);
-        if ($mapItemCategories) {
+        if ($mapItemCategories instanceof Collection) {
             while ($mapItemCategories->next()) {
                 $arrItem['category'][] = $this->getCategory($mapItemCategories->category);
             }
         }
+
         // Get location picture
         if ($objFile = FilesModel::findByUuid($arrItem['picture'])) {
             $arrItem['picture'] = [
@@ -168,15 +206,22 @@ abstract class Core extends Module
         } else {
             unset($arrItem['picture']);
         }
+
         // Get country and continent
-        Util::getCountries();
+        $arrCountries = Util::getCountries();
         $strCountry = strtoupper($arrItem['country']);
         $strContinent = Util::getCountryContinent($strCountry);
-        $arrItem['country'] = ['code' => $strCountry, 'name' => $GLOBALS['TL_LANG']['CNT'][$arrItem['country']]];
-        $arrItem['continent'] = ['code' => $strContinent, 'name' => null !== $strContinent ? $GLOBALS['TL_LANG']['CONTINENT'][$strContinent] : ''];
+        $arrItem['country'] = [
+            'code' => $strCountry,
+            'name' => $arrCountries[$arrItem['country']]
+        ];
+        $arrItem['continent'] = [
+            'code' => $strContinent,
+            'name' => $strContinent !== null ? $GLOBALS['TL_LANG']['CONTINENT'][$strContinent] : ''
+        ];
         $strContent = '';
         $objElement = ContentModel::findPublishedByPidAndTable($arrItem['id'], 'tl_wem_map_item');
-        if (null !== $objElement) {
+        if ($objElement !== null) {
             while ($objElement->next()) {
                 $strContent .= $this->getContentElement($objElement->current());
             }
@@ -186,7 +231,7 @@ abstract class Core extends Module
         // get attributes
         $arrItem['attributes'] = [];
         $attributes = MapItemAttributeValue::findItems(['pid' => $arrItem['id']]);
-        if ($attributes) {
+        if ($attributes instanceof \WEM\GeoDataBundle\Model\Collection) {
             while ($attributes->next()) {
                 $arrItem['attributes'][$attributes->attribute] = [
                     'attribute' => $attributes->attribute,
@@ -194,20 +239,29 @@ abstract class Core extends Module
                 ];
             }
         }
+
         // Build the item URL
-        $objMap = Map::findByPk($arrItem['pid']);
+        $objMap = Map::findById($arrItem['pid']);
         $objPage = null;
         if ($objMap && $objMap->jumpTo) {
-            $objPage = PageModel::findByPk($objMap->jumpTo);
+            $objPage = PageModel::findById($objMap->jumpTo);
         }
 
         if ($objPage instanceof PageModel) {
-            // if ($this->objJumpTo instanceof PageModel) {
-            $params = (Config::get('useAutoItem') ? '/' : '/items/').($arrItem['alias'] ?: $arrItem['id']);
-            $arrItem['url'] = StringUtil::ampersand($blnAbsolute ? $objPage->getAbsoluteUrl($params) : $objPage->getFrontendUrl($params));
+            $params = '/' . ($arrItem['alias'] ?: $arrItem['id']);
+            $arrItem['url'] = StringUtil::ampersand(
+                $blnAbsolute ? $objPage->getAbsoluteUrl($params) : $objPage->getFrontendUrl($params)
+            );
         }
+
         // HOOK: add custom logic
-        if (isset($GLOBALS['TL_HOOKS']['WEMGEODATAGETLOCATION']) && \is_array($GLOBALS['TL_HOOKS']['WEMGEODATAGETLOCATION'])) {
+        if (
+
+            isset($GLOBALS['TL_HOOKS']['WEMGEODATAGETLOCATION']) && \is_array(
+                $GLOBALS['TL_HOOKS']['WEMGEODATAGETLOCATION']
+            )
+
+        ) {
             foreach ($GLOBALS['TL_HOOKS']['WEMGEODATAGETLOCATION'] as $callback) {
                 $arrItem = static::importStatic($callback[0])->{$callback[1]}($arrItem, $objMap, $objPage, $this);
             }
@@ -216,68 +270,29 @@ abstract class Core extends Module
         return $arrItem;
     }
 
-    /**
-     * Build Pagination.
-     *
-     * @param int $intTotal Number of items
-     *
-     * @return [Void]
-     */
-    protected function buildPagination(int $intTotal): void
-    {
-        $total = $intTotal - $this->offset;
-
-        // Split the results
-        if ($this->perPage > 0 && (!property_exists($this, 'limit') || null === $this->limit || $this->numberOfItems > $this->perPage)) {
-            // Adjust the overall limit
-            if (property_exists($this, 'limit') && null !== $this->limit) {
-                $total = min($this->limit, $total);
-            }
-
-            // Get the current page
-            $id = 'page_n'.$this->id;
-            $page = Input::get($id) ?? 1;
-
-            // Do not index or cache the page if the page number is outside the range
-            if ($page < 1 || $page > max(ceil($total / $this->perPage), 1)) {
-                throw new \Exception(\sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['pageNotFound'], Environment::get('uri')));
-            }
-
-            // Set limit and offset
-            $this->limit = $this->perPage;
-            $this->offset += (max($page, 1) - 1) * $this->perPage;
-            $skip = (int) $this->skipFirst;
-
-            // Overall limit
-            if ($this->offset + $this->limit > $total + $skip) {
-                $this->limit = $total + $skip - $this->offset;
-            }
-
-            // Add the pagination menu
-            $objPagination = new Pagination($total, $this->perPage, Config::get('maxPaginationLinks') ?? 7, $id);
-            $this->Template->pagination = $objPagination->generate("\n  ");
-        }
-    }
+    
 
     protected function getCategories()
     {
         $params = [];
         if ($this->wem_geodata_map) {
             $params['pid'] = $this->wem_geodata_map;
-        } elseif (null !== $this->wem_geodata_maps) {
+        } elseif ($this->wem_geodata_maps !== null) {
             $arrCategoriesIds = unserialize($this->wem_geodata_maps ?? '');
-            if (!$arrCategoriesIds || empty($arrCategoriesIds)) {
-                throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noCategoryConfigured']);
+            if (! $arrCategoriesIds || empty($arrCategoriesIds)) {
+                throw new Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noCategoryConfigured']);
             }
 
             $params['pid'] = $arrCategoriesIds;
         }
 
         $objCategories = Category::findItems($params);
-        if (!$objCategories) {
-            throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['categoriesNotFound']);
+        if (! $objCategories instanceof Collection) {
+            throw new Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['categoriesNotFound']);
         }
+
         $arrCategories = [];
+
         while ($objCategories->next()) {
             $arrCategories[] = $this->getCategory($objCategories->row());
         }
@@ -287,13 +302,14 @@ abstract class Core extends Module
 
     protected function countLocations($c = null): int
     {
-        if (null === $c) {
-            $c = ['published' => 1, 'onlyWithCoords' => 1];
-            if (null !== $this->wem_geodata_map) {
+        if ($c === null) {
+            $c = ['published' => 1,
+                'onlyWithCoords' => 1];
+            if ($this->wem_geodata_map !== null && $this->wem_geodata_map !== 0) {
                 $c['pid'] = $this->wem_geodata_map;
-            } elseif (!empty($this->wem_geodata_maps)) {
+            } elseif (! empty($this->wem_geodata_maps)) {
                 $pids = StringUtil::deserialize($this->wem_geodata_maps);
-                if (!empty($pids)) {
+                if (! empty($pids)) {
                     $c['where'][] = \sprintf('pid IN (%s)', implode('', $pids));
                 }
             }
@@ -304,17 +320,19 @@ abstract class Core extends Module
 
     protected function getLocations($c = null): array
     {
-        if (null === $c) {
-            $c = ['published' => 1, 'onlyWithCoords' => 1];
-            if (null !== $this->wem_geodata_map) {
+        if ($c === null) {
+            $c = ['published' => 1,
+                'onlyWithCoords' => 1];
+            if ($this->wem_geodata_map !== null) {
                 $c['pid'] = $this->wem_geodata_map;
-            } elseif (!empty($this->wem_geodata_maps)) {
+            } elseif (! empty($this->wem_geodata_maps)) {
                 $pids = StringUtil::deserialize($this->wem_geodata_maps);
-                if (!empty($pids)) {
+                if (! empty($pids)) {
                     $c['where'][] = \sprintf('pid IN (%s)', implode('', $pids));
                 }
             }
         }
+
         $limit = 0;
         if (\array_key_exists('limit', $c)) {
             $limit = (int) $c['limit'];
@@ -326,11 +344,14 @@ abstract class Core extends Module
             $offset = (int) $c['offset'];
             unset($c['offset']);
         }
+
         $objLocations = MapItem::findItems($c, $limit, $offset);
-        if (!$objLocations) {
-            throw new \Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noLocationsFound']);
+        if (! $objLocations instanceof Collection) {
+            throw new Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noLocationsFound']);
         }
+
         $arrLocations = [];
+
         while ($objLocations->next()) {
             $arrLocations[] = $this->getLocation($objLocations->row());
         }

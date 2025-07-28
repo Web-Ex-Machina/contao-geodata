@@ -2,30 +2,29 @@
 
 declare(strict_types=1);
 
-/**
- * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2024 Web ex Machina
+/*
+ * Geodata Bundle for Contao Open Source CMS
+ * @author     Web Ex Machina
  *
- * @category ContaoBundle
- * @package  Web-Ex-Machina/contao-geodata
- * @author   Web ex Machina <contact@webexmachina.fr>
- * @link     https://github.com/Web-Ex-Machina/contao-geodata/
+ * @see        https://github.com/Web-Ex-Machina/contao-geodata
+ * @license    https://www.apache.org/licenses/LICENSE-2.0
  */
 
 namespace WEM\GeoDataBundle\Migration;
 
 use Contao\CoreBundle\Migration\AbstractMigration;
 use Contao\CoreBundle\Migration\MigrationResult;
+use Contao\Model\Collection;
 use Doctrine\DBAL\Connection;
+use Exception;
+use LengthException;
 use WEM\GeoDataBundle\Model\Map;
 use WEM\UtilsBundle\Classes\Encryption;
 
 class M202410251433_EncodeMapProviderGmapKey extends AbstractMigration
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
+
     private Encryption $encryption;
 
     public function __construct(Connection $connection, Encryption $encryption)
@@ -39,24 +38,36 @@ class M202410251433_EncodeMapProviderGmapKey extends AbstractMigration
         $schemaManager = $this->connection->createSchemaManager();
 
         // If the database table itself does not exist we should do nothing
-        if (!$schemaManager->tablesExist(['tl_wem_map'])) {
+        if (
+
+            ! $schemaManager->tablesExist(
+                ['tl_wem_map']
+            )
+
+        ) {
             return false;
         }
 
         $columns = $schemaManager->listTableColumns('tl_wem_map');
 
-        if (!isset($columns[strtolower('mapProviderGmapKey')])) {
+        if (! isset($columns[strtolower('mapProviderGmapKey')])) {
             return false;
         }
 
         $maps = $this->getItems();
         $i = 0;
-        if ($maps) {
+        if ($maps instanceof Collection) {
             while ($maps->next()) {
-                /** @var Map */
+                /** @var Map $objMap */
                 $objMap = $maps->current();
                 // if decrypt throws error, it means it wasn't encrypted
-                if ($this->isValueEncrypted($objMap->mapProviderGmapKey)) {
+                if (
+
+                    $this->isValueEncrypted(
+                        $objMap->mapProviderGmapKey
+                    )
+
+                ) {
                     continue;
                 }
 
@@ -71,15 +82,24 @@ class M202410251433_EncodeMapProviderGmapKey extends AbstractMigration
     {
         $maps = $this->getItems();
         $i = 0;
-        if ($maps) {
+        if ($maps instanceof Collection) {
             while ($maps->next()) {
-                /** @var Map */
+                /** @var Map $objMap */
                 $objMap = $maps->current();
                 // if decrypt throws error, it means it wasn't encrypted
-                if ($this->isValueEncrypted($objMap->mapProviderGmapKey)) {
+                if (
+
+                    $this->isValueEncrypted(
+                        $objMap->mapProviderGmapKey
+                    )
+
+                ) {
                     continue;
                 }
-                $objMap->mapProviderGmapKey = $this->encryption->encrypt_b64($objMap->mapProviderGmapKey);
+
+                $objMap->mapProviderGmapKey = $this->encryption->encrypt_b64(
+                    $objMap->mapProviderGmapKey
+                );
                 $objMap->save();
 
                 ++$i;
@@ -88,22 +108,22 @@ class M202410251433_EncodeMapProviderGmapKey extends AbstractMigration
 
         return $this->createResult(
             true,
-            $i.' map(s) updated.'
+            $i . ' map(s) updated.'
         );
     }
 
-    protected function isValueEncrypted($val): bool
+    protected function isValueEncrypted(?string $val): bool
     {
         try {
             $this->encryption->decrypt_b64($val);
 
             return true;
-        } catch (\LengthException $e) {
+        } catch (LengthException $lengthException) {
             return false;
         }
     }
 
-    private function getItems()
+    private function getItems(): ?Collection
     {
         try {
             return Map::findItems([
@@ -111,18 +131,8 @@ class M202410251433_EncodeMapProviderGmapKey extends AbstractMigration
                     \sprintf('LENGTH(%s.mapProviderGmapKey) > 0', Map::getTable()),
                 ],
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $exception) {
             return null;
         }
-    }
-
-    private function countItems()
-    {
-        $items = $this->getItems();
-        if (!$items) {
-            return 0;
-        }
-
-        return $items->count();
     }
 }

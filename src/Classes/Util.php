@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-/**
- * Geodata for Contao Open Source CMS
- * Copyright (c) 2015-2024 Web ex Machina
+/*
+ * Geodata Bundle for Contao Open Source CMS
+ * @author     Web Ex Machina
  *
- * @category ContaoBundle
- * @package  Web-Ex-Machina/contao-geodata
- * @author   Web ex Machina <contact@webexmachina.fr>
- * @link     https://github.com/Web-Ex-Machina/contao-geodata/
+ * @see        https://github.com/Web-Ex-Machina/contao-geodata
+ * @license    https://www.apache.org/licenses/LICENSE-2.0
  */
 
 namespace WEM\GeoDataBundle\Classes;
 
+use Contao\Model\Collection;
 use Contao\StringUtil;
 use Contao\System;
+use Exception;
 use WEM\GeoDataBundle\Model\Category;
 use WEM\GeoDataBundle\Model\MapItem;
 use WEM\GeoDataBundle\Model\MapItemCategory;
@@ -32,14 +32,14 @@ class Util
      *
      * @return string the formatted value
      */
-    public static function formatStringValueForFilters(string $value): string
-    {
+    public static function formatStringValueForFilters(
+        string $value
+    ): string {
         return str_replace([' ', '.'], '_', mb_strtolower($value, 'UTF-8'));
     }
 
     /**
-     * Calculates the great-circle distance between two points, with
-     * the Vincenty formula.
+     * Calculates the great-circle distance between two points, with the Vincenty formula.
      *
      * @param float $latitudeFrom  Latitude of start point in [deg decimal]
      * @param float $longitudeFrom Longitude of start point in [deg decimal]
@@ -55,7 +55,7 @@ class Util
         float $latitudeTo,
         float $longitudeTo,
         float $earthRadius = 6371000
-    ) {
+    ): float {
         // convert from degrees to radians
         $latFrom = deg2rad($latitudeFrom);
         $lonFrom = deg2rad($longitudeFrom);
@@ -81,9 +81,10 @@ class Util
      *
      * @deprecated
      */
-    public static function replaceInsertTags(string $tag)
-    {
-        return System::getContainer()->get('wem.geodata.listener.replace_insert_tags_listener')->__invoke($tag);
+    public static function replaceInsertTags(
+        string $tag
+    ) {
+        return System::getContainer()->get('wem.geodata.listener.replace_insert_tags_listener')($tag);
     }
 
     /**
@@ -100,22 +101,32 @@ class Util
 
     /**
      * Try to find an ISO Code from the Country fullname.
-     *
-     * @throws \Exception
      */
-    public static function getCountryISOCodeFromFullname($strFullname)
-    {
+    public static function getCountryISOCodeFromFullname(
+        $strFullname
+    ) {
         $arrCountries = self::getCountries();
 
         foreach ($arrCountries as $strIsoCode => $strName) {
             // Use Generate Alias to handle little imperfections
-            if (StringUtil::generateAlias($strName) === StringUtil::generateAlias($strFullname)) {
+            if (
+
+                StringUtil::generateAlias(
+                    $strName
+                ) === StringUtil::generateAlias(
+                    $strFullname
+                )
+
+            ) {
                 return $strIsoCode;
             }
         }
 
         // If nothing, send an exception, because the name is wrong
-        throw new \Exception(\sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['countryNotFound'], $strFullname));
+        throw new Exception(\sprintf(
+            $GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['countryNotFound'],
+            $strFullname
+        ));
     }
 
     /**
@@ -125,8 +136,9 @@ class Util
      *
      * @return string [Continent ISOCode]
      */
-    public static function getCountryContinent(string $strCountry): ?string
-    {
+    public static function getCountryContinent(
+        string $strCountry
+    ): string|null {
         $COUNTRY_CONTINENTS = [
             'AF' => 'AS',
             'AX' => 'EU',
@@ -381,16 +393,17 @@ class Util
      * Delete MapItemCategory rows for a Category.
      *
      * @param Category $objItem The Category
-     *
-     * @throws \Exception
      */
-    public static function deleteMapItemCategoryForCategory(Category $objItem): void
-    {
+    public static function deleteMapItemCategoryForCategory(
+        Category $objItem
+    ): void {
         // remove links item <-> category
         $mapItemCategories = MapItemCategory::findItems(['category' => $objItem->id]);
-        if ($mapItemCategories) {
+        if ($mapItemCategories instanceof Collection) {
             while ($mapItemCategories->next()) {
-                $mapItemCategories->current()->delete();
+                $mapItemCategories->current()
+                    ->delete()
+                ;
             }
         }
     }
@@ -401,21 +414,25 @@ class Util
      * @param MapItem    $objItem                   The MapItem
      * @param array|null $arrCategoriesIdsToExclude Ids of Category to avoid
      *
-     * @throws \Exception
-     *
      * @return MapItem The updated MapItem
      */
-    public static function refreshMapItemCategoriesField(MapItem $objItem, ?array $arrCategoriesIdsToExclude): MapItem
-    {
+    public static function refreshMapItemCategoriesField(
+        MapItem $objItem,
+        array|null $arrCategoriesIdsToExclude
+    ): MapItem {
         $params = ['pid' => $objItem->id];
 
         if (\is_array($arrCategoriesIdsToExclude)) {
-            $params['where'][] = \sprintf('%s.category NOT IN (%s)', MapItemCategory::getTable(), implode(',', $arrCategoriesIdsToExclude));
+            $params['where'][] = \sprintf(
+                '%s.category NOT IN (%s)',
+                MapItemCategory::getTable(),
+                implode(',', $arrCategoriesIdsToExclude)
+            );
         }
 
         $mapItemCategories = MapItemCategory::findItems($params);
         $arrCategoriesIds = [];
-        if ($mapItemCategories) {
+        if ($mapItemCategories instanceof Collection) {
             while ($mapItemCategories->next()) {
                 $arrCategoriesIds[] = $mapItemCategories->category;
             }
@@ -434,9 +451,14 @@ class Util
      *
      * @return string|null The package version if found, null otherwise
      */
-    public static function getCustomPackageVersion(string $package): ?string
-    {
-        $packages = json_decode(file_get_contents(TL_ROOT.'/vendor/composer/installed.json'));
+    public static function getCustomPackageVersion(
+        string $package
+    ): string|null {
+        $packages = json_decode(
+            file_get_contents(System::getContainer()->getParameter(
+                'kernel.project_dir'
+            ) . '/vendor/composer/installed.json')
+        );
 
         foreach ($packages->packages as $p) {
             $p = (array) $p;

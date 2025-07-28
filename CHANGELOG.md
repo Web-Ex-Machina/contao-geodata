@@ -1,6 +1,13 @@
 Extension "Geodata" for Contao Open Source CMS
 ========
 
+3.0.0 - 2025-07-28
+---
+- COMPATIBILITY BREAK: This version is now compatible with Contao 4.13 and 5.3.
+- ADDED: Use of ECS + Rector to clean the files
+- ADDED: Ajax loading for markers and filters
+- FIXED: A lot of warning issues logged
+
 2.0.3 - 2024-11-05
 ---
 - UPDATED : if some map items' marker config' values are missing, use the one from the map if they exists
