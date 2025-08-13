@@ -125,7 +125,7 @@ abstract class Core extends Module
                     if(!$objMap){
                         throw new Exception('nothing to do here');
                     }
-                    $mapConfig = unserialize($objMap->mapConfig);
+                    $mapConfig = unserialize($objMap->mapConfig) ?? [];
                     // set missing infos
                     if(!($arrItem['marker']['icon']['iconUrl'] ?? false)
                     && $mapConfig['icon_iconUrl'] ?? false
