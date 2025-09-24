@@ -1,6 +1,10 @@
 Extension "Geodata" for Contao Open Source CMS
 ========
 
+3.0.1 - 2025-09-24
+---
+- FIXED: Warnings issues
+
 3.0.0 - 2025-07-28
 ---
 - COMPATIBILITY BREAK: This version is now compatible with Contao 4.13 and 5.3.
