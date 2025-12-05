@@ -153,7 +153,7 @@ class LocationsList extends CoreList
         ) : 1) - 1);
 
         $arrLocations = $this->fetchItems(
-            null,
+            $this->arrConfig,
             $limit ?: 0,
             $offset
         );
