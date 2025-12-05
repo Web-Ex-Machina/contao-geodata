@@ -7,17 +7,17 @@
   data-country="<?php echo \WEM\GeoDataBundle\Classes\Util::formatStringValueForFilters($this->location['country']['code']);?>"
 >
   <div class="block-card__wrapper">
-    <?php if ($this->location['picture']['path']): ?>
-      <<?php echo $this->location['url']?'a href="'.$this->location['url'].'" title="'.$GLOBALS['TL_LANG']['MSC']['more'].'"':'div' ?> class="block-card__figure">
+    <?php if ($this->location['picture']['path'] ?? false): ?>
+      <<?php echo array_key_exists('url', $this->location) ? 'a href="'.$this->location['url'].'" title="'.$GLOBALS['TL_LANG']['MSC']['more'].'"' : 'div' ?> class="block-card__figure">
         <img src="<?= $this->location['picture']['path'] ?>" alt="<?= $this->location['title'] ?>" itemprop="image">
-      </<?php echo $this->location['url']?'a':'div' ?> >
+      </<?php echo array_key_exists('url', $this->location) ? 'a' : 'div' ?> >
     <?php endif; ?>
 
     <div class="block-card__content">
-      <<?php echo $this->location['url']?'a href="'.$this->location['url'].'"':'div' ?>  class="block-card__title h2 " title="<?= $this->location['title'] ?>" itemprop="name">
+      <<?php echo array_key_exists('url', $this->location) ? 'a href="'.$this->location['url'].'"' : 'div' ?>  class="block-card__title h2 " title="<?= $this->location['title'] ?>" itemprop="name">
         <?= $this->location['title'] ?>
-      </<?php echo $this->location['url']?'a':'div' ?> >
-      <?php if ($this->location['category']['title']): ?>
+      </<?php echo array_key_exists('url', $this->location) ? 'a' : 'div' ?> >
+      <?php if ($this->location['category']['title'] ?? false): ?>
         <p class="map__list__item__categoryTitle"><?php echo mb_strtoupper($this->location['category']['title']); ?></p>
       <?php elseif (is_array($this->location['category'])): ?>
         <p class="map__list__item__categoryTitle"><?php echo mb_strtoupper(implode(', ',array_map(function($c){return $c['title'];},$this->location['category'])), 'UTF-8');?></p>
@@ -45,7 +45,7 @@
         <?php endif; ?>
       </div>
       
-      <?php if ($this->location['url']): ?>
+      <?php if (array_key_exists('url', $this->location)): ?>
         <div class="event__link m-top-0">
           <a href="<?= $this->location['url'] ?>" title="<?= $GLOBALS['TL_LANG']['MSC']['more'] ?>"></a>
         </div>
