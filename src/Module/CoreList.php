@@ -256,7 +256,7 @@ abstract class CoreList extends Core
      */
     protected function retrieveGetAttributes(): void
     {
-        $arrKeys = Input::getKeys();
+        $arrKeys = $_GET;
 
         if (!empty($arrKeys)) {
             foreach ($arrKeys as $k) {
