@@ -89,15 +89,6 @@ $GLOBALS['TL_MODELS'][MapItemCategory::getTable()] = MapItemCategory::class;
 $GLOBALS['TL_MODELS'][MapItemAttributeValue::getTable()] = MapItemAttributeValue::class;
 $GLOBALS['TL_MODELS'][Category::getTable()] = Category::class;
 
-/*
- * Hooks
- */
-$GLOBALS['TL_HOOKS']['replaceInsertTags'][] = [
-    'wem.geodata.listener.replace_insert_tags_listener',
-    '__invoke',
-];
-$GLOBALS['TL_HOOKS']['generateBreadcrumb'][] = ['wem.geodata.listener.generate_breadcrumb_listener', '__invoke'];
-
 // File Usage bundle
 $GLOBALS['FILE_USAGE']['tl_wem_map_item'] = [
     'labelColumn' => ['title'],

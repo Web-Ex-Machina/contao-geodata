@@ -10,11 +10,13 @@ declare(strict_types=1);
  * @license    https://www.apache.org/licenses/LICENSE-2.0
  */
 
-namespace WEM\GeoDataBundle\EventListener;
+namespace WEM\GeoDataBundle\EventListener\InsertTags;
 
+use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
 use Contao\Database;
 use WEM\GeoDataBundle\Model\MapItem;
 
+#[AsHook('replaceInsertTags')]
 class ReplaceInsertTagsListener
 {
     /**
@@ -22,9 +24,8 @@ class ReplaceInsertTagsListener
      *
      * @return false|string the value of the requested field for the given location or false if the tag is not related to geodata or if the location or field is not found
      */
-    public function __invoke(
-        string $tag
-    ) {
+    public function __invoke(string $tag) 
+    {
         $arrTag = explode('::', $tag);
 
         // Exist if the tested tag doesn't concern locations

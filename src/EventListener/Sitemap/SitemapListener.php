@@ -10,15 +10,18 @@ declare(strict_types=1);
  * @license    https://www.apache.org/licenses/LICENSE-2.0
  */
 
-namespace WEM\GeoDataBundle\EventListener;
+namespace WEM\GeoDataBundle\EventListener\Sitemap;
 
+use Contao\CoreBundle\Event\ContaoCoreEvents;
 use Contao\CoreBundle\Event\SitemapEvent;
 use Contao\Model\Collection;
 use Contao\PageModel;
 use DateTime;
+use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use WEM\GeoDataBundle\Model\Map;
 use WEM\GeoDataBundle\Model\MapItem;
 
+#[AsEventListener(ContaoCoreEvents::SITEMAP)]
 class SitemapListener
 {
     protected int $currentTimestamp;

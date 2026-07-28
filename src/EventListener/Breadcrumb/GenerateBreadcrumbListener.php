@@ -10,9 +10,10 @@ declare(strict_types=1);
  * @license    https://www.apache.org/licenses/LICENSE-2.0
  */
 
-namespace WEM\GeoDataBundle\EventListener;
+namespace WEM\GeoDataBundle\EventListener\Breadcrumb;
 
 use Contao\ArticleModel;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
 use Contao\ContentModel;
 use Contao\Database;
 use Contao\Input;
@@ -22,6 +23,7 @@ use Contao\ModuleModel;
 use Contao\PageModel;
 use WEM\GeoDataBundle\Model\MapItem;
 
+#[AsHook('generateBreadcrumb', priority: 100)]
 class GenerateBreadcrumbListener
 {
     public function __invoke(array $items, Module $module): array
