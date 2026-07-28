@@ -15,7 +15,7 @@ return ECSConfig::configure()
 @author     Web Ex Machina
 
 @see        https://github.com/Web-Ex-Machina/contao-geodata
-@license    https://www.apache.org/licenses/LICENSE-2.0"])
+@license    https://www.gnu.org/licenses/lgpl+gpl-3.0.txt"])
     ->withPaths([
         __DIR__ . '/src',
     ])
