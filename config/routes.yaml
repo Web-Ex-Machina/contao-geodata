@@ -1,0 +1,3 @@
+wem.geodata.controller:
+  resource: '../src/Controller'
+  type: attribute

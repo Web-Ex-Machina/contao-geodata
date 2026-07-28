@@ -24,12 +24,9 @@ class WEMGeoDataExtension extends Extension
 {
     public function load(array $mergedConfig, ContainerBuilder $container): void
     {
-        $loader = new YamlFileLoader(
-            $container,
-            new FileLocator(__DIR__ . '/../Resources/config')
-        );
-
-        $loader->load('services.yml');
-        $loader->load('listeners.yml');
+        $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../../config'));
+        $loader->load('controller.yaml');
+        $loader->load('listeners.yaml');
+        $loader->load('services.yaml');
     }
 }
