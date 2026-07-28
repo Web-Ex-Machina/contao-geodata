@@ -12,18 +12,18 @@
         }
     ],
     "support":{
-        "website":"https://www.webexmachina.fr/",
-        "issues":"https://github.com/Web-Ex-Machina/contao-geodata/issues",
-        "source":"https://github.com/Web-Ex-Machina/contao-geodata"
+        "website": "https://www.webexmachina.fr/",
+        "issues": "https://github.com/Web-Ex-Machina/contao-geodata/issues",
+        "source": "https://github.com/Web-Ex-Machina/contao-geodata"
     },
     "require": {
-        "php": "^7.4 || ^8.1",
-        "contao/core-bundle": "^4.13 || ^5.3",
-        "webexmachina/contao-utils": "^2.0",
-        "phpoffice/phpspreadsheet": "^1.29 || ^3.3",
-        "terminal42/dcawizard":"^2.7 || ^3.0",
         "ext-json": "*",
-        "ext-curl": "*"
+        "ext-curl": "*",
+        "contao/core-bundle": "^5.3 || ^5.7",
+        "contao/manager-plugin": "^2.0",
+        "terminal42/dcawizard": "^3.0 || ^4.0",
+        "phpoffice/phpspreadsheet": "^3.10 || ^5.9",
+        "webexmachina/contao-utils": "^2.0"
     },
     "require-dev": {
         "contao/manager-plugin": "@stable",
@@ -35,27 +35,16 @@
     "autoload":{
         "psr-4": {
             "WEM\\GeoDataBundle\\": "src/"
-        },
-        "classmap": [
-            "src/Resources/contao/"
-        ],
-        "exclude-from-classmap": [
-            "src/Resources/contao/config/",
-            "src/Resources/contao/dca/",
-            "src/Resources/contao/languages/",
-            "src/Resources/contao/templates/"
-        ]
+        }
     },
     "extra":{
         "contao-manager-plugin": "WEM\\GeoDataBundle\\ContaoManager\\Plugin"
     },
     "config": {
         "allow-plugins": {
-            "contao-components/installer": true,
-            "contao/manager-plugin": true,
-            "composer/package-versions-deprecated": true,
-            "contao-community-alliance/composer-plugin": true,
-            "php-http/discovery": true
+            "contao-components/installer": false,
+            "contao/manager-plugin": false,
+            "contao-community-alliance/composer-plugin": true
         }
-    }
+    },
 }
