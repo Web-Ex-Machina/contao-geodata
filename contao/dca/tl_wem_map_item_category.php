@@ -12,10 +12,8 @@ declare(strict_types=1);
 
 use Contao\DataContainer;
 use Contao\DC_Table;
-use WEM\GeoDataBundle\DataContainer\MapItemCategory;
 
 $GLOBALS['TL_DCA']['tl_wem_map_item_category'] = [
-    // Config
     'config' => [
         'dataContainer' => DC_Table::class,
         'ptable' => 'tl_wem_map_item',
@@ -28,12 +26,7 @@ $GLOBALS['TL_DCA']['tl_wem_map_item_category'] = [
                 'pid' => 'index',
             ],
         ],
-        'ondelete_callback' => [
-            [MapItemCategory::class, 'ondeleteCallback'],
-        ],
     ],
-
-    // Fields
     'fields' => [
         'id' => [
             'sql' => 'int(10) unsigned NOT NULL auto_increment',
@@ -50,14 +43,12 @@ $GLOBALS['TL_DCA']['tl_wem_map_item_category'] = [
         'pid' => [
             'foreignKey' => 'tl_wem_map_item.id',
             'sql' => "int(10) unsigned NOT NULL default '0'",
-            'relation' => ['type' => 'belongsTo',
-                'load' => 'eager'],
+            'relation' => ['type' => 'belongsTo', 'load' => 'eager'],
         ],
         'category' => [
             'foreignKey' => 'tl_wem_map_category.title',
             'sql' => "int(10) unsigned NOT NULL default '0'",
-            'relation' => ['type' => 'belongsTo',
-                'load' => 'eager'],
+            'relation' => ['type' => 'belongsTo', 'load' => 'eager'],
         ],
     ],
 ];

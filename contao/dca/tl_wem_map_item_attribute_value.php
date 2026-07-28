@@ -12,13 +12,11 @@ declare(strict_types=1);
 
 use Contao\DataContainer;
 use Contao\DC_Table;
-use WEM\GeoDataBundle\DataContainer\MapItemAttributeValue;
 
 /*
  * Table tl_wem_map_item_attribute_value.
  */
 $GLOBALS['TL_DCA']['tl_wem_map_item_attribute_value'] = [
-    // Config
     'config' => [
         'dataContainer' => DC_Table::class,
         'ptable' => 'tl_wem_map_item',
@@ -32,57 +30,27 @@ $GLOBALS['TL_DCA']['tl_wem_map_item_attribute_value'] = [
             ],
         ],
     ],
-
-    // List
     'list' => [
         'sorting' => [
             'mode' => DataContainer::MODE_PARENT,
             'fields' => ['attribute ASC'],
             'headerFields' => ['title'],
             'panelLayout' => 'filter;sort,search,limit',
-            'child_record_callback' => [MapItemAttributeValue::class, 'listItems'],
             'child_record_class' => 'no_padding',
         ],
         'global_operations' => [
-            'all' => [
-                'href' => 'act=select',
-                'class' => 'header_edit_all',
-                'attributes' => 'onclick="Backend.getScrollOffset()" accesskey="e"',
-            ],
+            'all',
         ],
         'operations' => [
-            'edit' => [
-                'href' => 'table=tl_content',
-                'icon' => 'edit.svg',
-            ],
-            'editheader' => [
-                'href' => 'act=edit',
-                'icon' => 'header.svg',
-            ],
-            'copy' => [
-                'href' => 'act=copy',
-                'icon' => 'copy.gif',
-            ],
-            'delete' => [
-                'href' => 'act=delete',
-                'icon' => 'delete.gif',
-                'attributes' => 'onclick="if(!confirm(\''.($GLOBALS['TL_LANG']['MSC']['deleteConfirm'] ?? null).'\'))return false;Backend.getScrollOffset()"',
-            ],
-            'show' => [
-                'href' => 'act=show',
-                'icon' => 'show.gif',
-            ],
+            'edit',
+            'copy',
+            'delete',
+            'show',
         ],
     ],
-
-    // Palettes
     'palettes' => [
-        'default' => '
-            {title_legend},attribute,value
-        ',
+        'default' => '{title_legend},attribute,value',
     ],
-
-    // Fields
     'fields' => [
         'id' => [
             'sql' => 'int(10) unsigned NOT NULL auto_increment',
@@ -101,18 +69,14 @@ $GLOBALS['TL_DCA']['tl_wem_map_item_attribute_value'] = [
             'exclude' => true,
             'search' => true,
             'inputType' => 'text',
-            'eval' => ['mandatory' => true,
-                'maxlength' => 64,
-                'tl_class' => 'w50'],
+            'eval' => ['mandatory' => true, 'maxlength' => 64, 'tl_class' => 'w50'],
             'sql' => "varchar(34) NOT NULL default ''",
         ],
         'value' => [
             'exclude' => true,
             'search' => true,
             'inputType' => 'text',
-            'eval' => ['mandatory' => true,
-                'maxlength' => 64,
-                'tl_class' => 'w50'],
+            'eval' => ['mandatory' => true, 'maxlength' => 64, 'tl_class' => 'w50'],
             'sql' => "varchar(34) NOT NULL default ''",
         ],
     ],

@@ -10,13 +10,15 @@ declare(strict_types=1);
  * @license    https://www.apache.org/licenses/LICENSE-2.0
  */
 
-namespace WEM\GeoDataBundle\DataContainer;
+namespace WEM\GeoDataBundle\EventListener\DataContainer;
 
+use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
 use Contao\DataContainer;
 use WEM\GeoDataBundle\Classes\Util;
 
-class MapItemCategory extends CoreContainer
+class MapItemCategoryContainer extends CoreContainer
 {
+    #[AsCallback(table: 'tl_wem_map_item_category', target: 'config.ondelete')]
     public function ondeleteCallback(DataContainer $dc): void
     {
         if (! $dc->id) {

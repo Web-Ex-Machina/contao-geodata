@@ -10,24 +10,24 @@ declare(strict_types=1);
  * @license    https://www.apache.org/licenses/LICENSE-2.0
  */
 
-namespace WEM\GeoDataBundle\DataContainer;
+namespace WEM\GeoDataBundle\EventListener\DataContainer;
 
+use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
 use Contao\DataContainer;
 use Contao\Model\Collection;
 use Exception;
 use WEM\GeoDataBundle\Classes\Util;
 use WEM\GeoDataBundle\Model\Category;
 
-class MapCategory extends CoreContainer
+class MapCategoryContainer extends CoreContainer
 {
-    /**
-     * Design each row of the DCA.
-     */
+    #[AsCallback(table: 'tl_wem_map_category', target: 'list.sorting.child_record')]
     public function listItems(array $row): string
     {
         return $row['title'] . ($row['is_default'] ? ' (' . $GLOBALS['TL_LANG'][Category::getTable()]['is_default']['label'] . ')' : '');
     }
 
+    #[AsCallback(table: 'tl_wem_map_category', target: 'config.onsubmit')]
     public function onsubmitCallback(DataContainer $dc): void
     {
         if (! $dc->id) {
@@ -59,7 +59,8 @@ class MapCategory extends CoreContainer
         }
     }
 
-    public function ondeleteCallback(DataContainer $dc): void
+    #[AsCallback(table: 'tl_wem_map_category', target: 'config.ondelete')]
+    public function ondeleteCallback(DataContainer $dc, int $undoId): void
     {
         if (! $dc->id) {
             return;

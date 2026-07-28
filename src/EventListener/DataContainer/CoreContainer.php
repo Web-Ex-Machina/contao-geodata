@@ -10,7 +10,7 @@ declare(strict_types=1);
  * @license    https://www.apache.org/licenses/LICENSE-2.0
  */
 
-namespace WEM\GeoDataBundle\DataContainer;
+namespace WEM\GeoDataBundle\EventListener\DataContainer;
 
 use Contao\Backend;
 use Contao\Database;

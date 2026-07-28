@@ -18,7 +18,6 @@ use WEM\GeoDataBundle\Model\Map;
  * Table tl_wem_map.
  */
 $GLOBALS['TL_DCA']['tl_wem_map'] = [
-    // Config
     'config' => [
         'dataContainer' => DC_Table::class,
         'ctable' => ['tl_wem_map_category', 'tl_wem_map_item'],
@@ -29,15 +28,7 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
                 'id' => 'primary',
             ],
         ],
-        'onload_callback' => [
-            [WEM\GeoDataBundle\DataContainer\Map::class, 'onloadCallback'],
-        ],
-        'onsubmit_callback' => [
-            [WEM\GeoDataBundle\DataContainer\Map::class, 'onsubmitCallback'],
-        ],
     ],
-
-    // List
     'list' => [
         'sorting' => [
             'mode' => DataContainer::MODE_SORTED,
@@ -49,43 +40,19 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'fields' => ['title', 'mapProvider'],
             'format' => '%s | %s',
         ],
-        'global_operations' => [
-            'all' => [
-                'href' => 'act=select',
-                'class' => 'header_edit_all',
-                'attributes' => 'onclick="Backend.getScrollOffset()" accesskey="e"',
-            ],
-        ],
+        'global_operations' => ['all'],
         'operations' => [
-            'edit' => [
-                'href' => 'table=tl_wem_map_item',
-                'icon' => 'edit.gif',
-            ],
-            'editheader' => [
-                'href' => 'act=edit',
-                'icon' => 'header.gif',
-            ],
-            'copy' => [
-                'href' => 'act=copy',
-                'icon' => 'copychilds.gif',
-            ],
+            'edit', 
+            'children', 
+            'copy', 
             'copy_map_item' => [
                 'href' => 'key=copy_map_item',
                 'icon' => 'copy.gif',
-            ],
-            'delete' => [
-                'href' => 'act=delete',
-                'icon' => 'delete.gif',
-                'attributes' => 'onclick="if(!confirm(\''.($GLOBALS['TL_LANG']['MSC']['deleteConfirm'] ?? null).'\'))return false;Backend.getScrollOffset()"',
-            ],
-            'show' => [
-                'href' => 'act=show',
-                'icon' => 'show.gif',
-            ],
+            ], 
+            'delete', 
+            'show',
         ],
     ],
-
-    // Palettes
     'palettes' => [
         '__selector__' => ['mapProvider', 'geocodingProvider'],
         'default' => '
@@ -98,15 +65,11 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             {import_legend},updateExistingItems,deleteExistingItemsNotInImportFile;
         ',
     ],
-
-    // Subpalettes
     'subpalettes' => [
         'mapProvider_leaflet' => 'mapConfig',
         'mapProvider_gmaps' => 'mapProviderGmapKey,mapConfig',
         'geocodingProvider_nominatim' => 'geocodingProviderNominatimReferer',
     ],
-
-    // Fields
     'fields' => [
         'id' => [
             'sql' => 'int(10) unsigned NOT NULL auto_increment',
@@ -118,31 +81,24 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'default' => time(),
             'sql' => "int(10) unsigned NOT NULL default '0'",
         ],
-
         'title' => [
             'exclude' => true,
             'search' => true,
             'inputType' => 'text',
-            'eval' => ['mandatory' => true,
-                'maxlength' => 255],
+            'eval' => ['mandatory' => true, 'maxlength' => 255],
             'sql' => "varchar(255) NOT NULL default ''",
         ],
         'jumpTo' => [
             'exclude' => true,
             'inputType' => 'pageTree',
             'foreignKey' => 'tl_page.title',
-            'eval' => ['fieldType' => 'radio',
-                'tl_class' => 'clr'],
+            'eval' => ['fieldType' => 'radio', 'tl_class' => 'clr'],
             'sql' => "int(10) unsigned NOT NULL default '0'",
-            'relation' => ['type' => 'hasOne',
-                'load' => 'lazy'],
+            'relation' => ['type' => 'hasOne', 'load' => 'lazy'],
         ],
         'excelPattern' => [
             'exclude' => true,
             'inputType' => 'keyValueWizard',
-            'load_callback' => [
-                [WEM\GeoDataBundle\DataContainer\Map::class, 'generateExcelPattern'],
-            ],
             'sql' => 'blob NULL',
         ],
         'mapProvider' => [
@@ -151,27 +107,19 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'inputType' => 'select',
             'options' => [Map::MAP_PROVIDER_GMAP, Map::MAP_PROVIDER_LEAFLET],
             'reference' => &$GLOBALS['TL_LANG']['tl_wem_map']['mapProvider'],
-            'eval' => ['helpwizard' => true,
-                'mandatory' => true,
-                'submitOnChange' => true,
-                'chosen' => true,
-                'includeBlankOption' => true],
+            'eval' => ['helpwizard' => true, 'mandatory' => true, 'submitOnChange' => true, 'chosen' => true, 'includeBlankOption' => true],
             'explanation' => 'wem_geodata_mapProvider',
             'sql' => "varchar(255) NOT NULL default ''",
         ],
         'mapConfig' => [
             'exclude' => true,
             'inputType' => 'keyValueWizard',
-            'load_callback' => [
-                [WEM\GeoDataBundle\DataContainer\Map::class, 'getDefaultMapConfig'],
-            ],
             'sql' => 'blob NULL',
         ],
         'mapProviderGmapKey' => [
             'exclude' => true,
             'inputType' => 'text',
-            'eval' => ['mandatory' => true,
-                'maxlength' => 255],
+            'eval' => ['mandatory' => true, 'maxlength' => 255],
             'load_callback' => [
                 ['wem.encryption_util', 'decrypt_b64'],
             ],
@@ -185,18 +133,14 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'inputType' => 'select',
             'options' => [Map::GEOCODING_PROVIDER_NOMINATIM],
             'reference' => &$GLOBALS['TL_LANG']['tl_wem_map']['geocodingProvider'],
-            'eval' => ['helpwizard' => true,
-                'includeBlankOption' => true,
-                'submitOnChange' => true,
-                'chosen' => true],
+            'eval' => ['helpwizard' => true, 'includeBlankOption' => true, 'submitOnChange' => true, 'chosen' => true],
             'explanation' => 'wem_geodata_geocodingProvider',
             'sql' => "varchar(255) NOT NULL default ''",
         ],
         'geocodingProviderNominatimReferer' => [
             'exclude' => true,
             'inputType' => 'text',
-            'eval' => ['mandatory' => true,
-                'maxlength' => 255],
+            'eval' => ['mandatory' => true, 'maxlength' => 255],
             'load_callback' => [
                 ['wem.encryption_util', 'decrypt_b64'],
             ],
@@ -205,8 +149,6 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             ],
             'sql' => "varchar(255) NOT NULL default ''",
         ],
-
-        // {categories_legend},categories
         'categories' => [
             'inputType' => 'dcaWizard',
             'foreignTable' => 'tl_wem_map_category',
@@ -224,8 +166,7 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'filter' => true,
             'flag' => DataContainer::SORT_INITIAL_LETTER_ASC,
             'inputType' => 'checkbox',
-            'eval' => ['doNotCopy' => true,
-                'tl_class' => 'w50 m12'],
+            'eval' => ['doNotCopy' => true, 'tl_class' => 'w50 m12'],
             'sql' => "char(1) NOT NULL default ''",
         ],
         'doNotAddItemsToContaoSearch' => [
@@ -233,8 +174,7 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'filter' => true,
             'flag' => DataContainer::SORT_INITIAL_LETTER_ASC,
             'inputType' => 'checkbox',
-            'eval' => ['doNotCopy' => true,
-                'tl_class' => 'w50 m12'],
+            'eval' => ['doNotCopy' => true, 'tl_class' => 'w50 m12'],
             'sql' => "char(1) NOT NULL default ''",
         ],
         'updateExistingItems' => [
@@ -242,8 +182,7 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'filter' => true,
             'flag' => DataContainer::SORT_INITIAL_LETTER_ASC,
             'inputType' => 'checkbox',
-            'eval' => ['doNotCopy' => true,
-                'tl_class' => 'w50 m12'],
+            'eval' => ['doNotCopy' => true, 'tl_class' => 'w50 m12'],
             'sql' => "char(1) NOT NULL default ''",
         ],
         'deleteExistingItemsNotInImportFile' => [
@@ -251,8 +190,7 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'filter' => true,
             'flag' => DataContainer::SORT_INITIAL_LETTER_ASC,
             'inputType' => 'checkbox',
-            'eval' => ['doNotCopy' => true,
-                'tl_class' => 'w50 m12'],
+            'eval' => ['doNotCopy' => true, 'tl_class' => 'w50 m12'],
             'sql' => "char(1) NOT NULL default ''",
         ],
     ],

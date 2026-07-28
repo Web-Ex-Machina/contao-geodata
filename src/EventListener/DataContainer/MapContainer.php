@@ -10,8 +10,9 @@ declare(strict_types=1);
  * @license    https://www.apache.org/licenses/LICENSE-2.0
  */
 
-namespace WEM\GeoDataBundle\DataContainer;
+namespace WEM\GeoDataBundle\EventListener\DataContainer;
 
+use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
 use Contao\DataContainer;
 use Contao\Message;
 use Contao\Model\Collection;
@@ -19,8 +20,9 @@ use WEM\GeoDataBundle\Controller\Provider\Leaflet;
 use WEM\GeoDataBundle\Model\Category;
 use WEM\GeoDataBundle\Model\Map as ModelMap;
 
-class Map extends CoreContainer
+class MapContainer extends CoreContainer
 {
+    #[AsCallback(table: 'tl_wem_map', target: 'config.onload')]
     public function onloadCallback(DataContainer $dc): void
     {
         if (! $dc->id) {
@@ -40,6 +42,7 @@ class Map extends CoreContainer
         }
     }
 
+    #[AsCallback(table: 'tl_wem_map', target: 'config.onsubmit')]
     public function onsubmitCallback(DataContainer $dc): void
     {
         if (! $dc->id) {
@@ -69,9 +72,7 @@ class Map extends CoreContainer
         }
     }
 
-    /**
-     * Generate the default map config array.
-     */
+    #[AsCallback(table: 'tl_wem_map', target: 'fields.mapConfig.load')]
     public function getDefaultMapConfig(
         $varValue,
         DataContainer $objDc
@@ -87,33 +88,29 @@ class Map extends CoreContainer
             }
 
             foreach ($arrConfig as $strKey => $strValue) {
-                $varValue[] = ['key' => $strKey,
-                    'value' => $strValue];
+                $varValue[] = ['key' => $strKey, 'value' => $strValue];
             }
         }
 
         return $varValue;
     }
 
-    /**
-     * Generate the default Excel pattern.
-     */
+    #[AsCallback(table: 'tl_wem_map', target: 'fields.excelPattern.load')]
     public function generateExcelPattern($varValue)
     {
         if (! $varValue) {
             return [
-                ['key' => 'title',
-                    'value' => 'A'], ['key' => 'lat',
-                        'value' => 'B'], ['key' => 'lng',
-                            'value' => 'C'], ['key' => 'street',
-                                'value' => 'D'], ['key' => 'postal',
-                                    'value' => 'E'], ['key' => 'city',
-                                        'value' => 'F'], ['key' => 'region',
-                                            'value' => 'G'], ['key' => 'country',
-                                                'value' => 'H'], ['key' => 'phone',
-                                                    'value' => 'I'], ['key' => 'email',
-                                                        'value' => 'J'], ['key' => 'website',
-                                                            'value' => 'K'],
+                ['key' => 'title', 'value' => 'A'], 
+                ['key' => 'lat', 'value' => 'B'], 
+                ['key' => 'lng', 'value' => 'C'], 
+                ['key' => 'street', 'value' => 'D'], 
+                ['key' => 'postal', 'value' => 'E'], 
+                ['key' => 'city', 'value' => 'F'], 
+                ['key' => 'region', 'value' => 'G'], 
+                ['key' => 'country', 'value' => 'H'], 
+                ['key' => 'phone', 'value' => 'I'], 
+                ['key' => 'email', 'value' => 'J'], 
+                ['key' => 'website', 'value' => 'K'],
             ];
         }
 

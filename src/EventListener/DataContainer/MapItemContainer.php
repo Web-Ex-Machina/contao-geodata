@@ -10,9 +10,11 @@ declare(strict_types=1);
  * @license    https://www.apache.org/licenses/LICENSE-2.0
  */
 
-namespace WEM\GeoDataBundle\DataContainer;
+namespace WEM\GeoDataBundle\EventListener\DataContainer;
 
 use Contao\BackendUser;
+use Contao\CoreBundle\DataContainer\DataContainerOperation;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
 use Contao\DataContainer;
 use Contao\Image;
 use Contao\Input;
@@ -26,24 +28,11 @@ use WEM\GeoDataBundle\Model\Category;
 use WEM\GeoDataBundle\Model\Map;
 use WEM\UtilsBundle\Classes\CountriesUtil;
 
-class MapItem extends CoreContainer
+class MapItemContainer extends CoreContainer
 {
-    /**
-     * Import the back end user object.
-     */
-    public function __construct()
+    #[AsCallback(table: 'tl_wem_map_item', target: 'fields.categories.options')]
+    public function getMapCategories(DataContainer|null $dc = null): array 
     {
-        parent::__construct();
-    }
-
-    /**
-     * Get and return all the parent map categories.
-     *
-     * @return array Categories
-     */
-    public function getMapCategories(
-        DataContainer $dc
-    ): array {
         $arrData = [];
 
         if ($dc->activeRecord && $dc->activeRecord->pid) {
@@ -65,13 +54,9 @@ class MapItem extends CoreContainer
         return $arrData;
     }
 
-    /**
-     * Auto-generate the news alias if it has not been set yet.
-     */
-    public function generateAlias(
-        $varValue,
-        DataContainer $dc
-    ): string {
+    #[AsCallback(table: 'tl_wem_map_item', target: 'fields.alias.save')]
+    public function generateAlias($varValue, DataContainer $dc): string 
+    {
         $autoAlias = false;
 
         // Generate alias if there is none
@@ -119,9 +104,7 @@ class MapItem extends CoreContainer
         return $varValue;
     }
 
-    /**
-     * Adjust DCA if there is no Geocoder for the map.
-     */
+    #[AsCallback(table: 'tl_wem_map_item', target: 'config.onload')]
     public function checkIfGeocodeExists(): void
     {
         $objMap = Map::findById(Input::get('id'));
@@ -131,6 +114,7 @@ class MapItem extends CoreContainer
         }
     }
 
+    #[AsCallback(table: 'tl_wem_map_item', target: 'fields.categories.load')]
     public function assignDefaultCategoryIfNew($value, DataContainer $dc): string
     {
         if (! $dc->id || ! $dc->activeRecord->categories) {
@@ -144,9 +128,7 @@ class MapItem extends CoreContainer
         return $value;
     }
 
-    /**
-     * Design each row of the DCA.
-     */
+    #[AsCallback(table: 'tl_wem_map_item', target: 'list.sorting.child_record')]
     public function listItems(array $arrRow): string
     {
         $arrCountries = CountriesUtil::getCountries();
@@ -163,58 +145,29 @@ class MapItem extends CoreContainer
         return $strRow . '<div class="ajax-results"></div>';
     }
 
-    public function importButtonGlobalOperations(
-        string|null $href,
-        string $label,
-        string $title,
-        string $class,
-        string $attributes,
-        string $table,
-        array|null $rootIds
-    ): string {
+    #[AsCallback(table: 'tl_wem_map_item', target: 'list.operations.import.button')]
+    public function importButtonGlobalOperations(DataContainerOperation $operation): void 
+    {
         $objMap = Map::findById(Input::get('id'));
-        if (! $objMap || $objMap->excelPattern === null || empty(StringUtil::deserialize($objMap->excelPattern))) {
-            return '';
+        if (!$objMap || $objMap->excelPattern === null || empty(StringUtil::deserialize($objMap->excelPattern))) {
+            $operation->hide();
         }
 
-        $url = $this->addToUrl($href);
-
-        return \sprintf(
-            '<a href="%s" title="%s" class="%s" %s>%s</a>',
-            $url,
-            StringUtil::specialchars($title),
-            $class,
-            $attributes,
-            $label
-        );
+        $operation->setUrl($this->addToUrl($operation['href']));
     }
 
-    public function exportButtonGlobalOperations(
-        string|null $href,
-        string $label,
-        string $title,
-        string $class,
-        string $attributes,
-        string $table,
-        array|null $rootIds
-    ): string {
+    #[AsCallback(table: 'tl_wem_map_item', target: 'list.operations.export.button')]
+    public function exportButtonGlobalOperations(DataContainerOperation $operation): void  
+    {
         $objMap = Map::findById(Input::get('id'));
         if (! $objMap || $objMap->excelPattern === null || empty(StringUtil::deserialize($objMap->excelPattern))) {
-            return '';
+            $operation->hide();
         }
 
-        $url = $this->addToUrl($href);
-
-        return \sprintf(
-            '<a href="%s" title="%s" class="%s" %s>%s</a>',
-            $url,
-            StringUtil::specialchars($title),
-            $class,
-            $attributes,
-            $label
-        );
+        $operation->setUrl($this->addToUrl($operation['href']));
     }
 
+    #[AsCallback(table: 'tl_wem_map_item', target: 'list.global_operations.geocodeAll.button')]
     public function geocodeAllButtonGlobalOperations(
         string|null $href,
         string $label,
@@ -241,31 +194,20 @@ class MapItem extends CoreContainer
         );
     }
 
-    public function geocodeButtonOperations(
-        array $data,
-        string|null $href,
-        string $label,
-        string $title,
-        string|null $icon,
-        string $attributes
-    ): string {
+    #[AsCallback(table: 'tl_wem_map_item', target: 'list.operations.export.button')]
+    public function geocodeButtonOperations(DataContainerOperation $operation): void 
+    {
         $objMap = Map::findById(Input::get('id'));
         if (!$objMap || $objMap->geocodingProvider === null) {
-            return '';
+            $operation->hide();
         }
 
         $url = $this->addToUrl($href);
-        $url = str_replace('&amp;id=' . $objMap->id, '&amp;id=' . $data['id'], $url);
-
-        return \sprintf(
-            '<a href="%s" title="%s" %s>%s</a> ',
-            $url,
-            StringUtil::specialchars($title),
-            $attributes,
-            Image::getHtml($icon, $label)
-        );
+        $url = str_replace('&amp;id=' . $objMap->id, '&amp;id=' . $operation['id'], $url);
+        $operation->setUrl($url);
     }
 
+    #[AsCallback(table: 'tl_wem_map_item', target: 'fields.categories.save')]
     public function syncMapItemCategoryPivotTable($varValue, $dc)
     {
         $this->syncData(StringUtil::deserialize($varValue), 'tl_wem_map_item_category', $dc->id, 'pid', 'category');

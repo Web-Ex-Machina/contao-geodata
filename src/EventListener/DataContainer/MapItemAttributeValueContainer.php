@@ -10,13 +10,13 @@ declare(strict_types=1);
  * @license    https://www.apache.org/licenses/LICENSE-2.0
  */
 
-namespace WEM\GeoDataBundle\DataContainer;
+namespace WEM\GeoDataBundle\EventListener\DataContainer;
 
-class MapItemAttributeValue extends CoreContainer
+use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
+
+class MapItemAttributeValueContainer extends CoreContainer
 {
-    /**
-     * Design each row of the DCA.
-     */
+    #[AsCallback(table: 'tl_wem_map_item_attribute_value', target: 'list.sorting.child_record')]
     public function listItems(array $arrRow): string
     {
         return $arrRow['attribute'] . ' ' . $arrRow['value'];
