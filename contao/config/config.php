@@ -11,6 +11,7 @@ declare(strict_types=1);
  */
 
 use Contao\ArrayUtil;
+use Contao\System;
 use WEM\GeoDataBundle\Backend\Callback;
 use WEM\GeoDataBundle\Classes\Util;
 use WEM\GeoDataBundle\Model\Category;
@@ -25,6 +26,8 @@ use WEM\GeoDataBundle\Module\LocationsReader;
 if (! defined('WEM_GEODATA_COMBINER_VERSION')) {
     define('WEM_GEODATA_COMBINER_VERSION', Util::getCustomPackageVersion('webexmachina/contao-geodata'));
 }
+
+$scopeMatcher = System::getContainer()->get('wem.scope_matcher');
 
 /*
  * Backend modules.
@@ -58,7 +61,9 @@ ArrayUtil::arrayInsert(
 /*
  * Load backend css
  */
-$GLOBALS['TL_CSS'][] = 'bundles/wemgeodata/backend/backend_svg.css';
+if ($scopeMatcher->isBackend()) {
+    $GLOBALS['TL_CSS'][] = 'bundles/wemgeodata/backend/backend_svg.css';
+}
 
 /*
  * Frontend modules
