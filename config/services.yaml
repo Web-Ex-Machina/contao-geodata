@@ -6,7 +6,7 @@ services:
 
   WEM\GeoDataBundle\:
     resource: ../src/
-    exclude: ../src/{ContaoManager,DependencyInjection}
+    exclude: ../src/{ContaoManager,Controller,DependencyInjection,Module}
 
   WEM\GeoDataBundle\Backend\Callback:
     arguments:
