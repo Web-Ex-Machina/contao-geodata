@@ -31,7 +31,7 @@ if (! defined('WEM_GEODATA_COMBINER_VERSION')) {
  */
 ArrayUtil::arrayInsert(
     $GLOBALS['BE_MOD'],
-    array_search('content', array_keys($GLOBALS['BE_MOD']), true) + 1,
+    1,
     [
         'wem-geodata' => [
             'wem-maps' => [
