@@ -30,28 +30,127 @@ use WEM\UtilsBundle\Classes\CountriesUtil;
 
 class MapItemContainer extends CoreContainer
 {
-    #[AsCallback(table: 'tl_wem_map_item', target: 'fields.categories.options')]
-    public function getMapCategories(DataContainer|null $dc = null): array 
+    #[AsCallback(table: 'tl_wem_map_item', target: 'config.onload')]
+    public function checkIfGeocodeExists(): void
     {
-        $arrData = [];
+        $objMap = Map::findById(Input::get('id'));
 
-        if ($dc->activeRecord && $dc->activeRecord->pid) {
-            $objCategories = $this->Database->prepare(
-                'SELECT id, title FROM tl_wem_map_category WHERE pid = ? ORDER BY createdAt ASC'
-            )
-                ->execute($dc->activeRecord->pid)
-            ;
+        if (!$objMap || $objMap->geocodingProvider === '') {
+            unset($GLOBALS['TL_DCA']['tl_wem_map_item']['list']['global_operations']['geocodeAll'], $GLOBALS['TL_DCA']['tl_wem_map_item']['list']['operations']['geocode']);
+        }
+    }
 
-            if (! $objCategories) {
-                return [];
-            }
+    #[AsCallback(table: 'tl_wem_map_item', target: 'list.sorting.child_record')]
+    public function listItems(array $arrRow): string
+    {
+        $arrCountries = CountriesUtil::getCountries();
+        $strColor = ! $arrRow['lat'] || ! $arrRow['lng'] ? '#ff0000' : '#333';
 
-            while ($objCategories->next()) {
-                $arrData[$objCategories->id] = $objCategories->title;
-            }
+        $strRow = \sprintf(
+            '<span style="color:%s">%s</span> <span style="color:#888">[%s - %s]</span>',
+            $strColor,
+            $arrRow['title'],
+            $arrRow['city'],
+            $arrCountries[$arrRow['country']]
+        );
+
+        return $strRow . '<div class="ajax-results"></div>';
+    }
+
+    #[AsCallback(table: 'tl_wem_map_item', target: 'list.global_operations.geocodeAll.button')]
+    public function geocodeAllButtonGlobalOperations(
+        string|null $href,
+        string $label,
+        string $title,
+        string|null $class,
+        string $attributes,
+        string $table,
+        array|null $rootIds
+    ): string {
+        $objMap = Map::findById(Input::get('id'));
+        if (!$objMap || $objMap->geocodingProvider === null) {
+            return '';
         }
 
-        return $arrData;
+        $url = $this->addToUrl($href);
+
+        return \sprintf(
+            '<a href="%s" title="%s" class="%s" %s>%s</a>',
+            $url,
+            StringUtil::specialchars($title),
+            $class ?: '',
+            $attributes,
+            $label
+        );
+    }
+
+    #[AsCallback(table: 'tl_wem_map_item', target: 'list.global_operations.import.button')]
+    public function importButtonGlobalOperations(
+        string|null $href,
+        string $label,
+        string $title,
+        string|null $class,
+        string $attributes,
+        string $table,
+        array|null $rootIds
+    ): string 
+    {
+        $objMap = Map::findById(Input::get('id'));
+        if (!$objMap || $objMap->excelPattern === null || empty(StringUtil::deserialize($objMap->excelPattern))) {
+            return '';
+        }
+
+        $url = $this->addToUrl($href);
+
+        return \sprintf(
+            '<a href="%s" title="%s" class="%s" %s>%s</a>',
+            $url,
+            StringUtil::specialchars($title),
+            $class ?: '',
+            $attributes,
+            $label
+        );
+    }
+
+    #[AsCallback(table: 'tl_wem_map_item', target: 'list.global_operations.export.button')]
+    public function exportButtonGlobalOperations(
+        string|null $href,
+        string $label,
+        string $title,
+        string|null $class,
+        string $attributes,
+        string $table,
+        array|null $rootIds
+    ): string  
+    {
+        $objMap = Map::findById(Input::get('id'));
+        if (! $objMap || $objMap->excelPattern === null || empty(StringUtil::deserialize($objMap->excelPattern))) {
+            return '';
+        }
+
+        $url = $this->addToUrl($href);
+
+        return \sprintf(
+            '<a href="%s" title="%s" class="%s" %s>%s</a>',
+            $url,
+            StringUtil::specialchars($title),
+            $class ?: '',
+            $attributes,
+            $label
+        );
+    }
+
+    #[AsCallback(table: 'tl_wem_map_item', target: 'list.operations.geocode.button')]
+    public function geocodeButtonOperations(DataContainerOperation $operation): void 
+    {
+        $objMap = Map::findById(Input::get('id'));
+        if (!$objMap || $objMap->geocodingProvider === null) {
+            $operation->hide();
+        }
+
+        $url = $this->addToUrl('key=geocode');
+        $url = str_replace('&amp;id=' . $objMap->id, '&amp;id=' . Input::get('id'), $url);
+        $operation->setUrl($url);
     }
 
     #[AsCallback(table: 'tl_wem_map_item', target: 'fields.alias.save')]
@@ -66,13 +165,11 @@ class MapItemContainer extends CoreContainer
 
             // Read the slug options from the associated page
             if (
-
                 null !== ($objMap = Map::findById(
                     $dc->activeRecord->pid
                 )) && null !== ($objPage = PageModel::findWithDetails(
                     $objMap->jumpTo
                 ))
-
             ) {
                 $slugOptions = $objPage->getSlugOptions();
             }
@@ -104,14 +201,28 @@ class MapItemContainer extends CoreContainer
         return $varValue;
     }
 
-    #[AsCallback(table: 'tl_wem_map_item', target: 'config.onload')]
-    public function checkIfGeocodeExists(): void
+    #[AsCallback(table: 'tl_wem_map_item', target: 'fields.categories.options')]
+    public function getMapCategories(DataContainer|null $dc = null): array 
     {
-        $objMap = Map::findById(Input::get('id'));
+        $arrData = [];
 
-        if (!$objMap || $objMap->geocodingProvider === '') {
-            unset($GLOBALS['TL_DCA']['tl_wem_map_item']['list']['global_operations']['geocodeAll'], $GLOBALS['TL_DCA']['tl_wem_map_item']['list']['operations']['geocode']);
+        if ($dc->activeRecord && $dc->activeRecord->pid) {
+            $objCategories = $this->Database->prepare(
+                'SELECT id, title FROM tl_wem_map_category WHERE pid = ? ORDER BY createdAt ASC'
+            )
+                ->execute($dc->activeRecord->pid)
+            ;
+
+            if (! $objCategories) {
+                return [];
+            }
+
+            while ($objCategories->next()) {
+                $arrData[$objCategories->id] = $objCategories->title;
+            }
         }
+
+        return $arrData;
     }
 
     #[AsCallback(table: 'tl_wem_map_item', target: 'fields.categories.load')]
@@ -126,85 +237,6 @@ class MapItemContainer extends CoreContainer
         }
 
         return $value;
-    }
-
-    #[AsCallback(table: 'tl_wem_map_item', target: 'list.sorting.child_record')]
-    public function listItems(array $arrRow): string
-    {
-        $arrCountries = CountriesUtil::getCountries();
-        $strColor = ! $arrRow['lat'] || ! $arrRow['lng'] ? '#ff0000' : '#333';
-
-        $strRow = \sprintf(
-            '<span style="color:%s">%s</span> <span style="color:#888">[%s - %s]</span>',
-            $strColor,
-            $arrRow['title'],
-            $arrRow['city'],
-            $arrCountries[$arrRow['country']]
-        );
-
-        return $strRow . '<div class="ajax-results"></div>';
-    }
-
-    #[AsCallback(table: 'tl_wem_map_item', target: 'list.operations.import.button')]
-    public function importButtonGlobalOperations(DataContainerOperation $operation): void 
-    {
-        $objMap = Map::findById(Input::get('id'));
-        if (!$objMap || $objMap->excelPattern === null || empty(StringUtil::deserialize($objMap->excelPattern))) {
-            $operation->hide();
-        }
-
-        $operation->setUrl($this->addToUrl($operation['href']));
-    }
-
-    #[AsCallback(table: 'tl_wem_map_item', target: 'list.operations.export.button')]
-    public function exportButtonGlobalOperations(DataContainerOperation $operation): void  
-    {
-        $objMap = Map::findById(Input::get('id'));
-        if (! $objMap || $objMap->excelPattern === null || empty(StringUtil::deserialize($objMap->excelPattern))) {
-            $operation->hide();
-        }
-
-        $operation->setUrl($this->addToUrl($operation['href']));
-    }
-
-    #[AsCallback(table: 'tl_wem_map_item', target: 'list.global_operations.geocodeAll.button')]
-    public function geocodeAllButtonGlobalOperations(
-        string|null $href,
-        string $label,
-        string $title,
-        string $class,
-        string $attributes,
-        string $table,
-        array|null $rootIds
-    ): string {
-        $objMap = Map::findById(Input::get('id'));
-        if (!$objMap || $objMap->geocodingProvider === null) {
-            return '';
-        }
-
-        $url = $this->addToUrl($href);
-
-        return \sprintf(
-            '<a href="%s" title="%s" class="%s" %s>%s</a>',
-            $url,
-            StringUtil::specialchars($title),
-            $class,
-            $attributes,
-            $label
-        );
-    }
-
-    #[AsCallback(table: 'tl_wem_map_item', target: 'list.operations.export.button')]
-    public function geocodeButtonOperations(DataContainerOperation $operation): void 
-    {
-        $objMap = Map::findById(Input::get('id'));
-        if (!$objMap || $objMap->geocodingProvider === null) {
-            $operation->hide();
-        }
-
-        $url = $this->addToUrl($href);
-        $url = str_replace('&amp;id=' . $objMap->id, '&amp;id=' . $operation['id'], $url);
-        $operation->setUrl($url);
     }
 
     #[AsCallback(table: 'tl_wem_map_item', target: 'fields.categories.save')]

@@ -22,9 +22,18 @@ class Map extends CoreModel
 {
     public const GEOCODING_PROVIDER_NOMINATIM = 'nominatim';
 
+    public const GEOCODING_PROVIDERS = [
+        self::GEOCODING_PROVIDER_NOMINATIM,
+    ];
+
     public const MAP_PROVIDER_GMAP = 'gmaps';
 
     public const MAP_PROVIDER_LEAFLET = 'leaflet';
+
+    public const MAP_PROVIDERS = [
+        self::MAP_PROVIDER_LEAFLET,
+        self::MAP_PROVIDER_GMAP,
+    ];
 
     /**
      * Table name.

@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 use Contao\DataContainer;
 use Contao\DC_Table;
+use Contao\System;
 use WEM\GeoDataBundle\Model\Map;
 
 /*
@@ -20,7 +21,7 @@ use WEM\GeoDataBundle\Model\Map;
 $GLOBALS['TL_DCA']['tl_wem_map'] = [
     'config' => [
         'dataContainer' => DC_Table::class,
-        'ctable' => ['tl_wem_map_category', 'tl_wem_map_item'],
+        'ctable' => ['tl_wem_map_item', 'tl_wem_map_category'],
         'switchToEdit' => true,
         'enableVersioning' => true,
         'sql' => [
@@ -47,7 +48,7 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'copy', 
             'copy_map_item' => [
                 'href' => 'key=copy_map_item',
-                'icon' => 'copy.gif',
+                'icon' => 'copy.svg',
             ], 
             'delete', 
             'show',
@@ -56,13 +57,12 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
     'palettes' => [
         '__selector__' => ['mapProvider', 'geocodingProvider'],
         'default' => '
-            {title_legend},title,jumpTo;
-            {import_legend},excelPattern;
+            {title_legend},title,language,jumpTo;
             {map_legend},mapProvider;
             {geocoding_legend},geocodingProvider;
             {categories_legend},categories;
             {markers_legend},doNotAddItemsToContaoSitemap,doNotAddItemsToContaoSearch;
-            {import_legend},updateExistingItems,deleteExistingItemsNotInImportFile;
+            {import_legend},excelPattern,updateExistingItems,deleteExistingItemsNotInImportFile;
         ',
     ],
     'subpalettes' => [
@@ -85,8 +85,18 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'exclude' => true,
             'search' => true,
             'inputType' => 'text',
-            'eval' => ['mandatory' => true, 'maxlength' => 255],
+            'eval' => ['mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50'],
             'sql' => "varchar(255) NOT NULL default ''",
+        ],
+        'language' => [
+            'exclude' => true,
+            'filter' => true,
+            'inputType' => 'select',
+            'eval' => ['includeBlankOption' => true, 'chosen' => true, 'feEditable' => true, 'feGroup' => 'personal', 'tl_class' => 'w50'],
+            'options_callback' => static function () {
+                return System::getContainer()->get('contao.intl.locales')->getLocales(null, false);
+            },
+            'sql' => "varchar(64) NOT NULL default ''",
         ],
         'jumpTo' => [
             'exclude' => true,
@@ -96,16 +106,11 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'sql' => "int(10) unsigned NOT NULL default '0'",
             'relation' => ['type' => 'hasOne', 'load' => 'lazy'],
         ],
-        'excelPattern' => [
-            'exclude' => true,
-            'inputType' => 'keyValueWizard',
-            'sql' => 'blob NULL',
-        ],
         'mapProvider' => [
             'default' => '',
             'exclude' => true,
             'inputType' => 'select',
-            'options' => [Map::MAP_PROVIDER_GMAP, Map::MAP_PROVIDER_LEAFLET],
+            'options' => Map::MAP_PROVIDERS,
             'reference' => &$GLOBALS['TL_LANG']['tl_wem_map']['mapProvider'],
             'eval' => ['helpwizard' => true, 'mandatory' => true, 'submitOnChange' => true, 'chosen' => true, 'includeBlankOption' => true],
             'explanation' => 'wem_geodata_mapProvider',
@@ -131,7 +136,7 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
         'geocodingProvider' => [
             'exclude' => true,
             'inputType' => 'select',
-            'options' => [Map::GEOCODING_PROVIDER_NOMINATIM],
+            'options' => MAP::GEOCODING_PROVIDERS,
             'reference' => &$GLOBALS['TL_LANG']['tl_wem_map']['geocodingProvider'],
             'eval' => ['helpwizard' => true, 'includeBlankOption' => true, 'submitOnChange' => true, 'chosen' => true],
             'explanation' => 'wem_geodata_geocodingProvider',
@@ -154,7 +159,7 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'foreignTable' => 'tl_wem_map_category',
             'foreignField' => 'pid',
             'eval' => [
-                'fields' => ['createdAt', 'title', 'is_default'],
+                'fields' => ['title', 'is_default'],
                 'orderField' => 'createdAt DESC',
                 'hideButton' => false,
                 'showOperations' => true,
@@ -166,7 +171,7 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'filter' => true,
             'flag' => DataContainer::SORT_INITIAL_LETTER_ASC,
             'inputType' => 'checkbox',
-            'eval' => ['doNotCopy' => true, 'tl_class' => 'w50 m12'],
+            'eval' => ['doNotCopy' => true, 'tl_class' => 'w25 m12'],
             'sql' => "char(1) NOT NULL default ''",
         ],
         'doNotAddItemsToContaoSearch' => [
@@ -174,15 +179,21 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'filter' => true,
             'flag' => DataContainer::SORT_INITIAL_LETTER_ASC,
             'inputType' => 'checkbox',
-            'eval' => ['doNotCopy' => true, 'tl_class' => 'w50 m12'],
+            'eval' => ['doNotCopy' => true, 'tl_class' => 'w25 m12'],
             'sql' => "char(1) NOT NULL default ''",
+        ],
+        'excelPattern' => [
+            'exclude' => true,
+            'inputType' => 'keyValueWizard',
+            'eval' => ['doNotCopy' => true, 'tl_class' => 'clr'],
+            'sql' => 'blob NULL',
         ],
         'updateExistingItems' => [
             'exclude' => true,
             'filter' => true,
             'flag' => DataContainer::SORT_INITIAL_LETTER_ASC,
             'inputType' => 'checkbox',
-            'eval' => ['doNotCopy' => true, 'tl_class' => 'w50 m12'],
+            'eval' => ['doNotCopy' => true, 'tl_class' => 'w25 m12 clr'],
             'sql' => "char(1) NOT NULL default ''",
         ],
         'deleteExistingItemsNotInImportFile' => [
@@ -190,7 +201,7 @@ $GLOBALS['TL_DCA']['tl_wem_map'] = [
             'filter' => true,
             'flag' => DataContainer::SORT_INITIAL_LETTER_ASC,
             'inputType' => 'checkbox',
-            'eval' => ['doNotCopy' => true, 'tl_class' => 'w50 m12'],
+            'eval' => ['doNotCopy' => true, 'tl_class' => 'w25 m12'],
             'sql' => "char(1) NOT NULL default ''",
         ],
     ],

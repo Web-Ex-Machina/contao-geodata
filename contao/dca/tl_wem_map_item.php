@@ -42,14 +42,18 @@ $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
         'global_operations' => [
             'geocodeAll' => [
                 'href' => 'key=geocodeAll',
+                'icon' => 'bundles/wemgeodata/backend/icon_geocode_16.png',
                 'class' => 'header_geocodeAll',
                 'attributes' => 'data-confirm="Geocode all?"',
+                'primary' => true,
             ],
             'import' => [
+                'icon' => 'bundles/wemgeodata/backend/icon_geocode_16.png',
                 'href' => 'key=import',
                 'class' => 'header_css_import',
             ],
             'export' => [
+                'icon' => 'bundles/wemgeodata/backend/icon_geocode_16.png',
                 'href' => 'key=export_form',
                 'class' => 'header_css_import',
             ],
@@ -65,18 +69,19 @@ $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
             'geocode' => [
                 'href' => 'key=geocode',
                 'icon' => 'bundles/wemgeodata/backend/icon_geocode_16.png',
+                'primary' => true,
             ],
         ],
     ],
     'palettes' => [
         'default' => '
-            {location_legend},title,alias,categories,published,publishedAt,publishedUntil;
-            {street_legend},country,admin_lvl_1,admin_lvl_2,admin_lvl_3,city,postal,street;
+            {location_legend},title,alias,categories;
+            {street_legend},country,admin_lvl_3,admin_lvl_2,admin_lvl_1,city,postal,street;
             {coords_legend},lat,lng;
             {data_legend},picture,teaser;
-            {contact_legend},phone,fax,email;
-            {links_legend},website,facebook,twitter,instagram;
-            {attributes_legend},attributes
+            {contact_legend},phone,email,website;
+            {attributes_legend},attributes;
+            {publish_legend},published,publishedAt,publishedUntil
         ',
     ],
     'fields' => [
@@ -117,28 +122,6 @@ $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
             'eval' => ['chosen' => true, 'includeBlankOption' => true, 'multiple' => true, 'mandatory' => true, 'tl_class' => 'w50'],
             'sql' => 'blob NULL',
             'relation' => ['type' => 'belongsTo', 'load' => 'eager'],
-        ],
-        'published' => [
-            'exclude' => true,
-            'filter' => true,
-            'toggle' => true,
-            'flag' => DataContainer::SORT_INITIAL_LETTER_ASC,
-            'inputType' => 'checkbox',
-            'eval' => ['doNotCopy' => true, 'tl_class' => 'w50 m12 clr'],
-            'sql' => "char(1) NOT NULL default ''",
-        ],
-        'publishedAt' => [
-            'exclude' => true,
-            'inputType' => 'text',
-            'eval' => ['rgxp' => 'datim',
-                'datepicker' => true, 'tl_class' => 'w50 wizard clr'],
-            'sql' => "varchar(10) NOT NULL default ''",
-        ],
-        'publishedUntil' => [
-            'exclude' => true,
-            'inputType' => 'text',
-            'eval' => ['rgxp' => 'datim', 'datepicker' => true, 'tl_class' => 'w50 wizard'],
-            'sql' => "varchar(10) NOT NULL default ''",
         ],
         'lat' => [
             'exclude' => true,
@@ -221,12 +204,6 @@ $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
             'eval' => ['maxlength' => 64, 'tl_class' => 'w50'],
             'sql' => "varchar(64) NOT NULL default ''",
         ],
-        'fax' => [
-            'exclude' => true,
-            'inputType' => 'text',
-            'eval' => ['maxlength' => 64, 'tl_class' => 'w50'],
-            'sql' => "varchar(64) NOT NULL default ''",
-        ],
         'email' => [
             'exclude' => true,
             'search' => true,
@@ -235,27 +212,6 @@ $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
             'sql' => "varchar(255) NOT NULL default ''",
         ],
         'website' => [
-            'exclude' => true,
-            'search' => true,
-            'inputType' => 'text',
-            'eval' => ['rgxp' => 'url', 'maxlength' => 255, 'tl_class' => 'w50'],
-            'sql' => "varchar(255) NOT NULL default ''",
-        ],
-        'facebook' => [
-            'exclude' => true,
-            'search' => true,
-            'inputType' => 'text',
-            'eval' => ['rgxp' => 'url', 'maxlength' => 255, 'tl_class' => 'w50'],
-            'sql' => "varchar(255) NOT NULL default ''",
-        ],
-        'twitter' => [
-            'exclude' => true,
-            'search' => true,
-            'inputType' => 'text',
-            'eval' => ['rgxp' => 'url', 'maxlength' => 255, 'tl_class' => 'w50'],
-            'sql' => "varchar(255) NOT NULL default ''",
-        ],
-        'instagram' => [
             'exclude' => true,
             'search' => true,
             'inputType' => 'text',
@@ -274,6 +230,28 @@ $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
                 'showOperations' => true,
                 'operations' => ['edit', 'delete'],
             ],
+        ],
+        'published' => [
+            'exclude' => true,
+            'filter' => true,
+            'toggle' => true,
+            'flag' => DataContainer::SORT_INITIAL_LETTER_ASC,
+            'inputType' => 'checkbox',
+            'eval' => ['doNotCopy' => true, 'tl_class' => 'w50 m12 clr'],
+            'sql' => "char(1) NOT NULL default ''",
+        ],
+        'publishedAt' => [
+            'exclude' => true,
+            'inputType' => 'text',
+            'eval' => ['rgxp' => 'datim',
+                'datepicker' => true, 'tl_class' => 'w50 wizard clr'],
+            'sql' => "varchar(10) NOT NULL default ''",
+        ],
+        'publishedUntil' => [
+            'exclude' => true,
+            'inputType' => 'text',
+            'eval' => ['rgxp' => 'datim', 'datepicker' => true, 'tl_class' => 'w50 wizard'],
+            'sql' => "varchar(10) NOT NULL default ''",
         ],
     ],
 ];
