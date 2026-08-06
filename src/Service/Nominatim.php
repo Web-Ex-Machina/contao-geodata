@@ -2,33 +2,24 @@
 
 declare(strict_types=1);
 
-/*
- * Geodata Bundle for Contao Open Source CMS
- * @author     Web Ex Machina
- *
- * @see        https://github.com/Web-Ex-Machina/contao-geodata
- * @license    https://www.apache.org/licenses/LICENSE-2.0
- */
-
-namespace WEM\GeoDataBundle\Controller\Provider;
+namespace WEM\GeoDataBundle\Service;
 
 use Contao\Config;
-use Contao\Controller;
 use Exception;
 use WEM\GeoDataBundle\Model\Map;
 use WEM\GeoDataBundle\Model\MapItem;
 
 /**
- * Provide Nominatim utilities functions to Locations Extension.
+ * Provide Nominatim utilities functions
  */
-class Nominatim extends Controller
+class Nominatim
 {
     /**
      * Nominating Geocoding URL to request (sprintf pattern).
      *
      * @var string
      */
-    protected static $strGeocodingUrl = 'https://nominatim.openstreetmap.org/search%s&format=json&addressdetails=1&email=%s';
+    protected $strGeocodingUrl = 'https://nominatim.openstreetmap.org/search%s&format=json&addressdetails=1&email=%s';
 
     /**
      * Return the coords lat/lng for a given address.
@@ -39,18 +30,19 @@ class Nominatim extends Controller
      *
      * @return array [Address Components]
      */
-    public static function geocoder(
-        $varAddress,
-        Map $objMap,
-        int|null $intResults = 1
-    ): array {
+    public function geocode(string|MapItem $varAddress, Map $objMap, int|null $intResults = 1): array 
+    {
         // Before everything, check if we can geocode this
-        if ($objMap->geocodingProvider !== 'nominatim') {
-            throw new Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['missingConfigForGeocoding']);
+        if ('nominatim' !== $objMap->geocodingProvider) {
+            throw new Exception(
+                $GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['missingConfigForGeocoding']
+            );
         }
 
         if (empty($objMap->geocodingProviderNominatimReferer)) {
-            throw new Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['missingConfigForGeocoding']);
+            throw new Exception(
+                $GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['missingConfigForGeocoding']
+            );
         }
 
         // Standardize the address to geocode
@@ -90,7 +82,7 @@ class Nominatim extends Controller
 
         // Then, cURL it baby.
         $ch = curl_init();
-        $strUrl = \sprintf(static::$strGeocodingUrl, $strAddress, Config::get('adminEmail'));
+        $strUrl = \sprintf($this->strGeocodingUrl, $strAddress, Config::get('adminEmail'));
         curl_setopt($ch, CURLOPT_URL, $strUrl);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_TIMEOUT, 5);
@@ -100,7 +92,7 @@ class Nominatim extends Controller
         $geoloc = json_decode(curl_exec($ch), true);
 
         // Catch Error
-        if (! $geoloc) {
+        if (!$geoloc) {
             throw new Exception(\sprintf(
                 $GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['invalidRequest'],
                 $strUrl
@@ -108,14 +100,18 @@ class Nominatim extends Controller
         }
 
         // And return them
-        if ($intResults === 1) {
-            return ['lat' => $geoloc[0]['lat'],
-                'lng' => $geoloc[0]['lon']];
+        if (1 === $intResults) {
+            return [
+                'lat' => $geoloc[0]['lat'],
+                'lng' => $geoloc[0]['lon'],
+            ];
         }
 
         foreach ($geoloc as $result) {
-            $arrResults[] = ['lat' => $result['lat'],
-                'lng' => $result['lng']];
+            $arrResults[] = [
+                'lat' => $result['lat'],
+                'lng' => $result['lon'],
+            ];
         }
 
         return $arrResults;

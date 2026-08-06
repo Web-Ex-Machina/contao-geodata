@@ -8,10 +8,8 @@ services:
     resource: ../src/
     exclude: ../src/{ContaoManager,Controller,DependencyInjection,Module}
 
-  WEM\GeoDataBundle\Backend\Callback:
-    arguments:
-      $locales: '@contao.intl.locales'
-    public: true
+  wem.geodata.service.nominatim:
+    class: WEM\GeoDataBundle\Service\Nominatim
             
   WEM\GeoDataBundle\Migration\M202307170826_MultiCategories:
     arguments:

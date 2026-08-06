@@ -30,23 +30,21 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use WEM\GeoDataBundle\Classes\Util;
-use WEM\GeoDataBundle\Controller\Provider\Nominatim;
 use WEM\GeoDataBundle\Model\Category;
 use WEM\GeoDataBundle\Model\Map;
 use WEM\GeoDataBundle\Model\MapItem;
+use WEM\GeoDataBundle\Service\Nominatim;
 
 /**
  * Provide backend functions to Locations Extension.
  */
 class Callback extends Backend
 {
-    private Locales $locales;
-
-    public function __construct(Locales $locales)
-    {
+    public function __construct(
+        private Locales $locales,
+        private Nominatim $nominatim,
+    ) {
         parent::__construct();
-        // $this->locales = System::getContainer()->get('contao.intl.locales');
-        $this->locales = $locales;
     }
 
     /**
@@ -55,14 +53,14 @@ class Callback extends Backend
      *
      * @param DataContainer $objDc [Datacontainer to geocode]
      */
-    public function geocode(
-        DataContainer $objDc
-    ): string|null {
+    public function geocode(DataContainer $objDc): string|null 
+    {
         $arrResponse = null;
         $objLocation = null;
         $objMap = null;
+        $isAjax = 'ajax' === Input::get('src');
 
-        if (Input::get('key') !== 'geocode') {
+        if ('geocode' !== Input::get('key')) {
             return '';
         }
 
@@ -70,21 +68,15 @@ class Callback extends Backend
             $objLocation = MapItem::findById($objDc->id);
             $objMap = Map::findById($objLocation->pid);
 
-            if (! $objMap->geocodingProvider) {
-                throw new Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['missingConfigForGeocoding']);
+            if (!$objMap->geocodingProvider) {
+                throw new Exception(
+                    $GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['missingConfigForGeocoding']
+                );
             }
 
             switch ($objMap->geocodingProvider) {
-                case 'gmaps': // hardcoded, as the constant doesn't exist anymore because we will not need it again
-                    throw new Exception(
-                        \sprintf(
-                            $GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['featureDeletedIn'],
-                            'Geocoding by Google',
-                            '2.0'
-                        )
-                    );
                 case Map::GEOCODING_PROVIDER_NOMINATIM:
-                    $arrCoords = Nominatim::geocoder($objLocation, $objMap);
+                    $arrCoords = $this->nominatim->geocode($objLocation, $objMap);
                     break;
                 default:
                     throw new Exception(
@@ -95,11 +87,13 @@ class Callback extends Backend
             $objLocation->lat = $arrCoords['lat'];
             $objLocation->lng = $arrCoords['lng'];
 
-            if (! $objLocation->save()) {
-                throw new Exception($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['errorWhenSavingTheLocation']);
+            if (!$objLocation->save()) {
+                throw new Exception(
+                    $GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['errorWhenSavingTheLocation']
+                );
             }
 
-            if (Input::get('src') === 'ajax') {
+            if ($isAjax) {
                 $arrResponse = [
                     'status' => 'success',
                     'response' => \sprintf(
@@ -114,7 +108,7 @@ class Callback extends Backend
                 );
             }
         } catch (Exception $exception) {
-            if (Input::get('src') === 'ajax') {
+            if ($isAjax) {
                 $arrResponse = [
                     'status' => 'error',
                     'response' => $exception->getMessage(),
@@ -124,17 +118,17 @@ class Callback extends Backend
             }
         }
 
-        if (Input::get('src') === 'ajax') {
+        if ($isAjax) {
             $objResponse = new JsonResponse($arrResponse);
             $objResponse->send();
         }
 
         $strRedirect = str_replace(
-            [
-                '&key=geocode', 'id=' . $objLocation->id, '&src=ajax'],
+            ['&key=geocode', 'id=' . $objLocation->id, '&src=ajax'],
             ['', 'id=' . $objMap->id, ''],
-            Environment::get('request')
+            Environment::get('request'),
         );
+
         $this->redirect(StringUtil::ampersand($strRedirect));
     }
 
