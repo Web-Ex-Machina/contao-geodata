@@ -74,7 +74,7 @@ class Nominatim
 
             $strAddress = '?' . implode('&', $args);
         } else {
-            $strAddress = $varAddress;
+            $strAddress = '?q=' . $varAddress;
         }
 
         // Some String manips
@@ -86,10 +86,10 @@ class Nominatim
         curl_setopt($ch, CURLOPT_URL, $strUrl);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Referer: ' . $objMap->geocodingProviderNominatimReferer,
-        ]);
-        $geoloc = json_decode(curl_exec($ch), true);
+        curl_setopt($ch, CURLOPT_USERAGENT, Config::get('adminEmail'));
+        curl_setopt($ch, CURLOPT_REFERER, $objMap->geocodingProviderNominatimReferer);
+        $response = curl_exec($ch);
+        $geoloc = json_decode($response, true);
 
         // Catch Error
         if (!$geoloc) {
