@@ -1,67 +1,78 @@
 <div id="tl_buttons">
-    <a href="<?php echo $this->backButtonHref; ?>" class="header_back" title="'<?php echo $this->backButtonTitle; ?>" accesskey="b"><?php echo $this->backButtonLabel; ?></a>
+    <a href="<?= $this->backButtonHref ?>" class="header_back" title="'<?= $this->backButtonTitle ?>" accesskey="b"><?= $this->backButtonLabel ?></a>
 </div>
-    <?php echo \Contao\Message::generate(); ?>
-<form action="<?php echo $this->formAction; ?>" id="tl_wem_items_export" class="tl_form" method="post">
+
+<?= \Contao\Message::generate() ?>
+
+<form action="<?= $this->formAction ?>" id="<?= $this->formId ?>" class="tl_form" method="post" data-turbo="false">
     <div class="tl_formbody_edit">
-        <input type="hidden" name="FORM_SUBMIT" value="tl_wem_items_export">
-        <input type="hidden" name="REQUEST_TOKEN" value="<?php echo $this->formRequestToken; ?>">
+        <input type="hidden" name="FORM_SUBMIT" value="<?= $this->formId ?>">
+        <input type="hidden" name="REQUEST_TOKEN" value="<?= $this->formRequestToken ?>">
 
         <fieldset class="tl_tbox">
-            <legend><?php echo $this->widgetSettingsTitle; ?></legend>
-            <div class="widget">
-                <fieldset class="tl_radio_container">
-                    <legend><?php echo $this->widgetSettingsFormatLabel; ?></legend>
-                    <input type="radio" name="format" id="format_xslx" value="xlsx"  class="tl_radio" checked>
-                    <label for="format_xlsx">
-                        XLSX
-                    </label>
-                    <input type="radio" name="format" id="format_csv" value="csv" class="tl_radio" >
-                    <label for="format_csv">
-                        CSV
-                    </label>
-                </fieldset>
-            </div>
-            <div class="widget">
-                <h3>
-                    <label for="chk_limit_to_categories">
-                        <input type="checkbox" name="chk_limit_to_categories" value="1" class="tl_checkbox">
-                        <?php echo $this->widgetSettingsLimitToCategoriesCheckboxLabel; ?>
-                    </label>
-                </h3>
-                <div id="limit_to_categories_container" class="hidden">
-                    <br/>
-                    <label for="limit_to_categories[]">
-                        <?php echo $this->widgetSettingsLimitToCategoriesSelectLabel; ?>
-                    </label>
-                    <select name="limit_to_categories[]" multiple class="tl_select tl_chosen">
-                        <?php foreach($this->categories as $id => $label): ?>
-                        <option value="<?php echo $id; ?>">
-                            <?php echo $label; ?>
-                        </option>
-                        <?php endforeach; ?>
-                    </select>
+            <legend><?= $this->widgetSettingsTitle ?></legend>
+
+            <div class="widget-group">
+                <div class="widget">
+                    <fieldset class="tl_radio_container">
+                        <legend><?= $this->widgetSettingsFormatLabel ?></legend>
+                        <span>
+                            <input type="radio" name="format" id="format_xslx" value="xlsx"  class="tl_radio" checked>
+                            <label for="format_xslx">XLSX</label>
+                        </span>
+                        <span>
+                            <input type="radio" name="format" id="format_csv" value="csv" class="tl_radio" >
+                            <label for="format_csv">CSV</label>
+                        </span>
+                    </fieldset>
                 </div>
-            </div>
-            <div class="widget">
-                <h3>
-                    <label for="chk_limit_to_countries">
-                        <input type="checkbox" name="chk_limit_to_countries" value="1" class="tl_checkbox">
-                        <?php echo $this->widgetSettingsLimitToCountriesCheckboxLabel; ?>
-                    </label>
-                </h3>
-                <div id="limit_to_countries_container" class="hidden">
-                    <br/>
-                    <label for="limit_to_countries[]">
-                        <?php echo $this->widgetSettingsLimitToCountriesSelectLabel; ?>
-                    </label>
-                    <select name="limit_to_countries[]" multiple class="tl_select tl_chosen">
-                        <?php foreach($this->countries as $id => $label): ?>
-                        <option value="<?php echo $id; ?>">
-                            <?php echo $label; ?>
-                        </option>
-                        <?php endforeach; ?>
-                    </select>
+
+                <div class="widget">
+                    <div class="tl_checkbox_single_container">
+                        <span>
+                            <input type="checkbox" id="chk_limit_to_categories" name="chk_limit_to_categories" value="1" class="tl_checkbox">
+                            <label for="chk_limit_to_categories"><?= $this->widgetSettingsLimitToCategoriesCheckboxLabel ?></label>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="widget">
+                    <div id="limit_to_categories_container" class="hidden">
+                        <h3>
+                            <label for="limit_to_categories[]"><?= $this->widgetSettingsLimitToCategoriesSelectLabel ?></label>
+                        </h3>
+                        <select name="limit_to_categories[]" multiple class="tl_select tl_chosen">
+                            <?php foreach($this->categories as $id => $label): ?>
+                            <option value="<?= $id ?>">
+                                <?= $label ?>
+                            </option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="widget">
+                    <div class="tl_checkbox_single_container">
+                        <span>
+                            <input type="checkbox" id="chk_limit_to_countries" name="chk_limit_to_countries" value="1" class="tl_checkbox">
+                            <label for="chk_limit_to_countries"><?= $this->widgetSettingsLimitToCountriesCheckboxLabel ?></label>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="widget">
+                    <div id="limit_to_countries_container" class="hidden">
+                        <h3>
+                            <label for="limit_to_countries[]"><?= $this->widgetSettingsLimitToCountriesSelectLabel ?></label>
+                        </h3>
+                        <select name="limit_to_countries[]" multiple class="tl_select tl_chosen">
+                            <?php foreach($this->countries as $id => $label): ?>
+                            <option value="<?= $id ?>">
+                                <?= $label ?>
+                            </option>
+                            <?php endforeach ?>
+                        </select>
+                    </div>
                 </div>
             </div>
         </fieldset>
@@ -69,7 +80,7 @@
 
     <div class="tl_formbody_submit">
         <div class="tl_submit_container">
-          <input type="submit" name="save" id="save" class="tl_submit" accesskey="s" value="<?php echo $this->formSubmitValue; ?>">
+          <input type="submit" name="save" id="save" class="tl_submit" accesskey="s" value="<?= $this->formSubmitValue ?>">
         </div>
     </div>
 </form>

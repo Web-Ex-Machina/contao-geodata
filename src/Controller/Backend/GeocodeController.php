@@ -40,7 +40,7 @@ class GeocodeController extends AbstractController
      *
      * @param DataContainer $objDc [Datacontainer to geocode]
      */
-    public function geocode(DataContainer $objDc): string|null 
+    public function run(DataContainer $objDc): string|null 
     {
         $arrResponse = null;
         $objLocation = null;

@@ -54,7 +54,7 @@ $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
             ],
             'export' => [
                 'icon' => 'bundles/wemgeodata/backend/icon_geocode_16.png',
-                'href' => 'key=export_form',
+                'href' => 'key=export',
                 'class' => 'header_css_import',
             ],
             'all',

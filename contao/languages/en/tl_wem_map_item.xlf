@@ -156,6 +156,16 @@
 				<source>Download a sample file as example</source>
 			</trans-unit>
 
+			<trans-unit id="tl_wem_map_item.export.0">
+				<source>Export</source>
+			</trans-unit>
+			<trans-unit id="tl_wem_map_item.export.1">
+				<source>Export locations from this map</source>
+			</trans-unit>
+			<trans-unit id="tl_wem_map_item.export_form.0">
+				<source>Export</source>
+				<target>Exporter</target>
+			</trans-unit>
 			<trans-unit id="tl_wem_map_item.export_form.0">
 				<source>Export</source>
 			</trans-unit>
