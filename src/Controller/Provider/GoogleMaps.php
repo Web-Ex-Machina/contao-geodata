@@ -27,7 +27,7 @@ class GoogleMaps extends Controller
      */
     protected static string $strGeocodingUrl = 'https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=%s';
 
-    protected function __construct()
+    public function __construct()
     {
         parent::__construct();
     }

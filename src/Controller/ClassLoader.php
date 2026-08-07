@@ -24,6 +24,11 @@ use WEM\GeoDataBundle\Model\Map;
  */
 class ClassLoader extends Controller
 {
+    public function __construct()
+    {
+
+    }
+    
     /**
      * Correctly load a generic Provider Not used for now, but keep it for later !
      */

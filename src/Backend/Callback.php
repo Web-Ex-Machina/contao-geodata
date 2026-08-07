@@ -15,10 +15,12 @@ namespace WEM\GeoDataBundle\Backend;
 use Contao\Backend;
 use Contao\BackendTemplate;
 use Contao\Config;
+use Contao\CoreBundle\Exception\ResponseException;
 use Contao\CoreBundle\Intl\Locales;
 use Contao\DataContainer;
 use Contao\Environment;
 use Contao\File;
+use Contao\Files;
 use Contao\FileUpload;
 use Contao\Input;
 use Contao\Message;
@@ -33,7 +35,8 @@ use WEM\GeoDataBundle\Classes\Util;
 use WEM\GeoDataBundle\Model\Category;
 use WEM\GeoDataBundle\Model\Map;
 use WEM\GeoDataBundle\Model\MapItem;
-use WEM\GeoDataBundle\Service\Nominatim;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
  * Provide backend functions to Locations Extension.
@@ -42,94 +45,8 @@ class Callback extends Backend
 {
     public function __construct(
         private Locales $locales,
-        private Nominatim $nominatim,
     ) {
         parent::__construct();
-    }
-
-    /**
-     * Geocode a given location. return JSON through AJAX request or Message
-     * with redirection.
-     *
-     * @param DataContainer $objDc [Datacontainer to geocode]
-     */
-    public function geocode(DataContainer $objDc): string|null 
-    {
-        $arrResponse = null;
-        $objLocation = null;
-        $objMap = null;
-        $isAjax = 'ajax' === Input::get('src');
-
-        if ('geocode' !== Input::get('key')) {
-            return '';
-        }
-
-        try {
-            $objLocation = MapItem::findById($objDc->id);
-            $objMap = Map::findById($objLocation->pid);
-
-            if (!$objMap->geocodingProvider) {
-                throw new Exception(
-                    $GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['missingConfigForGeocoding']
-                );
-            }
-
-            switch ($objMap->geocodingProvider) {
-                case Map::GEOCODING_PROVIDER_NOMINATIM:
-                    $arrCoords = $this->nominatim->geocode($objLocation, $objMap);
-                    break;
-                default:
-                    throw new Exception(
-                        $GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['missingConfigForGeocoding']
-                    );
-            }
-
-            $objLocation->lat = $arrCoords['lat'];
-            $objLocation->lng = $arrCoords['lng'];
-
-            if (!$objLocation->save()) {
-                throw new Exception(
-                    $GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['errorWhenSavingTheLocation']
-                );
-            }
-
-            if ($isAjax) {
-                $arrResponse = [
-                    'status' => 'success',
-                    'response' => \sprintf(
-                        $GLOBALS['TL_LANG']['WEM']['LOCATIONS']['CONFIRM']['locationSaved'],
-                        $objLocation->title
-                    ),
-                    'data' => $arrCoords,
-                ];
-            } else {
-                Message::addConfirmation(
-                    \sprintf($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['CONFIRM']['locationSaved'], $objLocation->title)
-                );
-            }
-        } catch (Exception $exception) {
-            if ($isAjax) {
-                $arrResponse = [
-                    'status' => 'error',
-                    'response' => $exception->getMessage(),
-                ];
-            } else {
-                Message::addError($exception->getMessage());
-            }
-        }
-
-        if ($isAjax) {
-            $objResponse = new JsonResponse($arrResponse);
-            $objResponse->send();
-        }
-
-        $strRedirect = str_replace(
-            ['&key=geocode', 'id=' . $objLocation->id, '&src=ajax'],
-            ['', 'id=' . $objMap->id, ''],
-            Environment::get('request'),
-        );
-
-        $this->redirect(StringUtil::ampersand($strRedirect));
     }
 
     /**
@@ -476,17 +393,17 @@ class Callback extends Backend
 
     public function downloadImportSample(): string
     {
-        if (Input::get('key') !== 'download_import_sample') {
+        if ('download_import_sample' !== Input::get('key')) {
             return '';
         }
 
-        if (! Input::get('id')) {
+        if (!Input::get('id')) {
             return '';
         }
 
         $objMap = Map::findById(Input::get('id'));
 
-        if (! $objMap) {
+        if (!$objMap) {
             return '';
         }
 
@@ -497,10 +414,8 @@ class Callback extends Backend
         $arrExcelPattern = [];
 
         // Preformat Excel Pattern (key = Excel column, value = DB Column)
-        foreach (StringUtil::deserialize(
-            $objMap->excelPattern
-        ) as $arrColumn) {
-            $arrExcelPattern[$arrColumn['value']] = $arrColumn['key'];
+        foreach (StringUtil::deserialize($objMap->excelPattern) as $c) {
+            $arrExcelPattern[$c['value']] = $c['key'];
         }
 
         foreach ($arrExcelPattern as $strExcelColumn => $strDbColumn) {
@@ -515,16 +430,15 @@ class Callback extends Backend
 
         // HOOK: add custom logic
         if (
-
             isset($GLOBALS['TL_HOOKS']['WEMGEODATADOWNLOADLOCATIONSSAMPLE']) && \is_array(
                 $GLOBALS['TL_HOOKS']['WEMGEODATADOWNLOADLOCATIONSSAMPLE']
             )
-
         ) {
             foreach ($GLOBALS['TL_HOOKS']['WEMGEODATADOWNLOADLOCATIONSSAMPLE'] as $callback) {
                 $objSpreadsheetTemp = static::importStatic(
                     $callback[0]
                 )->{$callback[1]}($objSpreadsheet, $arrExcelPattern, $objMap, $this);
+                
                 if ($objSpreadsheetTemp) {
                     $objSpreadsheet = $objSpreadsheetTemp;
                 }
@@ -532,7 +446,6 @@ class Callback extends Backend
         }
 
         header('Content-Disposition: attachment;filename="' . $strFilename . '.xlsx"');
-
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Cache-Control: max-age=0');
 
@@ -546,15 +459,19 @@ class Callback extends Backend
      */
     public function exportLocationsForm(): string
     {
-        if (Input::get('key') !== 'export_form') {
+        if ('export_form' !== Input::get('key')) {
             return '';
         }
 
-        if (! Input::get('id')) {
+        if (!Input::get('id')) {
             return '';
         }
 
         $objMap = Map::findById(Input::get('id'));
+
+        if (!$objMap) {
+            return '';
+        }
 
         $arrCategories = [];
         $categories = Category::findItems(['pid' => $objMap->id]);
@@ -569,11 +486,8 @@ class Callback extends Backend
         $items = MapItem::findItems(['pid' => $objMap->id]);
         if ($items instanceof Collection) {
             while ($items->next()) {
-                $arrCountries[$items->country] = $arrCountriesSystem[strtoupper(
-                    $items->country
-                )] ?? $arrCountriesSystem[strtolower(
-                    $items->country
-                )];
+                $arrCountries[$items->country] = $arrCountriesSystem[strtoupper($items->country)] 
+                    ?? $arrCountriesSystem[strtolower($items->country)];
             }
         }
 
@@ -591,7 +505,6 @@ class Callback extends Backend
 
         $objTemplate->widgetSettingsTitle = $GLOBALS['TL_LANG']['tl_wem_map_item']['exportSettingsTitle'];
         $objTemplate->widgetSettingsFormatLabel = $GLOBALS['TL_LANG']['tl_wem_map_item']['exportSettingsFormatLabel'];
-
         $objTemplate->widgetSettingsLimitToCategoriesCheckboxLabel = $GLOBALS['TL_LANG']['tl_wem_map_item']['exportSettingsLimitToCategoriesCheckboxLabel'];
         $objTemplate->widgetSettingsLimitToCategoriesSelectLabel = $GLOBALS['TL_LANG']['tl_wem_map_item']['exportSettingsLimitToCategoriesSelectLabel'];
         $objTemplate->widgetSettingsLimitToCountriesCheckboxLabel = $GLOBALS['TL_LANG']['tl_wem_map_item']['exportSettingsLimitToCountriesCheckboxLabel'];
@@ -602,9 +515,7 @@ class Callback extends Backend
 
         $objTemplate->categories = $arrCategories;
         $objTemplate->countries = $arrCountries;
-        $objTemplate->formRequestToken = System::getContainer()->get(
-            'contao.csrf.token_manager'
-        )->getDefaultTokenValue();
+        $objTemplate->formRequestToken = System::getContainer()->get('contao.csrf.token_manager')->getDefaultTokenValue();
         $objTemplate->formMaxFileSize = Config::get('maxFileSize');
 
         return $objTemplate->parse();
@@ -613,20 +524,29 @@ class Callback extends Backend
     /**
      * Export the Locations of the current map, according to the pattern set.
      */
-    public function exportLocations(): string
+    public function exportLocations(): never
     {
-        if (Input::get('key') !== 'export') {
-            return '';
+        $referer = Environment::get('uri');
+        $referer = str_replace(['&key=export'], ['&key=export_form'], $referer);
+
+        if ('export' !== Input::get('key')) {
+            Message::addError("Unauthorized access");
+            
+            $this->redirect($referer);
         }
 
-        if (! Input::get('id')) {
-            return '';
+        if (!Input::get('id')) {
+            Message::addError("No ID found");
+            
+            $this->redirect($referer);
         }
 
         $objMap = Map::findById(Input::get('id'));
 
-        if (! $objMap) {
-            return '';
+        if (!$objMap) {
+            Message::addError("No map found");
+            
+            $this->redirect($referer);
         }
 
         $params = ['pid' => $objMap->id];
@@ -641,10 +561,8 @@ class Callback extends Backend
         $arrExcelPattern = [];
 
         // Preformat Excel Pattern (key = DB Column, value = Excel column)
-        foreach (StringUtil::deserialize(
-            $objMap->excelPattern
-        ) as $arrColumn) {
-            $arrExcelPattern[$arrColumn['key']] = $arrColumn['value'];
+        foreach (StringUtil::deserialize($objMap->excelPattern) as $c) {
+            $arrExcelPattern[$c['key']] = $c['value'];
         }
 
         // Fetch all the locations
@@ -652,12 +570,10 @@ class Callback extends Backend
         $objLocations = MapItem::findItems($params);
 
         // Break if no locations
-        if (! $objLocations instanceof Collection) {
+        if (!$objLocations instanceof Collection) {
             Message::addError($GLOBALS['TL_LANG']['WEM']['LOCATIONS']['ERROR']['noLocationsFound']);
-            $url = Environment::get('uri');
-            $url = str_replace(['&key=export'], ['&key=export_form'], $url);
-
-            $this->redirect($url);
+            
+            $this->redirect($referer);
         }
 
         // Format for the Excel
@@ -699,16 +615,18 @@ class Callback extends Backend
         }
 
         // And send to browser
-        $strFilename = date('Y-m-d_H-i') . '_export-locations';
+        $filename = date('Y-m-d_H-i') . '_export-locations';
 
         switch (strtolower(Input::post('format') ?? '')) {
             case 'csv':
                 $format = IOFactory::WRITER_CSV;
-                header('Content-Disposition: attachment;filename="' . $strFilename . '.csv"');
+                $filename .= '.csv';
+                // header('Content-Disposition: attachment;filename="' . $filename . '"');
                 break;
             case 'xlsx':
                 $format = IOFactory::WRITER_XLSX;
-                header('Content-Disposition: attachment;filename="' . $strFilename . '.xlsx"');
+                $filename .= '.xlsx';
+                // header('Content-Disposition: attachment;filename="' . $filename . '"');
                 break;
             default:
                 throw new Exception(\sprintf(
@@ -719,24 +637,23 @@ class Callback extends Backend
 
         // HOOK: add custom logic
         if (
-
             isset($GLOBALS['TL_HOOKS']['WEMGEODATADOWNLOADLOCATIONSEXPORT']) && \is_array(
                 $GLOBALS['TL_HOOKS']['WEMGEODATADOWNLOADLOCATIONSEXPORT']
             )
-
         ) {
             foreach ($GLOBALS['TL_HOOKS']['WEMGEODATADOWNLOADLOCATIONSEXPORT'] as $callback) {
                 $objSpreadsheetTemp = static::importStatic(
                     $callback[0]
                 )->{$callback[1]}($objSpreadsheet, $arrExcelPattern, $objLocations->reset(), $arrCountries, $objMap, $format, $this);
+                
                 if ($objSpreadsheetTemp) {
                     $objSpreadsheet = $objSpreadsheetTemp;
                 }
             }
         }
 
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Cache-Control: max-age=0');
+        // header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        // header('Cache-Control: max-age=0');
 
         $writer = IOFactory::createWriter($objSpreadsheet, $format);
 
@@ -747,18 +664,24 @@ class Callback extends Backend
             $writer->setSheetIndex(0);
         }
 
-        $writer->save('php://output');
-        exit;
+        $root = System::getContainer()->getParameter('kernel.project_dir');
+        $filepath = $root . '/system/tmp/' . $filename;
+        $writer->save($filepath);
+
+        $response = new BinaryFileResponse($filepath);
+        $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $filename);
+
+        throw new ResponseException($response);
     }
 
     public function copyMapItem(DataContainer $dc): void
     {
-        if (! $dc->id) {
+        if (!$dc->id) {
             return;
         }
 
         $objMapOld = Map::findById($dc->id);
-        if (! $objMapOld) {
+        if (!$objMapOld) {
             throw new Exception(\sprintf('Unable to find map %s', $dc->id));
         }
 
@@ -767,7 +690,6 @@ class Callback extends Backend
 
         $objMap = new Map();
         $objMap->setRow($arrData);
-        // $objMap->id = null;
         $objMap->save();
 
         $url = Environment::get('uri');

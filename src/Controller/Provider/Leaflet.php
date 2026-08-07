@@ -19,6 +19,11 @@ use Contao\Controller;
  */
 class Leaflet extends Controller
 {
+    public function __construct()
+    {
+
+    }
+    
     /**
      * Default Leaflet Map Config.
      *

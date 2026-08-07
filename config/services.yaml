@@ -6,7 +6,7 @@ services:
 
   WEM\GeoDataBundle\:
     resource: ../src/
-    exclude: ../src/{ContaoManager,Controller,DependencyInjection,Module}
+    exclude: ../src/{ContaoManager,DependencyInjection,Module}
 
   wem.geodata.service.nominatim:
     class: WEM\GeoDataBundle\Service\Nominatim
