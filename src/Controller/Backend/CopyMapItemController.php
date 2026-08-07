@@ -10,46 +10,26 @@ declare(strict_types=1);
  * @license    https://www.apache.org/licenses/LICENSE-2.0
  */
 
-namespace WEM\GeoDataBundle\Backend;
+namespace WEM\GeoDataBundle\Controller\Backend;
 
-use Contao\Backend;
-use Contao\BackendTemplate;
-use Contao\Config;
-use Contao\CoreBundle\Exception\ResponseException;
-use Contao\CoreBundle\Intl\Locales;
+use Contao\CoreBundle\Controller\AbstractController;
+use Contao\Controller;
 use Contao\DataContainer;
 use Contao\Environment;
-use Contao\File;
-use Contao\Files;
-use Contao\FileUpload;
-use Contao\Input;
-use Contao\Message;
-use Contao\Model\Collection;
-use Contao\StringUtil;
-use Contao\System;
 use Exception;
-use PhpOffice\PhpSpreadsheet\IOFactory;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use WEM\GeoDataBundle\Classes\Util;
-use WEM\GeoDataBundle\Model\Category;
 use WEM\GeoDataBundle\Model\Map;
-use WEM\GeoDataBundle\Model\MapItem;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
  * Provide backend functions to Locations Extension.
  */
-class Callback extends Backend
+class CopyMapItemController extends AbstractController
 {
     public function __construct(
-        private Locales $locales,
+
     ) {
-        parent::__construct();
     }
 
-    public function copyMapItem(DataContainer $dc): void
+    public function run(DataContainer $dc): void
     {
         if (!$dc->id) {
             return;
@@ -70,6 +50,5 @@ class Callback extends Backend
         $url = Environment::get('uri');
         $url = str_replace(['&key=copy_map_item', '&id=' . $dc->id], ['&act=edit', '&id=' . $objMap->id], $url);
 
-        $this->redirect($url);
+        Controller::redirect($url);
     }
-}

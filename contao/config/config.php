@@ -14,6 +14,7 @@ use Contao\ArrayUtil;
 use Contao\System;
 use WEM\GeoDataBundle\Backend\Callback;
 use WEM\GeoDataBundle\Classes\Util;
+use WEM\GeoDataBundle\Controller\Backend\CopyMapItemController;
 use WEM\GeoDataBundle\Controller\Backend\DownloadSampleController;
 use WEM\GeoDataBundle\Controller\Backend\ExportController;
 use WEM\GeoDataBundle\Controller\Backend\GeocodeController;
@@ -54,7 +55,7 @@ ArrayUtil::arrayInsert(
                 'download_import_sample' => [DownloadSampleController::class, 'run'],
                 'export' => [ExportController::class, 'run'],
                 'geocode' => [GeocodeController::class, 'run'],
-                'copy_map_item' => [Callback::class, 'copyMapItem'],
+                'copy_map_item' => [CopyMapItemController::class, 'run'],
                 'icon' => 'system/bundles/wemgeodata/backend/icon_map_16_c3.png',
             ],
         ],
