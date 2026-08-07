@@ -14,8 +14,10 @@ use Contao\ArrayUtil;
 use Contao\System;
 use WEM\GeoDataBundle\Backend\Callback;
 use WEM\GeoDataBundle\Classes\Util;
+use WEM\GeoDataBundle\Controller\Backend\DownloadSampleController;
 use WEM\GeoDataBundle\Controller\Backend\ExportController;
 use WEM\GeoDataBundle\Controller\Backend\GeocodeController;
+use WEM\GeoDataBundle\Controller\Backend\ImportController;
 use WEM\GeoDataBundle\Model\Category;
 use WEM\GeoDataBundle\Model\Map;
 use WEM\GeoDataBundle\Model\MapItem;
@@ -48,8 +50,8 @@ ArrayUtil::arrayInsert(
                     'tl_content',
                     'tl_wem_map_item_attribute_value',
                 ],
-                'import' => [Callback::class, 'importLocations'],
-                'download_import_sample' => [Callback::class, 'downloadImportSample'],
+                'import' => [ImportController::class, 'run'],
+                'download_import_sample' => [DownloadSampleController::class, 'run'],
                 'export' => [ExportController::class, 'run'],
                 'geocode' => [GeocodeController::class, 'run'],
                 'copy_map_item' => [Callback::class, 'copyMapItem'],

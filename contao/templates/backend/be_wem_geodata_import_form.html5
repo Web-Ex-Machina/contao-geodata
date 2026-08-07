@@ -1,32 +1,32 @@
 <div id="tl_buttons">
-    <a href="<?php echo $this->backButtonHref; ?>" class="header_back" title="'<?php echo $this->backButtonTitle; ?>" accesskey="b"><?php echo $this->backButtonLabel; ?></a>
+    <a href="<?= $this->backButtonHref ?>" class="header_back" title="'<?= $this->backButtonTitle ?>" accesskey="b"><?= $this->backButtonLabel ?></a>
 </div>
-    <?php echo Contao\Message::generate(); ?>
-<form action="<?php echo $this->formAction; ?>" id="tl_wem_items_import" class="tl_form" method="post" enctype="multipart/form-data">
+    <?= Contao\Message::generate() ?>
+<form action="<?= $this->formAction ?>" id="<?= $this->formId ?>" class="tl_form" method="post" enctype="multipart/form-data">
     <div class="tl_formbody_edit">
-        <input type="hidden" name="FORM_SUBMIT" value="tl_wem_items_import">
-        <input type="hidden" name="REQUEST_TOKEN" value="<?php echo $this->formRequestToken; ?>">
-        <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $this->formMaxFileSize; ?>">
+        <input type="hidden" name="FORM_SUBMIT" value="<?= $this->formId ?>">
+        <input type="hidden" name="REQUEST_TOKEN" value="<?= $this->formRequestToken ?>">
+        <input type="hidden" name="MAX_FILE_SIZE" value="<?= $this->formMaxFileSize ?>">
 
         <fieldset class="tl_tbox nolegend">
             <div class="widget">
-              <h3><?php echo $this->widgetUploadTitle; ?></h3>
-              <?php echo $this->widgetUploadContent; ?>
+              <h3><?= $this->widgetUploadTitle ?></h3>
+              <?= $this->widgetUploadContent ?>
               <?php if('' !== $this->widgetUploadHelp): ?>
-                <p class="tl_help tl_tip"><?php echo $this->widgetUploadHelp; ?></p>
-              <?php endif; ?>
+                <p class="tl_help tl_tip"><?= $this->widgetUploadHelp ?></p>
+              <?php endif ?>
             </div>     
 
             <div class="widget">
-                <h3><?php echo $this->widgetSettingsTitle; ?></h3>
+                <h3><?= $this->widgetSettingsTitle ?></h3>
                 <label for="update_existing_items">
-                    <input type="checkbox" name="update_existing_items" <?php echo $this->widgetSettingsUpdateChecked ? 'checked' : ''; ?>>
-                    <?php echo $this->widgetSettingsUpdateLabel; ?>
+                    <input type="checkbox" name="update_existing_items" <?= $this->widgetSettingsUpdateChecked ? 'checked' : '' ?>>
+                    <?= $this->widgetSettingsUpdateLabel ?>
                 </label>
                 <br />
                 <label for="delete_existing_items_not_in_import_file">
-                    <input type="checkbox" name="delete_existing_items_not_in_import_file" <?php echo $this->widgetSettingsDeleteChecked ? 'checked' : ''; ?>>
-                    <?php echo $this->widgetSettingsDeleteLabel; ?>
+                    <input type="checkbox" name="delete_existing_items_not_in_import_file" <?= $this->widgetSettingsDeleteChecked ? 'checked' : '' ?>>
+                    <?= $this->widgetSettingsDeleteLabel ?>
                 </label>
             </div>
         </fieldset>
@@ -34,44 +34,43 @@
 
     <div class="tl_formbody_submit">
         <div class="tl_submit_container">
-          <input type="submit" name="save" id="save" class="tl_submit" accesskey="s" value="<?php echo $this->formSubmitValue; ?>">
+          <input type="submit" name="save" id="save" class="tl_submit" accesskey="s" value="<?= $this->formSubmitValue ?>">
         </div>
     </div>
 
     <fieldset class="tl_tbox nolegend">
         <div class="widget">
-        <h3><?php echo $this->importExampleTitle; ?></h3>
+        <h3><?= $this->importExampleTitle ?></h3>
             <table class="wem_geodata_import_table">
                 <thead>
-                    <tr><?php echo $this->importExampleTh; ?></tr>
+                    <tr><?= $this->importExampleTh ?></tr>
                 </thead>
                 <tbody>
-                    <tr><?php echo $this->importExampleTd; ?></tr>
                     <?php foreach($this->importExampleTd as $td): ?>
-                    <tr><?php echo implode('',$td); ?></tr>
-                    <?php endforeach; ?>
+                    <tr><?= implode('', $td) ?></tr>
+                    <?php endforeach ?>
                 </tbody>
             </table>
             <br />
-            <a class="tl_submit" href="<?php echo $this->downloadSampleButtonHref; ?>" title="<?php echo $this->downloadSampleButtonTitle; ?>">
-                <?php echo $this->downloadSampleButtonLabel; ?>
+            <a class="tl_submit" href="<?= $this->downloadSampleButtonHref ?>" title="<?= $this->downloadSampleButtonTitle ?>">
+                <?= $this->downloadSampleButtonLabel ?>
             </a>
         </div>
     </fieldset>
 
     <fieldset class="tl_tbox nolegend">
         <div class="widget">
-        <h3><?php echo $this->importListCountriesTitle; ?></h3>
+        <h3><?= $this->importListCountriesTitle ?></h3>
         <table class="wem_geodata_import_table">
             <thead>
                 <tr>
                     <th>ISOCode</th>
-                    <th><?php echo $this->importListCountriesNameCurrentLanguage; ?></th>
-                    <th><?php echo $this->importListCountriesNameEnglish; ?></th>
+                    <th><?= $this->importListCountriesNameCurrentLanguage ?></th>
+                    <th><?= $this->importListCountriesNameEnglish ?></th>
                 </tr>
             </thead>
             <tbody>
-                <?php echo $this->importListCountries; ?>
+                <?= $this->importListCountries ?>
             </tbody>
         </table>
         </div>
