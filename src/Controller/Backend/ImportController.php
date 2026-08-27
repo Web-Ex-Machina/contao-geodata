@@ -30,14 +30,14 @@ use Contao\System;
 use Exception;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use WEM\GeoDataBundle\Classes\Util;
-use WEM\GeoDataBundle\Model\Category;
-use WEM\GeoDataBundle\Model\Map;
-use WEM\GeoDataBundle\Model\MapItem;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use WEM\GeoDataBundle\Model\Category;
+use WEM\GeoDataBundle\Model\Map;
+use WEM\GeoDataBundle\Model\MapItem;
+use WEM\UtilsBundle\Classes\CountriesUtil;
 
 /**
  * Provide backend functions to Locations Extension.
@@ -262,7 +262,7 @@ class ImportController extends AbstractController
                                 if (\strlen($strValue) === 2) {
                                     $arrLocation['country'] = $strValue;
                                 } else {
-                                    $arrLocation['country'] = Util::getCountryISOCodeFromFullname($strValue);
+                                    $arrLocation['country'] = CountriesUtil::getCountryISOCodeFromFullname($strValue);
                                 }
 
                                 break;
@@ -280,7 +280,7 @@ class ImportController extends AbstractController
                         }
                     }
 
-                    $arrLocation['continent'] = Util::getCountryContinent($arrLocation['country']);
+                    $arrLocation['continent'] = CountriesUtil::getCountryContinent($arrLocation['country']);
                     $arrLocations[$nbRow] = $arrLocation;
                 } catch (Exception $e) {
                     Message::addError(

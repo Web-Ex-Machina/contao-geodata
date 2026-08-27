@@ -23,7 +23,6 @@ use Contao\PageModel;
 use Contao\Pagination;
 use Contao\StringUtil;
 use Exception;
-use WEM\GeoDataBundle\Classes\Util;
 use WEM\GeoDataBundle\Model\Category;
 use WEM\GeoDataBundle\Model\Map;
 use WEM\GeoDataBundle\Model\MapItem;
@@ -211,7 +210,7 @@ abstract class Core extends Module
         // Get country and continent
         $arrCountries = CountriesUtil::getCountries();
         $strCountry = strtoupper($arrItem['country']);
-        $strContinent = Util::getCountryContinent($strCountry);
+        $strContinent = CountriesUtil::getCountryContinent($strCountry);
         $arrItem['country'] = [
             'code' => $strCountry,
             'name' => $arrCountries[$arrItem['country']]
