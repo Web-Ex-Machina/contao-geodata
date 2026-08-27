@@ -135,8 +135,6 @@
 				<source>Manage the location attributes</source>
 			</trans-unit>
 
-			
-
 			<trans-unit id="tl_wem_map_item.import.0">
 				<source>Import</source>
 			</trans-unit>
@@ -155,7 +153,6 @@
 			<trans-unit id="tl_wem_map_item.downloadSampleBT">
 				<source>Download a sample file as example</source>
 			</trans-unit>
-
 			<trans-unit id="tl_wem_map_item.export.0">
 				<source>Export</source>
 			</trans-unit>
@@ -206,6 +203,12 @@
 				<source>Delete existing elements not present in import file</source>
 			</trans-unit>
 
+			<trans-unit id="tl_wem_map_item.geocode.0">
+				<source>Geocode</source>
+			</trans-unit>
+			<trans-unit id="tl_wem_map_item.geocode.1">
+				<source>Geocode the item ID %s</source>
+			</trans-unit>
 			<trans-unit id="tl_wem_map_item.geocodeAll.0">
 				<source>Geocode</source>
 			</trans-unit>
