@@ -13,7 +13,6 @@ declare(strict_types=1);
 use Contao\ArrayUtil;
 use Contao\System;
 use WEM\GeoDataBundle\Backend\Callback;
-use WEM\GeoDataBundle\Classes\Util;
 use WEM\GeoDataBundle\Controller\Backend\CopyMapItemController;
 use WEM\GeoDataBundle\Controller\Backend\DownloadSampleController;
 use WEM\GeoDataBundle\Controller\Backend\ExportController;
@@ -27,9 +26,10 @@ use WEM\GeoDataBundle\Model\MapItemCategory;
 use WEM\GeoDataBundle\Module\DisplayMap;
 use WEM\GeoDataBundle\Module\LocationsList;
 use WEM\GeoDataBundle\Module\LocationsReader;
+use WEM\UtilsBundle\Classes\PackageUtil;
 
 if (! defined('WEM_GEODATA_COMBINER_VERSION')) {
-    define('WEM_GEODATA_COMBINER_VERSION', Util::getCustomPackageVersion('webexmachina/contao-geodata'));
+    define('WEM_GEODATA_COMBINER_VERSION', PackageUtil::getVersion('webexmachina/contao-geodata'));
 }
 
 $scopeMatcher = System::getContainer()->get('wem.scope_matcher');

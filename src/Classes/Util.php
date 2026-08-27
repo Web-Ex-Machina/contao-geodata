@@ -416,30 +416,4 @@ class Util
 
         return $objItem;
     }
-
-    /**
-     * Get a package's version.
-     *
-     * @param string $package The package name
-     *
-     * @return string|null The package version if found, null otherwise
-     */
-    public static function getCustomPackageVersion(
-        string $package
-    ): string|null {
-        $packages = json_decode(
-            file_get_contents(System::getContainer()->getParameter(
-                'kernel.project_dir'
-            ) . '/vendor/composer/installed.json')
-        );
-
-        foreach ($packages->packages as $p) {
-            $p = (array) $p;
-            if ($package === $p['name']) {
-                return $p['version'];
-            }
-        }
-
-        return null;
-    }
 }
