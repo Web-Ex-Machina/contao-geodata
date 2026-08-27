@@ -90,7 +90,7 @@ class ExportController extends AbstractController
         $objTemplate = new BackendTemplate('be_wem_geodata_export_form');
 
         $objTemplate->backButtonHref = StringUtil::ampersand(
-            str_replace('&key=export_form', '', Environment::get('request'))
+            str_replace('&key=export', '', Environment::get('request'))
         );
         $objTemplate->backButtonTitle = StringUtil::specialchars($GLOBALS['TL_LANG']['MSC']['backBTTitle']);
         $objTemplate->backButtonLabel = $GLOBALS['TL_LANG']['MSC']['backBT'];
