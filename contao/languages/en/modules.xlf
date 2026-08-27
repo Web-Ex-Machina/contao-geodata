@@ -2,42 +2,42 @@
   <file datatype="php" original="system/modules/wem-contao-locations/languages/en/modules.php" source-language="en" target-language="en">
     <body>
     	<trans-unit id="MOD.wem-geodata">
-			<source>Maps &amp; Locations</source>
-			<target>Maps &amp; Locations</target>
-		</trans-unit>
-		<trans-unit id="MOD.wem-maps.0">
-			<source>Maps</source>
-			<target>Maps</target>
-		</trans-unit>
-		<trans-unit id="MOD.wem-maps.1">
-			<source>Manage maps and locations of your website</source>
-			<target>Manage maps and locations of your website</target>
-		</trans-unit>
+				<source>Maps &amp; Locations</source>
+			</trans-unit>
+			<trans-unit id="MOD.wem-maps.0">
+				<source>Maps</source>
+			</trans-unit>
+			<trans-unit id="MOD.wem-maps.1">
+				<source>Manage maps and locations of your website</source>
+			</trans-unit>
 
-		<trans-unit id="FMD.wem_geodata">
-			<source>Maps &amp; Locations</source>
-			<target>Maps &amp; Locations</target>
-		</trans-unit>
-		<trans-unit id="FMD.wem_display_map.0">
-			<source>Map</source>
-			<target>Map</target>
-		</trans-unit>
-		<trans-unit id="FMD.wem_display_map.1">
-			<source>Display a map on your website</source>
-			<target>Display a map on your website</target>
-		</trans-unit>
-		<trans-unit id="FMD.wem_geodata_list.0">
-			<source>Locations list</source>
-		</trans-unit>
-		<trans-unit id="FMD.wem_geodata_list.1">
-			<source>Display a locations list on your website</source>
-		</trans-unit>
-		<trans-unit id="FMD.wem_geodata_reader.0">
-			<source>Locations reader</source>
-		</trans-unit>
-		<trans-unit id="FMD.wem_geodata_reader.1">
-			<source>Display a locations reader on your website</source>
-		</trans-unit>
+			<trans-unit id="FMD.wem_geodata">
+				<source>Maps &amp; Locations</source>
+			</trans-unit>
+			<trans-unit id="FMD.wem_geodata_map.0">
+				<source>Map</source>
+			</trans-unit>
+			<trans-unit id="FMD.wem_geodata_map.1">
+				<source>Display a map on your website</source>
+			</trans-unit>
+			<trans-unit id="FMD.wem_geodata_list.0">
+				<source>Locations list</source>
+			</trans-unit>
+			<trans-unit id="FMD.wem_geodata_list.1">
+				<source>Display a locations list on your website</source>
+			</trans-unit>
+			<trans-unit id="FMD.wem_geodata_reader.0">
+				<source>Locations reader</source>
+			</trans-unit>
+			<trans-unit id="FMD.wem_geodata_reader.1">
+				<source>Display a locations reader on your website</source>
+			</trans-unit>
+			<trans-unit id="FMD.wem_geodata_filters.0">
+				<source>Filters</source>
+			</trans-unit>
+			<trans-unit id="FMD.wem_geodata_filters.1">
+				<source>Display a list of map filters on your website</source>
+			</trans-unit>
     </body>
   </file>
 </xliff>

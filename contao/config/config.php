@@ -70,21 +70,6 @@ if ($scopeMatcher->isBackend()) {
 }
 
 /*
- * Frontend modules
- */
-ArrayUtil::arrayInsert(
-    $GLOBALS['FE_MOD'],
-    2,
-    [
-        'wem_geodata' => [
-            'wem_display_map' => DisplayMap::class,
-            'wem_geodata_list' => LocationsList::class,
-            'wem_geodata_reader' => LocationsReader::class,
-        ],
-    ]
-);
-
-/*
  * Models
  */
 $GLOBALS['TL_MODELS'][Map::getTable()] = Map::class;
