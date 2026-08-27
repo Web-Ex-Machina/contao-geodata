@@ -89,4 +89,23 @@ class Map extends CoreModel
 
         return MapItem::findItems($config);
     }
+
+    /**
+     * Retrieve import pattern
+     * 
+     * @return array
+     */
+    public function getImportPattern(): array
+    {
+        $arrPattern = [];
+
+        // Preformat Pattern (key = File column, value = DB Column)
+        foreach (StringUtil::deserialize($this->excelPattern) as $c) {
+            $arrPattern[$c['value']] = $c['key'];
+        }
+
+        ksort($arrPattern);
+
+        return $arrPattern;
+    }
 }

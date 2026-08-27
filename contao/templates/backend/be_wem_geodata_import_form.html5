@@ -2,7 +2,7 @@
     <a href="<?= $this->backButtonHref ?>" class="header_back" title="'<?= $this->backButtonTitle ?>" accesskey="b"><?= $this->backButtonLabel ?></a>
 </div>
     <?= Contao\Message::generate() ?>
-<form action="<?= $this->formAction ?>" id="<?= $this->formId ?>" class="tl_form" method="post" enctype="multipart/form-data">
+<form action="<?= $this->formAction ?>" id="<?= $this->formId ?>" class="tl_form" method="post" enctype="multipart/form-data" data-turbo="false">
     <div class="tl_formbody_edit">
         <input type="hidden" name="FORM_SUBMIT" value="<?= $this->formId ?>">
         <input type="hidden" name="REQUEST_TOKEN" value="<?= $this->formRequestToken ?>">

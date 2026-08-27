@@ -20,6 +20,7 @@ use Contao\BackendTemplate;
 use Contao\Config;
 use Contao\Controller;
 use Contao\Environment;
+use Contao\File;
 use Contao\FileUpload;
 use Contao\Input;
 use Contao\Message;
@@ -55,38 +56,33 @@ class ImportController extends AbstractController
         $formId = 'tl_geodata_import';
         $request = $this->requestStack->getCurrentRequest();
 
-        if ($request->request->get('FORM_SUBMIT') === $formId) {
-            $this->import($request);
-        }
-
-        return $this->getForm($formId);
-    }
-
-    protected function getForm(string $formId): string
-    {
-        if (!Input::get('id')) {
-            return '';
-        }
-
         $objMap = Map::findById(Input::get('id'));
 
         if (!$objMap) {
             return '';
         }
 
+        if ($request->request->get('FORM_SUBMIT') === $formId) {
+            $this->import($request, $objMap);
+        }
+
+        return $this->getForm($formId, $objMap);
+    }
+
+    protected function getForm(string $formId, Map $objMap): string
+    {
+        if (!Input::get('id')) {
+            return '';
+        }    
+
         /** @var FileUpload $objUploader */
         $objUploader = new FileUpload();
         
-        $arrExcelPattern = [];
-        // Preformat Excel Pattern (key = Excel column, value = DB Column)
-        foreach (StringUtil::deserialize($objMap->excelPattern) as $c) {
-            $arrExcelPattern[$c['value']] = $c['key'];
-        }
+        $arrExcelPattern = $objMap->getImportPattern();
 
         // Build an Excel pattern to show
         $arrTh = [];
         $arrTd = [];
-        ksort($arrExcelPattern);
 
         foreach ($arrExcelPattern as $strExcelColumn => $strDbColumn) {
             $strDbColumn = $strDbColumn === 'region' ? 'admin_lvl_1' : $strDbColumn;
@@ -147,6 +143,7 @@ class ImportController extends AbstractController
         );
         $objTemplate->downloadSampleButtonLabel = $GLOBALS['TL_LANG']['tl_wem_map_item']['downloadSampleBT'];
 
+        $objTemplate->formId = $formId;
         $objTemplate->formAction = StringUtil::ampersand(Environment::get('request'), true);
         $objTemplate->widgetUploadTitle = $GLOBALS['TL_LANG']['tl_wem_map_item']['source'][0];
         $objTemplate->widgetUploadContent = $objUploader->generateMarkup();
@@ -167,24 +164,27 @@ class ImportController extends AbstractController
         $objTemplate->formRequestToken = System::getContainer()->get('contao.csrf.token_manager')->getDefaultTokenValue();
         $objTemplate->formMaxFileSize = Config::get('maxFileSize');
 
-        dump($arrTd);
-
         return $objTemplate->parse();
     }
 
     /**
      * Export the Locations of the current map, according to the pattern set.
      */
-    public function import(Request $request): never
+    public function import(Request $request, Map $objMap): never
     {
         $updateExistingItems = (bool) Input::post('update_existing_items');
         $deleteExistingItems = (bool) Input::post('delete_existing_items_not_in_import_file');
 
+        /** @var FileUpload $objUploader */
+        $objUploader = new FileUpload();
+
         $arrUploaded = $objUploader->uploadTo('system/tmp');
         if (empty($arrUploaded)) {
             Message::addError($GLOBALS['TL_LANG']['ERR']['all_fields']);
-            $this->reload();
+            Controller::reload();
         }
+
+        $arrExcelPattern = $objMap->getImportPattern();
 
         // HOOK: add custom logic
         if (
@@ -389,7 +389,6 @@ class ImportController extends AbstractController
 
         Message::addError(\sprintf($GLOBALS['TL_LANG']['tl_wem_map_item']['errorsConfirmation'], $intErrors));
 
-        System::setCookie('BE_PAGE_OFFSET', 0, 0);
-        $this->reload();
+        Controller::reload();
     }
 }
