@@ -3,59 +3,106 @@
     <body>
       <trans-unit id="tl_module.wem_geodata_map.0">
         <source>Map</source>
-        <target>Map</target>
       </trans-unit>
       <trans-unit id="tl_module.wem_geodata_map.1">
         <source>Select the map to display.</source>
-        <target>Select the map to display.</target>
-      </trans-unit>
-      <trans-unit id="tl_module.wem_geodata_maps.0">
-        <source>Maps</source>
-        <target>Maps</target>
-      </trans-unit>
-      <trans-unit id="tl_module.wem_geodata_maps.1">
-        <source>Select maps to display.</source>
-        <target>Select maps to display.</target>
-      </trans-unit>
-      <trans-unit id="tl_module.wem_geodata_customTplForGeodataItems.0">
-        <source>Model for list items</source>
-        <target>Model for list items</target>
-      </trans-unit>
-      <trans-unit id="tl_module.wem_geodata_customTplForGeodataItems.1">
-        <source>Here you can select the list items template.</source>
-        <target>Here you can select the list items template.</target>
-      </trans-unit>
-      <trans-unit id="tl_module.wem_geodata_search.0">
-        <source>Search field</source>
-        <target>Search field</target>
-      </trans-unit>
-      <trans-unit id="tl_module.wem_geodata_search.1">
-        <source>Display a search field.</source>
-        <target>Display a search field.</target>
-      </trans-unit>
-      <trans-unit id="tl_module.wem_geodata_filters.nofilters">
-        <source>No filters</source>
-        <target>Pas de filtres</target>
-      </trans-unit>
-      <trans-unit id="tl_module.wem_geodata_filters.inmap">
-        <source>Left panel</source>
-        <target>Panneau à gauche</target>
-      </trans-unit>
-      <trans-unit id="tl_module.wem_geodata_filters.above">
-        <source>Above</source>
-        <target>Au dessus</target>
-      </trans-unit>
-      <trans-unit id="tl_module.wem_geodata_filters.below">
-        <source>Below</source>
-        <target>En dessous</target>
       </trans-unit>
       <trans-unit id="tl_module.wem_geodata_map_nbItemsToForceAjaxLoading.0">
         <source>Maximum locations allowed before asynchronous load</source>
-        <target>Maximum locations allowed before asynchronous load</target>
       </trans-unit>
       <trans-unit id="tl_module.wem_geodata_map_nbItemsToForceAjaxLoading.1">
         <source>If there are more locations than this, the map will load asynchronously (0 to disable)</source>
-        <target>If there are more locations than this, the map will load asynchronously (0 to disable)</target>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_addList.0">
+        <source>Add a list</source>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_addList.1">
+        <source>Check to add a list to this module.</source>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_list_module.0">
+        <source>List module</source>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_list_module.1">
+        <source>Select a list module to add with the map.</source>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_map_list_position.0">
+        <source>List module position</source>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_map_list_position.1">
+        <source>Select a the list module position.</source>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_map_list_position.nolist">
+        <source>No list</source>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_map_list_position.rightpanel">
+        <source>Right panel</source>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_map_list_position.below">
+        <source>Below</source>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_addFilters.0">
+        <source>Add filters</source>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_addFilters.1">
+        <source>Check to add filters to this module.</source>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_filters_module.0">
+        <source>Filters module</source>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_filters_module.1">
+        <source>Select a filters module to add with this module.</source>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_map_filters_position.0">
+        <source>Filters module position</source>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_map_filters_position.1">
+        <source>Select a the filters module position.</source>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_map_filters_position.nofilters">
+        <source>No filters</source>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_map_filters_position.inmap">
+        <source>Left panel</source>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_map_filters_position.above">
+        <source>Above</source>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_map_filters_position.below">
+        <source>Below</source>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_filters_fields.0">
+        <source>Filter fields</source>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_filters_fields.1">
+        <source>Select the filters to display.</source>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_hideFiltersWithNoResults.0">
+        <source>Hide when no results</source>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_hideFiltersWithNoResults.1">
+        <source>Check to hide filters if there are no results</source>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_addSearch.0">
+        <source>Add a search field</source>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_addSearch.1">
+        <source>Check to add a search field to the filters.</source>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_customTplForGeodataItems.0">
+        <source>Model for list items</source>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_customTplForGeodataItems.1">
+        <source>Here you can select the list items template.</source>
+      </trans-unit>
+
+      <trans-unit id="tl_module.list_legend">
+        <source>List settings</source>
+      </trans-unit>
+      <trans-unit id="tl_module.filters_legend">
+        <source>Filters settings</source>
+      </trans-unit>
+      <trans-unit id="tl_module.search_legend">
+        <source>Search settings</source>
       </trans-unit>
     </body>
   </file>

@@ -13,32 +13,46 @@ declare(strict_types=1);
 use Contao\Controller;
 use Contao\DataContainer;
 
-$GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'wem_geodata_filters';
-$GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'wem_geodata_filters_present';
-$GLOBALS['TL_DCA']['tl_module']['palettes']['wem_display_map'] = '
-    {title_legend},name,type;
-    {config_legend},wem_geodata_map,wem_geodata_map_nbItemsToForceAjaxLoading,wem_geodata_map_list,wem_geodata_filters;
+$GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'wem_geodata_addList';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'wem_geodata_addFilters';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['wem_geodata_map'] = '
+    {title_legend},name,headline,type;
+    {config_legend},wem_geodata_map,wem_geodata_map_nbItemsToForceAjaxLoading;
+    {list_legend},wem_geodata_addList;
+    {filters_legend},wem_geodata_addFilters;
+    {image_legend:hide},imgSize;
     {template_legend:hide},customTpl;
     {protected_legend:hide},protected;
     {expert_legend:hide},guests,cssID
 ';
 $GLOBALS['TL_DCA']['tl_module']['palettes']['wem_geodata_list'] = '
-    {title_legend},name,type;
-    {template_legend:hide},wem_geodata_maps,wem_geodata_filters_present,perPage,numberOfItems,customTpl,wem_geodata_customTplForGeodataItems;
+    {title_legend},name,headline,type;
+    {config_legend},wem_geodata_map,perPage,numberOfItems;
+    {filters_legend},wem_geodata_addFilters;
+    {image_legend:hide},imgSize;
+    {template_legend:hide},customTpl,wem_geodata_customTplForGeodataItems;
     {protected_legend:hide},protected;
     {expert_legend:hide},guests,cssID
 ';
 $GLOBALS['TL_DCA']['tl_module']['palettes']['wem_geodata_reader'] = '
-    {title_legend},name,type;
+    {title_legend},name,headline,type;
+    {config_legend},wem_geodata_map,overviewPage,customLabel;
+    {image_legend:hide},imgSize;
+    {template_legend:hide},customTpl;
+    {protected_legend:hide},protected;
+    {expert_legend:hide},guests,cssID
+';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['wem_geodata_filters'] = '
+    {title_legend},name,headline,type;
+    {config_legend},jumpTo,wem_geodata_map,wem_geodata_filters_fields,wem_geodata_hideFiltersWithNoResults;
+    {search_legend},wem_geodata_addSearch;
     {template_legend:hide},customTpl;
     {protected_legend:hide},protected;
     {expert_legend:hide},guests,cssID
 ';
 
-$GLOBALS['TL_DCA']['tl_module']['subpalettes']['wem_geodata_filters_inmap'] = 'wem_geodata_search,wem_geodata_filters_fields';
-$GLOBALS['TL_DCA']['tl_module']['subpalettes']['wem_geodata_filters_above'] = 'wem_geodata_search,wem_geodata_filters_fields';
-$GLOBALS['TL_DCA']['tl_module']['subpalettes']['wem_geodata_filters_below'] = 'wem_geodata_search,wem_geodata_filters_fields';
-$GLOBALS['TL_DCA']['tl_module']['subpalettes']['wem_geodata_filters_present'] = 'wem_geodata_search,wem_geodata_filters_fields';
+$GLOBALS['TL_DCA']['tl_module']['subpalettes']['wem_geodata_addList'] = 'wem_geodata_list_module,wem_geodata_map_list_position';
+$GLOBALS['TL_DCA']['tl_module']['subpalettes']['wem_geodata_addFilters'] = 'wem_geodata_filters_module,wem_geodata_map_filters_position';
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_map'] = [
     'exclude' => true,
@@ -51,58 +65,79 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_map'] = [
     ],
     'sql' => "int(10) unsigned NOT NULL default '0'",
 ];
-$GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_maps'] = [
-    'exclude' => true,
-    'inputType' => 'select',
-    'foreignKey' => 'tl_wem_map.title',
-    'eval' => [
-        'chosen' => true,
-        'mandatory' => true,
-        'multiple' => true,
-        'tl_class' => 'w50',
-    ],
-    'sql' => 'blob NULL',
-];
-$GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_map_list'] = [
-    'exclude' => true,
-    'inputType' => 'select',
-    'options' => ['nolist', 'rightpanel', 'below'],
-    'reference' => &$GLOBALS['TL_LANG']['tl_module']['wem_geodata_map_list'],
-    'eval' => ['chosen' => true,
-        'mandatory' => true,
-        'tl_class' => 'w50'],
-    'sql' => "varchar(32) NOT NULL default 'nolist'",
-];
 $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_map_nbItemsToForceAjaxLoading'] = [
     'exclude' => true,
     'inputType' => 'text',
-    'eval' => ['mandatory' => true,
-        'tl_class' => 'w50'],
-    'sql' => "INT(10) NOT NULL default '0'",
-];
-$GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_filters'] = [
-    'exclude' => true,
-    'inputType' => 'select',
-    'options' => ['nofilters', 'inmap', 'above', 'below'],
-    'reference' => &$GLOBALS['TL_LANG']['tl_module']['wem_geodata_filters'],
-    'eval' => ['submitOnChange' => true,
-        'chosen' => true,
+    'eval' => [
         'mandatory' => true,
-        'tl_class' => 'w50'],
-    'sql' => "varchar(32) NOT NULL default 'nofilters'",
+        'tl_class' => 'w50'
+    ],
+    'sql' => "int(10) NOT NULL default '0'",
 ];
-
-$GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_filters_present'] = [
+$GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_addList'] = [
     'exclude' => true,
     'filter' => true,
     'flag' => DataContainer::SORT_INITIAL_LETTER_ASC,
     'inputType' => 'checkbox',
-    'eval' => ['submitOnChange' => true,
+    'eval' => [
+        'submitOnChange' => true,
         'doNotCopy' => true,
-        'tl_class' => 'w50 m12'],
+        'tl_class' => 'w50 m12'
+    ],
     'sql' => "char(1) NOT NULL default ''",
 ];
-
+$GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_list_module'] = [
+    'exclude' => true,
+    'inputType' => 'select',
+    'foreignKey' => 'tl_module.name',
+    'eval' => ['mandatory' => true],
+    'sql' => 'int(10) unsigned NOT NULL default 0',
+    'relation' => ['type' => 'hasOne', 'load' => 'lazy'],
+];
+$GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_map_list_position'] = [
+    'exclude' => true,
+    'inputType' => 'select',
+    'options' => ['nolist', 'rightpanel', 'below'],
+    'reference' => &$GLOBALS['TL_LANG']['tl_module']['wem_geodata_map_list_position'],
+    'eval' => [
+        'chosen' => true,
+        'mandatory' => true,
+        'tl_class' => 'w50'
+    ],
+    'sql' => "varchar(32) NOT NULL default 'nolist'",
+];
+$GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_addFilters'] = [
+    'exclude' => true,
+    'filter' => true,
+    'flag' => DataContainer::SORT_INITIAL_LETTER_ASC,
+    'inputType' => 'checkbox',
+    'eval' => [
+        'submitOnChange' => true,
+        'doNotCopy' => true,
+        'tl_class' => 'w50 m12'
+    ],
+    'sql' => "char(1) NOT NULL default ''",
+];
+$GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_filters_module'] = [
+    'exclude' => true,
+    'inputType' => 'select',
+    'foreignKey' => 'tl_module.name',
+    'eval' => ['mandatory' => true],
+    'sql' => 'int(10) unsigned NOT NULL default 0',
+    'relation' => ['type' => 'hasOne', 'load' => 'lazy'],
+];
+$GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_map_filters_position'] = [
+    'exclude' => true,
+    'inputType' => 'select',
+    'options' => ['', 'inmap', 'above', 'below'],
+    'reference' => &$GLOBALS['TL_LANG']['tl_module']['wem_geodata_map_filters_position'],
+    'eval' => [
+        'chosen' => true,
+        'mandatory' => true,
+        'tl_class' => 'w50'
+    ],
+    'sql' => "varchar(32) NOT NULL default ''",
+];
 $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_filters_fields'] = [
     'exclude' => true,
     'inputType' => 'select',
@@ -114,19 +149,30 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_filters_fields'] = [
         'city' => 'city',
     ],
     'reference' => &$GLOBALS['TL_LANG']['tl_module']['wem_geodata_filters_fields'],
-    'eval' => ['chosen' => true,
+    'eval' => [
+        'chosen' => true,
         'mandatory' => true,
         'multiple' => true,
-        'tl_class' => 'w50'],
+        'tl_class' => 'w50'
+    ],
     'sql' => "blob NULL'",
 ];
-$GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_search'] = [
+$GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_hideFiltersWithNoResults'] = [
+    'exclude' => true,
+    'flag' => 1,
+    'inputType' => 'checkbox',
+    'eval' => ['doNotCopy' => true, 'tl_class' => 'clr'],
+    'sql' => "char(1) NOT NULL default ''",
+];
+$GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_addSearch'] = [
     'exclude' => true,
     'filter' => true,
     'flag' => DataContainer::SORT_INITIAL_LETTER_ASC,
     'inputType' => 'checkbox',
-    'eval' => ['doNotCopy' => true,
-        'tl_class' => 'w50 m12'],
+    'eval' => [
+        'doNotCopy' => true,
+        'tl_class' => 'w50 m12'
+    ],
     'sql' => "char(1) NOT NULL default ''",
 ];
 $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_customTplForGeodataItems'] = [
@@ -137,7 +183,9 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_customTplForGeodataItems'
         [],
         'mod_wem_geodata_list_item'
     ),
-    'eval' => ['chosen' => true,
-        'tl_class' => 'w50'],
+    'eval' => [
+        'chosen' => true,
+        'tl_class' => 'w50'
+    ],
     'sql' => "varchar(64) NOT NULL default ''",
 ];
