@@ -153,6 +153,14 @@
 			<target>Si un marqueur existant n'est pas présent dans le fichier d'import, le supprimer</target>
 		</trans-unit>
 
+		<trans-unit id="tl_wem_map.copy_map_item.0">
+			<source>Duplicate w/ items</source>
+			<target>Dupliquer avec items</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map.copy_map_item.1">
+			<source>Duplicate map and its locations</source>
+			<source>Dupliquer la carte et ses emplacements</source>
+		</trans-unit>
 
 		<trans-unit id="tl_wem_map.new.0">
 			<source>New map</source>

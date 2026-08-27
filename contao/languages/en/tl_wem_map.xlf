@@ -95,6 +95,13 @@
 				<source>Manage map categories</source>
 			</trans-unit>
 
+			<trans-unit id="tl_wem_map.copy_map_item.0">
+				<source>Duplicate w/ items</source>
+			</trans-unit>
+			<trans-unit id="tl_wem_map.copy_map_item.1">
+				<source>Duplicate map and its locations</source>
+			</trans-unit>
+
 			<trans-unit id="tl_wem_map.title_legend">
 				<source>Global informations</source>
 			</trans-unit>

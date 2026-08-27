@@ -244,10 +244,6 @@
 			<target>Gérez les attributs de l'emplacement</target>
 		</trans-unit>
 
-
-
-
-
 		<trans-unit id="tl_wem_map_item.new.0">
 			<source>New location</source>
 			<target>Nouvel emplacement</target>
@@ -337,7 +333,6 @@
 			<source>Download a sample file as example</source>
 			<target>Télécharger un fichier d'exemple</target>
 		</trans-unit>
-
 		<trans-unit id="tl_wem_map_item.export.0">
 			<source>Export</source>
 			<target>Exporter</target>
@@ -378,10 +373,6 @@
 			<source>Countries :</source>
 			<target>Pays :</target>
 		</trans-unit>
-
-
-
-
 		<trans-unit id="tl_wem_map_item.importExampleTitle">
 			<source>Your Excel file should looks like this :</source>
 			<target>Votre ficher Excel devrait ressembler à cela :</target>
@@ -403,6 +394,14 @@
 			<target>Supprimer les élements existant non présents dans le fichier d'import</target>
 		</trans-unit>
 
+		<trans-unit id="tl_wem_map_item.geocode.0">
+			<source>Geocode</source>
+			<target>Geocode</target>
+		</trans-unit>
+		<trans-unit id="tl_wem_map_item.geocode.1">
+			<source>Geocode the item ID %s</source>
+			<target>Geocode l'élément ID %s</target>
+		</trans-unit>
 		<trans-unit id="tl_wem_map_item.geocodeAll.0">
 			<source>Geocode</source>
 			<target>Géocode</target>
