@@ -52,3 +52,4 @@ class CopyMapItemController extends AbstractController
 
         Controller::redirect($url);
     }
+}
