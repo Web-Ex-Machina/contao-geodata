@@ -26,14 +26,15 @@ use Contao\System;
 use Exception;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use WEM\GeoDataBundle\Classes\Util;
-use WEM\GeoDataBundle\Model\Category;
-use WEM\GeoDataBundle\Model\Map;
-use WEM\GeoDataBundle\Model\MapItem;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use WEM\GeoDataBundle\Classes\Util;
+use WEM\GeoDataBundle\Model\Category;
+use WEM\GeoDataBundle\Model\Map;
+use WEM\GeoDataBundle\Model\MapItem;
+use WEM\UtilsBundle\Classes\CountriesUtil;
 
 /**
  * Provide backend functions to Locations Extension.
@@ -77,7 +78,7 @@ class ExportController extends AbstractController
             }
         }
 
-        $arrCountriesSystem = Util::getCountries();
+        $arrCountriesSystem = CountriesUtil::getCountries();
         $arrCountries = [];
         $items = MapItem::findItems(['pid' => $objMap->id]);
         if ($items instanceof Collection) {
@@ -159,7 +160,7 @@ class ExportController extends AbstractController
         }
 
         // Fetch all the locations
-        $arrCountries = Util::getCountries();
+        $arrCountries = CountriesUtil::getCountries();
         $objLocations = MapItem::findItems($params);
 
         // Break if no locations

@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 use Contao\DataContainer;
 use Contao\DC_Table;
-use WEM\GeoDataBundle\Classes\Util;
+use WEM\UtilsBundle\Classes\CountriesUtil;
 
 /*
  * Table tl_wem_map_item.
@@ -181,7 +181,7 @@ $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
             'filter' => true,
             'sorting' => true,
             'inputType' => 'select',
-            'options' => Util::getCountries(),
+            'options' => CountriesUtil::getCountries(),
             'eval' => ['includeBlankOption' => true, 'chosen' => true, 'tl_class' => 'w50'],
             'sql' => "varchar(2) NOT NULL default ''",
         ],

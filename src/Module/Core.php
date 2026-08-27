@@ -29,6 +29,7 @@ use WEM\GeoDataBundle\Model\Map;
 use WEM\GeoDataBundle\Model\MapItem;
 use WEM\GeoDataBundle\Model\MapItemAttributeValue;
 use WEM\GeoDataBundle\Model\MapItemCategory;
+use WEM\UtilsBundle\Classes\CountriesUtil;
 
 /**
  * Parent class for locations modules.
@@ -208,7 +209,7 @@ abstract class Core extends Module
         }
 
         // Get country and continent
-        $arrCountries = Util::getCountries();
+        $arrCountries = CountriesUtil::getCountries();
         $strCountry = strtoupper($arrItem['country']);
         $strContinent = Util::getCountryContinent($strCountry);
         $arrItem['country'] = [

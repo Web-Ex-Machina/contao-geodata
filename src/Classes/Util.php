@@ -73,33 +73,6 @@ class Util
     }
 
     /**
-     * Replaces insert tags related to geodata.
-     *
-     * @param string $tag the insert tag to replace
-     *
-     * @return mixed the value of the requested field for the given location or false if the tag is not related to geodata or if the location or field is not found
-     *
-     * @deprecated
-     */
-    public static function replaceInsertTags(
-        string $tag
-    ) {
-        return System::getContainer()->get('wem.geodata.listener.replace_insert_tags_listener')($tag);
-    }
-
-    /**
-     * Get a list of countries with their corresponding two-letter country codes.
-     *
-     * @return array an associative array where the keys are the two-letter country codes and the values are the country names
-     */
-    public static function getCountries(): array
-    {
-        $arrCountries = System::getContainer()->get('contao.intl.countries')->getCountries();
-
-        return array_combine(array_map('strtolower', array_keys($arrCountries)), $arrCountries);
-    }
-
-    /**
      * Try to find an ISO Code from the Country fullname.
      */
     public static function getCountryISOCodeFromFullname(

@@ -30,6 +30,7 @@ use WEM\GeoDataBundle\Model\Map;
 use WEM\GeoDataBundle\Model\MapItem;
 use WEM\GeoDataBundle\Model\MapItemAttributeValue;
 use WEM\GeoDataBundle\Model\MapItemCategory;
+use WEM\UtilsBundle\Classes\CountriesUtil;
 
 /**
  * Parent class for locations modules.
@@ -77,7 +78,7 @@ abstract class CoreList extends Core
                 }
             }
 
-            $arrCountries = Util::getCountries();
+            $arrCountries = CountriesUtil::getCountries();
 
             foreach ($arrFilterFields as $filterField) {
                 if (Input::post($filterField)) {
