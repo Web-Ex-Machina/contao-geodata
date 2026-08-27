@@ -380,40 +380,4 @@ class Util
             }
         }
     }
-
-    /**
-     * Refreshes "categories" field for a MapItem.
-     *
-     * @param MapItem    $objItem                   The MapItem
-     * @param array|null $arrCategoriesIdsToExclude Ids of Category to avoid
-     *
-     * @return MapItem The updated MapItem
-     */
-    public static function refreshMapItemCategoriesField(
-        MapItem $objItem,
-        array|null $arrCategoriesIdsToExclude
-    ): MapItem {
-        $params = ['pid' => $objItem->id];
-
-        if (\is_array($arrCategoriesIdsToExclude)) {
-            $params['where'][] = \sprintf(
-                '%s.category NOT IN (%s)',
-                MapItemCategory::getTable(),
-                implode(',', $arrCategoriesIdsToExclude)
-            );
-        }
-
-        $mapItemCategories = MapItemCategory::findItems($params);
-        $arrCategoriesIds = [];
-        if ($mapItemCategories instanceof Collection) {
-            while ($mapItemCategories->next()) {
-                $arrCategoriesIds[] = $mapItemCategories->category;
-            }
-        }
-
-        $objItem->categories = serialize($arrCategoriesIds);
-        $objItem->save();
-
-        return $objItem;
-    }
 }

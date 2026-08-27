@@ -40,7 +40,7 @@ class MapItemCategory extends CoreModel
         $mapItem = MapItem::findById($this->pid);
 
         if ($mapItem) {
-            Util::refreshMapItemCategoriesField($mapItem, [$this->category]);
+            $mapItem->refreshCategories([$this->category]);
         }
 
         return parent::delete();

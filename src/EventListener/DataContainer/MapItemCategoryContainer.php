@@ -27,7 +27,7 @@ class MapItemCategoryContainer extends CoreContainer
 
         $mapItem = MapItem::findById($dc->activeRecord->pid);
         if ($mapItem) {
-            Util::refreshMapItemCategoriesField($mapItem, [$dc->activeRecord->category]);
+            $mapItem->refreshCategories([$dc->activeRecord->category]);
         }
     }
 }

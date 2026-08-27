@@ -175,4 +175,36 @@ class MapItem extends CoreModel
             && (empty($this->publishedAt) || (! empty($this->publishedAt) && (int) $this->publishedAt < $timestamp))
             && (empty($this->publishedUntil) || (! empty($this->publishedUntil) && (int) $this->publishedUntil > $timestamp));
     }
+
+    /**
+     * Refreshes "categories" field for a MapItem.
+     *
+     * @param array|null $arrCategoriesIdsToExclude Ids of Category to avoid
+     *
+     * @return MapItem The updated MapItem
+     */
+    public function refreshCategories(
+        array|null $arrCategoriesIdsToExclude
+    ): void {
+        $params = ['pid' => $this->id];
+
+        if (\is_array($arrCategoriesIdsToExclude)) {
+            $params['where'][] = \sprintf(
+                '%s.category NOT IN (%s)',
+                MapItemCategory::getTable(),
+                implode(',', $arrCategoriesIdsToExclude)
+            );
+        }
+
+        $mapItemCategories = MapItemCategory::findItems($params);
+        $arrCategoriesIds = [];
+        if ($mapItemCategories instanceof Collection) {
+            while ($mapItemCategories->next()) {
+                $arrCategoriesIds[] = $mapItemCategories->category;
+            }
+        }
+
+        $this->categories = serialize($arrCategoriesIds);
+        $this->save();
+    }
 }
