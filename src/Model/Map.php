@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace WEM\GeoDataBundle\Model;
 
+use Contao\Model\Collection;
 use Contao\StringUtil;
 use WEM\UtilsBundle\Model\Model as CoreModel;
 
@@ -75,5 +76,17 @@ class Map extends CoreModel
         }
 
         return $r;
+    }
+
+    /**
+     * Retrieve map locations
+     * 
+     * @return Collection
+     */
+    public function getMapItems(array $config = []): ?Collection
+    {
+        $config['pid'] = $this->id;
+
+        return MapItem::findItems($config);
     }
 }
