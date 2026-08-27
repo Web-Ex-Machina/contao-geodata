@@ -18,6 +18,7 @@ use Contao\DataContainer;
 use Contao\Environment;
 use Exception;
 use WEM\GeoDataBundle\Model\Map;
+use WEM\GeoDataBundle\Model\MapItem;
 
 /**
  * Provide backend functions to Locations Extension.
@@ -46,6 +47,20 @@ class CopyMapItemController extends AbstractController
         $objMap = new Map();
         $objMap->setRow($arrData);
         $objMap->save();
+
+        $objMapItems = $objMapOld->getMapItems();
+
+        if ($objMapItems && 0 < $objMapItems->count()) {
+            while ($objMapItems->next()) {
+                $arrData = $objMapItems->row();
+                $arrData['pid'] = $objMap->id;
+                unset($arrData['id']);
+
+                $objMapItem = new MapItem();
+                $objMapItem->setRow($arrData);
+                $objMapItem->save();
+            }
+        }
 
         $url = Environment::get('uri');
         $url = str_replace(['&key=copy_map_item', '&id=' . $dc->id], ['&act=edit', '&id=' . $objMap->id], $url);
