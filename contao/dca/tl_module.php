@@ -30,7 +30,7 @@ $GLOBALS['TL_DCA']['tl_module']['palettes']['wem_geodata_list'] = '
     {config_legend},wem_geodata_map,perPage,numberOfItems;
     {filters_legend},wem_geodata_addFilters;
     {image_legend:hide},imgSize;
-    {template_legend:hide},customTpl,wem_geodata_customTplForGeodataItems;
+    {template_legend:hide},customTpl,wem_geodata_item_template;
     {protected_legend:hide},protected;
     {expert_legend:hide},guests,cssID
 ';
@@ -59,6 +59,7 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_map'] = [
     'inputType' => 'select',
     'foreignKey' => 'tl_wem_map.title',
     'eval' => [
+        'includeBlankOption' => true,
         'chosen' => true,
         'mandatory' => true,
         'tl_class' => 'w50',
@@ -175,17 +176,17 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_addSearch'] = [
     ],
     'sql' => "char(1) NOT NULL default ''",
 ];
-$GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_customTplForGeodataItems'] = [
+$GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_item_template'] = [
     'exclude' => true,
     'inputType' => 'select',
     'options_callback' => static fn () => Controller::getTemplateGroup(
-        'mod_wem_geodata_list_item',
+        'wem_geodata_item_template',
         [],
-        'mod_wem_geodata_list_item'
+        'wem_geodata_item_template_default'
     ),
     'eval' => [
         'chosen' => true,
         'tl_class' => 'w50'
     ],
-    'sql' => "varchar(64) NOT NULL default ''",
+    'sql' => "varchar(64) NOT NULL default 'wem_geodata_item_template_default'",
 ];

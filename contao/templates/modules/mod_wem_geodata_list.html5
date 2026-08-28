@@ -1,10 +1,6 @@
-<div class="locations__list <?= $this->class ?><?php echo count($this->categories??[])<2?' hide-categories':'' ?>">
-  <?php if($this->error): ?>
-    <div class="error">
-      <?= $this->msg ?>
-    </div>
-  <?php else: ?>
-    <?php if($this->filters): ?>  
+<div class="locations__list <?= $this->class ?><?= count($this->categories ?? []) < 2 ?' hide-categories' : '' ?>">
+  
+    <?php if ($this->filters): ?>  
       <form action="<?= $this->filters_action ?>" method="<?= $this->filters_method ?>" class="locations__filters ft-0-8-em">
           <?php foreach($this->filters as $f): ?>
               <?php if('select' == $f['type'] && count($f['options']) <= 1): ?>
@@ -31,17 +27,16 @@
           </div>
       </form>
     <?php endif; ?>
+    
+    <?php if (!empty($this->items)): ?>
     <div class="location__list__wrapper flex-wrap">
-      <?php foreach($this->locations as $location): ?>
-        <?php $this->insert($this->customTplForGeodataItems,['location'=>$location]); ?>
-      <?php endforeach; ?>
+      <?= implode("", $this->items) ?>
     </div>
+    <?php else: ?>
+    <div class="location__list__wrapper empty">
+      <p><?= $GLOBALS['TL_LANG']['WEM']['GEODATA']['LIST']['empty'] ?></p>
+    </div>
+    <?php endif; ?>
+
     <?php echo $this->pagination; ?>
-    <script type="text/javascript">
-      objMapData        = <?= json_encode($this->locations, JSON_INVALID_UTF8_IGNORE | JSON_INVALID_UTF8_SUBSTITUTE) ?>;
-      objMapConfig      = <?= json_encode($this->config) ?>;
-      categories        = <?= $this->categories ? json_encode($this->categories):'{}' ?>;
-      objMapFilters     = <?= $this->filters ? json_encode($this->filters):'{}' ?>;
-    </script>
-  <?php endif; ?>
 </div>

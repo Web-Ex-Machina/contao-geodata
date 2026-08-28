@@ -1,0 +1,62 @@
+<div 
+  class="block-card map__list__item layout_list" 
+  data-preset="inline" 
+  itemscope 
+  itemtype="http://schema.org/Place" 
+  data-id="<?= $this->id ?>" 
+  data-category="<?= \WEM\GeoDataBundle\Classes\Util::formatStringValueForFilters(implode(',', array_map(function ($c) { return $c['title']; }, $this->categories))) ?>"
+  data-city="<?= \WEM\GeoDataBundle\Classes\Util::formatStringValueForFilters($this->city);?>" 
+  data-admin_lvl_1="<?= \WEM\GeoDataBundle\Classes\Util::formatStringValueForFilters($this->admin_lvl_1) ?>" 
+  data-admin_lvl_2="<?= \WEM\GeoDataBundle\Classes\Util::formatStringValueForFilters($this->admin_lvl_2) ?>" 
+  data-country="<?= \WEM\GeoDataBundle\Classes\Util::formatStringValueForFilters($this->country['code']) ?>"
+>
+  <div class="block-card__wrapper">
+    <?php if ($this->picture ?? false): ?>
+      <<?= $this->jumpTo ? 'a href="'.$this->jumpTo.'" title="'.$GLOBALS['TL_LANG']['MSC']['more'].'"' : 'div' ?> class="block-card__figure">
+        <img src="<?= $this->picture->path ?>" alt="<?= $this->title ?>" itemprop="image">
+      </<?= $this->jumpTo ? 'a' : 'div' ?> >
+    <?php endif; ?>
+
+    <div class="block-card__content">
+      <<?= $this->jumpTo ? 'a href="'.$this->jumpTo.'"' : 'div' ?>  class="block-card__title h2 " title="<?= $this->title ?>" itemprop="name">
+        <?= $this->title ?>
+      </<?= $this->jumpTo ? 'a' : 'div' ?> >
+
+      <?php if ($this->categories): ?>
+      <p class="map__list__item__categoryTitle">
+        <?= mb_strtoupper(implode(', ', array_map(function($c) { return $c['title']; }, $this->categories)), 'UTF-8') ?>
+      </p>
+      <?php endif ?>
+
+      <div class="block-card__text">
+        <div class="map__list__item__line">
+          <i class="fa fa-map-marker-alt"></i>
+          <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+            <?= $this->address ?>
+          </span>
+        </div>
+
+        <?php if($this->phone): ?>
+        <div class="map__list__item__line"><i class="fa fa-phone"></i><a href="tel:<?= $this->phone ?>"><?= $this->phone ?></a></div>
+        <?php endif; ?>
+        <?php if($this->email): ?>
+        <div class="map__list__item__line"><i class="fa fa-envelope"></i><a href="mailto:<?= $this->email ?>"><?= $this->email ?></a></div>
+        <?php endif; ?>
+        <?php if($this->website): ?>
+        <div class="map__list__item__line"><i class="fa fa-globe"></i> <a href="<?= $this->website ?>" target="_blank"><?= $this->website ?></a></div>
+        <?php endif; ?>
+        
+        <?php if (!empty($this->teaser)): ?>
+        <br>
+        <?= $this->teaser ?>
+        <?php endif; ?>
+      </div>
+      
+      <?php if ($this->jumpTo): ?>
+      <div class="event__link m-top-0">
+        <a href="<?= $this->jumpTo ?>" title="<?= $GLOBALS['TL_LANG']['MSC']['more'] ?>"></a>
+      </div>
+      <?php endif ?>
+    </div>
+  </div>
+</div>

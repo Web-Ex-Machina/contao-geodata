@@ -97,6 +97,11 @@ $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
         ],
         'pid' => [
             'sql' => "int(10) unsigned NOT NULL default '0'",
+            'foreignKey' => 'tl_wem_map.title',
+            'relation' => [
+                'type' => 'belongsTo',
+                'load' => 'eager',
+            ],
         ],
         'title' => [
             'exclude' => true,
@@ -121,7 +126,7 @@ $GLOBALS['TL_DCA']['tl_wem_map_item'] = [
             'foreignKey' => 'tl_wem_map_category.title',
             'eval' => ['chosen' => true, 'includeBlankOption' => true, 'multiple' => true, 'mandatory' => true, 'tl_class' => 'w50'],
             'sql' => 'blob NULL',
-            'relation' => ['type' => 'belongsTo', 'load' => 'eager'],
+            'relation' => ['type' => 'hasMany', 'load' => 'eager'],
         ],
         'lat' => [
             'exclude' => true,
