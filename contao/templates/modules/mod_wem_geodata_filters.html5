@@ -35,6 +35,9 @@
             <?php endforeach; ?>
             <div class="input-group geodata__filters__submit">
                 <button type="submit" class="btn-sm"><i class="fal fa-search"></i></button>
+                <?php if ($this->formReset): ?>
+                <a class="btn-sm" href="<?= $this->formReset ?>" title="Reset"><i class="fal fa-undo"></i></a>
+                <?php endif ?>
             </div>
         </div>
     </form>

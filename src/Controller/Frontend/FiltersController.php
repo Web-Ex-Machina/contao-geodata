@@ -67,6 +67,11 @@ class FiltersController extends ModuleController
             $template->formAction = $request->getRequestUri();
         }
 
+        // Reset link
+        if ($this->config !== $this->baseConfig) {
+            $template->formReset = $request->getPathInfo();
+        }
+
         return $template->getResponse();
     }
 
