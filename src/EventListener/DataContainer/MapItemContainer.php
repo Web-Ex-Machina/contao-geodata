@@ -202,24 +202,33 @@ class MapItemContainer extends CoreContainer
     }
 
     #[AsCallback(table: 'tl_wem_map_item', target: 'fields.categories.options')]
-    public function getMapCategories(DataContainer|null $dc = null): array 
+    public function getMapCategories(DataContainer|Map|null $dc = null): array 
     {
         $arrData = [];
+        $objCategories = null;
 
-        if ($dc->activeRecord && $dc->activeRecord->pid) {
+        if ($dc instanceof DataContainer && $dc->getCurrentRecord() && $dc->getCurrentRecord()['pid']) {
             $objCategories = $this->Database->prepare(
                 'SELECT id, title FROM tl_wem_map_category WHERE pid = ? ORDER BY createdAt ASC'
             )
-                ->execute($dc->activeRecord->pid)
+                ->execute($dc->getCurrentRecord()['pid'])
             ;
 
-            if (! $objCategories) {
-                return [];
-            }
+            
+        } else if ($dc instanceof Map) {
+            $objCategories = $this->Database->prepare(
+                'SELECT id, title FROM tl_wem_map_category WHERE pid = ? ORDER BY createdAt ASC'
+            )
+                ->execute($dc->id)
+            ;
+        }
 
-            while ($objCategories->next()) {
-                $arrData[$objCategories->id] = $objCategories->title;
-            }
+        if (null === $objCategories) {
+            return [];
+        }
+
+        while ($objCategories->next()) {
+            $arrData[$objCategories->id] = $objCategories->title;
         }
 
         return $arrData;

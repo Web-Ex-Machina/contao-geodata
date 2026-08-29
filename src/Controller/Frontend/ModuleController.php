@@ -159,7 +159,7 @@ abstract class ModuleController extends AbstractFrontendModuleController
         $this->map = Map::findById($this->model->wem_geodata_map);
     }
 
-    protected function getFilters(): string
+    protected function getFiltersModule(): string
     {
         if ($this->model->wem_geodata_addFilters) {
             return Controller::getFrontendModule($this->model->wem_geodata_filters_module);

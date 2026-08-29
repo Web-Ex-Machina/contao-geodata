@@ -87,7 +87,7 @@ class ListController extends ModuleController
         }
 
         // Retrieve filters
-        $template->filters = $this->getFilters();
+        $template->filters = $this->getFiltersModule();
 
         // Get the total number of items
         $intTotal = $this->countItems();
