@@ -20,6 +20,7 @@ use Contao\ManagerPlugin\Routing\RoutingPluginInterface;
 use Symfony\Component\Config\Loader\LoaderResolverInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouteCollection;
+use Symfony\UX\Map\UXMapBundle;
 use WEM\GeoDataBundle\WEMGeoDataBundle;
 
 /**
@@ -30,8 +31,9 @@ class Plugin implements BundlePluginInterface, RoutingPluginInterface
     public function getBundles(ParserInterface $parser): array
     {
         return [
+            BundleConfig::create(UXMapBundle::class),
             BundleConfig::create(WEMGeoDataBundle::class)
-                ->setLoadAfter([ContaoCoreBundle::class])
+                ->setLoadAfter([UXMapBundle::class, ContaoCoreBundle::class])
                 ->setReplace(['wem-geodata']),
         ];
     }

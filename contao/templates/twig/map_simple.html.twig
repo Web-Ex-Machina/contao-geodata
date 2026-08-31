@@ -1,0 +1,18 @@
+{{ ux_map(
+    center: [51.5074, 0.1278],
+    zoom: 3,
+    markers: [
+        { position: [51.5074, 0.1278], title: 'London' },
+        { position: [48.8566, 2.3522], title: 'Paris' },
+        {
+            position: [40.7128, -74.0060],
+            title: 'New York',
+            infoWindow: { content: 'Welcome to <b>New York</b>' }
+        },
+    ],
+    fitBoundsToMarkers: true,
+    attributes: {
+        class: 'foo',
+        style: 'height: 800px; width: 100%; border: 4px solid red; margin-block: 10vh;',
+    }
+) }}

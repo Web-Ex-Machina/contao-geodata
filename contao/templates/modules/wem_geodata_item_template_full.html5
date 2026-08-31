@@ -84,14 +84,6 @@
 				<?= $this->address ?>
 			</span>
 		<?php endif; ?>
-<!-- 				<br />
-		<?= $this->admin_lvl_1 ?>
-		<?php if($this->admin_lvl_2): ?>
-			- <?= $this->admin_lvl_2 ?>
-		<?php endif; ?>
-		<?php if($this->admin_lvl_3): ?>
-			- <?= $this->admin_lvl_3 ?>
-		<?php endif; ?> -->
     </div>
 
     <?php if (!empty($this->lat) && !empty($this->lng)): ?>
@@ -99,18 +91,10 @@
 	    	<meta itemprop="latitude" content="<?= $this->lat; ?>" />
 	    	<meta itemprop="longitude" content="<?= $this->lng; ?>" />
 	    </div>
-		<div id="map-<?= $this->id ?>" class="geodata__reader__map" style="height:512px;" data-lat="<?= $this->lat; ?>" data-lon="<?= $this->lng; ?>"></div>
-		<script type="text/javascript">
-		  var mapContainer = document.querySelector('#map-<?= $this->id ?>');
-		  var map = L.map('map-<?= $this->id ?>',{
-		    gestureHandling: true,
-		  }).setView([mapContainer.getAttribute('data-lat'),mapContainer.getAttribute('data-lon')], 16);
-		  var OpenStreetMap_Layer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-		    maxZoom: 18,
-		    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-		  })
-		  .addTo(map);
-		  var marker = L.marker([mapContainer.getAttribute('data-lat'),mapContainer.getAttribute('data-lon')]).addTo(map);
-		</script>
+
+
+		
     <?php endif; ?>
+
+	<?= $this->map ?>
 </div>
