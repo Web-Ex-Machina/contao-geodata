@@ -8,6 +8,7 @@ use Contao\CoreBundle\Controller\FrontendModule\AbstractFrontendModuleController
 use Contao\CoreBundle\Routing\ContentUrlGenerator;
 use Contao\ContentModel;
 use Contao\Controller;
+use Contao\FilesModel;
 use Contao\FrontendTemplate;
 use Contao\Model\Collection;
 use Contao\ModuleModel;
@@ -18,6 +19,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use WEM\GeoDataBundle\Model\Map;
 use WEM\GeoDataBundle\Model\MapItem;
 use WEM\UtilsBundle\Classes\CountriesUtil;
+use WEM\UtilsBundle\Classes\StringUtil;
 
 /**
  * Common functions for job portfolios modules.
@@ -121,13 +123,23 @@ abstract class ModuleController extends AbstractFrontendModuleController
         }
 
         // Add an image
-        if ($objItem->singleSRC) {
-            $objFile = FilesModel::findByUuid($objItem->singleSRC);
+        if ($objItem->picture) {
+            $objFile = FilesModel::findByUuid($objItem->picture);
+
+            $imgSize = null;
+            if ($this->model->imgSize) {
+                $size = StringUtil::deserialize($this->model->imgSize);
+
+                if ($size[0] > 0 || $size[1] > 0 || is_numeric($size[2]) || ($size[2][0] ?? null) === '_') {
+                    $imgSize = $this->model->imgSize;
+                }
+            }
 
             $figure = System::getContainer()
                 ->get('contao.image.studio')
                 ->createFigureBuilder()
-                ->fromPath($objFile->path)
+                ->from($objItem->picture)
+                ->setSize($imgSize)
                 ->buildIfResourceExists()
             ;
 
@@ -136,7 +148,7 @@ abstract class ModuleController extends AbstractFrontendModuleController
             }
 
             // Send also the data for flexible behavior
-            $objTemplate->picture = $objFile;
+            $objTemplate->pictureSrc = $objFile;
         }
 
         // Retrieve item content

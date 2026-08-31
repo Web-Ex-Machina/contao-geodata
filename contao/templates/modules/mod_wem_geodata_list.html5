@@ -1,18 +1,22 @@
-<div class="locations__list <?= $this->class ?><?= count($this->categories ?? []) < 2 ?' hide-categories' : '' ?>">
+<?php $this->extend('block_searchable'); ?>
+
+<?php $this->block('content'); ?>
+<div class="geodata__list <?= $this->class ?><?= count($this->categories ?? []) < 2 ?' hide-categories' : '' ?>">
   
     <?php if ($this->filters): ?>  
     <?= $this->filters ?>
     <?php endif; ?>
     
     <?php if (!empty($this->items)): ?>
-    <div class="location__list__wrapper flex-wrap">
+    <div class="geodata__list__wrapper flex-wrap">
       <?= implode("", $this->items) ?>
     </div>
     <?php else: ?>
-    <div class="location__list__wrapper empty">
+    <div class="geodata__list__wrapper empty">
       <p><?= $GLOBALS['TL_LANG']['WEM']['GEODATA']['LIST']['empty'] ?></p>
     </div>
     <?php endif; ?>
 
     <?php echo $this->pagination; ?>
 </div>
+<?php $this->endblock(); ?>

@@ -1,5 +1,5 @@
 <div 
-  class="block-card map__list__item layout_list" 
+  class="block-card geodata__list__item layout_list" 
   data-preset="inline" 
   itemscope 
   itemtype="http://schema.org/Place" 
@@ -13,7 +13,7 @@
   <div class="block-card__wrapper">
     <?php if ($this->picture ?? false): ?>
       <<?= $this->jumpTo ? 'a href="'.$this->jumpTo.'" title="'.$GLOBALS['TL_LANG']['MSC']['more'].'"' : 'div' ?> class="block-card__figure">
-        <img src="<?= $this->picture->path ?>" alt="<?= $this->title ?>" itemprop="image">
+        <?php $this->insert('image', $this->arrData); ?>
       </<?= $this->jumpTo ? 'a' : 'div' ?> >
     <?php endif; ?>
 
@@ -23,13 +23,13 @@
       </<?= $this->jumpTo ? 'a' : 'div' ?> >
 
       <?php if ($this->categories): ?>
-      <p class="map__list__item__categoryTitle">
+      <p class="geodata__list__item__categoryTitle">
         <?= mb_strtoupper(implode(', ', array_map(function($c) { return $c['title']; }, $this->categories)), 'UTF-8') ?>
       </p>
       <?php endif ?>
 
       <div class="block-card__text">
-        <div class="map__list__item__line">
+        <div class="geodata__list__item__line">
           <i class="fa fa-map-marker-alt"></i>
           <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
             <?= $this->address ?>
@@ -37,13 +37,13 @@
         </div>
 
         <?php if($this->phone): ?>
-        <div class="map__list__item__line"><i class="fa fa-phone"></i><a href="tel:<?= $this->phone ?>"><?= $this->phone ?></a></div>
+        <div class="geodata__list__item__line"><i class="fa fa-phone"></i><a href="tel:<?= $this->phone ?>"><?= $this->phone ?></a></div>
         <?php endif; ?>
         <?php if($this->email): ?>
-        <div class="map__list__item__line"><i class="fa fa-envelope"></i><a href="mailto:<?= $this->email ?>"><?= $this->email ?></a></div>
+        <div class="geodata__list__item__line"><i class="fa fa-envelope"></i><a href="mailto:<?= $this->email ?>"><?= $this->email ?></a></div>
         <?php endif; ?>
         <?php if($this->website): ?>
-        <div class="map__list__item__line"><i class="fa fa-globe"></i> <a href="<?= $this->website ?>" target="_blank"><?= $this->website ?></a></div>
+        <div class="geodata__list__item__line"><i class="fa fa-globe"></i> <a href="<?= $this->website ?>" target="_blank"><?= $this->website ?></a></div>
         <?php endif; ?>
         
         <?php if (!empty($this->teaser)): ?>

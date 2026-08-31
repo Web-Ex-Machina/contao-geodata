@@ -38,7 +38,7 @@ $GLOBALS['TL_DCA']['tl_module']['palettes']['wem_geodata_reader'] = '
     {title_legend},name,headline,type;
     {config_legend},wem_geodata_map,overviewPage,customLabel;
     {image_legend:hide},imgSize;
-    {template_legend:hide},customTpl;
+    {template_legend:hide},customTpl,wem_geodata_item_template;
     {protected_legend:hide},protected;
     {expert_legend:hide},guests,cssID
 ';
