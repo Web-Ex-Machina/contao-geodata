@@ -74,8 +74,7 @@
 				<i class="fab fa-instagram fa-2xl"></i>
 			</a>
 		<?php endif; ?>
-	</div>
-
+	</div>	
 
     <div class="geodata__reader__location">
 		<?php if ($this->address): ?>
@@ -87,14 +86,11 @@
     </div>
 
     <?php if (!empty($this->lat) && !empty($this->lng)): ?>
-	    <div itemprop="geo" itemscope itemtype="https://schema.org/GeoCoordinates">
-	    	<meta itemprop="latitude" content="<?= $this->lat; ?>" />
-	    	<meta itemprop="longitude" content="<?= $this->lng; ?>" />
-	    </div>
-
-
-		
+    <div itemprop="geo" itemscope itemtype="https://schema.org/GeoCoordinates">
+    	<meta itemprop="latitude" content="<?= $this->lat; ?>" />
+    	<meta itemprop="longitude" content="<?= $this->lng; ?>" />
+    </div>		
     <?php endif; ?>
 
-	<?= $this->map ?>
+	
 </div>
