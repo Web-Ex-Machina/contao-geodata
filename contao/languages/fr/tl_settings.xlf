@@ -1,0 +1,19 @@
+<?xml version="1.0" ?><xliff version="1.1">
+  <file datatype="php" original="system/modules/wem-geodata/languages/en/tl_settings.php" source-language="en" target-language="fr">
+    <body>
+      <trans-unit id="tl_settings.wem_geodata_assets_version.0">
+        <source>Assets version</source>
+        <target>Version des assets</target>
+      </trans-unit>
+      <trans-unit id="tl_settings.wem_geodata_assets_version.1">
+        <source>Enter the version number for the geodata assets.</source>
+        <target>Indiquez le numéro de version des assets geodata.</target>
+      </trans-unit>
+
+      <trans-unit id="tl_settings.wem_geodata_legend">
+        <source>Geodata module settings</source>
+        <target>Paramètrage du module Geodata</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
