@@ -8,5 +8,4 @@
 
 <?php $this->block('content'); ?>
 <?= $this->item ?>
-<?= $this->mapTem ?>
 <?php $this->endblock(); ?>

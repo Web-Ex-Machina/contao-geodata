@@ -19,15 +19,6 @@ use Contao\Template;
 use Contao\System;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\UX\Map\Map;
-use Symfony\UX\Map\Marker;
-use Symfony\UX\Map\InfoWindow;
-use Symfony\UX\Map\Point;
-use Symfony\UX\Map\Bridge\Leaflet\LeafletOptions;
-use Symfony\UX\Map\Bridge\Leaflet\Option\AttributionControlOptions;
-use Symfony\UX\Map\Bridge\Leaflet\Option\ControlPosition;
-use Symfony\UX\Map\Bridge\Leaflet\Option\TileLayer;
-use Symfony\UX\Map\Bridge\Leaflet\Option\ZoomControlOptions;
 use WEM\GeoDataBundle\Model\MapItem;
 
 #[AsFrontendModule(
@@ -115,52 +106,7 @@ class ReaderController extends ModuleController
         $template->item = $this->parseItem($this->mapitem);
         $template->moduleId = $this->model->id;
 
-        $template->mapTem = $this->getmap();
-
         return $template->getResponse();
-    }
-
-    protected function getmap()
-    {
-        $map = new Map();
-        $map
-            // Explicitly set the center and zoom
-            ->center(new Point(47.903354, 1.888334))
-            ->zoom(6)
-
-            ->addMarker(new Marker(
-                position: new Point(45.7640, 4.8357),
-                title: 'Lyon',
-                infoWindow: new InfoWindow(
-                    headerContent: '<b>Lyon</b>',
-                    content: 'The French town in the historic Rhône-Alpes region, located at the junction of the Rhône and Saône rivers.'
-                ),
-            ))
-
-            // Or automatically fit the bounds to the markers
-            ->fitBoundsToMarkers()
-        ;
-
-        $leafletOptions = (new LeafletOptions())
-            ->tileLayer(new TileLayer(
-                url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-                options: [
-                    'minZoom' => 5,
-                    'maxZoom' => 10,
-                ]
-            ))
-            ->attributionControl(false)
-            ->attributionControlOptions(new AttributionControlOptions(ControlPosition::BOTTOM_LEFT))
-            ->zoomControl(false)
-            ->zoomControlOptions(new ZoomControlOptions(ControlPosition::TOP_LEFT))
-        ;
-
-        $map->options($leafletOptions);
-
-        $t = new \Contao\FrontendTemplate('map_simple');
-        $t->map = $map;
-        return $t->parse();
     }
 
     protected function findItem(): ?MapItem
