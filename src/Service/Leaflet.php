@@ -14,7 +14,25 @@ use WEM\GeoDataBundle\Model\MapItem;
  */
 class Leaflet extends Provider
 {
-	public function loadMapAssets(): void
+	/**
+     * Default Leaflet Map Config.
+     *
+     * @return [Array]
+     */
+    public static function getDefaultConfig(): array
+    {
+        return [
+            'provider' => 'leaflet',
+            'zoom' => 13,
+            'tileLayer_url' => 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            'tileLayer_attribution' => 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
+            'tileLayer_minZoom' => 0,
+            'tileLayer_maxZoom' => 18,
+            'tileLayer_id' => '',
+            'tileLayer_accessToken' => '',
+        ];
+    }
+    	public function loadMapAssets(): void
 	{
 		$v = Config::get('wem_geodata_assets_version') ?: WEM_GEODATA_COMBINER_VERSION;
 

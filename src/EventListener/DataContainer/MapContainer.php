@@ -16,7 +16,6 @@ use Contao\CoreBundle\DependencyInjection\Attribute\AsCallback;
 use Contao\DataContainer;
 use Contao\Message;
 use Contao\Model\Collection;
-use WEM\GeoDataBundle\Controller\Provider\Leaflet;
 use WEM\GeoDataBundle\Model\Category;
 use WEM\GeoDataBundle\Model\Map as ModelMap;
 
@@ -80,7 +79,8 @@ class MapContainer extends CoreContainer
         if (! $varValue) {
             switch ($objDc->activeRecord->mapProvider) {
                 case ModelMap::MAP_PROVIDER_LEAFLET:
-                    $arrConfig = Leaflet::getDefaultConfig();
+                    $service = System::getContainer()->get('wem.geodata.service.leaflet');
+                    $arrConfig = $service->getDefaultConfig();
                     break;
 
                 default:
