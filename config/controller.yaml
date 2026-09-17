@@ -1,0 +1,10 @@
+services:
+  WEM\GeoDataBundle\Controller\Api\ApiController:
+        alias: 'wem.geodata.api.apicontroller'
+        public: true
+
+  wem.geodata.api.apicontroller:
+      class: WEM\GeoDataBundle\Controller\Api\ApiController
+      arguments:
+          $framework: '@contao.framework'
+      public: true
