@@ -37,23 +37,4 @@ class Util
     ): string {
         return str_replace([' ', '.'], '_', mb_strtolower($value, 'UTF-8'));
     }
-
-    /**
-     * Delete MapItemCategory rows for a Category.
-     *
-     * @param Category $objItem The Category
-     */
-    public static function deleteMapItemCategoryForCategory(
-        Category $objItem
-    ): void {
-        // remove links item <-> category
-        $mapItemCategories = MapItemCategory::findItems(['category' => $objItem->id]);
-        if ($mapItemCategories instanceof Collection) {
-            while ($mapItemCategories->next()) {
-                $mapItemCategories->current()
-                    ->delete()
-                ;
-            }
-        }
-    }
 }

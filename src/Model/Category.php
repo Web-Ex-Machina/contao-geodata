@@ -60,8 +60,20 @@ class Category extends CoreModel
     public function delete(): int
     {
         // remove links item <-> category
-        Util::deleteMapItemCategoryForCategory($this);
+        $this->deleteMapItemCategories();
 
         return parent::delete();
+    }
+
+    public function deleteMapItemCategories(): void {
+        // remove links item <-> category
+        $mapItemCategories = MapItemCategory::findItems(['category' => $this->id]);
+        if ($mapItemCategories instanceof Collection) {
+            while ($mapItemCategories->next()) {
+                $mapItemCategories->current()
+                    ->delete()
+                ;
+            }
+        }
     }
 }

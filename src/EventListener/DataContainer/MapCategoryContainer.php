@@ -73,7 +73,7 @@ class MapCategoryContainer extends CoreContainer
 
         $objCategory = Category::findById($dc->id);
         if ($objCategory) {
-            Util::deleteMapItemCategoryForCategory($objCategory);
+            $objCategory->deleteMapItemCategories();
         }
     }
 }
