@@ -6,6 +6,7 @@ namespace WEM\GeoDataBundle\Controller\Frontend;
 
 use Contao\CoreBundle\Controller\FrontendModule\AbstractFrontendModuleController;
 use Contao\CoreBundle\Routing\ContentUrlGenerator;
+use Contao\Config;
 use Contao\ContentModel;
 use Contao\Controller;
 use Contao\FilesModel;
@@ -18,6 +19,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use WEM\GeoDataBundle\Model\Map;
 use WEM\GeoDataBundle\Model\MapItem;
+use WEM\GeoDataBundle\Service\Leaflet;
 use WEM\UtilsBundle\Classes\CountriesUtil;
 use WEM\UtilsBundle\Classes\StringUtil;
 
@@ -32,6 +34,7 @@ abstract class ModuleController extends AbstractFrontendModuleController
     protected Map $map;
     protected ModuleModel $model;
     protected RequestStack $request;
+    protected Leaflet $service;
 
     public function __construct() 
     {
@@ -169,6 +172,17 @@ abstract class ModuleController extends AbstractFrontendModuleController
         }
 
         $this->map = Map::findById($this->model->wem_geodata_map);
+
+        switch ($this->map->mapProvider) {
+            case Map::MAP_PROVIDER_LEAFLET:
+                $this->service = System::getContainer()->get('wem.geodata.service.leaflet');
+            break;
+            case Map::MAP_PROVIDER_GMAP:
+                $this->service = System::getContainer()->get('wem.geodata.service.google_maps');
+            break;
+            default:
+                throw new Exception($GLOBALS['TL_LANG']['WEM']['GEODATA']['ERR']['serviceCannotBeInitialized']);
+        }
     }
 
     protected function getFiltersModule(): string

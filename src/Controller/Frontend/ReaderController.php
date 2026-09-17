@@ -44,6 +44,7 @@ class ReaderController extends ModuleController
     {
         $this->model = $model;
         $this->loadMap();
+        $this->service->loadMapAssets();
 
         $this->mapitem = $this->findItem();
 

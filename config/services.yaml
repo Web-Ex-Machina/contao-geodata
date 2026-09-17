@@ -8,6 +8,12 @@ services:
     resource: ../src/
     exclude: ../src/{ContaoManager,DependencyInjection,Module}
 
+  wem.geodata.service.google_maps:
+    class: WEM\GeoDataBundle\Service\GoogleMaps
+
+  wem.geodata.service.leaflet:
+    class: WEM\GeoDataBundle\Service\Leaflet
+
   wem.geodata.service.nominatim:
     class: WEM\GeoDataBundle\Service\Nominatim
             

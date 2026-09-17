@@ -5,6 +5,14 @@
 				<source>Map cannnot initialized, check your module config.</source>
 				<target>Map ne peut être initialisée, vérifiez la configuration du module.</target>
 			</trans-unit>
+			<trans-unit id="WEM.GEODATA.ERR.serviceCannotBeInitialized">
+				<source>Service cannnot initialized, check your module config.</source>
+				<target>Le service ne peut être initialisée, vérifiez la configuration du module.</target>
+			</trans-unit>
+			<trans-unit id="WEM.GEODATA.ERR.gmapNeedsAPIKey">
+				<source>Google Maps needs an API Key !</source>
+				<target>Google Maps necessite une clef API</target>
+			</trans-unit>
 
     	<trans-unit id="WEM.GEODATA.LIST.empty">
 				<source>This list does not contain any items.</source>
@@ -82,10 +90,6 @@
 			<trans-unit id="WEM.LOCATIONS.ERROR.unknownExportFormat">
 				<source>Unknown export format. Known formats are : "%s".</source>
 				<target>Format d'export inconnu. Les formats supportés sont : "%s"</target>
-			</trans-unit>
-			<trans-unit id="WEM.LOCATIONS.ERROR.gmapNeedsAPIKey">
-				<source>Google Maps needs an API Key !</source>
-				<target>Google Maps necessite une clef API</target>
 			</trans-unit>
 			<trans-unit id="WEM.LOCATIONS.ERROR.unknownProvider">
 				<source>This provider is unknown.</source>
