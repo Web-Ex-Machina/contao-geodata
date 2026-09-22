@@ -56,6 +56,10 @@ class FiltersController extends ModuleController
         // Add search filter
         $this->addSearchFilter();
 
+        if (Input::post('TL_AJAX') && (int) $this->model->id === (int) Input::post('module')) {
+            $this->handleAjaxRequests();
+        }
+
         $template->filters = $this->filters;
         $template->moduleId = $this->model->id;
 

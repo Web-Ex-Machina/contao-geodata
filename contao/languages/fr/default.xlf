@@ -13,6 +13,18 @@
 				<source>Google Maps needs an API Key !</source>
 				<target>Google Maps necessite une clef API</target>
 			</trans-unit>
+			<trans-unit id="WEM.GEODATA.ERROR.noCategoryConfigured">
+				<source>No category configured for this map !</source>
+				<target>Aucune catégorie configurée pour cette carte !</target>
+			</trans-unit>
+			<trans-unit id="WEM.GEODATA.ERROR.categoriesNotFound">
+				<source>No categories found for this map.</source>
+				<target>Aucune catégorie trouvée pour cette carte.</target>
+			</trans-unit>
+			<trans-unit id="WEM.LOCATIONS.ERROR.categoryNotFound">
+				<source>No category found for : "%s".</source>
+				<target>Aucune catégorie trouvée pour : "%s".</target>
+			</trans-unit>
 
     	<trans-unit id="WEM.GEODATA.LIST.empty">
 				<source>This list does not contain any items.</source>
@@ -67,10 +79,6 @@
 				<source>No map configured for this module !</source>
 				<target>Aucune carte configurée pour ce module !</target>
 			</trans-unit>
-			<trans-unit id="WEM.LOCATIONS.ERROR.noCategoryConfigured">
-				<source>No category configured for this map !</source>
-				<target>Aucune catégorie configurée pour cette carte !</target>
-			</trans-unit>
 			<trans-unit id="WEM.LOCATIONS.ERROR.countryNotFound">
 				<source>The country "%s" doesn't match a known ISO Code. Maybe there is a typo ?</source>
 				<target>Le pays "%s" ne correspond à aucun ISO code connu. Peut-être qu'il y a une faute ?</target>
@@ -102,14 +110,6 @@
 			<trans-unit id="WEM.LOCATIONS.ERROR.pageNotFound">
 				<source>Page not found : "%s".</source>
 				<target>Page introuvable : "%s".</target>
-			</trans-unit>
-			<trans-unit id="WEM.LOCATIONS.ERROR.categoriesNotFound">
-				<source>No categories found for this map.</source>
-				<target>Aucune catégorie trouvée pour cette carte.</target>
-			</trans-unit>
-			<trans-unit id="WEM.LOCATIONS.ERROR.categoryNotFound">
-				<source>No category found for : "%s".</source>
-				<target>Aucune catégorie trouvée pour : "%s".</target>
 			</trans-unit>
 			<trans-unit id="WEM.LOCATIONS.ERROR.locationNotFound">
 				<source>No location found for : "%s".</source>

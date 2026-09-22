@@ -411,7 +411,7 @@ geodata.ajax.getLocations = function(offset = 0, limit = 0){
         request.append('module', mapModuleId);
         request.append('offset', offset);
         request.append('limit', limit);
-        request.append('action', 'getLocationsItemsPagined');
+        request.append('action', 'getLocationsItems');
 
     	fetch(window.location,{
     		method: 'POST',

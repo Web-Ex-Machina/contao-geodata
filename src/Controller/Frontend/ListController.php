@@ -130,6 +130,10 @@ class ListController extends ModuleController
             $template->pagination = $objPagination->generate("\n  ");
         }
 
+        if (Input::post('TL_AJAX') && (int) $this->model->id === (int) Input::post('module')) {
+            $this->handleAjaxRequests();
+        }
+
         $objItems = $this->findItems();
 
         // Add the items

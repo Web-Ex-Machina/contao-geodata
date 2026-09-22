@@ -40,6 +40,18 @@
       <trans-unit id="tl_module.wem_geodata_map_list_position.below">
         <source>Below</source>
       </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_addMap.0">
+        <source>Add a map</source>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_addMap.1">
+        <source>Check to add a map to this module.</source>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_map_module.0">
+        <source>Map module</source>
+      </trans-unit>
+      <trans-unit id="tl_module.wem_geodata_map_module.1">
+        <source>Select a map module to add with the module.</source>
+      </trans-unit>
       <trans-unit id="tl_module.wem_geodata_addFilters.0">
         <source>Add filters</source>
       </trans-unit>
@@ -95,6 +107,9 @@
         <source>Here you can select the list items template.</source>
       </trans-unit>
 
+      <trans-unit id="tl_module.map_legend">
+        <source>Map settings</source>
+      </trans-unit>
       <trans-unit id="tl_module.list_legend">
         <source>List settings</source>
       </trans-unit>

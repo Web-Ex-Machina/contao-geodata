@@ -44,12 +44,15 @@ class ReaderController extends ModuleController
     {
         $this->model = $model;
         $this->loadMap();
-        $this->service->loadMapAssets();
 
         $this->mapitem = $this->findItem();
 
         if (!$this->mapitem) {
             throw new PageNotFoundException('Page not found: '.Environment::get('uri'));
+        }
+
+        if (Input::post('TL_AJAX') && (int) $this->model->id === (int) Input::post('module')) {
+            $this->handleAjaxRequests();
         }
 
         if ($this->model->overviewPage && ($overviewPage = PageModel::findById($this->model->overviewPage))) {

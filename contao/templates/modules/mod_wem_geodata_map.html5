@@ -18,7 +18,7 @@
 					<?= $this->filters_html_; ?>
 				</div>
 			<?php endif; ?>
-			<div id="map" class="map__container">
+			<div id="map" class="map__container" style="height:100%">
 				<?php if('rightpanel' !== $this->wem_geodata_map_list): ?>
 		    		<span class="map__legend__toggler btn-sm m-0 squared hidden">Legend</span>
 					<div class="map__legend">

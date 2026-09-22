@@ -13,8 +13,9 @@ declare(strict_types=1);
 use Contao\Controller;
 use Contao\DataContainer;
 
-$GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'wem_geodata_addList';
 $GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'wem_geodata_addFilters';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'wem_geodata_addList';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'wem_geodata_addMap';
 $GLOBALS['TL_DCA']['tl_module']['palettes']['wem_geodata_map'] = '
     {title_legend},name,headline,type;
     {config_legend},wem_geodata_map,wem_geodata_map_nbItemsToForceAjaxLoading;
@@ -37,6 +38,7 @@ $GLOBALS['TL_DCA']['tl_module']['palettes']['wem_geodata_list'] = '
 $GLOBALS['TL_DCA']['tl_module']['palettes']['wem_geodata_reader'] = '
     {title_legend},name,headline,type;
     {config_legend},wem_geodata_map,overviewPage,customLabel;
+    {map_legend},wem_geodata_addMap;
     {image_legend:hide},imgSize;
     {template_legend:hide},customTpl,wem_geodata_item_template;
     {protected_legend:hide},protected;
@@ -51,8 +53,9 @@ $GLOBALS['TL_DCA']['tl_module']['palettes']['wem_geodata_filters'] = '
     {expert_legend:hide},guests,cssID
 ';
 
-$GLOBALS['TL_DCA']['tl_module']['subpalettes']['wem_geodata_addList'] = 'wem_geodata_list_module,wem_geodata_map_list_position';
 $GLOBALS['TL_DCA']['tl_module']['subpalettes']['wem_geodata_addFilters'] = 'wem_geodata_filters_module,wem_geodata_map_filters_position';
+$GLOBALS['TL_DCA']['tl_module']['subpalettes']['wem_geodata_addList'] = 'wem_geodata_list_module,wem_geodata_map_list_position';
+$GLOBALS['TL_DCA']['tl_module']['subpalettes']['wem_geodata_addMap'] = 'wem_geodata_map_module';
 
 $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_map'] = [
     'exclude' => true,
@@ -91,7 +94,7 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_list_module'] = [
     'exclude' => true,
     'inputType' => 'select',
     'foreignKey' => 'tl_module.name',
-    'eval' => ['mandatory' => true],
+    'eval' => ['mandatory' => true, 'chosen' => true,],
     'sql' => 'int(10) unsigned NOT NULL default 0',
     'relation' => ['type' => 'hasOne', 'load' => 'lazy'],
 ];
@@ -106,6 +109,26 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_map_list_position'] = [
         'tl_class' => 'w50'
     ],
     'sql' => "varchar(32) NOT NULL default 'nolist'",
+];
+$GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_addMap'] = [
+    'exclude' => true,
+    'filter' => true,
+    'flag' => DataContainer::SORT_INITIAL_LETTER_ASC,
+    'inputType' => 'checkbox',
+    'eval' => [
+        'submitOnChange' => true,
+        'doNotCopy' => true,
+        'tl_class' => 'w50 m12'
+    ],
+    'sql' => "char(1) NOT NULL default ''",
+];
+$GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_map_module'] = [
+    'exclude' => true,
+    'inputType' => 'select',
+    'foreignKey' => 'tl_module.name',
+    'eval' => ['mandatory' => true, 'chosen' => true,],
+    'sql' => 'int(10) unsigned NOT NULL default 0',
+    'relation' => ['type' => 'hasOne', 'load' => 'lazy'],
 ];
 $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_addFilters'] = [
     'exclude' => true,
@@ -123,7 +146,7 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_filters_module'] = [
     'exclude' => true,
     'inputType' => 'select',
     'foreignKey' => 'tl_module.name',
-    'eval' => ['mandatory' => true],
+    'eval' => ['mandatory' => true, 'chosen' => true,],
     'sql' => 'int(10) unsigned NOT NULL default 0',
     'relation' => ['type' => 'hasOne', 'load' => 'lazy'],
 ];

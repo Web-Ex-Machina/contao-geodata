@@ -6,14 +6,18 @@ namespace WEM\GeoDataBundle\Controller\Api;
 
 use Contao\Environment;
 use Contao\FilesModel;
+use Contao\CoreBundle\Fragment\Reference\FrontendModuleReference;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\Model\Collection;
+use Contao\ModuleModel;
+use Contao\ModuleProxy;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
+use WEM\GeoDataBundle\Controller\Frontend\FiltersController;
 use WEM\GeoDataBundle\Model\Category;
 use WEM\GeoDataBundle\Model\Map;
 use WEM\GeoDataBundle\Model\MapItem;
@@ -36,7 +40,10 @@ class ApiController
         // parent::__construct();
     }
 
-    #[Route("/")]
+    #[Route(
+        "/", 
+        methods: ['GET']
+    )]
     public function view(Request $request): Response
     {
         return new Response('Hello World!');
@@ -92,7 +99,10 @@ class ApiController
         return new JsonResponse(['routes' => $routes]);
     }
 
-    #[Route("/get/items")]
+    #[Route(
+        "/get/items", 
+        methods: ['GET']
+    )]
     public function getItems(Request $request): Response
     {
         $locale = $request->query->has('locale') ? $request->query->get('locale') : $GLOBALS['TL_LANGUAGE'];
@@ -127,7 +137,10 @@ class ApiController
         return new JsonResponse(null, Response::HTTP_NOT_FOUND);
     }
 
-    #[Route("/count/items")]
+    #[Route(
+        "/count/items", 
+        methods: ['GET']
+    )]
     public function countItems(Request $request): Response
     {
         $locale = $request->query->has('locale') ? $request->query->get('locale') : $GLOBALS['TL_LANGUAGE'];

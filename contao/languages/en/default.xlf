@@ -10,6 +10,15 @@
 			<trans-unit id="WEM.GEODATA.ERR.gmapNeedsAPIKey">
 				<source>Google Maps needs an API Key !</source>
 			</trans-unit>
+			<trans-unit id="WEM.GEODATA.ERROR.noCategoryConfigured">
+				<source>No category configured for this map !</source>
+			</trans-unit>
+			<trans-unit id="WEM.GEODATA.ERROR.categoriesNotFound">
+				<source>No categories found for this map.</source>
+			</trans-unit>
+			<trans-unit id="WEM.LOCATIONS.ERROR.categoryNotFound">
+				<source>No category found for : "%s".</source>
+			</trans-unit>
 			
     	<trans-unit id="WEM.GEODATA.LIST.empty">
 				<source>This list does not contain any items.</source>
@@ -54,10 +63,6 @@
 				<source>No map configured for this module !</source>
 				<target>No map configured for this module !</target>
 			</trans-unit>
-			<trans-unit id="WEM.LOCATIONS.ERROR.noCategoryConfigured">
-				<source>No category configured for this map !</source>
-				<target>No category configured for this map !</target>
-			</trans-unit>
 			<trans-unit id="WEM.LOCATIONS.ERROR.noLocationsFound">
 				<source>No locations found for this map !</source>
 				<target>No locations found for this map !</target>
@@ -93,14 +98,6 @@
 			<trans-unit id="WEM.LOCATIONS.ERROR.pageNotFound">
 				<source>Page not found : "%s".</source>
 				<target>Page not found : "%s".</target>
-			</trans-unit>
-			<trans-unit id="WEM.LOCATIONS.ERROR.categoriesNotFound">
-				<source>No categories found for this map.</source>
-				<target>No categories found for this map.</target>
-			</trans-unit>
-			<trans-unit id="WEM.LOCATIONS.ERROR.categoryNotFound">
-				<source>No category found for : "%s".</source>
-				<target>No category found for : "%s".</target>
 			</trans-unit>
 			<trans-unit id="WEM.LOCATIONS.ERROR.locationNotFound">
 				<source>No location found for : "%s".</source>
