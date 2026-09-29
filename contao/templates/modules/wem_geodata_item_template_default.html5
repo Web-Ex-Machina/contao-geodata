@@ -1,5 +1,5 @@
 <div 
-  class="block-card geodata__list__item layout_list" 
+  class="geodata__list__item geodata__list__item layout_list" 
   data-preset="inline" 
   itemscope 
   itemtype="http://schema.org/Place" 
@@ -10,15 +10,15 @@
   data-admin_lvl_2="<?= \WEM\GeoDataBundle\Classes\Util::formatStringValueForFilters($this->admin_lvl_2) ?>" 
   data-country="<?= \WEM\GeoDataBundle\Classes\Util::formatStringValueForFilters($this->country['code']) ?>"
 >
-  <div class="block-card__wrapper">
+  <div class="geodata__list__item__wrapper">
     <?php if ($this->picture ?? false): ?>
-      <<?= $this->jumpTo ? 'a href="'.$this->jumpTo.'" title="'.$GLOBALS['TL_LANG']['MSC']['more'].'"' : 'div' ?> class="block-card__figure">
+      <<?= $this->jumpTo ? 'a href="'.$this->jumpTo.'" title="'.$GLOBALS['TL_LANG']['MSC']['more'].'"' : 'div' ?> class="geodata__list__item__picture">
         <?php $this->insert('image', $this->arrData); ?>
       </<?= $this->jumpTo ? 'a' : 'div' ?> >
     <?php endif; ?>
 
-    <div class="block-card__content">
-      <<?= $this->jumpTo ? 'a href="'.$this->jumpTo.'"' : 'div' ?>  class="block-card__title h2 " title="<?= $this->title ?>" itemprop="name">
+    <div class="geodata__list__item__content">
+      <<?= $this->jumpTo ? 'a href="'.$this->jumpTo.'"' : 'div' ?>  class="geodata__list__item__title h2 " title="<?= $this->title ?>" itemprop="name">
         <?= $this->title ?>
       </<?= $this->jumpTo ? 'a' : 'div' ?> >
 
@@ -28,7 +28,7 @@
       </p>
       <?php endif ?>
 
-      <div class="block-card__text">
+      <div class="geodata__list__item__text">
         <div class="geodata__list__item__line">
           <i class="fa fa-map-marker-alt"></i>
           <span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
@@ -53,7 +53,7 @@
       </div>
       
       <?php if ($this->jumpTo): ?>
-      <div class="event__link m-top-0">
+      <div class="geodata__list__item__link">
         <a href="<?= $this->jumpTo ?>" title="<?= $GLOBALS['TL_LANG']['MSC']['more'] ?>"></a>
       </div>
       <?php endif ?>

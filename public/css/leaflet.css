@@ -1,7 +1,7 @@
 .mod_wem_display_map .leaflet-pane{z-index:50;}
 .mod_wem_display_map .leaflet-control,
-.mod_wem_display_map .map__reset,
-.mod_wem_display_map .map__content{z-index:51;}
+.mod_wem_display_map .geodata__map__reset,
+.mod_wem_display_map .geodata__map__content{z-index:51;}
 
 .mod_wem_display_map .leaflet-popup-content-wrapper{border-radius: 0;}
 .mod_wem_display_map .leaflet-popup-content{margin: 1em 1.5em;}
