@@ -36,6 +36,7 @@ class GoogleMaps extends Provider
             $this->encryption->decrypt_b64($this->map->mapProviderGmapKey)
         );
 
+        $GLOBALS['TL_CSS'][] = 'bundles/wemgeodata/css/default.css|' . $v;
         $GLOBALS['TL_CSS'][] = 'bundles/wemgeodata/css/gmaps.css|' . $v;
         $GLOBALS['TL_JAVASCRIPT'][] = $remoteJs . '|' . $v;
         $GLOBALS['TL_JAVASCRIPT'][] = 'bundles/wemgeodata/js/default.js|' . $v;

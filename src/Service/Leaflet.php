@@ -40,6 +40,7 @@ class Leaflet extends Provider
         $GLOBALS['TL_CSS'][] = 'https://unpkg.com/leaflet.markercluster@latest/dist/MarkerCluster.css';
         $GLOBALS['TL_CSS'][] = 'https://unpkg.com/leaflet.markercluster@latest/dist/MarkerCluster.Default.css';
         $GLOBALS['TL_CSS'][] = 'https://unpkg.com/leaflet-gesture-handling@latest/dist/leaflet-gesture-handling.min.css';
+        $GLOBALS['TL_CSS'][] = 'bundles/wemgeodata/css/default.css|' . $v;
         $GLOBALS['TL_CSS'][] = 'bundles/wemgeodata/css/leaflet.css|' . $v;
 
         $GLOBALS['TL_JAVASCRIPT'][] = 'https://unpkg.com/leaflet@latest/dist/leaflet.js';
