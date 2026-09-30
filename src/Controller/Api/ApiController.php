@@ -173,7 +173,12 @@ class ApiController
                     if ($categories && is_array($categories) && !empty($categories)) {
                         foreach ($categories as $category) {
                             $objCategory = Category::findById($category);
-                            $v[] = $objCategory->row();
+                            $marker = $objCategory->row();
+
+                            $objFile = FilesModel::findByUuid($marker['marker']);
+                            $marker['marker'] = $base . $objFile->path;
+
+                            $v[] = $marker;
                         }
                     }
                 break;
