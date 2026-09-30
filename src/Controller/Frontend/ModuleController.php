@@ -563,41 +563,24 @@ abstract class ModuleController extends AbstractFrontendModuleController
         try {
             switch (Input::post('action')) {
                 case 'getLocationsList':
-                    $arrResponse = [
-                        'status' => 'success',
-                        'html' => $this->getListModule(),
-                    ];
+                    return new Response($this->getListModule(), Response::HTTP_OK);
                     break;
                 case 'getLocationsItems':
                     $this->buildFilters();
                     $this->limit = Input::post('limit') ? (int) Input::post('limit') : 50;
                     $this->offset = Input::post('offset') ? (int) Input::post('offset') : 0;
                     $objItems = $this->findItems();
-                    
-                    $arrResponse = [
-                        'status' => 'success',
-                        'html' => $this->parseItems($objItems),
-                        'json' => json_encode(
-                            $objItems,
-                            JSON_INVALID_UTF8_IGNORE | JSON_INVALID_UTF8_SUBSTITUTE
-                        ),
-                    ];
-                    break;
-                case 'countLocations':
-                    $this->buildFilters();
-                    $arrLocations = $this->countItems();
-                    $arrResponse = [
-                        'status' => 'success',
-                        'count' => $this->countItems(),
-                    ];
-                    break;
-                case 'getFilters':
-                    $this->buildFilters();
-                    $arrResponse = [
-                        'status' => 'success',
-                        'html' => $this->getFiltersModule(),
-                        'json' => json_encode($this->filters),
-                    ];
+
+                    if (!$objItems) {
+                        return new Response("No items", Response::HTTP_NO_CONTENT);
+                    }
+
+                    $arrItems = [];
+                    while ($objItems->next()) {
+                        $arrItems[$objItems->id] = $this->parseItem($objItems->current());
+                    }
+
+                    return new JsonResponse($arrItems, Response::HTTP_OK);
                     break;
                 default:
                     throw new Exception(\sprintf(

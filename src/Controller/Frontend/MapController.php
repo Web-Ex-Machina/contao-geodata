@@ -33,6 +33,11 @@ class MapController extends ModuleController
         $this->model = $model;
         $this->request = $request;
         $this->loadMap();
+
+        if (Input::post('TL_AJAX') && (int) $this->model->id === (int) Input::post('module')) {
+            $this->handleAjaxRequests();
+        }
+
         $this->service->loadMapAssets();
 
         $blnLoadInAjax = (int) $this->model->wem_geodata_map_nbItemsToForceAjaxLoading === 0
