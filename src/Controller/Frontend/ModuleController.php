@@ -549,9 +549,11 @@ abstract class ModuleController extends AbstractFrontendModuleController
                     ];
                     break;
                 case 'getFilters':
+                    $this->buildFilters();
                     $arrResponse = [
                         'status' => 'success',
                         'html' => $this->getFiltersModule(),
+                        'json' => json_encode($this->filters),
                     ];
                     break;
                 default:

@@ -33,8 +33,6 @@ class MapController extends ModuleController
         $this->model = $model;
         $this->loadMap();
         $this->service->loadMapAssets();
-        
-        $template->list = $this->getListModule();
 
         $blnLoadInAjax = (int) $this->model->wem_geodata_map_nbItemsToForceAjaxLoading === 0
             ? false
@@ -68,6 +66,9 @@ class MapController extends ModuleController
 
         $template->nbItems = $this->countItems();
         $template->nbItemsPerRequest = (int) $this->model->wem_geodata_map_nbItemsToForceAjaxLoading;
+        $template->list = $this->getListModule();
+        $template->list_module = $this->model->wem_geodata_addList ? $this->model->wem_geodata_list_module : null;
+        $template->filters_module = $this->model->wem_geodata_addFilters ? $this->model->wem_geodata_filters_module : null;
         $template->filters_html = $strFilters;
         $template->filters_position = $this->model->wem_geodata_map_filters_position;
         $template->categories = $this->getCategories();
