@@ -14,6 +14,7 @@ use Contao\FrontendTemplate;
 use Contao\Model\Collection;
 use Contao\ModuleModel;
 use Contao\System;
+use Contao\Input;
 use Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
