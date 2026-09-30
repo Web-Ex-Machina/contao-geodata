@@ -46,6 +46,7 @@ class ListController extends ModuleController
     protected function getResponse(Template $template, ModuleModel $model, Request $request): Response
     {
         $this->model = $model;
+        $this->request = $request;
         $this->limit = null;
         $this->offset = 0;
         $this->loadMap();
@@ -56,12 +57,6 @@ class ListController extends ModuleController
         }
 
         $template->items = [];
-
-        // Prepare config
-        $this->config = [
-            'pid' => $this->map->id,
-            'published' => 1,
-        ];
 
         // Retrieve filters
         if ([] !== $_GET || [] !== $_POST) {

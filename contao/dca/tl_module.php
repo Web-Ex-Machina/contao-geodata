@@ -53,7 +53,7 @@ $GLOBALS['TL_DCA']['tl_module']['palettes']['wem_geodata_filters'] = '
     {expert_legend:hide},guests,cssID
 ';
 
-$GLOBALS['TL_DCA']['tl_module']['subpalettes']['wem_geodata_addFilters'] = 'wem_geodata_filters_module,wem_geodata_map_filters_position';
+$GLOBALS['TL_DCA']['tl_module']['subpalettes']['wem_geodata_addFilters'] = 'wem_geodata_filters_fields,wem_geodata_hideFiltersWithNoResults,wem_geodata_addSearch,wem_geodata_map_filters_position';
 $GLOBALS['TL_DCA']['tl_module']['subpalettes']['wem_geodata_addList'] = 'wem_geodata_list_module,wem_geodata_map_list_position';
 $GLOBALS['TL_DCA']['tl_module']['subpalettes']['wem_geodata_addMap'] = 'wem_geodata_map_module';
 
@@ -186,7 +186,7 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_hideFiltersWithNoResults'
     'exclude' => true,
     'flag' => 1,
     'inputType' => 'checkbox',
-    'eval' => ['doNotCopy' => true, 'tl_class' => 'clr'],
+    'eval' => ['doNotCopy' => true, 'tl_class' => 'w50 m12'],
     'sql' => "char(1) NOT NULL default ''",
 ];
 $GLOBALS['TL_DCA']['tl_module']['fields']['wem_geodata_addSearch'] = [

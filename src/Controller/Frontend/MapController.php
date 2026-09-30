@@ -31,6 +31,7 @@ class MapController extends ModuleController
     protected function getResponse(Template $template, ModuleModel $model, Request $request): Response
     {
         $this->model = $model;
+        $this->request = $request;
         $this->loadMap();
         $this->service->loadMapAssets();
 
@@ -38,11 +39,7 @@ class MapController extends ModuleController
             ? false
             : $nbItems > (int) $this->model->wem_geodata_map_nbItemsToForceAjaxLoading;
 
-        $this->config = [
-            'pid' => $this->map->id,
-            'published' => 1,
-            'onlyWithCoords' => 1
-        ];
+        $this->config['onlyWithCoords'] = 1;
         $this->limit = 0;
         $this->offset = 0;
         $this->options = [];

@@ -43,6 +43,7 @@ class ReaderController extends ModuleController
     protected function getResponse(Template $template, ModuleModel $model, Request $request): Response
     {
         $this->model = $model;
+        $this->request = $request;
         $this->loadMap();
 
         $this->mapitem = $this->findItem();
