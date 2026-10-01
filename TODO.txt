@@ -1,0 +1,4 @@
+besoin de l'une de ces requetes: 
+- un call ajax getLocationsList , qui me retourne tout l'html d'une liste
+- dans le call getLocations, une clef "html" par item contenant l'html dudit item
+on avait apparement les deux en legacy. tu as tenté de rétablir un getLocationList (retourne un html sur 2XX), mais je n'arrive pas à le faire fonctionner
